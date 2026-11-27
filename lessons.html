@@ -283,6 +283,11 @@ svg text { font-family: var(--font-num); }
 .nest-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
 .nest-footer .secondary { margin: 2px 0 0; }
 
+html[lang="th"] { --font-lo: "Noto Sans Thai", "Leelawadee UI", "Thonburi", system-ui, sans-serif; }
+.language-btn { font: 700 15px/1.3 "Noto Sans Thai", "Noto Sans Lao", system-ui, sans-serif; }
+html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
+#voiceChoice { max-width: 100%; min-height: 44px; font: inherit; }
+@media(max-width: 400px) { .top { gap: 6px; } .top h1 { font-size: 18px; } }
 @keyframes shake { 0%, 100% { translate: 0; } 25% { translate: -6px; } 75% { translate: 6px; } }
 @keyframes nod { 0%, 100% { transform: none; } 40% { transform: scale(1.04); } }
 @keyframes pop { from { transform: scale(.92); opacity: .5; } to { transform: none; opacity: 1; } }
@@ -299,6 +304,7 @@ svg text { font-family: var(--font-num); }
   <header class="top">
     <button class="icon-btn" id="backBtn" type="button" aria-label="ສາລະບານ" hidden>←</button>
     <div class="ttl"><div class="kicker" id="kicker">ຄະນິດສາດ ປ.1</div><h1 id="topTitle">ຫ້ອງຮຽນໝີນ້ອຍ</h1></div>
+    <button class="icon-btn language-btn" type="button" id="languageBtn" data-original lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
     <button class="icon-btn" id="voiceBtn" type="button" aria-pressed="true">🔊</button>
   </header>
 
@@ -368,7 +374,9 @@ svg text { font-family: var(--font-num); }
     <section id="viewParent" class="parent" role="tabpanel" aria-labelledby="tabParent" hidden>
       <div id="parentBody"></div>
       <details><summary>ສຽງອ່ານ</summary><p id="noVoice" hidden>ເຄື່ອງນີ້ຍັງບໍ່ມີສຽງອ່ານລາວ. ພໍ່ແມ່ອ່ານຄຳຖາມໃຫ້ລູກຟັງໄດ້.</p>
-      <label><input type="checkbox" id="thaiVoice"> ໃຊ້ສຽງໄທໃນບົດທີ່ມີຄຳແປ ຖ້າເຄື່ອງບໍ່ມີສຽງລາວ</label></details>
+      <label id="chooseVoiceLabel" hidden>ເລືອກສຽງອ່ານ <select id="voiceChoice"></select></label>
+      <button type="button" class="secondary" id="voiceSample" hidden>ລອງຟັງສຽງ</button>
+      <label class="only-lo"><input type="checkbox" id="thaiVoice"> ໃຊ້ສຽງໄທໃນບົດທີ່ມີຄຳແປ ຖ້າເຄື່ອງບໍ່ມີສຽງລາວ</label></details>
     </section>
   </main>
 </div>
@@ -382,6 +390,273 @@ svg text { font-family: var(--font-num); }
   const shuffle = (list) => { for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; } return list; };
   const range = (n) => Array.from({ length: n }, (_, i) => i);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+  const LANGUAGE_KEY = "nab-lex.language";
+  let language = "lo";
+  try {
+    const preference = localStorage.getItem(LANGUAGE_KEY) || JSON.parse(localStorage.getItem("nab-bear.v1"))?.lang;
+    if (preference === "th") language = "th";
+  } catch (e) { /* use Lao on a new or restricted device */ }
+  const phrases = new Map();
+  let roundPhrases = new Map();
+  function line(lo, th) {
+    phrases.set(lo, th);
+    return lo;
+  }
+  function thaiText(source) {
+    const text = String(source);
+    const lookup = s => roundPhrases.get(s) ?? phrases.get(s);
+    const direct = lookup(text.trim());
+    if (direct !== undefined) return text.replace(text.trim(), () => direct);
+    if (text.includes(". ")) return text.split(". ").map(thaiText).join(". ");
+    // Captions combine translated labels with numerals, arrows and animal pictures.
+    return text.replace(/[ກ-໎ໜ-ໟ]+(?:[ \t]+[ກ-໎ໜ-ໟ]+)*/gu, run => lookup(run) ?? run);
+  }
+  // Change only displayed text and accessible names. The board, focus, answers and
+  // event handlers survive a language switch. Keep the original strings for a return to Lao.
+  const originals = new WeakMap();
+  const containsLao = /[ກ-໎ໜ-ໟ]/u;
+  function localizeNode(node, attr) {
+    const current = attr ? node.getAttribute(attr) : node.data;
+    if (current == null) return;
+    const prior = originals.get(node)?.[attr];
+    if (!prior && !containsLao.test(current)) return;
+    const source = prior && current === prior.shown ? prior.source : current;
+    const shown = language === "th" ? thaiText(source) : source;
+    if (current !== shown) {
+      if (attr) node.setAttribute(attr, shown);
+      else node.data = shown;
+    }
+    if (language === "th" && source !== shown) {
+      const record = originals.get(node) || {};
+      record[attr] = { source, shown };
+      originals.set(node, record);
+    } else if (prior) delete originals.get(node)[attr];
+  }
+  function paintLocale(node) {
+    const element = node.nodeType === 1 ? node : node.parentElement;
+    if (!element || element.closest("[data-original]")) return;
+    if (node.nodeType === 3) { localizeNode(node, ""); return; }
+    if (node.nodeType !== 1) return;
+    for (const attr of ["aria-label", "title"]) if (node.hasAttribute(attr)) localizeNode(node, attr);
+    node.childNodes.forEach(paintLocale);
+  }
+  const languageArea = $(".wrap");
+  const localeObserver = new MutationObserver(records => {
+    if (language !== "th") return;
+    for (const r of records) {
+      if (!languageArea.contains(r.target)) continue;
+      if (r.type === "childList") r.addedNodes.forEach(paintLocale);
+      else if (r.type === "characterData") paintLocale(r.target);
+      else if (!r.target.closest("[data-original]")) localizeNode(r.target, r.attributeName);
+    }
+  });
+  function displayLanguage() {
+    localeObserver.disconnect();
+    document.documentElement.lang = language;
+    document.title = language === "th" ? "ห้องเรียนหมีน้อย ป.1" : "ຫ້ອງຮຽນໝີນ້ອຍ ປ.1";
+    $("#languageBtn").textContent = language === "lo" ? "ไทย" : "ລາວ";
+    $("#languageBtn").lang = language === "lo" ? "th" : "lo";
+    $("#languageBtn").setAttribute("aria-label", language === "lo" ? "เปลี่ยนเป็นภาษาไทย" : "ປ່ຽນເປັນພາສາລາວ");
+    renderVoice(pickVoice());
+    paintLocale(languageArea);
+    if (language === "th") localeObserver.observe(languageArea, {subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "title"]});
+  }
+  function setLanguage(next) {
+    if (language === next) return;
+    language = next;
+    speechRequest++;
+    if (synth) synth.cancel();
+    displayLanguage();
+  }
+  $("#languageBtn").addEventListener("click", () => {
+    setLanguage(language === "lo" ? "th" : "lo");
+    try { localStorage.setItem(LANGUAGE_KEY, language); } catch (e) { /* keep this session */ }
+  });
+  window.addEventListener("pageshow", event => {
+    if (!event.persisted) return;
+    try {
+      const next = localStorage.getItem(LANGUAGE_KEY);
+      if (next === "lo" || next === "th") setLanguage(next);
+    } catch (e) { /* keep this session */ }
+  });
+
+  // Common interface labels and captions used inside the mathematical pictures.
+  [
+    ["ຄະນິດສາດ ປ.1", "คณิตศาสตร์ ป.1"],
+    ["ຫ້ອງຮຽນໝີນ້ອຍ", "ห้องเรียนหมีน้อย"],
+    ["ສາລະບານ", "สารบัญ"],
+    ["ເລືອກບົດທີ່ລູກກຳລັງຮຽນຢູ່ໂຮງຮຽນ", "เลือกบทที่ลูกกำลังเรียนที่โรงเรียน"],
+    ["ລອງຕື່ມໄຂ່ໃຫ້ຄົບ 7", "ลองเติมไข่ให้ครบ 7 ฟอง"],
+    ["ຮັງໄຂ່ໄດໂນເສົາ · ຖາດລະ 10", "รังไข่ไดโนเสาร์ · ถาดละ 10 ฟอง"],
+    ["ບົດທີ", "บทที่"],
+    ["ໜ້າ", "หน้า"],
+    ["ຮຽນ", "เรียน"],
+    ["ຝຶກ", "ฝึก"],
+    ["ພໍ່ແມ່", "พ่อแม่"],
+    ["ບົດຮຽນ", "บทเรียน"],
+    ["ຟັງຄຳຖາມ", "ฟังคำถาม"],
+    ["ຟັງຄຳຖາມອີກເທື່ອ", "ฟังคำถามอีกครั้ง"],
+    ["ໃນຮັງ", "ในรัง"],
+    ["ລໍຖ້າເຂົ້າຮັງ", "รอย้ายเข้ารัง"],
+    ["ສົ່ງໃຫ້ໄດໂນເສົາແລ້ວ", "ให้ไดโนเสาร์แล้ว"],
+    ["ໃຊ້ໄຂ່ຊ່ວຍຄິດ", "ใช้ไข่ช่วยคิด"],
+    ["ເຮັດຂໍ້ນີ້ຄືນ", "ลองข้อนี้อีกครั้ง"],
+    ["ພໍແລ້ວມື້ນີ້", "วันนี้พอแค่นี้"],
+    ["ກັບໄປບົດຮຽນ", "กลับไปที่บทเรียน"],
+    ["ລອງນຳກັນ", "ลองทำด้วยกัน"],
+    ["ລອງເອງ", "ลองทำเอง"],
+    ["ຂໍຄຳໃບ້", "ขอคำใบ้"],
+    ["ເບິ່ງບົດຮຽນຕາມປຶ້ມ", "ดูบทเรียนตามหนังสือ"],
+    ["ກັບຄືນ", "ย้อนกลับ"],
+    ["ຕໍ່ໄປ", "ต่อไป"],
+    ["ໄປຝຶກ", "ไปฝึก"],
+    ["ກັບໄປລອງເຮັດ", "กลับไปลองทำ"],
+    ["ສຽງອ່ານ", "เสียงอ่าน"],
+    ["ປິດສຽງ", "ปิดเสียง"],
+    ["ບໍ່ມີສຽງ", "ไม่มีเสียงอ่าน"],
+    ["ລາວ", "ลาว"],
+    ["ໄທ", "ไทย"],
+    ["ໃຊ້ສຽງໄທໃນບົດທີ່ມີຄຳແປ ຖ້າເຄື່ອງບໍ່ມີສຽງລາວ", "ใช้เสียงไทยแทนเมื่อเครื่องไม่มีเสียงลาว"],
+    ["ຂໍ້", "ข้อ"],
+    ["ຕອບເອງ", "ตอบเอง"],
+    ["ໃນ", "จาก"],
+    ["ຕອບເອງໃນຄັ້ງທຳອິດ", "ตอบเองตั้งแต่ครั้งแรก"],
+    ["ຝຶກອີກ", "ฝึกอีก"],
+    ["ບົດຕໍ່ໄປ", "บทถัดไป"],
+    ["ຂໍ້ຕໍ່ໄປ", "ข้อถัดไป"],
+    ["ຈົບຮອບ", "จบรอบ"],
+    ["ລອງກັບຂອງຈິງ", "ลองกับของจริง"],
+    ["ຖາມລູກ", "ลองถามลูก"],
+    ["ສັງເກດວິທີຄິດ", "สังเกตวิธีคิด"],
+    ["ໃນປຶ້ມ ໜ້າ", "ในหนังสือ หน้า"],
+    ["ຄຳອະທິບາຍພາສາໄທ", "คำแนะนำเพิ่มเติมสำหรับพ่อแม่"],
+    ["ຖ້າລູກຍັງນັບຂ້າມ ຫຼື ນັບຊ້ຳ ລອງ", "ถ้าลูกยังนับข้ามหรือนับซ้ำ ลอง"],
+    ["ແຕະເຕົ່າເພື່ອນັບທີລະໂຕ", "แตะเต่าเพื่อนับทีละตัว"],
+    ["ກ່ອນ", "ก่อน"],
+    ["ຫຼິ້ນຮັງໄຂ່ດ້ວຍຝາຂວດ", "เล่นรังไข่ด้วยฝาขวด"],
+    ["ລູກຕອບເອງ", "ลูกตอบเอง"],
+    ["ລູກໃຊ້ຮູບຊ່ວຍຄິດ", "ลูกใช้ภาพช่วยคิด"],
+    ["ຝຶກຂໍ້ໃໝ່ຕໍ່", "ฝึกข้อใหม่"],
+    ["ຝຶກບວກຂໍ້ໃໝ່ຕໍ່", "ฝึกบวกข้อใหม่"],
+    ["ຝຶກລົບຂໍ້ໃໝ່ຕໍ່", "ฝึกลบข้อใหม่"],
+    ["ລອງຍ້າຍຖາດໄຂ່", "ลองย้ายถาดไข่"],
+    ["ຂໍ້ທ້າລອງຕໍ່ຈາກບົດທີ", "โจทย์ท้าทายต่อจากบทที่"],
+    ["ນັບເປັນຖາດ", "นับเป็นถาด"],
+    ["ເພີ່ມສອງຖາດ", "เพิ่มสองถาด"],
+    ["ເອົາໄຂ່ອອກຈາກຖາດ", "หยิบไข่ออกจากถาด"],
+    ["ທ້າລອງຂໍ້ໃໝ່", "ลองโจทย์ใหม่"],
+    ["ລອງຂໍ້ໃໝ່", "ลองข้อใหม่"],
+    ["ເພີ່ມແລ້ວ", "เติมแล้ว"],
+    ["ສົ່ງແລ້ວ", "ให้ไปแล้ว"],
+    ["ຖາດໄຂ່", "ถาดไข่"],
+    ["ໜ່ວຍ", "ฟอง"],
+    ["ໄຂ່", "ไข่"],
+    ["ໄຂ່ 1 ໜ່ວຍ", "ไข่ 1 ฟอง"],
+    ["ຫ້ອງວ່າງ", "ช่องว่าง"],
+    ["ຈັບຄູ່ແລ້ວ", "จับคู่แล้ว"],
+    ["ຄູ່", "คู่"],
+    ["ນັບແລ້ວ", "นับแล้ว"],
+    ["ຍັງເຫຼືອ", "เหลืออยู่"],
+    ["ຕອນນີ້ມີ", "ตอนนี้มี"],
+    ["ລົງນ້ຳແລ້ວ", "ลงน้ำแล้ว"],
+    ["ກົບ", "กบ"],
+    ["ໃບບົວ", "ใบบัว"],
+    ["ເທົ່າກັນ", "เท่ากัน"],
+    ["ຫຼາຍກວ່າ", "มากกว่า"],
+    ["ໜ້ອຍກວ່າ", "น้อยกว่า"],
+    ["ເທົ່າກັບ", "เท่ากับ"],
+    ["ຫຼາຍຂຶ້ນ", "มากขึ้น"],
+    ["ໜ້ອຍລົງ", "น้อยลง"],
+    ["ເທົ່າເດີມ", "เท่าเดิม"],
+    ["ກ", "ก"],
+    ["ຂ", "ข"],
+    ["ໂມງ", "โมง"],
+    ["ໂມງເຄິ່ງ", "โมงครึ่ง"],
+    ["ໝາກບານ", "ลูกบอล"],
+    ["ກ່ອງ", "กล่อง"],
+    ["ວົງມົນ", "วงกลม"],
+    ["ຮູບສາມແຈ", "รูปสามเหลี่ยม"],
+    ["ທັງໝົດ", "ทั้งหมด"],
+    ["ສ່ວນໜຶ່ງ", "ส่วนหนึ่ง"],
+    ["ອີກສ່ວນໜຶ່ງ", "อีกส่วนหนึ่ง"],
+    ["ເຕົ່າ", "เต่า"],
+    ["ຂວາ", "ขวา"],
+    ["ຊ້າຍ", "ซ้าย"],
+    ["ເຂັມສັ້ນຊີ້", "เข็มสั้นชี้"],
+    ["ເຂັມຍາວຊີ້", "เข็มยาวชี้"],
+    ["ເຂັມສັ້ນຢູ່ລະຫວ່າງ", "เข็มสั้นอยู่ระหว่าง"],
+    ["ກັບ", "กับ"],
+    ["ພໍດີກັນ", "เท่ากันพอดี"],
+    ["ແບບກ່ອງ", "แบบกล่อง"],
+    ["ແບບໝາກບານ", "แบบลูกบอล"],
+    ["ແບບກະປ໋ອງ", "แบบกระป๋อง"],
+    ["ຕັ່ງ", "เก้าอี้"],
+    ["ເດັກນ້ອຍ", "เด็ก"],
+    ["ແມງກະເບື້ອ", "ผีเสื้อ"],
+    ["ຈານ", "จาน"],
+    ["ໝາ", "หมา"],
+    ["ກະດູກ", "กระดูก"],
+    ["ແມວ", "แมว"],
+    ["ກະຕ່າຍ", "กระต่าย"],
+    ["ລີງ", "ลิง"],
+    ["ໝູ", "หมู"],
+    ["ງົວ", "วัว"],
+    ["ຫຼັກຫົວສິບ", "หลักสิบ"],
+    ["ຫຼັກຫົວໜ່ວຍ", "หลักหน่วย"],
+    ["ຕາ", "ช่อง"],
+    ["ກຸ່ມ", "กลุ่ม"],
+    ["ໄດໂນເສົາ", "ไดโนเสาร์"],
+    ["ເລືອກສຽງອ່ານ", "เลือกเสียงอ่าน"],
+    ["ລອງຟັງສຽງ", "ลองฟังเสียง"],
+    ["ບໍ່ມີຈັກໜ່ວຍ", "ไม่มีสักชิ้น"],
+    ["ຈາກຊ້າຍ ໄດໂນເສົາ", "จากซ้าย ไดโนเสาร์"],
+    ["ຈາກຊ້າຍ ກົບ", "จากซ้าย กบ"],
+    ["ທາງໜ້າ", "ด้านหน้า"],
+    ["ທາງຫຼັງ", "ด้านหลัง"],
+    ["ຄົນທີ", "คนที่"],
+    ["ຄົນດຽວ", "คนเดียว"],
+    ["ຄົນ", "คน"],
+    ["ສາມຄົນ", "สามคน"],
+    ["ແມ່ນໄຂ່ທີ່ມີຢູ່ກ່ອນ", "คือไข่ที่มีอยู่ก่อน"],
+    ["ແມ່ນໄຂ່ທັງໝົດ", "คือไข่ทั้งหมด"],
+    ["ແມ່ນເຕົ່າທີ່ລົງນ້ຳໄປແລ້ວ", "คือตัวที่ลงน้ำไปแล้ว"],
+    ["ອີກສ່ວນໜຶ່ງ ຫ້ອງວ່າງ", "อีกส่วนหนึ่งเป็นช่องว่าง"],
+    ["ທັງໝົດ ຫ້ອງວ່າງ", "ช่องว่างคือจำนวนทั้งหมด"],
+    ["ສ່ວນໜຶ່ງ ຫ້ອງວ່າງ", "ส่วนหนึ่งเป็นช่องว่าง"],
+    ["ແມ່ນ", "คือ"],
+    ["ລວມກັບ", "รวมกับ"],
+    ["ມີ", "มี"],
+    ["ເຫັນ", "เห็น"],
+    ["ລີ້ໄວ້ຈັກອັນ", "ซ่อนไว้กี่ชิ้น"],
+    ["ມາອີກ", "มาอีก"],
+    ["ເທື່ອທີ", "ครั้งที่"],
+    ["ເຫຼືອ", "เหลือ"],
+    ["ຫຼາຍກວ່າຈັກ", "มากกว่าเท่าไร"],
+    ["ບວກ", "บวก"],
+    ["ລົບ", "ลบ"],
+    ["ມັດ ມັດລະ", "มัด มัดละ"],
+    ["ກັບອີກ", "กับอีก"],
+    ["ອັນ", "ชิ้น"],
+    ["ຈ", "จ"],
+    ["ສ", "ส"],
+    ["ຍັງອີກ", "ขาดอีก"],
+    ["ຊ່ອງ", "ช่อง"],
+    ["ຂ ລົ້ນ", "ข ล้น"],
+    ["ແຖວ ແຖວລະ", "แถว แถวละ"],
+    ["ຮູບຈະຕຸລັດ ແຕ່ລະຮູບແບ່ງຕາມເສັ້ນທະແຍງ", "สี่เหลี่ยมจัตุรัส แต่ละรูปแบ่งตามเส้นทแยงมุม"],
+    ["ແຜ່ນ", "ชิ้น"],
+    ["ຫົວສິບ ແລະ", "สิบ กับ"],
+    ["ຫົວໜ່ວຍ", "หน่วย"],
+    ["ກວດຄືນ", "ตรวจคำตอบ"],
+    ["ກ່ອງນ້ຳ", "กล่องเครื่องดื่ม"],
+    ["ກ່ອງຂອງຂວັນ", "กล่องของขวัญ"],
+    ["ໝາກກ້ຽງ", "ส้ม"],
+    ["ໝາກບານບ້ວງ", "ลูกบาส"],
+    ["ກະປ໋ອງ", "กระป๋อง"],
+    ["ມ້ວນເຈ້ຍ", "ม้วนกระดาษ"],
+    ["ຈອກ", "แก้ว"],
+  ].forEach(([lo, th]) => line(lo, th));
 
   /* ---------- saved on this device only: best stars per chapter, voice on/off ---------- */
   const KEY = "ph1-lessons.v1";
@@ -400,7 +675,23 @@ svg text { font-family: var(--font-num); }
   let voices = [];
   const findVoices = () => { try { voices = synth ? synth.getVoices() || [] : []; } catch (e) { voices = []; } };
   if (synth) { findVoices(); try { synth.addEventListener("voiceschanged", findVoices); } catch (e) { synth.onvoiceschanged = findVoices; } }
-  const voiceFor = (lang) => voices.find((v) => new RegExp("^" + lang + "([-_]|$)", "i").test(v.lang)) || null;
+  const matchingVoices = lang => voices.filter(v => v.lang.toLowerCase().split(/[-_]/)[0] === lang);
+  const voicePreference = {};
+  const voiceFor = lang => {
+    const matches = matchingVoices(lang);
+    let preferred = voicePreference[lang];
+    try { preferred ??= localStorage.getItem("nab-lex.voice." + lang); } catch (e) { /* optional */ }
+    return matches.find(v => v.voiceURI === preferred) || matches.find(v => /natural|neural/i.test(v.name)) || matches.find(v => v.default) || matches[0] || null;
+  };
+  function voiceMenu(p) {
+    const select = $("#voiceChoice"), options = matchingVoices(p?.lang || language);
+    $("#chooseVoiceLabel").hidden = options.length < 2;
+    $("#voiceSample").hidden = !p || !saved.voice;
+    if (select.options.length !== options.length || options.some((v,i) => select.options[i]?.value !== v.voiceURI)) {
+      select.replaceChildren(...options.map(v => new Option(v.name, v.voiceURI)));
+    }
+    if (p) select.value = p.v.voiceURI;
+  }
   /* Lao voice when the device has one, otherwise the Thai sentence in a Thai voice. With neither, stay
      silent: the browser's default voice is usually English and would read the words wrongly. */
   function waitVoices() {
@@ -413,6 +704,7 @@ svg text { font-family: var(--font-num); }
     });
   }
   function pickVoice() {
+    if (language === "th") { const v = voiceFor("th"); return v ? {v, tag: "th-TH", lang: "th"} : null; }
     const lao = voiceFor("lo");
     if (lao) return { v: lao, tag: "lo-LA", lang: "lo" };
     const thai = saved.thaiVoice && voiceFor("th");
@@ -423,9 +715,11 @@ svg text { font-family: var(--font-num); }
     const label = !saved.voice ? "ປິດສຽງ" : p ? (p.lang === "lo" ? "ລາວ" : "ໄທ") : "ບໍ່ມີສຽງ";
     $("#voiceBtn").innerHTML = `${saved.voice && p ? "🔊" : "🔇"} <small>${label}</small>`;
     $("#voiceBtn").setAttribute("aria-label", label);
-    $("#noVoice").hidden = !!voiceFor("lo") || (!!synth && !voicesChecked);
-    $("#nestListen").hidden = !(saved.voice && voiceFor("lo"));
-    $("#actListen").hidden = !(saved.voice && voiceFor("lo"));
+    $("#noVoice").hidden = !!voiceFor(language) || (!!synth && !voicesChecked);
+    $("#noVoice").textContent = language === "th" ? "เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย คุณพ่อคุณแม่อ่านโจทย์ให้ลูกฟังได้" : "ເຄື່ອງນີ້ຍັງບໍ່ມີສຽງອ່ານພາສາລາວ. ພໍ່ແມ່ອ່ານໂຈດໃຫ້ລູກຟັງໄດ້.";
+    voiceMenu(p);
+    $("#nestListen").hidden = !(saved.voice && p);
+    $("#actListen").hidden = !(saved.voice && p);
   }
   let voicesChecked = false;
   let speechRequest = 0;
@@ -438,18 +732,23 @@ svg text { font-family: var(--font-num); }
     const p = pickVoice();
     renderVoice(p);
     if (!p) return;
-    let text = p.lang === "lo" ? lo : th;
+    let text = p.lang === "lo" ? lo : th || thaiText(lo || "");
     if (!text) return;
-    text = String(text).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "").replace(/<[^>]+>/g, "");
+    text = String(text).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "").replace(/<\/?(?:span|b|i|div|p)\b[^>]*>/gi, "");
+    text = text.replace(/[໐-໙]/g, digit => String(digit.charCodeAt(0) - 0x0ed0));
     if (p.lang === "th") text = text.replace(/[\u0E80-\u0EFF]+/g, " ");   // a Thai voice cannot read Lao letters
     // signs are read as words in the chosen language
     const W = p.lang === "lo" ? { "+": " ບວກ ", "−": " ລົບ ", "=": " ເທົ່າກັບ ", ">": " ຫຼາຍກວ່າ ", "<": " ໜ້ອຍກວ່າ ", "□": " ຫ້ອງວ່າງ " } : { "+": " บวก ", "−": " ลบ ", "=": " เท่ากับ ", ">": " มากกว่า ", "<": " น้อยกว่า ", "□": " ช่องว่าง " };
     text = text.replace(/[+−=<>□]/g, (c) => W[c]).replace(/·/g, ", ").replace(/\s+/g, " ").trim();
+    text = text.replace(/→/g, p.lang === "lo" ? " ແລ້ວເປັນ " : " แล้วเป็น ").replace(/[0-9]+/g, digits => {
+      const n = Number(digits);
+      return n <= 100 ? (p.lang === "lo" ? wlo(n) : wth(n)) : digits;
+    });
     if (!text) return;
     try {
       synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = p.tag; u.voice = p.v; u.rate = 0.85; u.pitch = 1.08;
+      u.lang = p.tag; u.voice = p.v; u.rate = 0.9; u.pitch = 1;
       synth.speak(u);
     } catch (e) { /* no voice */ }
     const say = $("#stepSay");
@@ -640,9 +939,9 @@ svg text { font-family: var(--font-num); }
       const [eA, nA, eB, nB] = pick(PAIRS);
       const a = rnd(3, 8), b = Math.random() < 0.25 ? a : rnd(3, 8), spread = a < b ? { spreadA: true } : a > b ? { spreadB: true } : { spreadB: true };
       const ans = a > b ? "A" : b > a ? "B" : "=";
-      return { sig: eA + a + b, kind: "word", text: `${nA} ກັບ ${nB} ອັນໃດຫຼາຍກວ່າ?`, th: "อันไหนมากกว่า", vis: P.match(eA, a, eB, b, spread),
+      return { sig: eA + a + b, kind: "word", text: `${nA} ກັບ ${nB} ອັນໃດຫຼາຍກວ່າ?`, th: thaiText(nA) + " กับ " + thaiText(nB) + " อะไรมีมากกว่า?", vis: P.match(eA, a, eB, b, spread),
         choices: opts([[`${eA} ${nA}`, "A", nA], [`${eB} ${nB}`, "B", nB], ["ພໍດີກັນ", "=", "ພໍດີກັນ"]]), answer: ans,
-        why: ans === "=" ? "ຈັບຄູ່ແລ້ວ ພໍດີກັນ ບໍ່ມີເຫຼືອ" : `ຈັບຄູ່ແລ້ວ ${ans === "A" ? nA : nB} ມີເຫຼືອ ຈຶ່ງຫຼາຍກວ່າ`, whyTh: "จับคู่แล้วดูว่าฝั่งไหนเหลือ",
+        why: ans === "=" ? "ຈັບຄູ່ແລ້ວ ພໍດີກັນ ບໍ່ມີເຫຼືອ" : `ຈັບຄູ່ແລ້ວ ${ans === "A" ? nA : nB} ມີເຫຼືອ ຈຶ່ງຫຼາຍກວ່າ`, whyTh: ans === "=" ? "จับคู่ได้พอดี ทั้งสองกลุ่มมีเท่ากัน" : "จับคู่แล้ว " + thaiText(ans === "A" ? nA : nB) + " เหลือ จึงมีมากกว่า",
         hint: "ຢ່າເບິ່ງວ່າແຖວໃດຍາວ · ຈັບຄູ່ເທື່ອລະອັນ ແລ້ວເບິ່ງວ່າຝັ່ງໃດມີເຫຼືອ", hintTh: "อย่าดูว่าแถวไหนยาว จับคู่ทีละอัน แล้วดูว่าฝั่งไหนเหลือ", hintVis: P.match(eA, a, eB, b, { lines: true }) };
     },
     parent: {
@@ -700,7 +999,7 @@ svg text { font-family: var(--font-num); }
         const down = Math.random() < 0.3, start = down ? rnd(4, 10) : rnd(0, 6), seq = range(5).map((i) => (down ? start - i : start + i)).filter((v) => v >= 0 && v <= 10);
         const hole = rnd(1, seq.length - 2), ans = seq[hole];
         return { sig: "s" + start + down, text: "ເລກໃດຫາຍໄປ?", th: "เลขอะไรหายไป", vis: `<div class="eq">${seq.map((v, i) => (i === hole ? '<span class="box">?</span>' : `<span>${v}</span>`)).join("<span>–</span>")}</div>`,
-          choices: nums(ans, 0, 10), answer: ans, why: down ? `ນັບລົງ: ${seq.join(", ")}` : `ນັບຂຶ້ນ: ${seq.join(", ")}`, whyTh: "ถูกต้อง", hint: down ? "ນັບລົງເທື່ອລະ 1" : "ນັບຂຶ້ນເທື່ອລະ 1", hintTh: down ? "นับถอยหลังทีละ 1" : "นับขึ้นทีละ 1", hintVis: P.line(0, 10, { mark: ans }) };
+          choices: nums(ans, 0, 10), answer: ans, why: down ? `ນັບລົງ: ${seq.join(", ")}` : `ນັບຂຶ້ນ: ${seq.join(", ")}`, whyTh: (down ? "นับถอยหลัง " : "นับขึ้น ") + seq.join(", "), hint: down ? "ນັບລົງເທື່ອລະ 1" : "ນັບຂຶ້ນເທື່ອລະ 1", hintTh: down ? "นับถอยหลังทีละ 1" : "นับขึ้นทีละ 1", hintVis: P.line(0, 10, { mark: ans }) };
       }
       const n = rnd(0, 3), t = pick(THINGS);
       return { sig: "z" + n, text: `ໃນກະຕ່າມີ${t.lo}ຈັກ${t.c}?`, th: `ในตะกร้ามี${t.th}กี่${t.tc}`, vis: `<div class="eq">🧺 ${n ? P.items(t.e, n) : ""}</div>`, choices: nums(n, 0, 5), answer: n,
@@ -750,12 +1049,12 @@ svg text { font-family: var(--font-num); }
       const pos = fromLeft ? i + 1 : list.length - i;
       const side = fromLeft ? "ນັບຈາກເບື້ອງຊ້າຍ" : "ນັບຈາກເບື້ອງຂວາ", sideTh = fromLeft ? "นับจากซ้าย" : "นับจากขวา";
       if (Math.random() < 0.5) {
-        return { sig: list.join("") + i + fromLeft, text: `${side} ${ZOO_LO[list[i]]}ຢູ່ລຳດັບທີເທົ່າໃດ?`, th: `${sideTh} สัตว์ตัวนี้อยู่ลำดับที่เท่าไร`, vis: lineUp(list, i), choices: nums(pos, 1, list.length), answer: pos,
+        return { sig: list.join("") + i + fromLeft, text: `${side} ${ZOO_LO[list[i]]}ຢູ່ລຳດັບທີເທົ່າໃດ?`, th: `${sideTh} ${thaiText(ZOO_LO[list[i]])}อยู่ลำดับที่เท่าไร?`, vis: lineUp(list, i), choices: nums(pos, 1, list.length), answer: pos,
           why: `${side} ຢູ່ລຳດັບທີ ${pos}`, whyTh: `${sideTh} อยู่ลำดับที่ ${pos}`, hint: `ເລີ່ມນັບຈາກ${fromLeft ? "ຊ້າຍ" : "ຂວາ"} 1, 2, 3 … ຈົນຮອດໂຕທີ່ມີແສງ`, hintTh: `เริ่มนับจาก${fromLeft ? "ซ้าย" : "ขวา"} จนถึงตัวที่มีแสง` };
       }
       const choices = shuffle([list[i], ...shuffle(list.filter((e) => e !== list[i])).slice(0, 2)]).map((e) => ({ label: e, value: e, say: ZOO_LO[e] }));
       return { sig: "w" + list.join("") + pos + fromLeft, kind: "pic", text: `${side} ໂຕທີ ${pos} ແມ່ນໂຕໃດ?`, th: `${sideTh} ตัวที่ ${pos} คือตัวไหน`, vis: lineUp(list, -1), choices, answer: list[i],
-        why: `${side} ໂຕທີ ${pos} ແມ່ນ${ZOO_LO[list[i]]}`, whyTh: "ถูกต้อง", hint: `ຊີ້ ແລ້ວນັບຈາກ${fromLeft ? "ຊ້າຍ" : "ຂວາ"}: 1, 2, 3 …`, hintTh: `ชี้แล้วนับจาก${fromLeft ? "ซ้าย" : "ขวา"}`, hintVis: lineUp(list, i) };
+        why: `${side} ໂຕທີ ${pos} ແມ່ນ${ZOO_LO[list[i]]}`, whyTh: sideTh + " ตัวที่ " + pos + " คือ" + thaiText(ZOO_LO[list[i]]), hint: `ຊີ້ ແລ້ວນັບຈາກ${fromLeft ? "ຊ້າຍ" : "ຂວາ"}: 1, 2, 3 …`, hintTh: `ชี้แล้วนับจาก${fromLeft ? "ซ้าย" : "ขวา"}`, hintVis: lineUp(list, i) };
     },
     parent: {
       book: [
@@ -1029,7 +1328,7 @@ svg text { font-family: var(--font-num); }
         "หน้า 80–81: 10 + 5, 15 − 5, 15 − 10 และ 12 + 3, 15 − 3 โดยไม่แตะมัดสิบ คิดเฉพาะเศษ · หน้า 76–77 มีเปรียบเทียบด้วย > <",
         "หน้า 82–83: สรุปบท และทบทวนบวกลบที่ผ่านมา",
       ],
-      idea: { lo: "ມີ 10 ແລ້ວ, ນັບສ່ວນທີ່ເຫຼືອວ່າມີຈັກອັນ · 10 ກັບ 6 ບໍ່ໃຫ້ຂຽນເປັນ 106 ເດີ", th: "ครบ 10 แล้ว นับส่วนที่เหลือว่ามีกี่อัน · 10 กับ 6 อย่าเขียนเป็น 106 — บทนี้ไม่ใช้ตารางหลักสิบหลักหน่วย ใช้แค่ “10 ກັບ 6” และมัดไม้" },
+      idea: { lo: "ມີ 10 ແລ້ວ, ນັບສ່ວນທີ່ເຫຼືອວ່າມີຈັກອັນ · 10 ກັບ 6 ບໍ່ໃຫ້ຂຽນເປັນ 106 ເດີ", th: "มัดไม้ 10 อันไว้ด้วยกัน แล้ววางไม้อีก 6 อันข้าง ๆ ชวนลูกชี้มัดสิบกับไม้ที่เหลือ แล้วเขียน 16" },
       home: [
         "ใช้ไม้จิ้มฟันหรือหลอด มัดทีละ 10 ด้วยหนังยาง ให้ลูกนับของจริงเกิน 10 แล้วบอกว่า “10 ກັບ __ ເປັນ __”",
         "ฝึกอ่าน 11–20 เป็นภาษาลาวให้ถูก โดยเฉพาะ ສິບເອັດ (11) และ ຊາວ (20)",
@@ -1110,7 +1409,7 @@ svg text { font-family: var(--font-num); }
         const o = pick(OBJ3);
         return { sig: "g" + o.e, kind: "pic", text: `${o.lo} ຢູ່ກຸ່ມດຽວກັບຮູບໃດ?`, th: "อยู่กลุ่มเดียวกับรูปไหน", vis: `<div class="eq" style="font-size:64px">${o.e}</div>`,
           choices: ["box", "ball", "can"].map((g) => ({ label: P.shape(g, 64), value: g, say: GROUP[g] })), answer: o.g,
-          why: `${o.lo} ແມ່ນ${GROUP[o.g]}`, whyTh: "ถูกต้อง", hint: o.g === "ball" ? "ມັນກົມທຸກດ້ານ ກິ້ງໄດ້ທຸກທາງບໍ່?" : o.g === "can" ? "ມັນກິ້ງໄດ້ເມື່ອວາງນອນ ແລະ ມີໜ້າພຽງຢູ່ເທິງ ລຸ່ມ" : "ມັນມີໜ້າພຽງທຸກດ້ານ ແລະ ມີແຈ", hintTh: "ดูว่ากลิ้งได้ไหม มีหน้าแบนไหม" };
+          why: `${o.lo} ແມ່ນ${GROUP[o.g]}`, whyTh: thaiText(o.lo) + " อยู่ในกลุ่ม" + thaiText(GROUP[o.g]), hint: o.g === "ball" ? "ມັນກົມທຸກດ້ານ ກິ້ງໄດ້ທຸກທາງບໍ່?" : o.g === "can" ? "ມັນກິ້ງໄດ້ເມື່ອວາງນອນ ແລະ ມີໜ້າພຽງຢູ່ເທິງ ລຸ່ມ" : "ມັນມີໜ້າພຽງທຸກດ້ານ ແລະ ມີແຈ", hintTh: "ดูว่ากลิ้งได้ไหม มีหน้าแบนไหม" };
       }
       const roll = k === "roll";
       const right = roll ? pick(["ball", "can"]) : pick(["box", "cube"]);
@@ -1216,7 +1515,7 @@ svg text { font-family: var(--font-num); }
       }
       const offA = a < b ? rnd(1, 3) : 0, offB = b < a ? rnd(1, 3) : 0, ans = a > b ? "ກ" : "ຂ";
       return { sig: "l" + a + b, kind: "word", text: "ອັນໃດຍາວກວ່າ?", th: "อันไหนยาวกว่า", vis: P.bars([[a, offA, "var(--tomato)", "ກ"], [b, offB, "var(--sky)", "ຂ"]]),
-        choices: opts([["ກ", "ກ"], ["ຂ", "ຂ"]]), answer: ans, why: `${ans} ຍາວກວ່າ`, whyTh: "ถูกต้อง", hint: "ຢ່າເບິ່ງແຕ່ປາຍ · ນັບຕາກາໂຮຂອງແຕ່ລະອັນ ຫຼື ວາງສົ້ນໃຫ້ພຽງກັນ", hintTh: "อย่าดูแค่ปลาย นับช่องของแต่ละอัน หรือวางปลายให้ตรงกัน",
+        choices: opts([["ກ", "ກ"], ["ຂ", "ຂ"]]), answer: ans, why: `${ans} ຍາວກວ່າ`, whyTh: "แถว " + thaiText(ans) + " ยาวกว่า", hint: "ຢ່າເບິ່ງແຕ່ປາຍ · ນັບຕາກາໂຮຂອງແຕ່ລະອັນ ຫຼື ວາງສົ້ນໃຫ້ພຽງກັນ", hintTh: "อย่าดูแค่ปลาย นับช่องของแต่ละอัน หรือวางปลายให้ตรงกัน",
         hintVis: P.bars([[a, 0, "var(--tomato)", "ກ"], [b, 0, "var(--sky)", "ຂ"]]) };
     },
     parent: {
@@ -1329,7 +1628,7 @@ svg text { font-family: var(--font-num); }
         why: `${Math.max(a, b)} − ${Math.min(a, b)} = ${Math.abs(a - b)} ຈອກ`, whyTh: `${Math.abs(a - b)} แก้ว`, hint: "ນັບຈອກຂອງແຕ່ລະອັນ ແລ້ວເອົາມາລົບກັນ", hintTh: "นับแก้วของแต่ละอัน แล้วเอามาลบกัน", hintVis: P.pairs(a, b) };
       const ans = a > b ? "ກ" : "ຂ";
       return { sig: "m" + a + b, kind: "word", text: "ອັນໃດບັນຈຸນ້ຳໄດ້ຫຼາຍກວ່າ?", th: "อันไหนจุน้ำได้มากกว่า", vis, choices: opts([["ກ", "ກ"], ["ຂ", "ຂ"]]), answer: ans,
-        why: `${ans} ໄດ້ ${Math.max(a, b)} ຈອກ ຫຼາຍກວ່າ`, whyTh: `${ans} ได้มากกว่า`, hint: "ນັບວ່າແຕ່ລະອັນໄດ້ຈັກຈອກ", hintTh: "นับว่าแต่ละอันได้กี่แก้ว", hintVis: P.pairs(a, b) };
+        why: `${ans} ໄດ້ ${Math.max(a, b)} ຈອກ ຫຼາຍກວ່າ`, whyTh: `ภาชนะ ${ans === "ກ" ? "ก" : "ข"} จุน้ำได้ ${Math.max(a, b)} แก้ว จึงจุได้มากกว่า`, hint: "ນັບວ່າແຕ່ລະອັນໄດ້ຈັກຈອກ", hintTh: "นับว่าแต่ละอันได้กี่แก้ว", hintVis: P.pairs(a, b) };
     },
     parent: {
       book: [
@@ -1584,8 +1883,8 @@ svg text { font-family: var(--font-num); }
   CH.push({
     id: 18, lo: "ເລກລາວ", th: "เลขลาว", pages: "154–155",
     learn: [
-      { vis: `<div class="col"><div class="eq" style="font-size:28px;letter-spacing:8px">0 1 2 3 4</div><div class="big-lao">໐ ໑ ໒ ໓ ໔</div></div>`, lo: "ເລກລາວ ໐ ໑ ໒ ໓ ໔ ຄືກັບ 0 1 2 3 4", th: "เลขลาว ๐ ถึง ๔ เหมือนกับ 0 ถึง 4" },
-      { vis: `<div class="col"><div class="eq" style="font-size:28px;letter-spacing:8px">5 6 7 8 9</div><div class="big-lao">໕ ໖ ໗ ໘ ໙</div></div>`, lo: "ໄປຕໍ່ ໕ ໖ ໗ ໘ ໙ ຄືກັບ 5 6 7 8 9", th: "ต่อด้วย ๕ ถึง ๙ เหมือนกับ 5 ถึง 9" },
+      { vis: `<div class="col"><div class="eq" style="font-size:28px;letter-spacing:8px">0 1 2 3 4</div><div class="big-lao">໐ ໑ ໒ ໓ ໔</div></div>`, lo: "ເລກລາວ ໐ ໑ ໒ ໓ ໔ ຄືກັບ 0 1 2 3 4", th: "เลขลาว ໐ ໑ ໒ ໓ ໔ แทนจำนวนเดียวกับ 0 1 2 3 4" },
+      { vis: `<div class="col"><div class="eq" style="font-size:28px;letter-spacing:8px">5 6 7 8 9</div><div class="big-lao">໕ ໖ ໗ ໘ ໙</div></div>`, lo: "ໄປຕໍ່ ໕ ໖ ໗ ໘ ໙ ຄືກັບ 5 6 7 8 9", th: "เลขลาว ໕ ໖ ໗ ໘ ໙ แทนจำนวนเดียวกับ 5 6 7 8 9" },
       { vis: `<div class="col"><div class="eq">24 = <span class="big-lao" style="font-size:44px">${toLao(24)}</span></div><div class="eq">100 = <span class="big-lao" style="font-size:44px">${toLao(100)}</span></div></div>`, lo: "ຂຽນແບບດຽວກັນ: ຫຼັກຫົວສິບຢູ່ເບື້ອງຊ້າຍ ຫຼັກຫົວໜ່ວຍຢູ່ເບື້ອງຂວາ · 24 ຂຽນ ໒໔", th: "เขียนแบบเดียวกัน หลักสิบอยู่ซ้าย หลักหน่วยอยู่ขวา" },
       { vis: `<div class="big-lao">໔ ໕ · ໒ ໖ · ໑ ໙</div>`, lo: "ລະວັງ ເລກທີ່ຄ້າຍກັນ: ໔ ກັບ ໕ · ໒ ກັບ ໖ · ໑ ກັບ ໙", th: "ระวังเลขที่หน้าตาคล้ายกัน" },
     ],
@@ -1668,79 +1967,86 @@ svg text { font-family: var(--font-num); }
   const animalLine = (icons, names) => namedPicture(names, '<div class="eq">' + icons + '</div>');
   const choiceSigns = ["<", "=", ">"];
   const activities = {
-    1: lessonActivity("ວາງຝາຂວດ 4 ຝາແຖວເທິງ ແລະ ບ່ວງ 3 ກ້ານແຖວລຸ່ມ. ໃຫ້ລູກຈັບຄູ່ທີລະຄູ່.",
-      "ອັນໃດເຫຼືອຢູ່ອັນດຽວ?", "ລູກຊີ້ອັນທີ່ບໍ່ມີຄູ່ໄດ້. ລອງເພີ່ມບ່ວງອີກ 1 ກ້ານ ແລ້ວຖາມອີກ.",
-      question("ກົບ ຫຼື ໃບບົວ ອັນໃດຫຼາຍກວ່າ?", "", ["ກົບ", "ໃບບົວ", "ເທົ່າກັນ"], "ກົບ", "ຊີ້ຫາໂຕທີ່ຍັງບໍ່ມີໃບບົວ.", "ກົບເຫຼືອ 1 ໂຕ. ກົບ 4 ໂຕ ຫຼາຍກວ່າໃບບົວ 3 ໃບ.", P.eq([4, ">", 3])),
-      question("ກົບ 2 ໂຕ ກັບ ໃບບົວ 3 ໃບ. ຕື່ມເຄື່ອງໝາຍໃດ?", P.col(P.match("🐸", 2, "🍃", 3), P.eq([2, "?", 3])), choiceSigns, "<", "ຈັບຄູ່ກົບກັບໃບບົວ. ຫັນປາກກວ້າງໄປຫາກຸ່ມທີ່ຫຼາຍກວ່າ.", "2 ໜ້ອຍກວ່າ 3. ໃບບົວເຫຼືອ 1 ໃບ.", P.eq([2, "<", 3]))),
-    2: lessonActivity("ວາງຝາຂວດ 4 ຝາ. ເລື່ອນຝາໄປທາງຂ້າງທີລະຝາ ພ້ອມກັບນັບອອກສຽງ.",
-      "ນັບແລ້ວ ມີທັງໝົດຈັກຝາ?", "ລູກແຕະຝາລະເທື່ອ ແລະ ບອກຈຳນວນທັງໝົດດ້ວຍເລກສຸດທ້າຍທີ່ນັບ.",
-      question("ມີເຕົ່າທັງໝົດຈັກໂຕ?", "", [3, 4, 5], 4, "ເບິ່ງເລກທີ່ເຕົ່າໂຕສຸດທ້າຍ.", "ເຮົານັບ 1, 2, 3, 4. ມີເຕົ່າ 4 ໂຕ."),
-      question("ຄັ້ງນີ້ ມີໄຂ່ຈັກໜ່ວຍ?", eggPicture(3), [2, 3, 4], 3, "ໃຊ້ນິ້ວຊີ້ໄຂ່ທີລະໜ່ວຍ ແລ້ວນັບ.", "1, 2, 3. ມີໄຂ່ 3 ໜ່ວຍ.")),
-    3: lessonActivity("ໃຫ້ລູກວາງຂອງຫຼິ້ນ 3 ອັນເປັນແຖວ. ແຕະອັນທຳອິດທາງຊ້າຍ.",
-      "ຖ້າເລີ່ມຈາກອີກຂ້າງ ອັນໃດເປັນທີໜຶ່ງ?", "ລູກຊີ້ຈຸດເລີ່ມກ່ອນນັບລຳດັບ.",
-      question("ນັບຈາກຊ້າຍໄປຂວາ → ເຕົ່າຢູ່ທີເທົ່າໃດ?", animalLine("🦕 🐢 🐸", "ຈາກຊ້າຍ ໄດໂນເສົາ, ເຕົ່າ, ກົບ"), [1, 2, 3], 2, "ຊີ້ໄດໂນເສົາ ແລ້ວເວົ້າວ່າ ທີໜຶ່ງ.", "ໄດໂນເສົາຢູ່ທີ 1. ເຕົ່າຢູ່ທີ 2."),
-      question("← ນັບຈາກຂວາໄປຊ້າຍ. ກົບຢູ່ທີເທົ່າໃດ?", animalLine("🐸 🦕 🐢", "ຈາກຊ້າຍ ກົບ, ໄດໂນເສົາ, ເຕົ່າ"), [1, 2, 3], 3, "ເລີ່ມຈາກເຕົ່າທາງຂວາ.", "ນັບຈາກຂວາ ເຕົ່າທີ 1, ໄດໂນເສົາທີ 2, ກົບທີ 3.")),
-    4: lessonActivity("ໃຊ້ຝາຂວດແທນໄຂ່ໄດໂນເສົາ. ວາງ 2 ຝາໄວ້ກ່ອນ. ໃຫ້ລູກວາງຝາທີ່ເພີ່ມເປັນອີກກອງ ຈົນສອງກອງລວມກັນໄດ້ 7.",
-      "ຊີ້ແຕ່ຝາທີ່ລູກເພີ່ມ. ມີຈັກຝາ?", "ຖ້າລູກຕອບ 7 ໃຫ້ລູກປິດ 2 ຝາເດີມດ້ວຍມື ແລ້ວນັບຝາທີ່ເຫັນ. ຖ້າລູກຢາກແຕ້ມ ໃຫ້ແຕ້ມວົງນ້ອຍໆແທນໄຂ່ ແລ້ວລອງໃສ່ເລກໃນຮູບແຕກກິ່ງ.",
-      question("ເຮົາເພີ່ມໄຂ່ຈັກໜ່ວຍ?", "", [2, 5, 7], 5, "ໃຊ້ນິ້ວປິດໄຂ່ 2 ໜ່ວຍທຳອິດ. ນັບແຕ່ໄຂ່ທີ່ເພີ່ມ.", "ມີຢູ່ 2. ເພີ່ມ 5 ຈຶ່ງຄົບ 7. ເລກ 5 ຢູ່ໃນຫ້ອງວ່າງ.", P.col(P.eq([2, "+", {v: 5}, "=", 7]), P.split(7, 2, 5))),
-      question("ມີທັງໝົດ 8. ສ່ວນໜຶ່ງມີ 5. ອີກສ່ວນມີເທົ່າໃດ?", P.split(8, 5, 3, "b"), [2, 3, 8], 3, "ລອງຊູນິ້ວຂຶ້ນທີລະນິ້ວ ເມື່ອນັບຕໍ່ຈາກ 5 ຈົນເຖິງ 8.", "ນັບຕໍ່ 6, 7, 8 ແມ່ນເພີ່ມ 3 ເທື່ອ. 5 + 3 = 8.", P.split(8, 5, 3))),
-    5: lessonActivity("ວາງຂອງຫຼິ້ນ 3 ອັນ. ໃຫ້ລູກເລື່ອນເຂົ້າມາອີກ 2 ອັນ ທີລະອັນ.",
-      "ມີ 3 ແລ້ວ. ເມື່ອມາອີກອັນໜຶ່ງ ຈະນັບວ່າຫຍັງ?", "ລູກເວົ້າ 4, 5 ໃນເວລາເລື່ອນຂອງ ແລ້ວບອກວ່າມີ 5 ອັນທັງໝົດ.",
-      question("ຕອນນີ້ມີໄດໂນເສົາທັງໝົດຈັກໂຕ?", "", [2, 3, 5], 5, "ເລີ່ມທີ່ 3. ນັບຕໍ່ອີກ 2 ເທື່ອ.", "ຈາກ 3 ນັບຕໍ່ 4, 5. ມີ 5 ໂຕທັງໝົດ.", P.eq([3, "+", 2, "=", {v: 5}])),
-      question("ເຕົ່າມີ 4 ໂຕ. ມາອີກ 2 ໂຕ. ລວມເປັນຈັກໂຕ?", P.eq([4, "+", 2, "=", "?"]), [2, 5, 6], 6, "ເກັບ 4 ໄວ້ໃນໃຈ. ຊູນິ້ວຂຶ້ນ 2 ນິ້ວ ທີລະນິ້ວແລ້ວນັບຕໍ່.", "ຈາກ 4 ນັບຕໍ່ 5, 6. ຈຶ່ງມີ 6 ໂຕ.", P.eq([4, "+", 2, "=", {v: 6}]))),
-    6: lessonActivity("ວາງຝາ 5 ຝາແທນເຕົ່າ. ໃຫ້ລູກເລື່ອນເຕົ່າລົງນ້ຳ 3 ໂຕ ທີລະໂຕ.",
-      "ເຕົ່າທີ່ຍັງຢູ່ເທິງຝັ່ງ ມີຈັກໂຕ?", "ໃຫ້ລູກຊີ້ກຸ່ມທີ່ອອກໄປ ແລ້ວຊີ້ກຸ່ມທີ່ເຫຼືອ. ລອງປ່ຽນຄຳຖາມເປັນ ອອກໄປຈັກໂຕ?",
-      question("ຍັງເຫຼືອເຕົ່າຢູ່ຝັ່ງຈັກໂຕ?", "", [2, 3, 5], 2, "ນັບແຕ່ເຕົ່າທີ່ຍັງຢູ່. ເຕົ່າທີ່ມີກາກະບາດລົງນ້ຳແລ້ວ.", "ມີ 5 ໂຕ. ລົງນ້ຳ 3 ໂຕ. ເຫຼືອ 2 ໂຕ.", P.eq([5, "−", 3, "=", {v: 2}])),
-      question("ເຕົ່າ 7 ໂຕ ເຫຼືອຢູ່ຝັ່ງ 4 ໂຕ. ລົງນ້ຳໄປຈັກໂຕ?", P.eq([7, "−", "?", "=", 4]), [3, 4, 7], 3, "ວາງຝາ 7 ຝາ. ເລື່ອນອອກຈົນເຫຼືອ 4. ນັບຝາທີ່ເລື່ອນອອກ.", "ເອົາອອກ 3 ຈາກ 7 ຈຶ່ງເຫຼືອ 4.", P.eq([7, "−", {v: 3}, "=", 4]))),
-    7: lessonActivity("ມັດຫຼອດ 10 ຫຼອດໄວ້ນຳກັນ ແລ້ວວາງຫຼອດອີກ 3 ຫຼອດຂ້າງມັດ.", "ມີໜຶ່ງສິບແລ້ວ. ນັບຕໍ່ແນວໃດ?", "ລູກຊີ້ມັດແລ້ວເວົ້າ 10 ກ່ອນນັບສ່ວນທີ່ເຫຼືອ.",
-      question("ມີມັດໜຶ່ງ 10 ອັນ ກັບອີກ 3 ອັນ. ລວມມີເທົ່າໃດ?", blocks(1, 3), [3, 13, 16], 13, "ຈັບມັດໄວ້ໃນໃຈວ່າ 10 ແລ້ວນັບຕໍ່.", "10 ກັບ 3 ເປັນ 13."),
-      question("ມີ 16 ອັນ. ມັດໄວ້ 10 ອັນ. ຢູ່ນອກມັດຈັກອັນ?", P.split(16, 10, 6, "b"), [6, 10, 16], 6, "ນັບຈາກ 11 ຮອດ 16 ແລ້ວຊູນິ້ວໄປນຳ.", "16 ແມ່ນ 10 ກັບ 6.", blocks(1, 6))),
-    8: lessonActivity("ແຕ້ມໜ້າປັດໂມງໃສ່ເຈ້ຍ. ໃຊ້ເຈ້ຍສອງເສັ້ນ ເສັ້ນໜຶ່ງສັ້ນ ອີກເສັ້ນໜຶ່ງຍາວ ເຮັດເປັນເຂັມ.", "ເຂັມສັ້ນບອກຫຍັງ? ເຂັມຍາວຊີ້ໃສ່ເລກໃດ?", "ເມື່ອເຂັມຍາວຊີ້ 6 ລູກຊີ້ບ່ອນຂອງເຂັມສັ້ນລະຫວ່າງສອງເລກໄດ້.",
-      question("ຮອດເວລາກິນເຂົ້າ. ຈັກໂມງແລ້ວ?", P.clock(7, 0), ["6 ໂມງ", "7 ໂມງ", "12 ໂມງ"], "7 ໂມງ", "ເຂັມຍາວຊີ້ 12. ເບິ່ງເຂັມສັ້ນ.", "ເຂັມສັ້ນຊີ້ 7 ແລະ ເຂັມຍາວຊີ້ 12. ແມ່ນ 7 ໂມງ."),
-      question("ໂມງນີ້ບອກເວລາໃດ?", P.clock(3, 30), ["3 ໂມງ", "3 ໂມງເຄິ່ງ", "4 ໂມງ"], "3 ໂມງເຄິ່ງ", "ເຂັມສັ້ນກາຍ 3 ມາແລ້ວ. ເຂັມຍາວຊີ້ 6.", "ກາຍ 3 ໂມງມາເຄິ່ງຊົ່ວໂມງ. ແມ່ນ 3 ໂມງເຄິ່ງ.")),
-    9: lessonActivity("ໃຫ້ລູກລອງກິ້ງໝາກບານ ແລະ ກ່ອງ. ແລ້ວວາງກະປ໋ອງນອນລົງ ລອງກິ້ງເບິ່ງ.", "ດ້ານໃດຂອງກະປ໋ອງກິ້ງໄດ້? ດ້ານໃດວາງຕັ້ງໄດ້?", "ລູກລອງກັບຂອງຈິງ ແລະ ຊີ້ດ້ານໂຄ້ງກັບໜ້າພຽງໄດ້.",
-      question("ລອງຍູ້ເບົາໆ. ອັນໃດກິ້ງໄດ້ຄືໄຂ່ໄດໂນເສົາ?", P.row(P.shape("ball"), P.shape("box")), ["ໝາກບານ", "ກ່ອງ"], "ໝາກບານ", "ຄິດເບິ່ງວ່າຜິວດ້ານໃດໂຄ້ງ.", "ໝາກບານມີຜິວໂຄ້ງຮອບໂຕ ຈຶ່ງກິ້ງໄດ້."),
-      question("ເອົາກົ້ນກະປ໋ອງທາບໃສ່ເຈ້ຍ ແລ້ວແຕ້ມຕາມຂອບ. ໄດ້ຮູບໃດ?", P.shape("can"), ["ວົງມົນ", "ຮູບສາມແຈ"], "ວົງມົນ", "ໃຊ້ນິ້ວລູບຕາມຂອບກົ້ນກະປ໋ອງ.", "ຂອບກົ້ນກະປ໋ອງເປັນວົງມົນ.", P.shape("circle"))),
-    10: lessonActivity("ໃຊ້ຝາແທນກົບ. ວາງ 2 ຝາ, ເພີ່ມ 1 ຝາ, ແລ້ວເພີ່ມອີກ 2 ຝາ.", "ຫຼັງເຮັດບາດທຳອິດ ມີຈັກໂຕ?", "ລູກບອກຜົນບາດທຳອິດກ່ອນ ແລ້ວໃຊ້ຜົນນັ້ນເຮັດບາດຕໍ່ໄປ.",
-      question("ມີກົບ 2 ໂຕ. ມາ 1 ໂຕ ແລ້ວມາອີກ 2 ໂຕ. ລວມຈັກໂຕ?", P.eq([2, "+", 1, "+", 2]), [3, 4, 5], 5, "ລວມ 2 ກັບ 1 ກ່ອນ ແລ້ວເພີ່ມອີກ 2.", "2 + 1 = 3. ຈາກນັ້ນ 3 + 2 = 5."),
-      question("ມີເຕົ່າ 4 ໂຕ. ລົງນ້ຳ 1 ໂຕ ແລ້ວຂຶ້ນມາ 2 ໂຕ. ຢູ່ຝັ່ງຈັກໂຕ?", P.eq([4, "−", 1, "+", 2]), [3, 5, 7], 5, "ເອົາ 1 ອອກຈາກ 4 ກ່ອນ.", "4 − 1 = 3. ແລ້ວ 3 + 2 = 5.")),
-    11: lessonActivity("ວາງສໍສອງກ້ານໃຫ້ປາຍຂ້າງໜຶ່ງສະເໝີກັນ. ລອງວັດດ້ວຍເຈ້ຍຕາກາໂລ.", "ສອງກ້ານເລີ່ມວັດຈາກບ່ອນດຽວກັນບໍ?", "ລູກຈັດປາຍໃຫ້ສະເໝີ ແລະ ໃຊ້ຫົວໜ່ວຍຂະໜາດດຽວກັນ.",
-      question("ສອງແຖວເລີ່ມສະເໝີກັນ. ແຖວໃດຍາວກວ່າ?", P.bars([[5,0,"var(--sky)","ກ"], [3,0,"var(--tomato)","ຂ"]]), ["ກ", "ຂ", "ເທົ່າກັນ"], "ກ", "ຊີ້ປາຍຂວາຂອງແຕ່ລະແຖວ.", "ແຖວ ກ ຍາວ 5 ຕາ. ແຖວ ຂ ຍາວ 3 ຕາ."),
-      question("ແຖວ ຂ ຍາວກວ່າແຖວ ກ ຈັກຕາ?", P.bars([[4,0,"var(--sky)","ກ"], [6,0,"var(--tomato)","ຂ"]]), [2, 4, 6], 2, "ນັບແຕ່ຕາທີ່ຍື່ນອອກມາ.", "ແຖວ ຂ ຍື່ນອອກມາ 2 ຕາ. 6 − 4 = 2.")),
-    12: lessonActivity("ແຕ້ມຕາ 2 ແຖວ ແຖວລະ 5 ຕາ. ໃສ່ຝາ 8 ຝາ ແລ້ວວາງອີກ 5 ຝາໄວ້ຂ້າງນອກ.", "ຈະຍ້າຍຈັກຝາເຂົ້າໄປໃຫ້ຄົບ 10?", "ລູກຍ້າຍພໍໃຫ້ເຕັມ 10 ແລ້ວນັບຝາທີ່ເຫຼືອຂ້າງນອກ.",
-      question("ມີ 8 ແລ້ວ. ຍ້າຍຈັກຝາຈາກກອງ 5 ຝາ ເຂົ້າມາໃຫ້ຄົບ 10?", P.col(P.frame([[8,"c1"]]), eggPicture(5)), [2, 5, 8], 2, "ຊີ້ຕາຫວ່າງທີລະຕາ.", "ຍ້າຍ 2 ແລ້ວເຫຼືອ 3. ຈຶ່ງໄດ້ 10 + 3 = 13.", P.frame([[8,"c1"],[2,"c2"],[3,"c2"]])),
-      question("ໄຂ່ 9 ໜ່ວຍ ກັບອີກ 4 ໜ່ວຍ ລວມກັນເທົ່າໃດ?", P.eq([9, "+", 4, "=", "?"]), [10, 12, 13], 13, "ເອົາ 1 ຈາກ 4 ໄປໃຫ້ 9 ຄົບ 10. ຍັງເຫຼືອຈັກໜ່ວຍ?", "9 + 1 = 10. ເຫຼືອ 3. 10 + 3 = 13.")),
-    13: lessonActivity("ໃຊ້ຈອກນ້ອຍໃບດຽວຕວງນ້ຳສາມຈອກໃສ່ຖ້ວຍໜຶ່ງ ແລະ ສອງຈອກໃສ່ອີກຖ້ວຍໜຶ່ງ.", "ເປັນຫຍັງເຮົາຈຶ່ງໃຊ້ຈອກໃບດຽວກັນຕວງ?", "ລູກຕວງແຕ່ລະຈອກໃຫ້ເຕັມເທົ່າກັນ ແລ້ວປຽບທຽບຈຳນວນຈອກ.",
-      question("ໃຊ້ຈອກໃບດຽວຕວງ. ຖ້ວຍໃດມີນ້ຳຫຼາຍກວ່າ?", P.col(P.row(P.lbl("ກ"), P.cups(3)), P.row(P.lbl("ຂ"), P.cups(2))), ["ກ", "ຂ", "ເທົ່າກັນ"], "ກ", "ນັບຈຳນວນຈອກຂອງແຕ່ລະຖ້ວຍ.", "ຖ້ວຍ ກ ມີ 3 ຈອກ. ຖ້ວຍ ຂ ມີ 2 ຈອກ."),
-      question("ຖອກນ້ຳທັງໝົດຈາກຈອກເຕ້ຍໃສ່ຈອກສູງ ໂດຍບໍ່ໃຫ້ເຮ່ຍ. ນ້ຳປ່ຽນແນວໃດ?", P.row(P.glass(48,60,0.5), P.lbl("→"), P.glass(24,90,2 / 3)), ["ຫຼາຍຂຶ້ນ", "ເທົ່າເດີມ", "ໜ້ອຍລົງ"], "ເທົ່າເດີມ", "ເຮົາໄດ້ເຕີມນ້ຳ ຫຼື ເອົານ້ຳອອກບໍ?", "ເຮົາປ່ຽນຈອກ. ນ້ຳຍັງມີເທົ່າເດີມ.")),
-    14: lessonActivity("ວາງຝາ 13 ຝາເປັນກຸ່ມ 10 ແລະ 3. ເອົາ 8 ຝາອອກຈາກກຸ່ມ 10.", "ໃນກຸ່ມ 10 ເຫຼືອຈັກຝາ? ອີກກຸ່ມຍັງມີຈັກຝາ?", "ລູກນຳສອງກຸ່ມທີ່ເຫຼືອມາລວມກັນ.",
-      question("13 ແມ່ນ 10 ກັບ 3. ເອົາ 8 ອອກຈາກກຸ່ມ 10. ລວມແລ້ວເຫຼືອຈັກອັນ?", P.frame([[2,"c1"],[8,"gone"],[3,"c2"]]), [2, 3, 5], 5, "ຊີ້ຕາທີ່ຍັງມີສີຈາກທັງສອງກຸ່ມ.", "10 − 8 = 2. ເອົາ 2 ມາລວມກັບ 3 ໄດ້ 5."),
-      question("ໄຂ່ 12 ໜ່ວຍ ແຕກອອກເປັນໂຕ 7 ໜ່ວຍ. ເຫຼືອໄຂ່ຈັກໜ່ວຍ?", P.eq([12, "−", 7, "=", "?"]), [3, 5, 7], 5, "ແບ່ງ 12 ເປັນ 10 ກັບ 2. ເອົາ 7 ອອກຈາກ 10 ກ່ອນ.", "10 − 7 = 3. ຍັງມີອີກ 2. 3 + 2 = 5.")),
-    15: lessonActivity("ໃຊ້ເຈ້ຍຕາກາໂລ. ແຕ້ມຄອກເຕົ່າ 2 ແຖວ ແຖວລະ 3 ຕາ ແລ້ວໃຫ້ລູກລະບາຍສີທີລະຕາ.", "ຄອກເຕົ່າກວມເອົາຈັກຕາ?", "ລູກນັບຕາທຸກຕາທີ່ຢູ່ຂ້າງໃນ ລຽງໄປທີລະແຖວ.",
-      question("ຄອກເຕົ່ານີ້ມີຈັກຕາ?", areaPicture(3, 2), [3, 5, 6], 6, "ນັບແຖວເທິງ ແລ້ວນັບແຖວລຸ່ມຕໍ່.", "3 ຕາກັບອີກ 3 ຕາ ລວມເປັນ 6 ຕາ."),
-      question("ຄອກໃໝ່ນີ້ມີຈັກຕາ?", areaPicture(4, 2), [4, 6, 8], 8, "ຄອກໃໝ່ມີ 2 ແຖວ. ລອງນັບແຖວລະເທື່ອ.", "4 ຕາກັບອີກ 4 ຕາ ລວມເປັນ 8 ຕາ.")),
-    16: lessonActivity("ພັບເຈ້ຍຮູບຈະຕຸລັດຕາມເສັ້ນທະແຍງ ແລ້ວແຍກເປັນ 2 ແຜ່ນ. ໃຫ້ລູກໝູນແຜ່ນເຈ້ຍ ແລ້ວຕໍ່ໃຫ້ໄດ້ຮູບເດີມ.", "ຖ້າໝູນແຜ່ນໜຶ່ງ ຈຳນວນແຜ່ນປ່ຽນບໍ?", "ລູກລອງໝູນ ແລະ ຕໍ່ແຜ່ນຕາມຂອບໃຫ້ພໍດີ.",
-      question("ຮູບຈະຕຸລັດຮູບນີ້ ຕໍ່ຈາກສາມແຈຈັກແຜ່ນ?", triangularTiles(1), [1, 2, 3], 2, "ຊີ້ແຕ່ລະດ້ານຂອງເສັ້ນທະແຍງ.", "ສາມແຈ 2 ແຜ່ນ ຕໍ່ກັນໄດ້ຮູບຈະຕຸລັດ 1 ຮູບ."),
-      question("ຖ້າຕໍ່ສອງຮູບແບບນີ້ ໃຊ້ສາມແຈຈັກແຜ່ນ?", triangularTiles(2), [2, 3, 4], 4, "ຊີ້ສາມແຈໃນຮູບທຳອິດ ແລ້ວນັບຮູບທີສອງຕໍ່.", "ແຕ່ລະຮູບໃຊ້ 2 ແຜ່ນ. 2 + 2 = 4.")),
-    17: lessonActivity("ມັດຫຼອດເປັນມັດລະ 10. ວາງ 2 ມັດ ກັບຫຼອດອີກ 4 ຫຼອດ. ໃຫ້ລູກຂຽນຈຳນວນ.", "ເລກ 2 ໃນ 24 ແທນຫຼອດຈັກມັດ?", "ລູກອ່ານຈຳນວນມັດກ່ອນ ແລ້ວອ່ານຈຳນວນຫຼອດທີ່ຢູ່ນອກມັດ.",
-      question("ມັດລະ 10. ມີ 2 ມັດ ກັບອີກ 4 ອັນ. ເປັນຈຳນວນໃດ?", blocks(2, 4), [6, 24, 42], 24, "ນັບມັດ 10, 20 ແລ້ວນັບຕໍ່ອີກ 4.", "2 ຫົວສິບ ກັບ 4 ຫົວໜ່ວຍ ເປັນ 24."),
-      question("ຄັ້ງນີ້ ມີ 3 ມັດ ກັບອີກ 2 ອັນ. ຂຽນເລກໃດ?", blocks(3, 2), [5, 23, 32], 32, "ເລກຕົວທຳອິດບອກຈຳນວນມັດລະ 10.", "30 ກັບ 2 ເປັນ 32.")),
-    18: lessonActivity("ຂຽນ ໓ ໃສ່ເຈ້ຍ ແລ້ວໃຫ້ລູກແຕ້ມໄຂ່ໃຫ້ພໍດີກັບເລກ. ລອງປ່ຽນເປັນ ໔.", "ເລກ 3 ກັບ ໓ ໃຊ້ບອກຈຳນວນໄຂ່ດຽວກັນບໍ?", "ລູກຈັບຄູ່ຮູບກັບຕົວເລກໄດ້ ແລ້ວລອງຂຽນເລກລາວດ້ວຍນິ້ວ.",
-      question("ໄຂ່ 3 ໜ່ວຍ. ເລືອກເລກລາວທີ່ກົງກັນ.", eggPicture(3), ["໒", "໓", "໕"], "໓", "ໃຊ້ນິ້ວຂຽນຕາມແບບ ໑ ໒ ໓.", "3 ຂຽນເປັນເລກລາວວ່າ ໓."),
-      question("ບັດເລກລາວນີ້ແທນເຕົ່າຈັກໂຕ?", '<div class="big-lao">໔</div>', [3, 4, 5], 4, "ລອງໄລ່ ໑ ໒ ໓ ໔ ແລ້ວຊູນິ້ວໄປນຳ.", "໔ ແລະ 4 ບອກຈຳນວນດຽວກັນ.", turtlePicture(4))),
-    r: lessonActivity("ໃຫ້ລູກເລືອກສັດທີ່ມັກ. ໃຊ້ຝາ 6 ຝາແທນສັດ ແລ້ວປິດໄວ້ສ່ວນໜຶ່ງ.", "ລູກເບິ່ງເຫັນຈັກໂຕ? ຮູ້ໄດ້ແນວໃດວ່າລີ້ຢູ່ຈັກໂຕ?", "ໃຫ້ລູກແຕ້ມຈຸດ ຫຼື ຊີ້ຝາເພື່ອເລົ່າວິທີຄິດ ແລ້ວສະຫຼັບໃຫ້ລູກເປັນຄົນຖາມ.",
-      question("ເຕົ່າມີ 6 ໂຕ. ເຫັນ 4 ໂຕ. ລີ້ຢູ່ຈັກໂຕ?", P.split(6, 4, 2, "b"), [2, 4, 6], 2, "ນັບຕໍ່ຈາກ 4 ໄປຫາ 6.", "4 ກັບ 2 ລວມກັນເປັນ 6.", P.split(6, 4, 2)),
-      question("ກົບ 8 ໂຕ ໂດດລົງນ້ຳ 3 ໂຕ. ຢູ່ຝັ່ງຈັກໂຕ?", P.eq([8, "−", 3, "=", "?"]), [3, 5, 8], 5, "ແຕ້ມ 8 ຈຸດ. ຂີດຂ້າ 3 ຈຸດ ແລ້ວນັບທີ່ເຫຼືອ.", "8 − 3 = 5. ກວດໄດ້ດ້ວຍ 5 + 3 = 8."))
+    1: lessonActivity(line("ວາງຝາຂວດ 4 ຝາແຖວເທິງ ແລະ ບ່ວງ 3 ກ້ານແຖວລຸ່ມ. ໃຫ້ລູກຈັບຄູ່ທີລະຄູ່.", "วางฝาขวด 4 ฝาแถวบน กับช้อน 3 คันแถวล่าง ให้ลูกจับคู่ทีละคู่"),
+      line("ອັນໃດເຫຼືອຢູ່ອັນດຽວ?", "อะไรเหลืออยู่โดยไม่มีคู่?"), line("ລູກຊີ້ອັນທີ່ບໍ່ມີຄູ່ໄດ້. ລອງເພີ່ມບ່ວງອີກ 1 ກ້ານ ແລ້ວຖາມອີກ.", "ให้ลูกชี้ชิ้นที่เหลือ แล้วเพิ่มช้อนอีก 1 คัน ลองถามอีกครั้ง"),
+      question(line("ກົບ ຫຼື ໃບບົວ ອັນໃດຫຼາຍກວ່າ?", "กบกับใบบัว อะไรมีมากกว่า?"), "", ["ກົບ", "ໃບບົວ", "ເທົ່າກັນ"], "ກົບ", line("ຊີ້ຫາໂຕທີ່ຍັງບໍ່ມີໃບບົວ.", "ลองชี้กบตัวที่ยังไม่มีใบบัว"), line("ກົບເຫຼືອ 1 ໂຕ. ກົບ 4 ໂຕ ຫຼາຍກວ່າໃບບົວ 3 ໃບ.", "กบเหลือ 1 ตัว กบ 4 ตัวจึงมากกว่าใบบัว 3 ใบ"), P.eq([4, ">", 3])),
+      question(line("ກົບ 2 ໂຕ ກັບ ໃບບົວ 3 ໃບ. ຕື່ມເຄື່ອງໝາຍໃດ?", "มีกบ 2 ตัวกับใบบัว 3 ใบ เติมเครื่องหมายไหนดี?"), P.col(P.match("🐸", 2, "🍃", 3), P.eq([2, "?", 3])), choiceSigns, "<", line("ຈັບຄູ່ກົບກັບໃບບົວ. ຫັນປາກກວ້າງໄປຫາກຸ່ມທີ່ຫຼາຍກວ່າ.", "จับคู่กบกับใบบัว แล้วหันปากกว้างของเครื่องหมายไปหากลุ่มที่มีมากกว่า"), line("2 ໜ້ອຍກວ່າ 3. ໃບບົວເຫຼືອ 1 ໃບ.", "2 น้อยกว่า 3 ใบบัวเหลือ 1 ใบ"), P.eq([2, "<", 3]))),
+    2: lessonActivity(line("ວາງຝາຂວດ 4 ຝາ. ເລື່ອນຝາໄປທາງຂ້າງທີລະຝາ ພ້ອມກັບນັບອອກສຽງ.", "วางฝาขวด 4 ฝา ให้ลูกเลื่อนทีละฝาพร้อมนับออกเสียง"),
+      line("ນັບແລ້ວ ມີທັງໝົດຈັກຝາ?", "นับแล้วมีทั้งหมดกี่ฝา?"), line("ລູກແຕະຝາລະເທື່ອ ແລະ ບອກຈຳນວນທັງໝົດດ້ວຍເລກສຸດທ້າຍທີ່ນັບ.", "ลองดูว่าลูกแตะฝาละครั้ง และใช้เลขตัวสุดท้ายบอกว่ามีทั้งหมดเท่าไร"),
+      question(line("ມີເຕົ່າທັງໝົດຈັກໂຕ?", "มีเต่าทั้งหมดกี่ตัว?"), "", [3, 4, 5], 4, line("ເບິ່ງເລກທີ່ເຕົ່າໂຕສຸດທ້າຍ.", "ดูเลขที่เต่าตัวสุดท้าย"), line("ເຮົານັບ 1, 2, 3, 4. ມີເຕົ່າ 4 ໂຕ.", "เรานับ 1, 2, 3, 4 มีเต่า 4 ตัว")),
+      question(line("ຄັ້ງນີ້ ມີໄຂ່ຈັກໜ່ວຍ?", "คราวนี้มีไข่กี่ฟอง?"), eggPicture(3), [2, 3, 4], 3, line("ໃຊ້ນິ້ວຊີ້ໄຂ່ທີລະໜ່ວຍ ແລ້ວນັບ.", "ชี้ไข่ทีละฟองแล้วนับไปด้วย"), line("1, 2, 3. ມີໄຂ່ 3 ໜ່ວຍ.", "1, 2, 3 มีไข่ 3 ฟอง"))),
+    3: lessonActivity(line("ໃຫ້ລູກວາງຂອງຫຼິ້ນ 3 ອັນເປັນແຖວ. ແຕະອັນທຳອິດທາງຊ້າຍ.", "วางของเล่น 3 ชิ้นเป็นแถว ให้ลูกแตะชิ้นแรกทางซ้าย"),
+      line("ຖ້າເລີ່ມຈາກອີກຂ້າງ ອັນໃດເປັນທີໜຶ່ງ?", "ถ้าเริ่มจากอีกข้าง ชิ้นไหนจะเป็นชิ้นแรก?"), line("ລູກຊີ້ຈຸດເລີ່ມກ່ອນນັບລຳດັບ.", "ให้ลูกชี้ด้านที่จะเริ่มก่อนนับลำดับ"),
+      question(line("ນັບຈາກຊ້າຍໄປຂວາ → ເຕົ່າຢູ່ທີເທົ່າໃດ?", "นับจากซ้ายไปขวา → เต่าอยู่ลำดับที่เท่าไร?"), animalLine("🦕 🐢 🐸", "ຈາກຊ້າຍ ໄດໂນເສົາ, ເຕົ່າ, ກົບ"), [1, 2, 3], 2, line("ຊີ້ໄດໂນເສົາ ແລ້ວເວົ້າວ່າ ທີໜຶ່ງ.", "ชี้ไดโนเสาร์แล้วพูดว่า ตัวที่หนึ่ง"), line("ໄດໂນເສົາຢູ່ທີ 1. ເຕົ່າຢູ່ທີ 2.", "ไดโนเสาร์อยู่ที่ 1 เต่าอยู่ที่ 2")),
+      question(line("← ນັບຈາກຂວາໄປຊ້າຍ. ກົບຢູ່ທີເທົ່າໃດ?", "← นับจากขวาไปซ้าย กบอยู่ลำดับที่เท่าไร?"), animalLine("🐸 🦕 🐢", "ຈາກຊ້າຍ ກົບ, ໄດໂນເສົາ, ເຕົ່າ"), [1, 2, 3], 3, line("ເລີ່ມຈາກເຕົ່າທາງຂວາ.", "เริ่มจากเต่าทางขวา"), line("ນັບຈາກຂວາ ເຕົ່າທີ 1, ໄດໂນເສົາທີ 2, ກົບທີ 3.", "นับจากขวา เต่าที่ 1 ไดโนเสาร์ที่ 2 กบที่ 3"))),
+    4: lessonActivity(line("ໃຊ້ຝາຂວດແທນໄຂ່ໄດໂນເສົາ. ວາງ 2 ຝາໄວ້ກ່ອນ. ໃຫ້ລູກວາງຝາທີ່ເພີ່ມເປັນອີກກອງ ຈົນສອງກອງລວມກັນໄດ້ 7.", "ใช้ฝาขวดแทนไข่ไดโนเสาร์ วางไว้ 2 ฝา ให้ลูกเติมอีกกองจนสองกองรวมกันได้ 7"),
+      line("ຊີ້ແຕ່ຝາທີ່ລູກເພີ່ມ. ມີຈັກຝາ?", "ชี้เฉพาะฝาที่ลูกเติม มีกี่ฝา?"), line("ຖ້າລູກຕອບ 7 ໃຫ້ລູກປິດ 2 ຝາເດີມດ້ວຍມື ແລ້ວນັບຝາທີ່ເຫັນ. ຖ້າລູກຢາກແຕ້ມ ໃຫ້ແຕ້ມວົງນ້ອຍໆແທນໄຂ່ ແລ້ວລອງໃສ່ເລກໃນຮູບແຕກກິ່ງ.", "ถ้าลูกตอบ 7 ให้ใช้มือบัง 2 ฝาแรกแล้วนับฝาที่เห็น ถ้าชอบวาด ให้เขาวาดวงกลมแทนไข่แล้วเติมเลขในแผนภาพ"),
+      question(line("ເຮົາເພີ່ມໄຂ່ໄປຈັກໜ່ວຍ?", "เราเติมไข่ไปกี่ฟอง?"), "", [2, 5, 7], 5, line("ໃຊ້ນິ້ວປິດໄຂ່ 2 ໜ່ວຍທຳອິດ. ນັບແຕ່ໄຂ່ທີ່ເພີ່ມ.", "ลองบังไข่ 2 ฟองแรก แล้วนับเฉพาะฟองที่เติม"), line("ມີຢູ່ 2. ເພີ່ມ 5 ຈຶ່ງຄົບ 7. ເລກ 5 ຢູ່ໃນຫ້ອງວ່າງ.", "มีอยู่ 2 ฟอง เติม 5 ฟองจึงครบ 7 ช่องว่างจึงใส่ 5"), P.col(P.eq([2, "+", {v: 5}, "=", 7]), P.split(7, 2, 5))),
+      question(line("ມີທັງໝົດ 8. ສ່ວນໜຶ່ງມີ 5. ອີກສ່ວນມີເທົ່າໃດ?", "ทั้งหมดมี 8 ส่วนหนึ่งมี 5 อีกส่วนมีเท่าไร?"), P.split(8, 5, 3, "b"), [2, 3, 8], 3, line("ລອງຊູນິ້ວຂຶ້ນທີລະນິ້ວ ເມື່ອນັບຕໍ່ຈາກ 5 ຈົນເຖິງ 8.", "ชูนิ้วทีละนิ้วขณะนับต่อจาก 5 ไปถึง 8"), line("ນັບຕໍ່ 6, 7, 8 ແມ່ນເພີ່ມ 3 ເທື່ອ. 5 + 3 = 8.", "นับต่อ 6, 7, 8 ได้ 3 ครั้ง ดังนั้น 5 + 3 = 8"), P.split(8, 5, 3))),
+    5: lessonActivity(line("ວາງຂອງຫຼິ້ນ 3 ອັນ. ໃຫ້ລູກເລື່ອນເຂົ້າມາອີກ 2 ອັນ ທີລະອັນ.", "วางของเล่น 3 ชิ้น ให้ลูกเลื่อนเข้ามาเพิ่มอีก 2 ชิ้น ทีละชิ้น"),
+      line("ມີ 3 ແລ້ວ. ເມື່ອມາອີກອັນໜຶ່ງ ຈະນັບວ່າຫຍັງ?", "มีอยู่ 3 ถ้ามาอีกชิ้น จะนับว่าอะไร?"), line("ລູກເວົ້າ 4, 5 ໃນເວລາເລື່ອນຂອງ ແລ້ວບອກວ່າມີ 5 ອັນທັງໝົດ.", "ฟังว่าลูกพูด 4, 5 ตรงกับชิ้นที่เลื่อน แล้วบอกว่ารวมได้ 5 ชิ้น"),
+      question(line("ຕອນນີ້ມີໄດໂນເສົາທັງໝົດຈັກໂຕ?", "ตอนนี้มีไดโนเสาร์ทั้งหมดกี่ตัว?"), "", [2, 3, 5], 5, line("ເລີ່ມທີ່ 3. ນັບຕໍ່ອີກ 2 ເທື່ອ.", "เริ่มที่ 3 แล้วนับต่ออีก 2 ครั้ง"), line("ຈາກ 3 ນັບຕໍ່ 4, 5. ມີ 5 ໂຕທັງໝົດ.", "จาก 3 นับต่อ 4, 5 มีทั้งหมด 5 ตัว"), P.eq([3, "+", 2, "=", {v: 5}])),
+      question(line("ເຕົ່າມີ 4 ໂຕ. ມາອີກ 2 ໂຕ. ລວມເປັນຈັກໂຕ?", "มีเต่า 4 ตัว มาอีก 2 ตัว รวมกี่ตัว?"), P.eq([4, "+", 2, "=", "?"]), [2, 5, 6], 6, line("ເລີ່ມຈາກ 4. ຊູນິ້ວຂຶ້ນທີລະນິ້ວ ແລ້ວນັບຕໍ່ອີກ 2 ເທື່ອ.", "จำ 4 ไว้ ชูนิ้วทีละนิ้วสองครั้งพร้อมกับนับต่อ"), line("ຈາກ 4 ນັບຕໍ່ 5, 6. ຈຶ່ງມີ 6 ໂຕ.", "จาก 4 นับต่อ 5, 6 จึงมีเต่า 6 ตัว"), P.eq([4, "+", 2, "=", {v: 6}]))),
+    6: lessonActivity(line("ວາງຝາ 5 ຝາແທນເຕົ່າ. ໃຫ້ລູກເລື່ອນເຕົ່າລົງນ້ຳ 3 ໂຕ ທີລະໂຕ.", "ใช้ฝา 5 ฝาแทนเต่า ให้ลูกเลื่อนเต่าลงน้ำ 3 ตัว ทีละตัว"),
+      line("ເຕົ່າທີ່ຍັງຢູ່ເທິງຝັ່ງ ມີຈັກໂຕ?", "ยังมีเต่าอยู่บนฝั่งกี่ตัว?"), line("ໃຫ້ລູກຊີ້ກຸ່ມທີ່ອອກໄປ ແລ້ວຊີ້ກຸ່ມທີ່ເຫຼືອ. ລອງປ່ຽນຄຳຖາມເປັນ ອອກໄປຈັກໂຕ?", "ให้ลูกชี้กลุ่มที่ลงน้ำ แล้วชี้กลุ่มที่เหลือ ลองเปลี่ยนมาถามว่าลงน้ำไปกี่ตัว"),
+      question(line("ຍັງເຫຼືອເຕົ່າຢູ່ຝັ່ງຈັກໂຕ?", "เหลือเต่าอยู่บนฝั่งกี่ตัว?"), "", [2, 3, 5], 2, line("ນັບແຕ່ເຕົ່າທີ່ຍັງຢູ່. ເຕົ່າທີ່ມີກາກະບາດລົງນ້ຳແລ້ວ.", "นับเต่าที่ยังอยู่บนฝั่ง ตัวที่มีกากบาทลงน้ำไปแล้ว"), line("ມີ 5 ໂຕ. ລົງນ້ຳ 3 ໂຕ. ເຫຼືອ 2 ໂຕ.", "มี 5 ตัว ลงน้ำ 3 ตัว เหลือ 2 ตัว"), P.eq([5, "−", 3, "=", {v: 2}])),
+      question(line("ເຕົ່າ 7 ໂຕ ເຫຼືອຢູ່ຝັ່ງ 4 ໂຕ. ລົງນ້ຳໄປຈັກໂຕ?", "เต่า 7 ตัว เหลือบนฝั่ง 4 ตัว ลงน้ำไปกี่ตัว?"), P.eq([7, "−", "?", "=", 4]), [3, 4, 7], 3, line("ວາງຝາ 7 ຝາ. ເລື່ອນອອກຈົນເຫຼືອ 4. ນັບຝາທີ່ເລື່ອນອອກ.", "วางฝา 7 ฝา เลื่อนออกจนเหลือ 4 แล้วนับฝาที่เลื่อนออก"), line("ມີ 7 ໂຕ. ລົງນ້ຳໄປ 3 ໂຕ ຈຶ່ງເຫຼືອ 4 ໂຕ.", "เอาออก 3 จาก 7 จึงเหลือ 4"), P.eq([7, "−", {v: 3}, "=", 4]))),
+    7: lessonActivity(line("ມັດຫຼອດ 10 ຫຼອດໄວ້ນຳກັນ ແລ້ວວາງຫຼອດອີກ 3 ຫຼອດຂ້າງມັດ.", "มัดหลอด 10 หลอดเข้าด้วยกัน วางหลอดอีก 3 หลอดข้างมัด"), line("ມີໜຶ່ງສິບແລ້ວ. ນັບຕໍ່ແນວໃດ?", "มีสิบแล้ว จะนับต่อยังไง?"), line("ລູກຊີ້ມັດແລ້ວເວົ້າ 10 ກ່ອນນັບສ່ວນທີ່ເຫຼືອ.", "ให้ลูกชี้ที่มัดแล้วพูดว่า สิบ ก่อนนับหลอดที่อยู่ข้างนอก"),
+      question(line("ມີມັດໜຶ່ງ 10 ອັນ ກັບອີກ 3 ອັນ. ລວມມີເທົ່າໃດ?", "หนึ่งมัดมี 10 ชิ้น มีอีก 3 ชิ้น รวมเท่าไร?"), blocks(1, 3), [3, 13, 16], 13, line("ຈັບມັດໄວ້ໃນໃຈວ່າ 10 ແລ້ວນັບຕໍ່.", "จำว่ามัดนี้มี 10 แล้วนับต่อ"), line("10 ກັບ 3 ເປັນ 13.", "10 กับ 3 เป็น 13")),
+      question(line("ມີ 16 ອັນ. ມັດໄວ້ 10 ອັນ. ຢູ່ນອກມັດຈັກອັນ?", "มี 16 ชิ้น มัดไว้ 10 ชิ้น อยู่นอกมัดกี่ชิ้น?"), P.split(16, 10, 6, "b"), [6, 10, 16], 6, line("ນັບຈາກ 11 ຮອດ 16 ແລ້ວຊູນິ້ວໄປນຳ.", "ชูนิ้วขณะนับจาก 11 ถึง 16"), line("16 ແມ່ນ 10 ກັບ 6.", "16 คือ 10 กับ 6"), blocks(1, 6))),
+    8: lessonActivity(line("ແຕ້ມໜ້າປັດໂມງໃສ່ເຈ້ຍ. ໃຊ້ເຈ້ຍສອງເສັ້ນ ເສັ້ນໜຶ່ງສັ້ນ ອີກເສັ້ນໜຶ່ງຍາວ ເຮັດເປັນເຂັມ.", "วาดหน้าปัดนาฬิกาบนกระดาษ ใช้กระดาษเส้นสั้นกับเส้นยาวแทนเข็ม"), line("ເຂັມສັ້ນບອກຫຍັງ? ເຂັມຍາວຊີ້ໃສ່ເລກໃດ?", "เข็มสั้นบอกอะไร? เข็มยาวชี้เลขไหน?"), line("ເມື່ອເຂັມຍາວຊີ້ 6 ລູກຊີ້ບ່ອນຂອງເຂັມສັ້ນລະຫວ່າງສອງເລກໄດ້.", "เมื่อเข็มยาวชี้ 6 ให้ลูกชี้ว่าเข็มสั้นอยู่ระหว่างเลขอะไร"),
+      question(line("ຮອດເວລາກິນເຂົ້າ. ຈັກໂມງແລ້ວ?", "ถึงเวลากินข้าวแล้ว ตอนนี้กี่โมง?"), P.clock(7, 0), ["6 ໂມງ", "7 ໂມງ", "12 ໂມງ"], "7 ໂມງ", line("ເຂັມຍາວຊີ້ 12. ເບິ່ງເຂັມສັ້ນ.", "เข็มยาวชี้ 12 ลองดูเข็มสั้น"), line("ເຂັມສັ້ນຊີ້ 7 ແລະ ເຂັມຍາວຊີ້ 12. ແມ່ນ 7 ໂມງ.", "เข็มสั้นชี้ 7 เข็มยาวชี้ 12 ตอนนี้ 7 โมง")),
+      question(line("ໂມງນີ້ບອກເວລາໃດ?", "นาฬิกาเรือนนี้บอกเวลาเท่าไร?"), P.clock(3, 30), ["3 ໂມງ", "3 ໂມງເຄິ່ງ", "4 ໂມງ"], "3 ໂມງເຄິ່ງ", line("ເຂັມສັ້ນກາຍ 3 ມາແລ້ວ. ເຂັມຍາວຊີ້ 6.", "เข็มสั้นเพิ่งผ่าน 3 เข็มยาวชี้ 6"), line("ກາຍ 3 ໂມງມາເຄິ່ງຊົ່ວໂມງ. ແມ່ນ 3 ໂມງເຄິ່ງ.", "ผ่าน 3 โมงมาครึ่งชั่วโมง จึงเป็น 3 โมงครึ่ง"))),
+    9: lessonActivity(line("ໃຫ້ລູກລອງກິ້ງໝາກບານ ແລະ ກ່ອງ. ແລ້ວວາງກະປ໋ອງນອນລົງ ລອງກິ້ງເບິ່ງ.", "ลองกลิ้งลูกบอลกับกล่อง แล้ววางกระป๋องนอนลง ลองกลิ้งอีกครั้ง"), line("ດ້ານໃດຂອງກະປ໋ອງກິ້ງໄດ້? ດ້ານໃດວາງຕັ້ງໄດ້?", "กระป๋องกลิ้งได้ด้านไหน? วางตั้งได้ด้านไหน?"), line("ລູກລອງກັບຂອງຈິງ ແລະ ຊີ້ດ້ານໂຄ້ງກັບໜ້າພຽງໄດ້.", "ให้ลูกลองกับของจริง แล้วชี้ด้านโค้งกับด้านแบน"),
+      question(line("ລອງຍູ້ເບົາໆ. ອັນໃດກິ້ງໄດ້ຄືໄຂ່ໄດໂນເສົາ?", "ลองผลักเบา ๆ อะไรกลิ้งได้เหมือนไข่ไดโนเสาร์?"), P.row(P.shape("ball"), P.shape("box")), ["ໝາກບານ", "ກ່ອງ"], "ໝາກບານ", line("ຄິດເບິ່ງວ່າຜິວດ້ານໃດໂຄ້ງ.", "ลองดูว่าชิ้นไหนมีผิวโค้ง"), line("ໝາກບານມີຜິວໂຄ້ງຮອບໂຕ ຈຶ່ງກິ້ງໄດ້.", "ลูกบอลมีผิวโค้งรอบตัว จึงกลิ้งได้")),
+      question(line("ເອົາກົ້ນກະປ໋ອງທາບໃສ່ເຈ້ຍ ແລ້ວແຕ້ມຕາມຂອບ. ໄດ້ຮູບໃດ?", "ทาบก้นกระป๋องบนกระดาษแล้ววาดตามขอบ จะได้รูปอะไร?"), P.shape("can"), ["ວົງມົນ", "ຮູບສາມແຈ"], "ວົງມົນ", line("ໃຊ້ນິ້ວລູບຕາມຂອບກົ້ນກະປ໋ອງ.", "ใช้นิ้วลากไปตามขอบก้นกระป๋อง"), line("ຂອບກົ້ນກະປ໋ອງເປັນວົງມົນ.", "ขอบก้นกระป๋องเป็นวงกลม"), P.shape("circle"))),
+    10: lessonActivity(line("ໃຊ້ຝາແທນກົບ. ວາງ 2 ຝາ, ເພີ່ມ 1 ຝາ, ແລ້ວເພີ່ມອີກ 2 ຝາ.", "ใช้ฝาแทนกบ วาง 2 ฝา เพิ่ม 1 ฝา แล้วเพิ่มอีก 2 ฝา"), line("ຫຼັງເຮັດບາດທຳອິດ ມີຈັກໂຕ?", "หลังจากเพิ่มครั้งแรก มีกี่ตัว?"), line("ລູກບອກຜົນບາດທຳອິດກ່ອນ ແລ້ວໃຊ້ຜົນນັ້ນເຮັດບາດຕໍ່ໄປ.", "ให้ลูกบอกผลครั้งแรก แล้วใช้จำนวนนั้นคิดต่อ"),
+      question(line("ມີກົບ 2 ໂຕ. ມາ 1 ໂຕ ແລ້ວມາອີກ 2 ໂຕ. ລວມຈັກໂຕ?", "กบ 2 ตัว มา 1 ตัว แล้วมาอีก 2 ตัว รวมกี่ตัว?"), P.eq([2, "+", 1, "+", 2]), [3, 4, 5], 5, line("ລວມ 2 ກັບ 1 ກ່ອນ ແລ້ວເພີ່ມອີກ 2.", "รวม 2 กับ 1 ก่อน แล้วเพิ่มอีก 2"), line("2 + 1 = 3. ຈາກນັ້ນ 3 + 2 = 5.", "2 + 1 = 3 แล้ว 3 + 2 = 5")),
+      question(line("ມີເຕົ່າ 4 ໂຕ. ລົງນ້ຳ 1 ໂຕ ແລ້ວຂຶ້ນມາ 2 ໂຕ. ຢູ່ຝັ່ງຈັກໂຕ?", "เต่า 4 ตัว ลงน้ำ 1 ตัว แล้วขึ้นฝั่งมา 2 ตัว อยู่บนฝั่งกี่ตัว?"), P.eq([4, "−", 1, "+", 2]), [3, 5, 7], 5, line("ເອົາ 1 ອອກຈາກ 4 ກ່ອນ.", "เอา 1 ออกจาก 4 ก่อน"), line("4 − 1 = 3. ແລ້ວ 3 + 2 = 5.", "4 − 1 = 3 แล้ว 3 + 2 = 5"))),
+    11: lessonActivity(line("ວາງສໍສອງກ້ານໃຫ້ປາຍຂ້າງໜຶ່ງສະເໝີກັນ. ລອງວັດດ້ວຍເຈ້ຍຕາກາໂລ.", "วางดินสอสองแท่งให้ปลายด้านหนึ่งเสมอกัน ลองวัดด้วยกระดาษตาราง"), line("ສອງກ້ານເລີ່ມວັດຈາກບ່ອນດຽວກັນບໍ?", "เราเริ่มวัดทั้งสองแท่งจากจุดเดียวกันไหม?"), line("ລູກຈັດປາຍໃຫ້ສະເໝີ ແລະ ໃຊ້ຫົວໜ່ວຍຂະໜາດດຽວກັນ.", "ให้ลูกจัดปลายให้เสมอกัน แล้วใช้ช่องขนาดเท่ากันวัด"),
+      question(line("ສອງແຖວເລີ່ມສະເໝີກັນ. ແຖວໃດຍາວກວ່າ?", "สองแถวเริ่มที่เดียวกัน แถวไหนยาวกว่า?"), P.bars([[5,0,"var(--sky)","ກ"], [3,0,"var(--tomato)","ຂ"]]), ["ກ", "ຂ", "ເທົ່າກັນ"], "ກ", line("ຊີ້ປາຍຂວາຂອງແຕ່ລະແຖວ.", "ชี้ปลายขวาของแต่ละแถว"), line("ແຖວ ກ ຍາວ 5 ຕາ. ແຖວ ຂ ຍາວ 3 ຕາ.", "แถว ก ยาว 5 ช่อง แถว ข ยาว 3 ช่อง")),
+      question(line("ແຖວ ຂ ຍາວກວ່າແຖວ ກ ຈັກຕາ?", "แถว ข ยาวกว่าแถว ก กี่ช่อง?"), P.bars([[4,0,"var(--sky)","ກ"], [6,0,"var(--tomato)","ຂ"]]), [2, 4, 6], 2, line("ນັບແຕ່ຕາທີ່ຍື່ນອອກມາ.", "นับเฉพาะช่องที่ยื่นออกมา"), line("ແຖວ ຂ ຍື່ນອອກມາ 2 ຕາ. 6 − 4 = 2.", "แถว ข ยื่นออกมา 2 ช่อง 6 − 4 = 2"))),
+    12: lessonActivity(line("ແຕ້ມຕາ 2 ແຖວ ແຖວລະ 5 ຕາ. ໃສ່ຝາ 8 ຝາ ແລ້ວວາງອີກ 5 ຝາໄວ້ຂ້າງນອກ.", "วาดช่องสองแถว แถวละ 5 วางฝาลงในช่อง 8 ฝา แล้ววางอีก 5 ฝาไว้ข้างนอก"), line("ຈະຍ້າຍຈັກຝາເຂົ້າໄປໃຫ້ຄົບ 10?", "ต้องย้ายเข้าไปกี่ฝาถึงจะครบ 10?"), line("ລູກຍ້າຍພໍໃຫ້ເຕັມ 10 ແລ້ວນັບຝາທີ່ເຫຼືອຂ້າງນອກ.", "ให้ลูกย้ายเท่าที่พอดีสิบ แล้วนับฝาที่เหลือข้างนอก"),
+      question(line("ມີ 8 ແລ້ວ. ຍ້າຍຈັກຝາຈາກກອງ 5 ຝາ ເຂົ້າມາໃຫ້ຄົບ 10?", "มี 8 แล้ว จะย้ายจากกอง 5 เข้ามากี่ฝาให้ครบ 10?"), P.col(P.frame([[8,"c1"]]), eggPicture(5)), [2, 5, 8], 2, line("ຊີ້ຕາຫວ່າງທີລະຕາ.", "ชี้ช่องว่างทีละช่อง"), line("ຍ້າຍ 2 ແລ້ວເຫຼືອ 3. ຈຶ່ງໄດ້ 10 + 3 = 13.", "ย้าย 2 เหลือ 3 จึงได้ 10 + 3 = 13"), P.frame([[8,"c1"],[2,"c2"],[3,"c2"]])),
+      question(line("ໄຂ່ 9 ໜ່ວຍ ກັບອີກ 4 ໜ່ວຍ ລວມກັນເທົ່າໃດ?", "ไข่ 9 ฟองกับอีก 4 ฟอง รวมได้เท่าไร?"), P.eq([9, "+", 4, "=", "?"]), [10, 12, 13], 13, line("ເອົາ 1 ຈາກ 4 ໄປໃຫ້ 9 ຄົບ 10. ຍັງເຫຼືອຈັກໜ່ວຍ?", "แบ่ง 1 จาก 4 ไปเติม 9 ให้ครบสิบ แล้วเหลือกี่ฟอง?"), line("9 + 1 = 10. ເຫຼືອ 3. 10 + 3 = 13.", "9 + 1 = 10 เหลืออีก 3 ได้ 10 + 3 = 13"))),
+    13: lessonActivity(line("ໃຊ້ຈອກນ້ອຍໃບດຽວຕວງນ້ຳສາມຈອກໃສ່ຖ້ວຍໜຶ່ງ ແລະ ສອງຈອກໃສ່ອີກຖ້ວຍໜຶ່ງ.", "ใช้ถ้วยเล็กใบเดิมตวงน้ำ 3 ถ้วยใส่ชามใบหนึ่ง และ 2 ถ้วยใส่อีกใบ"), line("ເປັນຫຍັງເຮົາຈຶ່ງໃຊ້ຈອກໃບດຽວກັນຕວງ?", "ทำไมถึงใช้ถ้วยใบเดิมตวงทุกครั้ง?"), line("ລູກຕວງແຕ່ລະຈອກໃຫ້ເຕັມເທົ່າກັນ ແລ້ວປຽບທຽບຈຳນວນຈອກ.", "ให้ลูกตวงเต็มถ้วยเท่ากันทุกครั้ง แล้วเปรียบเทียบจำนวนถ้วย"),
+      question(line("ໃຊ້ຈອກໃບດຽວຕວງ. ຖ້ວຍໃດມີນ້ຳຫຼາຍກວ່າ?", "ใช้ถ้วยใบเดิมตวง ชามไหนมีน้ำมากกว่า?"), P.col(P.row(P.lbl("ກ"), P.cups(3)), P.row(P.lbl("ຂ"), P.cups(2))), ["ກ", "ຂ", "ເທົ່າກັນ"], "ກ", line("ນັບຈຳນວນຈອກຂອງແຕ່ລະຖ້ວຍ.", "นับจำนวนถ้วยของแต่ละชาม"), line("ຖ້ວຍ ກ ມີ 3 ຈອກ. ຖ້ວຍ ຂ ມີ 2 ຈອກ.", "ชาม ก มี 3 ถ้วย ชาม ข มี 2 ถ้วย")),
+      question(line("ຖອກນ້ຳທັງໝົດຈາກຈອກເຕ້ຍໃສ່ຈອກສູງ ໂດຍບໍ່ໃຫ້ເຮ່ຍ. ນ້ຳປ່ຽນແນວໃດ?", "เทน้ำทั้งหมดจากแก้วเตี้ยใส่แก้วสูงโดยไม่หก ปริมาณน้ำเป็นอย่างไร?"), P.row(P.glass(48,60,0.5), P.lbl("→"), P.glass(24,90,2 / 3)), ["ຫຼາຍຂຶ້ນ", "ເທົ່າເດີມ", "ໜ້ອຍລົງ"], "ເທົ່າເດີມ", line("ເຮົາໄດ້ເຕີມນ້ຳ ຫຼື ເອົານ້ຳອອກບໍ?", "เราได้เติมน้ำหรือตักน้ำออกไหม?"), line("ເຮົາປ່ຽນຈອກ. ນ້ຳຍັງມີເທົ່າເດີມ.", "เราเปลี่ยนแก้ว ปริมาณน้ำยังเท่าเดิม"))),
+    14: lessonActivity(line("ວາງຝາ 13 ຝາເປັນກຸ່ມ 10 ແລະ 3. ເອົາ 8 ຝາອອກຈາກກຸ່ມ 10.", "วางฝา 13 ฝา แยกเป็นกลุ่ม 10 กับ 3 หยิบ 8 ฝาออกจากกลุ่มสิบ"), line("ໃນກຸ່ມ 10 ເຫຼືອຈັກຝາ? ອີກກຸ່ມຍັງມີຈັກຝາ?", "กลุ่มสิบเหลือกี่ฝา? อีกกลุ่มมีกี่ฝา?"), line("ລູກນຳສອງກຸ່ມທີ່ເຫຼືອມາລວມກັນ.", "ให้ลูกนำของที่เหลือจากสองกลุ่มมารวมกัน"),
+      question(line("13 ແມ່ນ 10 ກັບ 3. ເອົາ 8 ອອກຈາກກຸ່ມ 10. ລວມແລ້ວເຫຼືອຈັກອັນ?", "13 คือ 10 กับ 3 เอา 8 ออกจากกลุ่มสิบ เหลือทั้งหมดกี่ชิ้น?"), P.frame([[2,"c1"],[8,"gone"],[3,"c2"]]), [2, 3, 5], 5, line("ຊີ້ຕາທີ່ຍັງມີສີຈາກທັງສອງກຸ່ມ.", "ชี้ช่องที่ยังมีสีในทั้งสองกลุ่ม"), line("10 − 8 = 2. ເອົາ 2 ມາລວມກັບ 3 ໄດ້ 5.", "10 − 8 = 2 เอา 2 มารวมกับ 3 ได้ 5")),
+      question(line("ໄຂ່ 12 ໜ່ວຍ ແຕກອອກເປັນໂຕ 7 ໜ່ວຍ. ເຫຼືອໄຂ່ຈັກໜ່ວຍ?", "ไข่ 12 ฟอง ฟักเป็นตัวแล้ว 7 ฟอง เหลือไข่กี่ฟอง?"), P.eq([12, "−", 7, "=", "?"]), [3, 5, 7], 5, line("ແບ່ງ 12 ເປັນ 10 ກັບ 2. ເອົາ 7 ອອກຈາກ 10 ກ່ອນ.", "แยก 12 เป็น 10 กับ 2 เอา 7 ออกจากสิบก่อน"), line("10 − 7 = 3. ຍັງມີອີກ 2. 3 + 2 = 5.", "10 − 7 = 3 ยังมีอีก 2 จึงได้ 3 + 2 = 5"))),
+    15: lessonActivity(line("ໃຊ້ເຈ້ຍຕາກາໂລ. ແຕ້ມຄອກເຕົ່າ 2 ແຖວ ແຖວລະ 3 ຕາ ແລ້ວໃຫ້ລູກລະບາຍສີທີລະຕາ.", "วาดคอกเต่าบนกระดาษตารางให้มี 2 แถว แถวละ 3 ช่อง ให้ลูกระบายสีทีละช่อง"), line("ຄອກເຕົ່າກວມເອົາຈັກຕາ?", "คอกเต่ากินพื้นที่กี่ช่อง?"), line("ລູກນັບຕາທຸກຕາທີ່ຢູ່ຂ້າງໃນ ລຽງໄປທີລະແຖວ.", "ให้ลูกนับช่องข้างในทุกช่อง เรียงไปทีละแถว"),
+      question(line("ຄອກເຕົ່ານີ້ມີຈັກຕາ?", "คอกเต่านี้มีกี่ช่อง?"), areaPicture(3, 2), [3, 5, 6], 6, line("ນັບແຖວເທິງ ແລ້ວນັບແຖວລຸ່ມຕໍ່.", "นับแถวบน แล้วนับแถวล่างต่อ"), line("3 ຕາກັບອີກ 3 ຕາ ລວມເປັນ 6 ຕາ.", "3 ช่องกับอีก 3 ช่อง รวมเป็น 6 ช่อง")),
+      question(line("ຄອກໃໝ່ນີ້ມີຈັກຕາ?", "คอกใหม่นี้มีกี่ช่อง?"), areaPicture(4, 2), [4, 6, 8], 8, line("ຄອກໃໝ່ມີ 2 ແຖວ. ລອງນັບແຖວລະເທື່ອ.", "คอกใหม่มี 2 แถว ลองนับทีละแถว"), line("4 ຕາກັບອີກ 4 ຕາ ລວມເປັນ 8 ຕາ.", "4 ช่องกับอีก 4 ช่อง รวมเป็น 8 ช่อง"))),
+    16: lessonActivity(line("ພັບເຈ້ຍຮູບຈະຕຸລັດຕາມເສັ້ນທະແຍງ ແລ້ວແຍກເປັນ 2 ແຜ່ນ. ໃຫ້ລູກໝູນແຜ່ນເຈ້ຍ ແລ້ວຕໍ່ໃຫ້ໄດ້ຮູບເດີມ.", "พับกระดาษสี่เหลี่ยมจัตุรัสตามเส้นทแยงมุม แยกเป็นสองชิ้น ให้ลูกหมุนแล้วต่อกลับเป็นรูปเดิม"), line("ຖ້າໝູນແຜ່ນໜຶ່ງ ຈຳນວນແຜ່ນປ່ຽນບໍ?", "ถ้าหมุนกระดาษชิ้นหนึ่ง จำนวนชิ้นเปลี่ยนไหม?"), line("ລູກລອງໝູນ ແລະ ຕໍ່ແຜ່ນຕາມຂອບໃຫ້ພໍດີ.", "ให้ลูกลองหมุน แล้วต่อให้ขอบชิดกันพอดี"),
+      question(line("ຮູບຈະຕຸລັດຮູບນີ້ ຕໍ່ຈາກສາມແຈຈັກແຜ່ນ?", "สี่เหลี่ยมจัตุรัสนี้ต่อจากสามเหลี่ยมกี่ชิ้น?"), triangularTiles(1), [1, 2, 3], 2, line("ຊີ້ແຕ່ລະດ້ານຂອງເສັ້ນທະແຍງ.", "ชี้รูปที่อยู่คนละด้านของเส้นทแยงมุม"), line("ສາມແຈ 2 ແຜ່ນ ຕໍ່ກັນໄດ້ຮູບຈະຕຸລັດ 1 ຮູບ.", "สามเหลี่ยม 2 ชิ้นต่อเป็นสี่เหลี่ยมจัตุรัส 1 รูป")),
+      question(line("ຖ້າຕໍ່ສອງຮູບແບບນີ້ ໃຊ້ສາມແຈຈັກແຜ່ນ?", "ถ้าต่อสองรูปแบบนี้ ใช้สามเหลี่ยมกี่ชิ้น?"), triangularTiles(2), [2, 3, 4], 4, line("ຊີ້ສາມແຈໃນຮູບທຳອິດ ແລ້ວນັບຮູບທີສອງຕໍ່.", "ชี้สามเหลี่ยมในรูปแรก แล้วนับรูปที่สองต่อ"), line("ແຕ່ລະຮູບໃຊ້ 2 ແຜ່ນ. 2 + 2 = 4.", "แต่ละรูปใช้ 2 ชิ้น ดังนั้น 2 + 2 = 4"))),
+    17: lessonActivity(line("ມັດຫຼອດເປັນມັດລະ 10. ວາງ 2 ມັດ ກັບຫຼອດອີກ 4 ຫຼອດ. ໃຫ້ລູກຂຽນຈຳນວນ.", "มัดหลอดมัดละ 10 วาง 2 มัดกับอีก 4 หลอด ให้ลูกเขียนจำนวน"), line("ເລກ 2 ໃນ 24 ແທນຫຼອດຈັກມັດ?", "เลข 2 ใน 24 แทนหลอดกี่มัด?"), line("ລູກອ່ານຈຳນວນມັດກ່ອນ ແລ້ວອ່ານຈຳນວນຫຼອດທີ່ຢູ່ນອກມັດ.", "ให้ลูกนับมัดก่อน แล้วค่อยนับหลอดที่อยู่นอกมัด"),
+      question(line("ມັດລະ 10. ມີ 2 ມັດ ກັບອີກ 4 ອັນ. ເປັນຈຳນວນໃດ?", "มัดละ 10 มี 2 มัดกับอีก 4 ชิ้น เป็นจำนวนเท่าไร?"), blocks(2, 4), [6, 24, 42], 24, line("ນັບມັດ 10, 20 ແລ້ວນັບຕໍ່ອີກ 4.", "นับมัดว่า 10, 20 แล้วนับต่ออีก 4"), line("2 ຫົວສິບ ກັບ 4 ຫົວໜ່ວຍ ເປັນ 24.", "2 สิบ กับ 4 หน่วย เป็น 24")),
+      question(line("ຄັ້ງນີ້ ມີ 3 ມັດ ກັບອີກ 2 ອັນ. ຂຽນເລກໃດ?", "คราวนี้มี 3 มัดกับอีก 2 ชิ้น เขียนเลขอะไร?"), blocks(3, 2), [5, 23, 32], 32, line("ເລກຕົວທຳອິດບອກຈຳນວນມັດລະ 10.", "เลขตัวแรกบอกว่ามีกี่มัดสิบ"), line("30 ກັບ 2 ເປັນ 32.", "30 กับ 2 เป็น 32"))),
+    18: lessonActivity(line("ຂຽນ ໓ ໃສ່ເຈ້ຍ ແລ້ວໃຫ້ລູກແຕ້ມໄຂ່ໃຫ້ພໍດີກັບເລກ. ລອງປ່ຽນເປັນ ໔.", "เขียน ໓ บนกระดาษ ให้ลูกวาดไข่ตามจำนวน แล้วลองเปลี่ยนเป็น ໔"), line("ເລກ 3 ກັບ ໓ ໃຊ້ບອກຈຳນວນໄຂ່ດຽວກັນບໍ?", "3 กับ ໓ บอกจำนวนไข่เท่ากันไหม?"), line("ລູກຈັບຄູ່ຮູບກັບຕົວເລກໄດ້ ແລ້ວລອງຂຽນເລກລາວດ້ວຍນິ້ວ.", "ให้ลูกจับคู่ภาพกับตัวเลข แล้วลองใช้นิ้วเขียนเลขลาว"),
+      question(line("ໄຂ່ 3 ໜ່ວຍ. ເລືອກເລກລາວທີ່ກົງກັນ.", "ไข่ 3 ฟอง เลือกตัวเลขลาวที่ตรงกัน"), eggPicture(3), ["໒", "໓", "໕"], "໓", line("ໃຊ້ນິ້ວຂຽນຕາມແບບ ໑ ໒ ໓.", "ใช้นิ้วลากตามตัวอย่าง ໑ ໒ ໓"), line("3 ຂຽນເປັນເລກລາວວ່າ ໓.", "เลข 3 เขียนเป็นเลขลาวว่า ໓")),
+      question(line("ບັດເລກລາວນີ້ແທນເຕົ່າຈັກໂຕ?", "บัตรเลขลาวใบนี้แทนเต่ากี่ตัว?"), '<div class="big-lao">໔</div>', [3, 4, 5], 4, line("ລອງໄລ່ ໑ ໒ ໓ ໔ ແລ້ວຊູນິ້ວໄປນຳ.", "ลองไล่ ໑ ໒ ໓ ໔ แล้วชูนิ้วไปพร้อมกัน"), line("໔ ແລະ 4 ບອກຈຳນວນດຽວກັນ.", "໔ กับ 4 บอกจำนวนเดียวกัน"), turtlePicture(4))),
+    r: lessonActivity(line("ໃຫ້ລູກເລືອກສັດທີ່ມັກ. ໃຊ້ຝາ 6 ຝາແທນສັດ ແລ້ວປິດໄວ້ສ່ວນໜຶ່ງ.", "ให้ลูกเลือกสัตว์ที่ชอบ ใช้ฝา 6 ฝาแทนสัตว์ แล้วบังไว้ส่วนหนึ่ง"), line("ລູກເບິ່ງເຫັນຈັກໂຕ? ຮູ້ໄດ້ແນວໃດວ່າລີ້ຢູ່ຈັກໂຕ?", "เห็นกี่ตัว? รู้ได้อย่างไรว่าซ่อนอยู่กี่ตัว?"), line("ໃຫ້ລູກແຕ້ມຈຸດ ຫຼື ຊີ້ຝາເພື່ອເລົ່າວິທີຄິດ ແລ້ວສະຫຼັບໃຫ້ລູກເປັນຄົນຖາມ.", "ให้ลูกวาดจุดหรือชี้ฝาเพื่อเล่าวิธีคิด แล้วสลับให้ลูกเป็นคนถาม"),
+      question(line("ເຕົ່າມີ 6 ໂຕ. ເຫັນ 4 ໂຕ. ລີ້ຢູ່ຈັກໂຕ?", "มีเต่า 6 ตัว เห็น 4 ตัว ซ่อนอยู่กี่ตัว?"), P.split(6, 4, 2, "b"), [2, 4, 6], 2, line("ນັບຕໍ່ຈາກ 4 ໄປຫາ 6.", "นับต่อจาก 4 ไปถึง 6"), line("4 ກັບ 2 ລວມກັນເປັນ 6.", "4 กับ 2 รวมเป็น 6"), P.split(6, 4, 2)),
+      question(line("ກົບ 8 ໂຕ ໂດດລົງນ້ຳ 3 ໂຕ. ຢູ່ຝັ່ງຈັກໂຕ?", "กบ 8 ตัว กระโดดลงน้ำ 3 ตัว เหลือบนฝั่งกี่ตัว?"), P.eq([8, "−", 3, "=", "?"]), [3, 5, 8], 5, line("ແຕ້ມ 8 ຈຸດ. ຂີດຂ້າ 3 ຈຸດ ແລ້ວນັບທີ່ເຫຼືອ.", "วาด 8 จุด ขีดฆ่า 3 จุด แล้วนับจุดที่เหลือ"), line("8 − 3 = 5. ກວດໄດ້ດ້ວຍ 5 + 3 = 8.", "8 − 3 = 5 ลองตรวจด้วย 5 + 3 = 8")))
   };
 
   const CHAPTERS = CH.sort((a, b) => (a.review ? 99 : a.id) - (b.review ? 99 : b.id));
 
+  CHAPTERS.forEach(c => {
+    line(c.lo, c.th);
+    if (c.parent.idea) line(c.parent.idea.lo, c.parent.idea.th);
+  });
+  for (let n = 0; n <= 100; n++) line(wlo(n), wth(n));
+  THINGS.forEach(t => line(t.lo, t.th));
+
   const guide = {
-    1: { mode: "pair", moves: 3, title: "ຊ່ວຍກົບຫາໃບບົວ ໂຕລະ 1 ໃບ.", action: "ຈັບຄູ່ 1 ຄູ່" },
-    2: { mode: "count", moves: 4, start: 0, icon: "🐢", title: "ແຕະເຕົ່າທີລະໂຕ ແລ້ວນັບນຳກັນ.", action: "ນັບເຕົ່າອີກ 1 ໂຕ" },
-    4: { mode: "add", moves: 5, start: 2, icon: "🥚", title: "ມີໄຂ່ໄດໂນເສົາ 2 ໜ່ວຍ. ເພີ່ມໃຫ້ຄົບ 7.", action: "ເພີ່ມໄຂ່ 1 ໜ່ວຍ", equation: [2, "+", "?", "=", 7] },
-    5: { mode: "add", moves: 2, start: 3, icon: "🦕", title: "ມີໄດໂນເສົາ 3 ໂຕ. ພາໝູ່ເຂົ້າມາອີກ 2 ໂຕ.", action: "ເພີ່ມໄດໂນເສົາ 1 ໂຕ", equation: [3, "+", 2, "=", "?"] },
-    6: { mode: "take", moves: 3, start: 5, icon: "🐢", title: "ມີເຕົ່າ 5 ໂຕ. ພາເຕົ່າ 3 ໂຕລົງນ້ຳ.", action: "ພາເຕົ່າລົງນ້ຳ 1 ໂຕ", equation: [5, "−", 3, "=", "?"] }
+    1: { mode: "pair", moves: 3, title: line("ມາຊ່ວຍກົບຫາໃບບົວ ໃຫ້ໄດ້ໂຕລະ 1 ໃບ.", "ช่วยกบหาใบบัว ตัวละ 1 ใบ"), action: line("ຈັບຄູ່ 1 ຄູ່", "จับคู่ 1 คู่") },
+    2: { mode: "count", moves: 4, start: 0, icon: "🐢", title: line("ແຕະເຕົ່າທີລະໂຕ ແລ້ວນັບນຳກັນ.", "แตะเต่าทีละตัวแล้วนับไปด้วยกัน"), action: line("ນັບເຕົ່າອີກ 1 ໂຕ", "นับเต่าอีก 1 ตัว") },
+    4: { mode: "add", moves: 5, start: 2, icon: "🥚", title: line("ໃນຮັງມີໄຂ່ໄດໂນເສົາ 2 ໜ່ວຍ. ລອງເພີ່ມໃຫ້ຄົບ 7 ໜ່ວຍ.", "มีไข่ไดโนเสาร์อยู่ 2 ฟอง เติมให้ครบ 7 ฟอง"), action: line("ເພີ່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง"), equation: [2, "+", "?", "=", 7] },
+    5: { mode: "add", moves: 2, start: 3, icon: "🦕", title: line("ມີໄດໂນເສົາ 3 ໂຕ. ພາໝູ່ເຂົ້າມາອີກ 2 ໂຕ.", "มีไดโนเสาร์ 3 ตัว พาเพื่อนมาอีก 2 ตัว"), action: line("ເພີ່ມໄດໂນເສົາ 1 ໂຕ", "เพิ่มไดโนเสาร์ 1 ตัว"), equation: [3, "+", 2, "=", "?"] },
+    6: { mode: "take", moves: 3, start: 5, icon: "🐢", title: line("ມີເຕົ່າ 5 ໂຕ. ພາເຕົ່າ 3 ໂຕລົງນ້ຳ.", "มีเต่า 5 ตัว พาเต่า 3 ตัวลงน้ำ"), action: line("ພາເຕົ່າລົງນ້ຳ 1 ໂຕ", "พาเต่าลงน้ำ 1 ตัว"), equation: [5, "−", 3, "=", "?"] }
   };
   const transferHintPictures = {
     1: P.match("🐸", 2, "🍃", 3, { lines: true }),
@@ -1788,7 +2094,7 @@ svg text { font-family: var(--font-num); }
     if (cur.id === 4 && guided && choice === 2) cue = "2 ແມ່ນໄຂ່ທີ່ມີຢູ່ກ່ອນ. ";
     if (cur.id === 6 && guided && choice === 3) cue = "3 ແມ່ນເຕົ່າທີ່ລົງນ້ຳໄປແລ້ວ. ";
     feedback.className = "feedback help";
-    feedback.textContent = cue + task.hint;
+    feedback.textContent = line(cue + task.hint, (cue ? thaiText(cue).trim() + " " : "") + thaiText(task.hint));
     if (activityState.phase === "transfer" && transferHintPictures[cur.id]) feedback.insertAdjacentHTML("beforeend", transferHintPictures[cur.id]);
     speak(cue + task.hint);
   }
@@ -1942,17 +2248,23 @@ svg text { font-family: var(--font-num); }
       ((action === "ten" && p.value === 10) || (action === "one" && p.value === 1));
   }
   function nestInstructions(action) {
-    const { a, b, moved, adding, counted, answer } = nest;
-    const now = adding ? a + moved : a - moved;
+    const {a, b, moved, adding, counted, answer} = nest;
+    const now = adding ? a + moved : a - moved, left = b - moved;
     switch (action) {
-      case "count": return counted === 0 ? ["ມານັບໄຂ່ໃນຖາດທຳອິດ ແຖວລະ 5.", "ນັບແຖວທຳອິດ"] : ["ແຖວເທິງມີ 5. ນັບແຖວລຸ່ມຕໍ່.", "ນັບອີກ 5 ໜ່ວຍ"];
+      case "count": return counted === 0
+        ? [line("ມານັບໄຂ່ນຳກັນ. ເລີ່ມຈາກແຖວເທິງກ່ອນ.", "มานับไข่ด้วยกัน เริ่มที่แถวบนก่อน"), line("ນັບແຖວເທິງ", "นับแถวบน")]
+        : [line("ແຖວເທິງມີ 5 ໜ່ວຍ. ລອງນັບແຖວລຸ່ມຕໍ່.", "แถวบนมี 5 ฟอง ลองนับแถวล่างต่อ"), line("ນັບແຖວລຸ່ມ", "นับแถวล่าง")];
       case "ten": return adding
-        ? [moved ? `ມີ ${now} ແລ້ວ. ຍ້າຍອີກ 1 ຖາດເຂົ້າຮັງ.` : `ມີ ${a} ໃນຮັງ. ເພີ່ມ ${b} ໂດຍຍ້າຍເທື່ອລະຖາດ.`, "ຍ້າຍ 10 ເຂົ້າຮັງ"]
-        : [`ມີໄຂ່ ${a} ໜ່ວຍ. ຈະສົ່ງ ${b} ໃຫ້ໄດໂນເສົາ. ສົ່ງ 10 ກ່ອນ.`, "ສົ່ງ 1 ຖາດ (10)"];
-      case "exchange": return [`ຕ້ອງສົ່ງອີກ ${b - moved}. ແກະ 1 ຖາດເປັນໄຂ່ແຍກ 10 ໜ່ວຍ.`, "ແກະຖາດ 10 ໜ່ວຍ"];
-      case "one": return [nest.lastExchange === moved ? `ແກະຖາດແລ້ວ ຍັງມີ ${now}. ສົ່ງອີກ ${b - moved} ໜ່ວຍ.` : `ສົ່ງອີກ ${b - moved} ໜ່ວຍ. ແຕະໄຂ່ທີລະໜ່ວຍ.`, "ສົ່ງໄຂ່ 1 ໜ່ວຍ"];
-      case "solved": return [adding ? `ໃນຮັງມີໄຂ່ ${answer} ໜ່ວຍ!` : `ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ!`];
-      default: return [adding ? `ມີ ${a} ເພີ່ມອີກ ${b}. ລວມກັນໄດ້ເທົ່າໃດ?` : `ມີ ${a} ສົ່ງໃຫ້ໄດໂນເສົາ ${b}. ເຫຼືອຈັກໜ່ວຍ?`];
+        ? [moved ? line(`ຕອນນີ້ມີ ${now} ໜ່ວຍແລ້ວ. ຍ້າຍເຂົ້າຮັງອີກ 1 ຖາດ.`, `ตอนนี้มี ${now} ฟองแล้ว ย้ายเข้ารังอีก 1 ถาด`)
+          : line(`ໃນຮັງມີໄຂ່ ${a} ໜ່ວຍ. ລອງເພີ່ມອີກ ${b} ໜ່ວຍ ເທື່ອລະຖາດ.`, `ในรังมีไข่ ${a} ฟอง เติมอีก ${b} ฟองทีละถาด`), line("ຍ້າຍເຂົ້າຮັງ 1 ຖາດ", "ย้ายเข้ารัง 1 ถาด")]
+        : [line(`ເຮົາມີໄຂ່ ${a} ໜ່ວຍ. ແບ່ງໃຫ້ໄດໂນເສົາ ${b} ໜ່ວຍ. ເອົາໃຫ້ກ່ອນ 1 ຖາດ.`, `เรามีไข่ ${a} ฟอง จะแบ่งให้ไดโนเสาร์ ${b} ฟอง ลองให้ไปก่อน 1 ถาด`), line("ເອົາໃຫ້ 1 ຖາດ (10 ໜ່ວຍ)", "ให้ 1 ถาด (10 ฟอง)")];
+      case "exchange": return [line(`ຍັງຕ້ອງໃຫ້ອີກ ${left} ໜ່ວຍ. ເອົາໄຂ່ 10 ໜ່ວຍອອກຈາກຖາດ ຈຶ່ງຈະຫຍິບໄດ້ທີລະໜ່ວຍ.`, `ยังต้องให้อีก ${left} ฟอง ยกไข่ 10 ฟองออกจากถาด จะได้หยิบทีละฟอง`), line("ເອົາໄຂ່ອອກຈາກຖາດ", "หยิบไข่ออกจากถาด")];
+      case "one": return [nest.lastExchange === moved
+        ? line(`ໄຂ່ຍັງຢູ່ໃນຮັງ ${now} ໜ່ວຍເທົ່າເດີມ. ເອົາໃຫ້ໄດໂນເສົາອີກ ${left} ໜ່ວຍ.`, `ในรังยังมีไข่ ${now} ฟองเท่าเดิม แบ่งให้ไดโนเสาร์อีก ${left} ฟอง`)
+        : line(`ຍັງຕ້ອງໃຫ້ອີກ ${left} ໜ່ວຍ. ແຕະໄຂ່ທີລະໜ່ວຍ.`, `ต้องให้อีก ${left} ฟอง แตะไข่ทีละฟอง`), line("ເອົາໄຂ່ໃຫ້ 1 ໜ່ວຍ", "ให้ไข่ 1 ฟอง")];
+      case "solved": return [adding ? line(`ລວມແລ້ວມີໄຂ່ ${answer} ໜ່ວຍ!`, `รวมแล้วมีไข่ ${answer} ฟอง!`) : line(`ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ!`, `ในรังเหลือไข่ ${answer} ฟอง!`)];
+      default: return [adding ? line(`ມີໄຂ່ ${a} ໜ່ວຍ. ໄດ້ມາອີກ ${b} ໜ່ວຍ. ລວມແລ້ວມີຈັກໜ່ວຍ?`, `มีไข่ ${a} ฟอง ได้มาอีก ${b} ฟอง รวมแล้วมีกี่ฟอง?`)
+        : line(`ມີໄຂ່ ${a} ໜ່ວຍ. ໃຫ້ໄດໂນເສົາໄປ ${b} ໜ່ວຍ. ເຫຼືອຈັກໜ່ວຍ?`, `มีไข่ ${a} ฟอง ให้ไดโนเสาร์ไป ${b} ฟอง เหลือกี่ฟอง?`)];
     }
   }
   function renderNest() {
@@ -1960,7 +2272,7 @@ svg text { font-family: var(--font-num); }
     const action = nestAction(), [prompt, button] = nestInstructions(action);
     if (cur) $("#kicker").textContent = level >= 2 ? "ຂໍ້ທ້າລອງຕໍ່ຈາກບົດທີ " + cur.id : "ບົດທີ " + cur.id + " · ໜ້າ " + cur.pages;
     $("#nestGame").dataset.solved = solved;
-    $("#nestLevel").textContent = ["ນັບເປັນຖາດ", "ລອງເອງ", adding ? "ເພີ່ມສອງຖາດ" : "ແກະຖາດ", "ທ້າລອງຂໍ້ໃໝ່"][level];
+    $("#nestLevel").textContent = ["ນັບເປັນຖາດ", "ລອງເອງ", adding ? "ເພີ່ມສອງຖາດ" : "ເອົາໄຂ່ອອກຈາກຖາດ", "ທ້າລອງຂໍ້ໃໝ່"][level];
     $("#nestPrompt").textContent = prompt;
     const expression = `${a} ${adding ? "+" : "−"} ${b} = `;
     $("#nestEq").innerHTML = expression + `<b>${solved ? answer : ""}</b>`;
@@ -2004,7 +2316,7 @@ svg text { font-family: var(--font-num); }
       p.el.remove();
       moving = range(10).map(() => addNestPiece(1, "home"));
       nest.lastExchange = nest.moved;
-      nest.notice = `ແກະ 10 ໜ່ວຍອອກຈາກຖາດ. ຍັງມີ ${nest.a - nest.moved} ໜ່ວຍໃນຮັງເທົ່າເດີມ.`;
+      nest.notice = line(`ໄຂ່ 10 ໜ່ວຍອອກຈາກຖາດແລ້ວ. ໄຂ່ໃນຮັງຍັງມີ ${nest.a - nest.moved} ໜ່ວຍເທົ່າເດີມ.`, `หยิบไข่ 10 ฟองออกจากถาดแล้ว ในรังยังมีไข่ ${nest.a - nest.moved} ฟองเท่าเดิม`);
     } else {
       placeNestPiece(p, nest.adding ? "home" : "side");
       nest.moved += p.value;
@@ -2025,7 +2337,7 @@ svg text { font-family: var(--font-num); }
     if (adding) {
       const tens = Math.floor(answer / 10), ones = answer % 10;
       const jumps = range(b / 10 + 1).map(i => a + 10 * i).join(" → ");
-      return `${jumps}. ${tens} ຖາດ ຖາດລະ 10${ones ? ` ກັບໄຂ່ແຍກ ${ones} ໜ່ວຍ` : ""}. ${a} + ${b} = ${answer}.`;
+      return line(`${jumps}. ມີ ${tens} ຖາດ ຖາດລະ 10 ໜ່ວຍ${ones ? ` ກັບໄຂ່ຂ້າງນອກອີກ ${ones} ໜ່ວຍ` : ""}. ${a} + ${b} = ${answer}.`, `${jumps} มี ${tens} ถาด ถาดละ 10 ฟอง${ones ? ` กับไข่นอกถาดอีก ${ones} ฟอง` : ""} รวม ${a} + ${b} = ${answer}`);
     }
     return `${a} − 10 = ${a - 10}. ${a - 10} − ${b - 10} = ${answer}. ກວດຄືນ ${b} + ${answer} = ${a}.`;
   }
@@ -2033,8 +2345,8 @@ svg text { font-family: var(--font-num); }
     const { adding, a, b } = nest;
     nest.usedHelp = true;
     nest.model = true;
-    let cue = adding ? "ໃນ 1 ຖາດມີໄຂ່ 10 ໜ່ວຍ." : `${b} ແມ່ນໄຂ່ທີ່ສົ່ງໄປ. ລອງນັບໄຂ່ທີ່ເຫຼືອໃນຮັງ.`;
-    if (!adding && wrong === a - 10) cue = `ຖ້າສົ່ງແຕ່ 10 ຍັງຕ້ອງສົ່ງອີກ ${b - 10}.`;
+    let cue = adding ? line("ໃນ 1 ຖາດມີໄຂ່ 10 ໜ່ວຍ.", "หนึ่งถาดมีไข่ 10 ฟอง") : line(`ເຮົາໃຫ້ໄດໂນເສົາໄປ ${b} ໜ່ວຍ. ລອງນັບໄຂ່ທີ່ຍັງຢູ່ໃນຮັງ.`, `เราให้ไดโนเสาร์ไป ${b} ฟอง ลองนับเฉพาะไข่ที่ยังอยู่ในรัง`);
+    if (!adding && wrong === a - 10) cue = line(`ຖ້າໃຫ້ໄປ 10 ໜ່ວຍ ຍັງຕ້ອງໃຫ້ອີກ ${b - 10} ໜ່ວຍ.`, `ถ้าให้ไป 10 ฟอง ยังต้องให้อีก ${b - 10} ฟอง`);
     nest.notice = cue;
     renderNest();
     speak(cue);
@@ -2064,8 +2376,8 @@ svg text { font-family: var(--font-num); }
     if (!entry) return "";
     const {kind} = entry, add = kind === "add", last = nestReport[kind];
     const practical = add
-      ? "ວາງຝາຂວດເທິງເຈ້ຍແຜ່ນລະ 10 ຝາ ເປັນ 2 ແຖວ ແຖວລະ 5. ວາງ 1 ແຜ່ນກັບ 5 ຝາ ແລ້ວເພີ່ມອີກ 2 ແຜ່ນ. ໃຫ້ລູກຊີ້ພ້ອມນັບ 15, 25, 35."
-      : "ຈັດຝາຂວດ 25 ຝາເປັນ 2 ຖາດ ຖາດລະ 10 ກັບ 5 ຝາແຍກ. ສົ່ງ 1 ຖາດກ່ອນ. ແກະອີກຖາດ ແລ້ວຖາມວ່າ ຈຳນວນຍັງເທົ່າເດີມບໍ? ໃຫ້ລູກສົ່ງອີກ 6 ຝາ ແລ້ວກວດວ່າ 16 ກັບ 9 ລວມກັນໄດ້ 25.";
+      ? line("ວາງຝາຂວດໃສ່ເຈ້ຍແຜ່ນລະ 10 ຝາ ເປັນ 2 ແຖວ ແຖວລະ 5. ເລີ່ມຈາກ 1 ແຜ່ນກັບ 5 ຝາ. ໃຫ້ລູກເລື່ອນເຂົ້າມາອີກ 2 ແຜ່ນ ພ້ອມກັບນັບ 15, 25, 35.", "วางฝาขวดบนกระดาษแผ่นละ 10 ฝา เรียง 2 แถว แถวละ 5 เริ่มจาก 1 แผ่นกับ 5 ฝา ให้ลูกเลื่อนเข้ามาอีก 2 แผ่น พร้อมนับ 15, 25, 35")
+      : line("ຈັດຝາຂວດ 25 ຝາໃສ່ 2 ຖາດ ຖາດລະ 10 ຝາ ອີກ 5 ຝາວາງໄວ້ຂ້າງນອກ. ໃຫ້ລູກເລື່ອນອອກ 1 ຖາດ ແລ້ວເອົາຝາທັງໝົດອອກຈາກຖາດທີ່ເຫຼືອ. ຖາມລູກວ່າ ຕອນນີ້ຍັງມີຈັກຝາ? ຈາກນັ້ນໃຫ້ລູກເລື່ອນອອກອີກ 6 ຝາ ແລ້ວນັບຝາທີ່ເຫຼືອ.", "ใช้ฝาขวด 25 ฝา ใส่สองถาด ถาดละ 10 อีก 5 ฝาวางข้างนอก ให้ลูกเลื่อนออกหนึ่งถาด แล้วหยิบฝาทั้งหมดจากถาดที่เหลือออกมาวาง ถามว่าตอนนี้ยังมีกี่ฝา จากนั้นให้ลูกเลื่อนออกอีก 6 ฝา แล้วนับฝาที่เหลือ");
     let progress = "";
     if (last) {
       const calculation = last.a + (add ? " + " : " − ") + last.b;
@@ -2181,7 +2493,7 @@ svg text { font-family: var(--font-num); }
     const st = cur.learn[stepI];
     $("#stepVis").innerHTML = st.vis;
     // one idea per line: the first line is the point, the rest explain it
-    $("#stepText").innerHTML = st.lo.split(" · ").map((line) => `<p>${line}</p>`).join("");
+    $("#stepText").innerHTML = '<div class="only-lo" data-original>' + st.lo.split(" · ").map(part => '<p>' + esc(part) + '</p>').join("") + '</div><div class="only-th" lang="th" data-original><p>' + esc(st.th) + '</p></div>';
     $("#stepDots").innerHTML = cur.learn.map((_, i) => `<span class="${i <= stepI ? "on" : ""}"></span>`).join("");
     $("#stepPrev").disabled = stepI === 0;
     $("#stepNext").textContent = stepI === cur.learn.length - 1 ? "ໄປຝຶກ →" : "ຕໍ່ໄປ →";
@@ -2194,6 +2506,7 @@ svg text { font-family: var(--font-num); }
 
   /* ---------- practice: five questions, a hint after a miss, a star for each first-try answer ---------- */
   const PRAISE = [["ເກັ່ງຫຼາຍ!", "เก่งมาก!"], ["ຖືກຕ້ອງ!", "ถูกต้อง!"], ["ສຸດຍອດ!", "สุดยอด!"], ["ແມ່ນແລ້ວ!", "ใช่แล้ว!"]];
+  PRAISE.forEach(([lo, th]) => line(lo, th));
   function startQuiz(talk = true, size = 3) {
     const seen = new Set(), qs = [];
     for (let g = 0; qs.length < size && g < 60; g++) {
@@ -2201,6 +2514,12 @@ svg text { font-family: var(--font-num); }
       const sig = q.sig || q.text + q.answer;
       if (!seen.has(sig) || g > 40) { seen.add(sig); qs.push(q); }
     }
+    roundPhrases = new Map();
+    qs.forEach(q => {
+      for (const [lo, th] of [[q.text, q.th], [q.hint, q.hintTh], [q.why, q.whyTh]]) {
+        if (lo && th && containsLao.test(lo)) roundPhrases.set(lo, th);
+      }
+    });
     quiz = { qs, i: 0, marks: [], tries: 0 };
     showQ(talk);
   }
@@ -2217,6 +2536,7 @@ svg text { font-family: var(--font-num); }
       if (record[cur.id] === undefined || got > record[cur.id]) { record[cur.id] = got; store(); }
       const i = CHAPTERS.indexOf(cur), next = CHAPTERS[i + 1];
       const msg = ["ຝຶກຈົບແລ້ວ! ເລືອກໜຶ່ງຂໍ້ ແລ້ວລອງເລົ່າວິທີຄິດໃຫ້ພໍ່ແມ່ຟັງ.", "ฝึกจบแล้ว ลองเลือกหนึ่งข้อแล้วเล่าวิธีคิดให้พ่อแม่ฟัง"];
+      line(msg[0], msg[1]);
       box.innerHTML = `<div class="result"><p class="qtext">${msg[0]}</p><p>ຕອບເອງໃນຄັ້ງທຳອິດ ${got} / ${size} ຂໍ້</p><a class="plain" href="#">ພໍແລ້ວມື້ນີ້</a><div class="row"><button class="plain" id="again" type="button">ຝຶກອີກ 3 ຂໍ້</button><button class="plain" id="fullRound" type="button">ຝຶກ 5 ຂໍ້</button></div>${next ? `<a class="secondary" href="#bot-${next.id}">ບົດຕໍ່ໄປ →</a>` : ""}</div>`;
       speak(...msg);
       $("#again").addEventListener("click", () => startQuiz());
@@ -2249,7 +2569,7 @@ svg text { font-family: var(--font-num); }
       $("#quizHint").hidden = true;
       renderStars();
       const [lo, th] = pick(PRAISE);
-      fb.innerHTML = `<div class="feedback good"><div>${[lo, ...String(q.why || "").split(" · ")].filter(Boolean).map((l, i) => i ? `<p>${esc(l)}</p>` : `<p><b>${esc(l)}</b></p>`).join("")}</div><button class="go" id="nextQ" type="button">${quiz.i + 1 === quiz.qs.length ? "ຈົບຮອບ" : "ຂໍ້ຕໍ່ໄປ →"}</button></div>`;
+      fb.innerHTML = `<div class="feedback good"><div>${[lo, q.why].filter(Boolean).map((l, i) => i ? `<p>${esc(l)}</p>` : `<p><b>${esc(l)}</b></p>`).join("")}</div><button class="go" id="nextQ" type="button">${quiz.i + 1 === quiz.qs.length ? "ຈົບຮອບ" : "ຂໍ້ຕໍ່ໄປ →"}</button></div>`;
       speak(`${lo} ${q.why || ""}`, `${th} ${q.whyTh || ""}`);
       $("#nextQ").addEventListener("click", () => { quiz.i++; showQ(); });
       $("#nextQ").focus();
@@ -2269,11 +2589,11 @@ svg text { font-family: var(--font-num); }
     return `
       ${nestParent(c)}
       <div class="idea"><p><strong>ລອງກັບຂອງຈິງ</strong>${a.home}</p>
-      <p><strong>ຖາມລູກ</strong>“${a.ask}”</p></div>
+      <p><strong>ຖາມລູກ</strong>${line("“" + a.ask + "”", "“" + thaiText(a.ask) + "”")}</p></div>
       <h3>ສັງເກດວິທີຄິດ</h3><p>${a.observe}</p>
       ${c.id === 4 ? '<p>ຖ້າລູກຍັງນັບຂ້າມ ຫຼື ນັບຊ້ຳ ລອງ <a href="#bot-2">ແຕະເຕົ່າເພື່ອນັບທີລະໂຕ</a> ກ່ອນ.</p>' : ""}
-      <details><summary>ໃນປຶ້ມ ໜ້າ ${c.pages}</summary><p>${lines(p.idea.lo)}</p></details>
-      <details><summary>ຄຳອະທິບາຍພາສາໄທ</summary><div class="th" lang="th">
+      <details><summary>ໃນປຶ້ມ ໜ້າ ${c.pages}</summary><p>${esc(p.idea.lo)}</p></details>
+      <details><summary>ຄຳອະທິບາຍພາສາໄທ</summary><div class="th" lang="th" data-original>
       <p>${lines(p.idea.th)}</p>
       <h3>สอนที่บ้าน</h3>${list(p.home, "ol")}
       <h3>ระวัง</h3>${list(p.watch)}
@@ -2304,6 +2624,15 @@ svg text { font-family: var(--font-num); }
     window.scrollTo(0, 0);
   }
   $("#backBtn").addEventListener("click", () => { location.hash = ""; });
+  if (synth) synth.addEventListener?.("voiceschanged", () => { findVoices(); voicesChecked = true; renderVoice(pickVoice()); });
+  $("#voiceChoice").addEventListener("change", event => {
+    const p = pickVoice();
+    if (!p) return;
+    voicePreference[p.lang] = event.target.value;
+    try { localStorage.setItem("nab-lex.voice." + p.lang, event.target.value); } catch (e) { /* session only */ }
+    renderVoice(pickVoice());
+  });
+  $("#voiceSample").addEventListener("click", () => speak("ມີໄຂ່ຢູ່ 2 ໜ່ວຍ. ເພີ່ມອີກ 1 ໜ່ວຍ ເປັນຈັກໜ່ວຍ?", "มีไข่อยู่ 2 ฟอง เพิ่มอีก 1 ฟอง เป็นกี่ฟอง?"));
   $("#thaiVoice").checked = saved.thaiVoice;
   $("#thaiVoice").addEventListener("change", (event) => {
     saved.thaiVoice = event.target.checked;
@@ -2320,6 +2649,7 @@ svg text { font-family: var(--font-num); }
   else renderVoice(null);
   window.addEventListener("hashchange", route);
   route();
+  displayLanguage();
   if ("serviceWorker" in navigator && window.isSecureContext) navigator.serviceWorker.register("sw.js").catch(() => {});
 })();
 </script>

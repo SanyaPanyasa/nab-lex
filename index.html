@@ -101,6 +101,9 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
   width: 46px; height: 46px; flex: none; border-radius: 50%; padding: 0;
   display: grid; place-items: center; background: var(--card); border: 2.5px solid var(--line);
 }
+.language-actions { display: flex; align-items: center; gap: 8px; }
+.language-actions .cta { flex: 1; }
+.quick-language { min-width: 44px; min-height: 44px; font: inherit; font-weight: 700; }
 .round-btn.off { opacity: 0.5; }
 .coin-chip {
   display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
@@ -624,7 +627,10 @@ button.obj:active { transform: scale(0.9); }
     <div class="title-card"><h1 id="appTitle"></h1><p id="tagline"></p></div>
     <div class="top-tools">
       <span class="coin-chip"><span class="coin" aria-hidden="true"></span><span class="num" id="homeCoins">0</span></span>
-      <button class="round-btn" id="musicHome" type="button"></button>
+      <div class="language-actions">
+        <button class="round-btn quick-language" type="button" lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
+        <button class="round-btn" id="musicHome" type="button"></button>
+      </div>
     </div>
   </div>
   <div class="pass"></div>
@@ -660,7 +666,10 @@ button.obj:active { transform: scale(0.9); }
       <h1 id="practiceTitle"></h1>
     </header>
     <div class="practice-panel" id="practiceMenu">
-      <button class="btn small cta" id="practiceExample" type="button"></button>
+      <div class="language-actions">
+        <button class="btn small cta" id="practiceExample" type="button"></button>
+        <button class="round-btn quick-language" type="button" lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
+      </div>
       <p id="practiceIntro"></p>
       <div class="practice-rounds" id="practiceRounds" role="group">
         <button class="btn small" id="practiceShortRound" data-round="short" aria-pressed="true" type="button"></button>
@@ -682,7 +691,7 @@ button.obj:active { transform: scale(0.9); }
         <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
         <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
       </button>
-      <a class="btn small" href="lessons.html" lang="lo">📖 ບົດຮຽນຕາມປຶ້ມ ປ.1</a>
+      <a class="btn small" href="lessons.html" id="textbookLink">📖 ບົດຮຽນຕາມປຶ້ມ ປ.1</a>
     </div>
     <div class="practice-panel" id="practiceQuestion" hidden>
       <div class="practice-progress"><h2 id="practiceLessonTitle" tabindex="-1"></h2><span id="practiceProgress"></span></div>
@@ -1476,6 +1485,10 @@ button.obj:active { transform: scale(0.9); }
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage blocked: play on without saving */ } }
   let S = load();
+  try {
+    const preference = localStorage.getItem("nab-lex.language");
+    if (preference === "lo" || preference === "th") S.lang = preference;
+  } catch (e) { /* use the saved game language */ }
 
   const T = () => TEXT[S.lang];
   const fmt = (n) => (S.nativeDigits ? String(n).replace(/\d/g, (d) => DIGITS[S.lang][d]) : String(n));
@@ -1500,7 +1513,12 @@ button.obj:active { transform: scale(0.9); }
     }
     renderVoiceNote();
   }
-  const voiceFor = (lang) => voices.find((v) => PREFIX[lang].test(v.lang)) || null;
+  function voiceFor(lang) {
+    const matches = voices.filter(v => PREFIX[lang].test(v.lang));
+    let preferred;
+    try { preferred = localStorage.getItem("nab-lex.voice." + lang); } catch (e) { /* optional */ }
+    return matches.find(v => v.voiceURI === preferred) || matches.find(v => /natural|neural/i.test(v.name)) || matches.find(v => v.default) || matches[0] || null;
+  }
   function voiceLang() {
     if (!synth || !S.voice) return null;
     if (!voicesKnown) return S.lang;
@@ -4166,6 +4184,12 @@ button.obj:active { transform: scale(0.9); }
     const D = T(), root = document.documentElement;
     root.lang = S.lang;
     root.dataset.lang = S.lang;
+    $$(".quick-language").forEach(button => {
+      button.textContent = S.lang === "lo" ? "ไทย" : "ລາວ";
+      button.lang = S.lang === "lo" ? "th" : "lo";
+      button.setAttribute("aria-label", S.lang === "lo" ? "เปลี่ยนเป็นภาษาไทย" : "ປ່ຽນເປັນພາສາລາວ");
+    });
+    $("#textbookLink").textContent = S.lang === "th" ? "📖 บทเรียนตามหนังสือ ป.1" : "📖 ບົດຮຽນຕາມປຶ້ມ ປ.1";
     $("#appTitle").textContent = D.appName;
     $("#tagline").textContent = D.tagline;
     $("#no3dText").textContent = D.no3d;
@@ -4323,11 +4347,21 @@ button.obj:active { transform: scale(0.9); }
   function setLang(lang) {
     if (S.lang === lang) return;
     S.lang = lang;
+    try { localStorage.setItem("nab-lex.language", lang); } catch (e) { /* session only */ }
     save();
     hush();
     applyLang();
+    if (!$("#practiceMenu").hidden) renderPracticeLessons();
     renderParent();
   }
+  $$(".quick-language").forEach(button => button.addEventListener("click", () => setLang(S.lang === "lo" ? "th" : "lo")));
+  window.addEventListener("pageshow", event => {
+    if (!event.persisted) return;
+    try {
+      const next = localStorage.getItem("nab-lex.language");
+      if (next === "lo" || next === "th") setLang(next);
+    } catch (e) { /* keep this session */ }
+  });
   function setMusic(on) {
     S.music = on;
     save();
