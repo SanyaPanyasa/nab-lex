@@ -238,6 +238,51 @@ svg text { font-family: var(--font-num); }
 .stage svg, .vis svg, .activity svg { max-width: 100%; height: auto; }
 .col, .row, .activity-picture > * { min-width: 0; max-width: 100%; }
 
+.nest-links { margin: 0 0 18px; padding: 12px 15px; border-radius: 16px; background: var(--card); }
+.nest-links h2 { font-size: 17px; }
+.nest-links div { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; margin-top: 8px; }
+.nest-links a, .nest-launch { display: grid; align-content: center; min-height: 44px; border-radius: 10px; background: var(--good-soft); color: var(--ink); text-decoration: none; text-align: center; font-weight: 700; }
+.nest-links #nestContinue { background: transparent; font-size: 15px; text-decoration: underline; }
+.nest-launch { padding: 7px 12px; margin: 0 0 12px; }
+.nest-game { padding: clamp(12px,3vw,22px); border-radius: 22px; background: var(--card); }
+.nest-game h2 { margin: 4px 0 10px; font: 700 clamp(20px,4vw,25px)/1.45 var(--font-lo); text-align: center; }
+.nest-level { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--soft); font-size: 14px; }
+.nest-level .lesson-dino { width: 38px; height: 38px; }
+.nest-game[data-solved="true"] .lesson-dino { background-position-y: 50%; animation: nod .42s ease-out; }
+.nest-eq { text-align: center; color: var(--ink); font: 700 clamp(28px,7vw,38px)/1.25 var(--font-num); margin: 8px 0 12px; }
+.nest-eq b { display: inline-grid; place-items: center; min-width: 1.2em; min-height: 1.15em; border: 2px dashed var(--accent); border-radius: 8px; vertical-align: bottom; }
+.nest-eq b:not(:empty) { border-color: var(--good); color: var(--good); }
+.nest-board { display: grid; gap: 7px; }
+.nest-zone { padding: 5px 10px 9px; min-width: 0; border-radius: 15px; background: var(--sun-soft); border: 1px solid var(--line); }
+.nest-zone + .nest-zone { background: var(--sky-soft); }
+.nest-zone h3 { font-size: 15px; margin: 0 0 4px; }
+.nest-cargo { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; min-height: 44px; }
+.nest-trays, .nest-loose { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; max-width: 100%; }
+.nest-loose { display: grid; grid-template-columns: repeat(5, auto); justify-content: start; }
+.nest-trays:empty, .nest-loose:empty { display: none; }
+.nest-piece { position: relative; color: var(--ink); }
+.nest-tray { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width: 73px; min-height: 44px; padding: 4px; border: 2px solid var(--soft); border-radius: 9px; background: var(--card); }
+.nest-egg { display: grid; place-items: center; min-width: 0; width: 24px; height: 32px; padding: 0; border: 0; background: transparent; border-radius: 12px; }
+.nest-egg:enabled { width: 32px; height: 44px; }
+.nest-piece:enabled { cursor: pointer; outline: 2px dashed var(--sky); outline-offset: -2px; }
+.nest-egg:enabled { outline: 0; }
+.nest-egg:enabled:first-child { outline: 2px dashed var(--sky); }
+.nest-piece:enabled:focus-visible { outline: 3px solid var(--focus); }
+.nest-piece:disabled { opacity: 1; cursor: default; }
+.nest-speckle { display: block; width: 100%; aspect-ratio: .75; border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%; border: 1px solid #806235; background: radial-gradient(circle at 61% 63%, #82642c 0 9%, transparent 10%), radial-gradient(circle at 36% 43%, #ab8241 0 10%, transparent 11%), #ffe6ad; }
+.nest-egg .nest-speckle { width: 19px; }
+.nest-tray .lit { background-color: #95e1b0; outline: 1px solid #388455; }
+.nest-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin: 6px 0; color: var(--ink); font-size: 15px; }
+.nest-stats:empty, .nest-feedback:empty { display: none; }
+.nest-controls { text-align: center; margin-top: 10px; }
+.nest-controls .go { min-height: 46px; }
+.nest-controls .choices { margin: 0; gap: 7px; }
+.nest-controls .choice { min-width: 60px; min-height: 48px; font-size: 24px; background: var(--bg); }
+.nest-feedback { margin: 10px 0; padding: 9px 12px; border-radius: 12px; background: var(--sky-soft); text-align: center; }
+.nest-game[data-solved="true"] .nest-feedback { background: var(--good-soft); }
+.nest-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
+.nest-footer .secondary { margin: 2px 0 0; }
+
 @keyframes shake { 0%, 100% { translate: 0; } 25% { translate: -6px; } 75% { translate: 6px; } }
 @keyframes nod { 0%, 100% { transform: none; } 40% { transform: scale(1.04); } }
 @keyframes pop { from { transform: scale(.92); opacity: .5; } to { transform: none; opacity: 1; } }
@@ -260,6 +305,10 @@ svg text { font-family: var(--font-num); }
   <main id="home">
     <p class="lead">ເລືອກບົດທີ່ລູກກຳລັງຮຽນຢູ່ໂຮງຮຽນ</p>
     <a class="start-link" href="#bot-4"><span class="lesson-dino" aria-hidden="true"></span><span class="start-name">ລອງຕື່ມໄຂ່ໃຫ້ຄົບ 7</span><span aria-hidden="true">→</span></a>
+    <section class="nest-links"><h2>ຮັງໄຂ່ໄດໂນເສົາ · ຖາດລະ 10</h2><div>
+      <a href="#bot-7-nest">10 + 10</a><a href="#bot-14-nest">14 − 13</a>
+      <a href="#bot-17-nest">15 + 20</a><a href="#bot-14-exchange">25 − 16</a>
+    </div><a id="nestContinue" class="secondary" hidden></a></section>
     <ol class="toc" id="toc"></ol>
   </main>
 
@@ -271,6 +320,23 @@ svg text { font-family: var(--font-num); }
     </nav>
 
     <section id="viewLearn" role="tabpanel" aria-labelledby="tabLearn">
+      <a id="nestLaunch" class="nest-launch" hidden></a>
+      <div id="nestPanel" hidden>
+        <div class="nest-game" id="nestGame">
+          <div class="nest-level"><span class="lesson-dino" aria-hidden="true"></span><span id="nestLevel"></span><button class="act-listen" id="nestListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
+          <h2 id="nestPrompt" tabindex="-1"></h2>
+          <div class="nest-eq" id="nestEq" role="img"></div>
+          <div class="nest-board" id="nestBoard">
+            <div class="nest-zone"><h3>ໃນຮັງ</h3><div class="nest-cargo" id="nestHome"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
+            <div class="nest-zone"><h3 id="nestSideLabel"></h3><div class="nest-cargo" id="nestSide"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
+          </div>
+          <div class="nest-stats" id="nestStats" aria-live="polite"></div>
+          <div class="nest-controls" id="nestControls"></div>
+          <div class="nest-feedback" id="nestFeedback" role="status"></div>
+          <div class="nest-footer"><button type="button" class="secondary" id="nestHelp">ໃຊ້ໄຂ່ຊ່ວຍຄິດ</button><button type="button" class="secondary" id="nestReplay">ເຮັດຂໍ້ນີ້ຄືນ</button><a class="secondary" href="#" id="nestFinish" hidden>ພໍແລ້ວມື້ນີ້</a></div>
+        </div>
+        <a class="secondary" id="nestBook" href="#bot-7">ກັບໄປບົດຮຽນ</a>
+      </div>
       <div id="starter">
         <div class="activity" aria-labelledby="actQuestion">
           <div class="phase-row"><p class="phase" id="actPhase"></p><button class="act-listen" id="actListen" type="button" aria-label="ຟັງຄຳຖາມອີກເທື່ອ" hidden>🔊</button></div>
@@ -358,6 +424,7 @@ svg text { font-family: var(--font-num); }
     $("#voiceBtn").innerHTML = `${saved.voice && p ? "🔊" : "🔇"} <small>${label}</small>`;
     $("#voiceBtn").setAttribute("aria-label", label);
     $("#noVoice").hidden = !!voiceFor("lo") || (!!synth && !voicesChecked);
+    $("#nestListen").hidden = !(saved.voice && voiceFor("lo"));
     $("#actListen").hidden = !(saved.voice && voiceFor("lo"));
   }
   let voicesChecked = false;
@@ -1796,8 +1863,270 @@ svg text { font-family: var(--font-num); }
     }
   });
 
+  // A tray is always ten eggs. Exchanging its representation never changes the quantity.
+  const nestRoutes = {
+    "7-nest": { kind: "add", level: 0 }, "17-nest": { kind: "add", level: 2 },
+    "14-nest": { kind: "take", level: 0 }, "14-exchange": { kind: "take", level: 2 },
+    "17-more": { kind: "add", resume: true }, "14-more": { kind: "take", resume: true }
+  };
+  const nestChapters = { 5: "7-nest", 7: "7-nest", 12: "17-nest", 17: "17-nest", 6: "14-nest", 14: "14-exchange" };
+  const nestLessons = {
+    add: [[10, 10], [12, 10], [15, 20]],
+    take: [[14, 13], [16, 12], [25, 16]]
+  };
+  const nestProgressKey = "ph1-nest-progress.v1";
+  let nest = null, nestReport = {};
+  try {
+    const stored = JSON.parse(localStorage.getItem(nestProgressKey)) || {};
+    for (const kind of ["add", "take"]) {
+      const r = stored[kind];
+      if (r && [r.a, r.b, r.level].every(Number.isInteger) && r.level >= 0 && r.level <= 3) nestReport[kind] = r;
+    }
+    if (nestReport[stored.lastKind] && ["add", "take"].includes(stored.lastKind)) nestReport.lastKind = stored.lastKind;
+  } catch (e) { /* storage unavailable */ }
+
+  function nextNestProblem(kind, level, previous) {
+    if (level < 3) return nestLessons[kind][level];
+    const tasks = kind === "add"
+      ? [[13, 20], [17, 20], [14, 30], [21, 10], [16, 20], [22, 20]]
+      : [[24, 18], [23, 15], [27, 18], [32, 15], [26, 19], [31, 16], [34, 18]];
+    return pick(tasks.filter(([a, b]) => !previous || a !== previous[0] || b !== previous[1]));
+  }
+  function startNest(kind, level, problem = nextNestProblem(kind, level), useModel = level === 0 || level === 2) {
+    const [a, b] = problem, adding = kind === "add", answer = adding ? a + b : a - b;
+    const alternatives = adding ? [Math.floor(answer / 10), a, answer - 10] : [b, a - 10, answer + 1];
+    const choices = [...new Set([answer, ...alternatives])].slice(0, 3).sort((x, y) => x - y);
+    nest = { kind, level, a, b, answer, adding, choices, model: useModel, usedHelp: false,
+      moved: 0, counted: level === 0 && adding ? 0 : 2, pieces: [], solved: false, notice: "" };
+    for (const zone of ["#nestHome", "#nestSide"]) {
+      $(zone + " .nest-trays").replaceChildren();
+      $(zone + " .nest-loose").replaceChildren();
+    }
+    stockNest(a, "home");
+    if (adding) stockNest(b, "side");
+    renderNest();
+  }
+  function stockNest(n, zone) {
+    for (let i = 0; i < Math.floor(n / 10); i++) addNestPiece(10, zone);
+    for (let i = 0; i < n % 10; i++) addNestPiece(1, zone);
+  }
+  function addNestPiece(value, zone) {
+    const el = document.createElement("button"), tray = value === 10;
+    el.type = "button";
+    el.className = "nest-piece " + (tray ? "nest-tray" : "nest-egg");
+    el.setAttribute("aria-label", tray ? "ຖາດໄຂ່ 10 ໜ່ວຍ" : "ໄຂ່ 1 ໜ່ວຍ");
+    el.innerHTML = '<i class="nest-speckle" aria-hidden="true"></i>'.repeat(value);
+    const p = { value, zone, el };
+    nest.pieces.push(p);
+    placeNestPiece(p, zone);
+    return p;
+  }
+  function placeNestPiece(p, zone) {
+    p.zone = zone;
+    const root = zone === "home" ? "#nestHome" : "#nestSide";
+    $(root + (p.value === 10 ? " .nest-trays" : " .nest-loose")).append(p.el);
+  }
+  function nestAction() {
+    if (nest.solved) return "solved";
+    if (!nest.model || nest.moved === nest.b) return "answer";
+    if (nest.counted < 2) return "count";
+    const due = nest.b - nest.moved;
+    if (due >= 10) return "ten";
+    const available = nest.pieces.filter(p => p.zone === "home" && p.value === 1).length;
+    return !nest.adding && due > available ? "exchange" : "one";
+  }
+  function canUseNestPiece(p, action) {
+    if (action === "count") return p.zone === "home" && p.value === 10;
+    if (action === "exchange") return p.zone === "home" && p.value === 10;
+    return p.zone === (nest.adding ? "side" : "home") &&
+      ((action === "ten" && p.value === 10) || (action === "one" && p.value === 1));
+  }
+  function nestInstructions(action) {
+    const { a, b, moved, adding, counted, answer } = nest;
+    const now = adding ? a + moved : a - moved;
+    switch (action) {
+      case "count": return counted === 0 ? ["ມານັບໄຂ່ໃນຖາດທຳອິດ ແຖວລະ 5.", "ນັບແຖວທຳອິດ"] : ["ແຖວເທິງມີ 5. ນັບແຖວລຸ່ມຕໍ່.", "ນັບອີກ 5 ໜ່ວຍ"];
+      case "ten": return adding
+        ? [moved ? `ມີ ${now} ແລ້ວ. ຍ້າຍອີກ 1 ຖາດເຂົ້າຮັງ.` : `ມີ ${a} ໃນຮັງ. ເພີ່ມ ${b} ໂດຍຍ້າຍເທື່ອລະຖາດ.`, "ຍ້າຍ 10 ເຂົ້າຮັງ"]
+        : [`ມີໄຂ່ ${a} ໜ່ວຍ. ຈະສົ່ງ ${b} ໃຫ້ໄດໂນເສົາ. ສົ່ງ 10 ກ່ອນ.`, "ສົ່ງ 1 ຖາດ (10)"];
+      case "exchange": return [`ຕ້ອງສົ່ງອີກ ${b - moved}. ແກະ 1 ຖາດເປັນໄຂ່ແຍກ 10 ໜ່ວຍ.`, "ແກະຖາດ 10 ໜ່ວຍ"];
+      case "one": return [nest.lastExchange === moved ? `ແກະຖາດແລ້ວ ຍັງມີ ${now}. ສົ່ງອີກ ${b - moved} ໜ່ວຍ.` : `ສົ່ງອີກ ${b - moved} ໜ່ວຍ. ແຕະໄຂ່ທີລະໜ່ວຍ.`, "ສົ່ງໄຂ່ 1 ໜ່ວຍ"];
+      case "solved": return [adding ? `ໃນຮັງມີໄຂ່ ${answer} ໜ່ວຍ!` : `ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ!`];
+      default: return [adding ? `ມີ ${a} ເພີ່ມອີກ ${b}. ລວມກັນໄດ້ເທົ່າໃດ?` : `ມີ ${a} ສົ່ງໃຫ້ໄດໂນເສົາ ${b}. ເຫຼືອຈັກໜ່ວຍ?`];
+    }
+  }
+  function renderNest() {
+    const { a, b, level, adding, moved, counted, model, solved, answer, choices } = nest;
+    const action = nestAction(), [prompt, button] = nestInstructions(action);
+    if (cur) $("#kicker").textContent = level >= 2 ? "ຂໍ້ທ້າລອງຕໍ່ຈາກບົດທີ " + cur.id : "ບົດທີ " + cur.id + " · ໜ້າ " + cur.pages;
+    $("#nestGame").dataset.solved = solved;
+    $("#nestLevel").textContent = ["ນັບເປັນຖາດ", "ລອງເອງ", adding ? "ເພີ່ມສອງຖາດ" : "ແກະຖາດ", "ທ້າລອງຂໍ້ໃໝ່"][level];
+    $("#nestPrompt").textContent = prompt;
+    const expression = `${a} ${adding ? "+" : "−"} ${b} = `;
+    $("#nestEq").innerHTML = expression + `<b>${solved ? answer : ""}</b>`;
+    $("#nestEq").setAttribute("aria-label", expression + (solved ? answer : "ຫ້ອງວ່າງ"));
+    $("#nestSideLabel").textContent = adding ? "ລໍຖ້າເຂົ້າຮັງ" : "ສົ່ງໃຫ້ໄດໂນເສົາແລ້ວ";
+    $("#nestBoard").hidden = level === 3 && !model && !solved;
+    nest.pieces.forEach(p => { p.el.disabled = !canUseNestPiece(p, action); });
+    const firstTray = nest.pieces[0];
+    if (adding && level === 0 && firstTray) {
+      [...firstTray.el.children].forEach((egg, i) => egg.classList.toggle("lit", i < counted * 5));
+    }
+    const now = adding ? a + moved : a - moved;
+    let stats = "";
+    if (model && !solved) {
+      if (adding && level === 0 && !moved) stats = ["", "5", "5 + 5 = 10"][counted];
+      else if (moved) stats = `${adding ? "ເພີ່ມແລ້ວ" : "ສົ່ງແລ້ວ"} ${moved} / ${b}` + (moved < b ? ` · ໃນຮັງ ${now}` : "");
+    }
+    $("#nestStats").textContent = stats;
+    $("#nestControls").innerHTML = action === "answer"
+      ? `<div class="choices">${choices.map(n => `<button type="button" class="choice num" data-nest-answer="${n}">${n}</button>`).join("")}</div>`
+      : `<button type="button" class="go" ${solved ? "data-nest-next" : "data-nest-step"}>${solved ? "ລອງຂໍ້ໃໝ່ →" : button}</button>`;
+    $("#nestFeedback").textContent = nest.notice;
+    $("#nestHelp").hidden = action !== "answer" || model;
+    $("#nestReplay").hidden = !solved && !moved && !nest.notice && !(adding && level === 0 && counted > 0);
+    $("#nestFinish").hidden = !solved;
+  }
+
+  function moveNestPiece(action, selected, animate) {
+    const p = selected || nest.pieces.find(piece => canUseNestPiece(piece, action));
+    const motion = animate && typeof p.el.animate === "function" && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const before = motion && p.el.getBoundingClientRect();
+    let moving = [];
+    if (action === "count") {
+      nest.counted++;
+      if (motion) [...p.el.children].slice((nest.counted - 1) * 5, nest.counted * 5).forEach((egg, i) => {
+        egg.animate([{ transform: "scale(.86)" }, { transform: "scale(1.18)" }, { transform: "scale(1)" }], { duration: 280, delay: i * 65 });
+      });
+    } else if (action === "exchange") {
+      const i = nest.pieces.indexOf(p);
+      nest.pieces.splice(i, 1);
+      p.el.remove();
+      moving = range(10).map(() => addNestPiece(1, "home"));
+      nest.lastExchange = nest.moved;
+      nest.notice = `ແກະ 10 ໜ່ວຍອອກຈາກຖາດ. ຍັງມີ ${nest.a - nest.moved} ໜ່ວຍໃນຮັງເທົ່າເດີມ.`;
+    } else {
+      placeNestPiece(p, nest.adding ? "home" : "side");
+      nest.moved += p.value;
+      moving = [p];
+    }
+    if (animate) {
+      renderNest();
+      if (motion) moving.forEach(({ el }, i) => {
+        const end = el.getBoundingClientRect();
+        const dx = before.x + before.width / 2 - end.x - end.width / 2;
+        const dy = before.y + before.height / 2 - end.y - end.height / 2;
+        el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: "translate(0, 0)" }], { duration: 380, delay: i * 22, fill: "backwards", easing: "ease-out" });
+      });
+    }
+  }
+  function explainNest() {
+    const { a, b, answer, adding } = nest;
+    if (adding) {
+      const tens = Math.floor(answer / 10), ones = answer % 10;
+      const jumps = range(b / 10 + 1).map(i => a + 10 * i).join(" → ");
+      return `${jumps}. ${tens} ຖາດ ຖາດລະ 10${ones ? ` ກັບໄຂ່ແຍກ ${ones} ໜ່ວຍ` : ""}. ${a} + ${b} = ${answer}.`;
+    }
+    return `${a} − 10 = ${a - 10}. ${a - 10} − ${b - 10} = ${answer}. ກວດຄືນ ${b} + ${answer} = ${a}.`;
+  }
+  function helpNest(wrong) {
+    const { adding, a, b } = nest;
+    nest.usedHelp = true;
+    nest.model = true;
+    let cue = adding ? "ໃນ 1 ຖາດມີໄຂ່ 10 ໜ່ວຍ." : `${b} ແມ່ນໄຂ່ທີ່ສົ່ງໄປ. ລອງນັບໄຂ່ທີ່ເຫຼືອໃນຮັງ.`;
+    if (!adding && wrong === a - 10) cue = `ຖ້າສົ່ງແຕ່ 10 ຍັງຕ້ອງສົ່ງອີກ ${b - 10}.`;
+    nest.notice = cue;
+    renderNest();
+    speak(cue);
+  }
+  function resumeNest(kind) {
+    const last = nestReport[kind];
+    if (!last) { startNest(kind, 0); return; }
+    if (last.level === 1 && !last.independent) {
+      const examples = kind === "add" ? [[12, 10], [14, 10], [16, 10]] : [[16, 12], [17, 12], [18, 15], [15, 13]];
+      startNest(kind, 1, pick(examples.filter(([a, b]) => a !== last.a || b !== last.b)));
+      return;
+    }
+    if (last.level === 2 && last.neededHelp) {
+      const examples = kind === "add" ? [[14, 20], [16, 20], [12, 20]] : [[24, 15], [23, 16], [25, 17]];
+      startNest(kind, 2, pick(examples.filter(([a, b]) => a !== last.a || b !== last.b)));
+      return;
+    }
+    if (last.level === 3 && last.neededHelp) {
+      startNest(kind, 3, nextNestProblem(kind, 3, [last.a, last.b]), true);
+      return;
+    }
+    const next = Math.min(last.level + 1, 3);
+    startNest(kind, next, nextNestProblem(kind, next, [last.a, last.b]));
+  }
+  function nestParent(c) {
+    const entry = nestRoutes[nestChapters[c.id]];
+    if (!entry) return "";
+    const {kind} = entry, add = kind === "add", last = nestReport[kind];
+    const practical = add
+      ? "ວາງຝາຂວດເທິງເຈ້ຍແຜ່ນລະ 10 ຝາ ເປັນ 2 ແຖວ ແຖວລະ 5. ວາງ 1 ແຜ່ນກັບ 5 ຝາ ແລ້ວເພີ່ມອີກ 2 ແຜ່ນ. ໃຫ້ລູກຊີ້ພ້ອມນັບ 15, 25, 35."
+      : "ຈັດຝາຂວດ 25 ຝາເປັນ 2 ຖາດ ຖາດລະ 10 ກັບ 5 ຝາແຍກ. ສົ່ງ 1 ຖາດກ່ອນ. ແກະອີກຖາດ ແລ້ວຖາມວ່າ ຈຳນວນຍັງເທົ່າເດີມບໍ? ໃຫ້ລູກສົ່ງອີກ 6 ຝາ ແລ້ວກວດວ່າ 16 ກັບ 9 ລວມກັນໄດ້ 25.";
+    let progress = "";
+    if (last) {
+      const calculation = last.a + (add ? " + " : " − ") + last.b;
+      const label = last.independent ? "ລູກຕອບເອງ" : "ລູກໃຊ້ຮູບຊ່ວຍຄິດ";
+      progress = '<p>' + label + ' · ' + calculation + '</p><a href="#bot-' + (add ? '17' : '14') + '-more">ຝຶກຂໍ້ໃໝ່ຕໍ່ →</a>';
+    }
+    return '<details' + (nest ? ' open' : '') + '><summary>ຫຼິ້ນຮັງໄຂ່ດ້ວຍຝາຂວດ</summary><p>' + practical + '</p>' + progress + '</details>';
+  }
+  function recordNest() {
+    const { kind, a, b, model, usedHelp, level } = nest;
+    const independent = !model && !usedHelp;
+    nestReport.lastKind = kind;
+    nestReport[kind] = { a, b, independent, neededHelp: usedHelp, level };
+    try { localStorage.setItem(nestProgressKey, JSON.stringify(nestReport)); } catch (e) { /* optional storage */ }
+    $("#parentBody").innerHTML = renderParent(cur);
+  }
+  $("#nestPanel").addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn || !nest) return;
+    const action = nestAction(), { kind, level, a, b } = nest;
+    if (btn.id === "nestListen") { speak($("#nestPrompt").textContent); return; }
+    if (btn.id === "nestReplay") { startNest(kind, level, [a, b], true); $("#nestPrompt").focus(); return; }
+    if (btn.id === "nestHelp") { helpNest(); $("#nestPrompt").focus(); return; }
+    if (btn.hasAttribute("data-nest-next") && nest.solved) {
+      resumeNest(kind);
+      $("#nestPrompt").focus();
+      speak($("#nestPrompt").textContent);
+      return;
+    }
+    if (btn.hasAttribute("data-nest-answer") && action === "answer") {
+      const guess = Number(btn.dataset.nestAnswer);
+      if (guess !== nest.answer) { helpNest(guess); $("#nestPrompt").focus(); return; }
+      recordNest();
+      nest.model = true;
+      while (nestAction() !== "answer") moveNestPiece(nestAction(), null, false);
+      $("#nestBoard").getAnimations?.({ subtree: true }).forEach(animation => animation.cancel());
+      nest.solved = true;
+      nest.notice = explainNest();
+      renderNest();
+      $("#nestPrompt").focus();
+      speak(nest.notice);
+      return;
+    }
+    const selected = nest.pieces.find(p => p.el === btn);
+    if (btn.hasAttribute("data-nest-step") || (selected && canUseNestPiece(selected, action))) {
+      nest.notice = "";
+      moveNestPiece(action, selected, true);
+      const next = $("#nestControls [data-nest-step]");
+      (next || $("#nestPrompt")).focus({ preventScroll: true });
+      speak(nest.notice || ($("#nestStats").textContent + ". " + $("#nestPrompt").textContent));
+    }
+  });
+
   /* ---------- contents ---------- */
   function renderToc() {
+    const kind = nestReport.lastKind, continuation = $("#nestContinue");
+    continuation.hidden = !kind;
+    if (kind) {
+      continuation.href = "#bot-" + (kind === "add" ? "17" : "14") + "-more";
+      continuation.textContent = kind === "add" ? "ຝຶກບວກຂໍ້ໃໝ່ຕໍ່ →" : "ຝຶກລົບຂໍ້ໃໝ່ຕໍ່ →";
+    }
     $("#toc").innerHTML = CHAPTERS.map((c) => {
       const best = [[saved.shortBest[c.id], 3], [saved.best[c.id], 5]].filter(([n]) => n !== undefined);
       const scores = best.map(([n, size]) => `<span aria-label="ຕອບເອງ ${n} ໃນ ${size} ຂໍ້">★ ${n}/${size}</span>`).join("");
@@ -1818,16 +2147,30 @@ svg text { font-family: var(--font-num); }
   $("#tabLearn").addEventListener("click", () => showTab("learn"));
   $("#tabPractice").addEventListener("click", () => showTab("practice"));
   $("#tabParent").addEventListener("click", () => showTab("parent"));
-  function openChapter(c) {
+  function openChapter(c, expedition) {
     cur = c;
     $("#home").hidden = true;
     $("#chapter").hidden = false;
     $("#backBtn").hidden = false;
     $("#kicker").textContent = c.review ? `ໜ້າ ${c.pages}` : `ບົດທີ ${c.id} · ໜ້າ ${c.pages}`;
     $("#topTitle").textContent = c.lo;
-    $("#parentBody").innerHTML = renderParent(c);
-    $("#starter").hidden = false;
+    const routeKey = nestChapters[c.id], launch = $("#nestLaunch");
+    launch.hidden = !routeKey || !!expedition;
+    if (routeKey) {
+      const {kind, level} = nestRoutes[routeKey];
+      const [a, b] = nestLessons[kind][level];
+      launch.href = "#bot-" + routeKey;
+      launch.textContent = "🥚 ລອງຍ້າຍຖາດໄຂ່  " + a + (kind === "add" ? " + " : " − ") + b + " →";
+    }
+    $("#nestPanel").hidden = !expedition;
+    $("#starter").hidden = !!expedition;
+    $("#nestBook").href = "#bot-" + c.id;
+    if (expedition) {
+      if (expedition.resume) resumeNest(expedition.kind);
+      else startNest(expedition.kind, expedition.level);
+    } else nest = null;
     $("#bookSteps").hidden = true;
+    $("#parentBody").innerHTML = renderParent(c);
     resetActivity();
     stepI = 0;
     showStep(false);
@@ -1924,6 +2267,7 @@ svg text { font-family: var(--font-num); }
     // numbered ideas (① … ②) read better one per line
     const lines = (s) => s.replace(/\s*([②-⑨])/g, "<br>$1").replace(/\s*—\s*/g, "<br>");
     return `
+      ${nestParent(c)}
       <div class="idea"><p><strong>ລອງກັບຂອງຈິງ</strong>${a.home}</p>
       <p><strong>ຖາມລູກ</strong>“${a.ask}”</p></div>
       <h3>ສັງເກດວິທີຄິດ</h3><p>${a.observe}</p>
@@ -1940,9 +2284,14 @@ svg text { font-family: var(--font-num); }
 
   /* ---------- pages ---------- */
   function route() {
-    const m = /^#bot-(\w+)$/.exec(location.hash);
+    const m = /^#bot-(\w+)(?:-(nest|exchange|more))?$/.exec(location.hash);
     const c = m && CHAPTERS.find((x) => String(x.id) === m[1]);
-    if (c) { openChapter(c); return; }
+    if (c) {
+      const key = m[1] + "-" + m[2];
+      openChapter(c, nestRoutes[key]);
+      return;
+    }
+    nest = null;
     cur = null;
     speechRequest++;
     $("#home").hidden = false;
