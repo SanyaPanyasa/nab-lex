@@ -4781,6 +4781,25 @@ button.obj:active { transform: scale(0.9); }
   ["pointerup", "pointercancel", "lostpointercapture"].forEach((name) => sketchCanvas.addEventListener(name, stopPracticeSketch));
   window.addEventListener("resize", resizePracticeSketch);
 
+  function onPracticeSketchAction(button, action) {
+    let start = null;
+    button.addEventListener("click", action);
+    button.addEventListener("touchstart", (e) => {
+      start = e.touches.length === 1 ? e.changedTouches[0] : null;
+    }, { passive: true });
+    button.addEventListener("touchcancel", () => { start = null; });
+    // Mobile Chrome can suppress the synthetic click immediately after a drawn stroke.
+    button.addEventListener("touchend", (e) => {
+      const first = start, last = e.changedTouches[0];
+      start = null;
+      if (!first || !last || first.identifier !== last.identifier || e.touches.length || button.disabled) return;
+      if (Math.hypot(first.clientX - last.clientX, first.clientY - last.clientY) > 12 ||
+          !button.contains(document.elementFromPoint(last.clientX, last.clientY))) return;
+      e.preventDefault();
+      action(e);
+    }, { passive: false });
+  }
+
   function openPractice() {
     token++;  // a tap can switch modes while the city is waiting for fonts
     musicStop();
@@ -4797,26 +4816,26 @@ button.obj:active { transform: scale(0.9); }
   $("#practiceChoose").addEventListener("click", showPracticeMenu);
   $("#practiceRepeat").addEventListener("click", () => startPractice(practice.kind));
   $("#practiceSpeak").addEventListener("click", () => { primeVoice(); say(practicePrompt); });
-  $$("#practiceSketchTools [data-ink]").forEach((button) => button.addEventListener("click", () => selectPracticeInk(button)));
-  $("#practiceDrawUndo").addEventListener("click", () => {
+  $$("#practiceSketchTools [data-ink]").forEach((button) => onPracticeSketchAction(button, () => selectPracticeInk(button)));
+  onPracticeSketchAction($("#practiceDrawUndo"), () => {
     const { strokes } = practice.sketch;
     sketchStroke = null;
     strokes.pop();
     $("#practiceDrawUndo").disabled = strokes.length === 0;
     resizePracticeSketch();
   });
-  $("#practiceDrawPaper").addEventListener("click", () => {
+  onPracticeSketchAction($("#practiceDrawPaper"), () => {
     sketchStroke = null;
     practice.sketch.paper = !practice.sketch.paper;
     renderPracticeQuestion();
     resizePracticeSketch();
   });
-  $("#practiceDrawContinue").addEventListener("click", (e) => {
+  onPracticeSketchAction($("#practiceDrawContinue"), (e) => {
     const sketch = practice.sketch;
     if (sketch.paper || sketch.strokes.length) sketch.ready = true;
     else practice.sketch = null;
     renderPracticeQuestion();
-    if (e.detail === 0) $("#practiceChoices button").focus();
+    if (e.type === "click" && e.detail === 0) $("#practiceChoices button").focus();
     else $("#practiceChoices").scrollIntoView({ block: "nearest" });
   });
   $("#practicePicture").addEventListener("click", (e) => {
