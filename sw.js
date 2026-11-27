@@ -1,6 +1,7 @@
 /* Offline support: the game's files stay on the phone. Each launch is answered from the phone at once,
    while a fresh copy is fetched in the background, so a new version arrives on the following launch. */
-const CACHE = "nab-lek-v1";
+const CACHE_PREFIX = "nab-lek-";
+const CACHE = CACHE_PREFIX + "v2";
 const CORE = [
   "./", "index.html", "three.min.js", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-192.png", "icons/maskable-512.png",
@@ -8,13 +9,14 @@ const CORE = [
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE)).then(() => self.skipWaiting()));
+  const requests = CORE.map((path) => new Request(path, { cache: "reload" }));
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(requests)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE).map((key) => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });

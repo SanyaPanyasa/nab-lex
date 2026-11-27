@@ -152,11 +152,83 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .play-btn:active { transform: translateY(5px); box-shadow: 0 3px 0 var(--cta-deep); }
 .play-btn small { display: block; font-size: 15px; font-weight: 600; }
 .play-btn svg { width: 40px; height: 40px; fill: currentColor; }
+.home-actions { display: grid; gap: 12px; }
+.home-actions .play-btn:disabled { opacity: 0.55; cursor: default; }
 .home-foot { display: flex; justify-content: center; }
 .gate { position: relative; overflow: hidden; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--card); border: 2px dashed var(--line); color: var(--ink-soft); font-size: 14px; }
 .gate-fill { position: absolute; inset: 0; background: var(--dim); transform: scaleX(0); transform-origin: left; }
 .gate.holding .gate-fill { transform: scaleX(1); transition: transform 2s linear; }
 .gate-text { position: relative; }
+
+/* ---------- practice with a grown-up ---------- */
+.practice {
+  position: fixed; inset: 0; z-index: 2; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--sky-soft);
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+.practice-shell { max-width: 560px; margin: 0 auto; display: grid; gap: 12px; }
+.practice-header { display: flex; align-items: center; gap: 10px; }
+.practice-header h1 { font-size: clamp(20px, 5.2vw, 27px); margin: 0; }
+.practice-panel { display: grid; gap: 12px; padding: clamp(12px, 4vw, 24px); border: 2px solid var(--line); border-radius: 22px; background: var(--card); }
+.practice-panel h2, .practice-panel p { margin: 0; }
+.practice-panel h2 { font-size: 20px; }
+.practice-lesson {
+  display: flex; align-items: center; gap: 12px; padding: 12px;
+  background: var(--card); border: 2px solid var(--line); border-radius: 16px; text-align: start;
+}
+.practice-lesson:hover { border-color: var(--sky); }
+.practice-lesson strong, .practice-lesson small { display: block; }
+.practice-lesson small { color: var(--ink-soft); }
+.practice-sign {
+  display: grid; place-items: center; flex: 0 0 48px; height: 48px; border-radius: 12px;
+  background: var(--sun-soft); font-size: 32px; font-weight: 700; line-height: 1;
+}
+#practiceSub .practice-sign { background: var(--sky-soft); }
+.practice-progress { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.practice-progress span { color: var(--ink-soft); white-space: nowrap; font-size: 15px; }
+.practice-equation { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(32px, 9vw, 48px); font-weight: 700; line-height: 1.1; }
+.practice-equation .blank { display: grid; place-items: center; min-width: 48px; min-height: 48px; padding: 0 5px; border: 2px dashed var(--sky); border-radius: 12px; }
+.practice-instruction { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 700; }
+#practiceSpeak { font-family: var(--font-emoji); font-size: 23px; }
+.practice-tray {
+  width: min(100%, 332px); margin: 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(3px, 1.4vw, 8px); padding: 6px; border-radius: 14px; background: var(--sky-soft);
+}
+.practice-cell {
+  min-width: 0; min-height: 44px; padding: 0; aspect-ratio: 1;
+  border: 2px solid transparent; border-radius: 10px;
+  background: #DCEBFC; color: #174B7D; font-size: clamp(22px, 7vw, 34px); line-height: 1;
+}
+.practice-cell:disabled { cursor: default; }
+.practice-cell.empty { border: 2px dashed var(--sky); background: var(--card); color: var(--ink-soft); }
+.practice-cell.added { background: #FFE29A; color: #774300; border-radius: 50%; animation: pop 0.2s ease-out; }
+.practice-cell.removed { border: 2px dashed var(--line); background: var(--card); color: var(--ink-soft); }
+.practice-count { text-align: center; font-size: 16px; font-weight: 700; }
+.practice-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.practice-choices .btn { min-height: 52px; padding: 0; font-size: 28px; }
+.practice-choices [data-wrong] { border-color: var(--sun); background: var(--sun-soft); }
+.practice-model { display: grid; gap: 10px; padding: 12px; border: 2px solid var(--line); border-radius: 16px; }
+.practice-model h3 { margin: 0; font-size: 17px; }
+.practice-model-stars {
+  display: grid; padding: 5px; border: 2px solid var(--sky); border-radius: 12px;
+  min-width: 0; gap: 3px; transition: gap 0.2s;
+}
+.practice-model-stars[data-split] { gap: 14px; border-color: transparent; }
+.practice-part {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); place-items: center;
+  min-height: 42px; min-width: 0; border: 2px solid transparent; border-radius: 7px;
+  background: #DCEBFC; color: #174B7D; font-size: clamp(16px, 4.5vw, 25px); line-height: 1;
+}
+.practice-part.other { background: #FFE29A; color: #774300; border-radius: 999px; }
+.practice-model-stars[data-split] .practice-part:first-child { border: 2px dashed #3873A9; }
+.practice-model-labels { display: flex; flex-wrap: wrap; gap: 4px 8px; font-size: 14px; font-weight: 700; }
+.practice-model-labels span { padding: 2px 8px; border-radius: 7px; background: #DCEBFC; color: #174B7D; }
+.practice-model-labels span + span { border-radius: 999px; background: #FFE29A; color: #774300; }
+.practice-model-equation { text-align: center; font-size: 30px; font-weight: 700; line-height: 1.25; }
+.practice-guide { padding: 8px 12px; border-radius: 12px; background: var(--sky-soft); font-size: 15px; }
+.practice-guide strong { display: block; }
+.practice .btn.cta { background: var(--sun); border-color: var(--sun); color: var(--on-sun); box-shadow: 0 4px 0 var(--cta-deep); }
 
 /* ---------- play: HUD and question card ---------- */
 .hud { display: flex; align-items: center; gap: 8px; }
@@ -378,7 +450,7 @@ button.obj:active { transform: scale(0.9); }
   #home > .hint-tap { grid-row: 3; }
   #home > .monster-row { grid-row: 4; }
   #home > .cities { grid-row: 5; }
-  #home > .play-btn { grid-row: 6; }
+  #home > .home-actions { grid-row: 6; }
   #home > .home-foot { grid-row: 7; }
   #game .qcard {
     position: fixed; z-index: 3; margin: 0; --cell: 24px; gap: 6px; padding: 8px 10px 10px;
@@ -398,12 +470,18 @@ button.obj:active { transform: scale(0.9); }
 }
 @media (orientation: landscape) and (max-height: 560px) {
   #home > .hint-tap { display: none; }
-  #home > .play-btn { min-height: 60px; font-size: 26px; }
+  #home .play-btn { min-height: 60px; font-size: 26px; }
   #home .nav-btn { width: 48px; height: 48px; }
   #home .city-chip { width: 46px; height: 46px; font-size: 22px; }
   #home .monster-card { padding: 4px 10px; }
   .title-card p { display: none; }
   #game .qcard { --cell: 20px; width: min(300px, 38vw); }
+}
+@media (max-height: 700px) {
+  #home { overflow-y: auto; }
+  #home > .pass { min-height: 20px; }
+  #home > .hint-tap { display: none; }
+  #home .play-btn { min-height: 60px; }
 }
 
 @keyframes pop { 0% { transform: scale(0.7); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -444,12 +522,65 @@ button.obj:active { transform: scale(0.9); }
     <button class="nav-btn" id="nextMon" type="button"></button>
   </div>
   <div class="cities" id="cities"></div>
-  <button class="play-btn" id="playBtn" type="button">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>
-    <span><span id="playLabel"></span><small id="playCity"></small></span>
-  </button>
+  <div class="home-actions">
+    <button class="play-btn" id="playBtn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>
+      <span><span id="playLabel"></span><small id="playCity"></small></span>
+    </button>
+    <button class="btn small" id="practiceBtn" type="button"></button>
+  </div>
   <div class="home-foot">
     <button class="gate" id="parentBtn" type="button"><span class="gate-fill"></span><span class="gate-text" id="gateText"></span></button>
+  </div>
+</section>
+
+<section class="practice" id="practice" aria-labelledby="practiceTitle" hidden>
+  <div class="practice-shell">
+    <header class="practice-header">
+      <button class="round-btn" id="practiceBack" type="button"></button>
+      <h1 id="practiceTitle"></h1>
+    </header>
+    <div class="practice-panel" id="practiceMenu">
+      <p id="practiceIntro"></p>
+      <button class="practice-lesson" id="practiceFill" type="button">
+        <span class="practice-sign num" aria-hidden="true">+</span>
+        <span><strong id="practiceFillTitle"></strong><small id="practiceFillIntro"></small></span>
+      </button>
+      <button class="practice-lesson" id="practiceSub" type="button">
+        <span class="practice-sign num" aria-hidden="true">−</span>
+        <span><strong id="practiceSubTitle"></strong><small id="practiceSubIntro"></small></span>
+      </button>
+    </div>
+    <div class="practice-panel" id="practiceQuestion" hidden>
+      <div class="practice-progress"><h2 id="practiceLessonTitle" tabindex="-1"></h2><span id="practiceProgress"></span></div>
+      <div class="practice-equation num" id="practiceEquation"></div>
+      <div class="practice-instruction">
+        <p id="practicePrompt" aria-live="polite"></p>
+        <button class="round-btn" id="practiceSpeak" type="button">🐻</button>
+      </div>
+      <div class="practice-tray" id="practiceTray"></div>
+      <p class="practice-count" id="practiceCount" aria-live="polite"></p>
+      <div class="practice-choices" id="practiceChoices" hidden></div>
+      <button class="btn small" id="practicePicture" type="button" aria-controls="practiceTray" hidden></button>
+      <section class="practice-model" id="practiceModel" aria-labelledby="practiceModelTitle" hidden>
+        <h3 id="practiceModelTitle" tabindex="-1"></h3>
+        <div class="practice-model-stars" id="practiceModelStars" aria-hidden="true">
+          <div class="practice-part" id="practiceModelPart"></div>
+          <div class="practice-part other" id="practiceModelOther"></div>
+        </div>
+        <p class="practice-model-labels" aria-live="polite"><span id="practiceModelPartLabel"></span><span id="practiceModelOtherLabel"></span></p>
+        <p class="practice-model-equation num" id="practiceModelEquation" aria-live="polite"></p>
+        <button class="btn small" id="practiceModelToggle" type="button"></button>
+      </section>
+      <aside class="practice-guide"><strong id="practiceGuideTitle"></strong><span id="practiceGuide"></span></aside>
+      <button class="btn small cta" id="practiceNext" type="button" hidden></button>
+    </div>
+    <div class="practice-panel" id="practiceSummary" hidden>
+      <h2 id="practiceSummaryTitle" tabindex="-1"></h2>
+      <p id="practiceSummaryNote"></p>
+      <button class="btn small cta" id="practiceRepeat" type="button"></button>
+      <button class="btn small" id="practiceChoose" type="button"></button>
+    </div>
   </div>
 </section>
 
@@ -652,6 +783,47 @@ button.obj:active { transform: scale(0.9); }
       no3d: "ເຄື່ອງນີ້ເປີດເກມ 3D ບໍ່ໄດ້ ລອງເປີດດ້ວຍ Chrome ແລະ ຕໍ່ອິນເຕີເນັດ",
       retry: "ລອງໃໝ່", prevMonster: "ໂຕກ່ອນ", nextMonster: "ໂຕຕໍ່ໄປ",
       back: "ກັບໜ້າຫຼັກ", replay: "ຟັງຄຳຖາມອີກເທື່ອ", musicBtn: "ເປີດ ຫຼື ປິດດົນຕີ",
+      practice: {
+        title: "ຝຶກກັບຜູ້ປົກຄອງ", intro: (n) => `ເລືອກບົດຝຶກ · ຮອບລະ ${n} ຂໍ້`,
+        choose: "ເລືອກບົດຝຶກ", next: "ຂໍ້ຕໍ່ໄປ", finish: "ຈົບບົດຝຶກ", speak: "ໃຫ້ໝີອ່ານ",
+        progress: (n, total) => `ຂໍ້ ${n} / ${total}`,
+        summary: (n) => `ຝຶກຄົບ ${n} ຂໍ້ແລ້ວ!`,
+        guide: "ຊວນລູກຄິດ", star: "ດາວທີ່ມີຢູ່", added: "ດາວທີ່ເຕີມ", removed: "ເອົາດາວອອກແລ້ວ",
+        put: "ເຕີມດາວໃສ່ຊ່ອງນີ້", take: "ເອົາດາວດວງນີ້ອອກ",
+        picture: "ໃຊ້ຮູບຊ່ວຍ", imagineAgain: "ລອງຄິດອີກເທື່ອ ຫຼື ແຕະໃຊ້ຮູບຊ່ວຍເດີ",
+        model: {
+          title: "ລອງລວມ ແລະ ແຍກດາວຊຸດດຽວກັນ",
+          first: (n) => `ກຸ່ມທຳອິດ ${n} ດວງ`, second: (n) => `ອີກກຸ່ມ ${n} ດວງ`,
+          taken: (n) => `ເອົາອອກ ${n} ດວງ`, left: (n) => `ເຫຼືອ ${n} ດວງ`,
+          split: (n) => `ເອົາ ${n} ດວງອອກ`, join: "ເອົາດາວກັບມາລວມກັນ",
+        },
+        fill: {
+          title: "ເຕີມໃຫ້ຄົບ", intro: "ແຕະຊ່ອງຫວ່າງເພື່ອເຕີມດາວ",
+          step: (part, whole) => `ມີດາວ ${part} ດວງ ແຕະຊ່ອງຫວ່າງເພື່ອເຕີມໃຫ້ຄົບ ${whole} ດວງ`,
+          imagine: (part, whole) => `ລອງນຶກວ່າມີດາວ ${part} ດວງ ຕ້ອງເຕີມຈັກດວງຈຶ່ງຈະຄົບ ${whole}?`,
+          count: (n) => `ຕອນນີ້ມີດາວທັງໝົດ ${n} ດວງ`,
+          ask: "ເຕີມດາວສີເຫຼືອງໄປຈັກດວງ?", again: "ລອງຊີ້ນັບສະເພາະດາວສີເຫຼືອງເບິ່ງເດີ",
+          done: (part, whole, answer) => `ມີ ${part} ດວງ ເຕີມ ${answer} ດວງ ລວມເປັນ ${whole} ດວງ`,
+          before: "ໃຫ້ລູກເວົ້າຈຳນວນດາວທັງໝົດທຸກຄັ້ງທີ່ເຕີມດາວໜຶ່ງດວງ",
+          during: "ໃຫ້ລູກຊີ້ນັບສະເພາະດາວສີເຫຼືອງ ເລີ່ມຈາກໜຶ່ງ",
+          think: "ຊວນລູກນັບຕໍ່ໃນໃຈ ແລ້ວເລົ່າວ່າເຕີມໄປຈັກດວງກ່ອນແຕະຄຳຕອບ",
+          after: "ໃຫ້ລູກລອງທາຍວ່າ ຖ້າເອົາກຸ່ມສີຟ້າອອກ ຈະເຫຼືອຈັກດວງ ແລ້ວກົດປຸ່ມເພື່ອເບິ່ງ",
+          home: (part, whole) => `ລອງໃຊ້ຝາຂວດ ${part} ຝາ. ໃຫ້ລູກທາຍວ່າຕ້ອງເຕີມຈັກຝາໃຫ້ຄົບ ${whole} ແລ້ວລອງເຕີມຂອງແທ້ເບິ່ງ.`,
+        },
+        sub: {
+          title: "ລົບເລກ", intro: "ແຕະເອົາດາວອອກ ແລ້ວນັບດາວທີ່ເຫຼືອ",
+          step: (part, whole) => `ມີດາວ ${whole} ດວງ ແຕະເອົາອອກ ${part} ດວງ`,
+          imagine: (part, whole) => `ລອງນຶກວ່າມີດາວ ${whole} ດວງ ຖ້າເອົາອອກ ${part} ດວງ ຈະເຫຼືອຈັກດວງ?`,
+          count: (n, part) => `ເອົາອອກແລ້ວ ${n} ຈາກ ${part} ດວງ`,
+          ask: "ເຫຼືອດາວຈັກດວງ?", again: "ລອງຊີ້ນັບສະເພາະດາວທີ່ຍັງຢູ່ເບິ່ງເດີ",
+          done: (part, whole, answer) => `ມີ ${whole} ດວງ ເອົາອອກ ${part} ດວງ ເຫຼືອ ${answer} ດວງ`,
+          before: "ໃຫ້ລູກນັບດາວທີ່ເອົາອອກເທື່ອລະດວງ",
+          during: "ໃຫ້ລູກຊີ້ນັບສະເພາະດາວທີ່ຍັງຢູ່ໃນຖາດ",
+          think: "ຊວນລູກນຶກພາບວ່າຢິບດາວອອກເທື່ອລະດວງ ແລ້ວເລົ່າວ່າເຫຼືອຈັກດວງກ່ອນແຕະຄຳຕອບ",
+          after: "ຖາມລູກວ່າ ຖ້າເອົາດາວທີ່ອອກໄປກັບຄືນ ຈະມີດາວທັງໝົດຈັກດວງ?",
+          home: (part, whole) => `ວາງຝາຂວດ ${whole} ຝາ. ໃຫ້ລູກທາຍວ່າຖ້າເອົາອອກ ${part} ຝາ ຈະເຫຼືອຈັກຝາ ແລ້ວລອງເອົາອອກຈິງເບິ່ງ.`,
+        },
+      },
       attack: "ຕີ", superBtn: "ທ່າໄມ້ຕາຍ", skip: "ຂ້າມ", close: "ປິດ",
       superHow: "ຕອບຖືກເທື່ອທຳອິດ 3 ຂໍ້ ເພື່ອສາກ ⚡",
       smashHow: "ຕຶກ ແລະ ລົດ ພັງໄດ້ດ້ວຍທ່າໄມ້ຕາຍ ⚡ ເທົ່ານັ້ນ · ຕອບຖືກເທື່ອທຳອິດ 3 ຂໍ້ ເພື່ອສາກ",
@@ -777,6 +949,47 @@ button.obj:active { transform: scale(0.9); }
       no3d: "เครื่องนี้เปิดเกม 3D ไม่ได้ ลองเปิดด้วย Chrome และต่ออินเทอร์เน็ต",
       retry: "ลองใหม่", prevMonster: "ตัวก่อนหน้า", nextMonster: "ตัวถัดไป",
       back: "กลับหน้าแรก", replay: "ฟังคำถามอีกครั้ง", musicBtn: "เปิดหรือปิดดนตรี",
+      practice: {
+        title: "ฝึกกับผู้ปกครอง", intro: (n) => `เลือกบทฝึก · รอบละ ${n} ข้อ`,
+        choose: "เลือกบทฝึก", next: "ข้อถัดไป", finish: "จบบทฝึก", speak: "ให้หมีอ่าน",
+        progress: (n, total) => `ข้อ ${n} / ${total}`,
+        summary: (n) => `ฝึกครบ ${n} ข้อแล้ว!`,
+        guide: "ชวนลูกคิด", star: "ดาวที่มีอยู่", added: "ดาวที่เติม", removed: "เอาดาวออกแล้ว",
+        put: "เติมดาวในช่องนี้", take: "เอาดาวดวงนี้ออก",
+        picture: "ใช้ภาพช่วย", imagineAgain: "ลองคิดอีกครั้ง หรือแตะใช้ภาพช่วยนะ",
+        model: {
+          title: "ลองรวมและแยกดาวชุดเดิม",
+          first: (n) => `กลุ่มแรก ${n} ดวง`, second: (n) => `อีกกลุ่ม ${n} ดวง`,
+          taken: (n) => `เอาออก ${n} ดวง`, left: (n) => `เหลือ ${n} ดวง`,
+          split: (n) => `เอา ${n} ดวงออก`, join: "เอาดาวกลับมารวมกัน",
+        },
+        fill: {
+          title: "เติมให้ครบ", intro: "แตะช่องว่างเพื่อเติมดาว",
+          step: (part, whole) => `มีดาว ${part} ดวง แตะช่องว่างเติมให้ครบ ${whole} ดวง`,
+          imagine: (part, whole) => `ลองนึกว่ามีดาว ${part} ดวง ต้องเติมอีกกี่ดวงถึงจะครบ ${whole}?`,
+          count: (n) => `ตอนนี้มีดาวทั้งหมด ${n} ดวง`,
+          ask: "เติมดาวไปกี่ดวง?", again: "ลองชี้นับเฉพาะดาวในวงกลมสีเหลืองอีกครั้งนะ",
+          done: (part, whole, answer) => `มี ${part} ดวง เติม ${answer} ดวง รวมเป็น ${whole} ดวง`,
+          before: "ชวนลูกเริ่มนับจากดาวที่มีอยู่ แล้วพูดจำนวนดาวทั้งหมดทุกครั้งที่เติมหนึ่งดวง",
+          during: "ให้ลูกชี้นับเฉพาะดาวในวงกลมสีเหลือง เริ่มนับจากหนึ่ง",
+          think: "ชวนลูกนับต่อในใจ แล้วเล่าว่าเติมไปกี่ดวงก่อนแตะคำตอบ",
+          after: "ชวนลูกทายว่า ถ้าเอากลุ่มสีฟ้าออกจะเหลือกี่ดวง แล้วกดปุ่มดูด้วยกัน",
+          home: (part, whole) => `ลองวางฝาขวด ${part} ฝา ให้ลูกทายว่าต้องเติมอีกกี่ฝาถึงจะครบ ${whole} แล้วให้เติมฝาจริงเพื่อตรวจคำตอบ`,
+        },
+        sub: {
+          title: "ลบเลข", intro: "แตะเอาดาวออก แล้วนับดาวที่เหลือ",
+          step: (part, whole) => `มีดาว ${whole} ดวง แตะเอาออก ${part} ดวง`,
+          imagine: (part, whole) => `ลองนึกว่ามีดาว ${whole} ดวง ถ้าหยิบออก ${part} ดวง จะเหลือกี่ดวง?`,
+          count: (n, part) => `เอาออกแล้ว ${n} จาก ${part} ดวง`,
+          ask: "เหลือดาวกี่ดวง?", again: "ลองชี้นับเฉพาะดาวที่ยังอยู่ในถาดอีกครั้งนะ",
+          done: (part, whole, answer) => `มี ${whole} ดวง เอาออก ${part} ดวง เหลือ ${answer} ดวง`,
+          before: "ให้ลูกนับดาวที่เอาออกทีละดวง",
+          during: "ให้ลูกชี้นับเฉพาะดาวที่ยังอยู่ในถาด",
+          think: "ชวนลูกนึกภาพว่าหยิบดาวออกทีละดวง แล้วเล่าว่าเหลือกี่ดวงก่อนแตะคำตอบ",
+          after: "ถามลูกว่า ถ้าเอาดาวที่หยิบออกกลับมา จะมีดาวทั้งหมดกี่ดวง?",
+          home: (part, whole) => `ลองวางฝาขวด ${whole} ฝา ให้ลูกทายว่าหยิบออก ${part} ฝาจะเหลือกี่ฝา แล้วให้หยิบออกจริงเพื่อตรวจคำตอบ`,
+        },
+      },
       attack: "ตี", superBtn: "ท่าไม้ตาย", skip: "ข้าม", close: "ปิด",
       superHow: "ตอบถูกครั้งแรก 3 ข้อ เพื่อชาร์จ ⚡",
       smashHow: "ตึกและรถพังได้ด้วยท่าไม้ตาย ⚡ เท่านั้น · ตอบถูกครั้งแรก 3 ข้อเพื่อชาร์จ",
@@ -2532,6 +2745,7 @@ button.obj:active { transform: scale(0.9); }
     current = name;
     $("#home").hidden = name !== "home";
     $("#game").hidden = name !== "game";
+    $("#practice").hidden = name !== "practice";
     if (name !== "game") { $("#controls").hidden = true; $("#cut").hidden = true; $("#cutSkip").hidden = true; $("#joy").hidden = true; }
     cam.snap = true;
     cam.mode = "follow";
@@ -3592,6 +3806,7 @@ button.obj:active { transform: scale(0.9); }
     requestAnimationFrame(loop);
     if (!renderer || document.hidden) return;
     const dt = Math.min(0.05, clock.getDelta());
+    if (current === "practice") return;
     tNow += dt;
     if (current === "game" && G && world) {
       let wdt = dt;
@@ -3712,6 +3927,7 @@ button.obj:active { transform: scale(0.9); }
     $("#pResetNo").textContent = D.resetNo;
     $$(".seg button").forEach((b) => b.setAttribute("aria-checked", String(b.dataset.lang === S.lang)));
     $("#pFallbackRow").hidden = S.lang !== "lo";
+    renderPracticeLabels();
     renderHome();
   }
   let stepFocus = "";
@@ -3913,6 +4129,210 @@ button.obj:active { transform: scale(0.9); }
     $("#pReset").focus();
   });
 
+  /* Each [part, whole] can be modelled by filling or taking away.
+     The last two questions vary and start with the picture hidden. */
+  const PRACTICE_PAIRS = [
+    [[2, 7]],
+    [[1, 4]],
+    [[3, 5]],
+    [[2, 5], [2, 6], [3, 6], [4, 8]],
+    [[3, 8], [4, 9], [6, 10], [7, 10]],
+  ];
+  const GUIDED_QUESTIONS = 3;
+  let practice = null;
+
+  function renderPracticeLabels() {
+    const D = T(), P = D.practice, total = fmt(PRACTICE_PAIRS.length);
+    $("#practiceBtn").textContent = P.title;
+    $("#practiceTitle").textContent = P.title;
+    $("#practiceBack").innerHTML = ICON.back;
+    $("#practiceIntro").textContent = P.intro(total);
+    $("#practiceFillTitle").textContent = P.fill.title;
+    $("#practiceFillIntro").textContent = P.fill.intro;
+    $("#practiceSubTitle").textContent = P.sub.title;
+    $("#practiceSubIntro").textContent = P.sub.intro;
+    $("#practiceGuideTitle").textContent = P.guide;
+    $("#practiceModelTitle").textContent = P.model.title;
+    $("#practicePicture").textContent = P.picture;
+    label("#practiceSpeak", P.speak);
+    $("#practiceSummaryTitle").textContent = P.summary(total);
+    $("#practiceRepeat").textContent = D.playAgain;
+    $("#practiceChoose").textContent = P.choose;
+  }
+
+  function showPracticeMenu() {
+    practice = null;
+    hush();
+    $("#practiceMenu").hidden = false;
+    $("#practiceQuestion").hidden = true;
+    $("#practiceSummary").hidden = true;
+    label("#practiceBack", T().back);
+    $("#practice").scrollTop = 0;
+    $("#practiceFill").focus({ preventScroll: true });
+  }
+
+  function practiceBack() {
+    if ($("#practiceMenu").hidden) { showPracticeMenu(); return; }
+    setScreen("home");
+    $("#practiceBtn").focus();
+    musicPlay("home");
+  }
+
+  function practicePrompt(D, N) {
+    const { kind, part, whole, answer, moved, moves, wrong, done, picture } = practice;
+    const P = D.practice[kind];
+    if (done) return P.done(N(part), N(whole), N(answer));
+    if (!picture) return wrong === null ? P.imagine(N(part), N(whole)) : D.practice.imagineAgain;
+    if (wrong !== null) return P.again;
+    if (moved.size === moves) return P.ask;
+    return P.step(N(part), N(whole));
+  }
+
+  function renderPracticeQuestion() {
+    const { kind, part, whole, moved, moves, wrong, done, picture } = practice;
+    const D = T(), P = D.practice, lesson = P[kind], fill = kind === "fill";
+    const ready = !picture || moved.size === moves;
+    const prompt = practicePrompt(D, fmt);
+    if ($("#practicePrompt").textContent !== prompt) $("#practicePrompt").textContent = prompt;
+    $("#practiceEquation").hidden = done;
+    $("#practiceTray").hidden = !picture || done;
+    $("#practiceCount").hidden = !picture || done;
+    $("#practiceCount").textContent = fill ? lesson.count(fmt(part + moved.size)) : lesson.count(fmt(moved.size), fmt(part));
+    if (!done) $("#practiceGuide").textContent = !picture ? lesson.think : ready ? lesson.during : lesson.before;
+    $("#practiceChoices").hidden = !ready || done;
+    $("#practicePicture").hidden = picture || done;
+    $("#practiceModel").hidden = !done;
+    $("#practiceNext").hidden = !done;
+    const tray = $("#practiceTray");
+    [...tray.children].forEach((cell, i) => {
+      const changed = moved.has(i);
+      const empty = fill && i >= part && !changed;
+      const removed = !fill && changed;
+      cell.disabled = ready || (fill ? !empty : removed);
+      cell.classList.toggle("empty", empty);
+      cell.classList.toggle("added", fill && changed);
+      cell.classList.toggle("removed", removed);
+      cell.textContent = empty ? "+" : removed ? "×" : "★";
+      const name = empty ? P.put : removed ? P.removed : changed ? P.added : fill || ready ? P.star : P.take;
+      cell.setAttribute("aria-label", `${name} ${fmt(i + 1)}`);
+    });
+    $$("#practiceChoices button").forEach((b) => b.toggleAttribute("data-wrong", Number(b.value) === wrong));
+  }
+
+  function renderPracticeModel() {
+    const { part, whole, answer, split } = practice;
+    const P = T().practice, M = P.model;
+    const first = fmt(part), second = fmt(answer), total = fmt(whole);
+    $("#practiceModelStars").toggleAttribute("data-split", split);
+    $("#practiceModelPartLabel").textContent = split ? M.taken(first) : M.first(first);
+    $("#practiceModelOtherLabel").textContent = split ? M.left(second) : M.second(second);
+    $("#practiceModelEquation").textContent = split ? `${total} − ${first} = ${second}` : `${first} + ${second} = ${total}`;
+    $("#practiceModelToggle").textContent = split ? M.join : M.split(first);
+    $("#practiceGuide").textContent = split ? P.sub.after : P.fill.after;
+  }
+
+  function startPractice(kind) {
+    showPracticeQuestion({ kind, pairs: PRACTICE_PAIRS.map(pick) }, 0);
+  }
+
+  function showPracticeQuestion({ kind, pairs }, index) {
+    hush();
+    const [part, whole] = pairs[index];
+    const answer = whole - part, fill = kind === "fill";
+    const moves = fill ? answer : part;
+    const picture = index < GUIDED_QUESTIONS;
+    practice = { kind, pairs, index, part, whole, answer, moves, picture, moved: new Set(), wrong: null, done: false, split: !fill };
+    const D = T(), P = D.practice;
+    $("#practiceLessonTitle").textContent = P[kind].title;
+    $("#practiceProgress").textContent = P.progress(fmt(index + 1), fmt(pairs.length));
+    $("#practiceNext").textContent = index + 1 === pairs.length ? P.finish : P.next;
+    $("#practiceSpeak").hidden = !S.voice || !voiceLang();
+    label("#practiceBack", P.choose);
+    const terms = fill ? [part, "+", "?", "=", whole] : [whole, "−", part, "=", "?"];
+    $("#practiceEquation").replaceChildren(...terms.map((term) => {
+      const span = el("span", term === "?" ? "blank" : "");
+      span.textContent = fmt(term);
+      return span;
+    }));
+    $("#practiceModelStars").style.gridTemplateColumns = `${part}fr ${answer}fr`;
+    $("#practiceModelPart").replaceChildren(...range(part).map(() => el("span", "", "★")));
+    $("#practiceModelOther").replaceChildren(...range(answer).map(() => el("span", "", "★")));
+    const tray = $("#practiceTray"), options = $("#practiceChoices");
+    const values = !picture || part === answer ? choicesFor(answer, 0, whole) : [part, answer, whole].sort((a, b) => a - b);
+    options.replaceChildren(...values.map((value) => {
+      const b = el("button", "btn num");
+      b.type = "button";
+      b.value = value;
+      b.textContent = fmt(value);
+      b.addEventListener("click", (e) => {
+        practice.done = value === answer;
+        practice.wrong = practice.done ? null : value;
+        renderPracticeQuestion();
+        if (practice.done) {
+          hush();
+          renderPracticeModel();
+          sfx.good();
+          if (e.detail === 0) $("#practiceModelTitle").focus();
+          else $("#practiceModel").scrollIntoView({ block: "nearest" });
+        }
+      });
+      return b;
+    }));
+    tray.replaceChildren(...range(whole).map((i) => {
+      const cell = el("button", "practice-cell");
+      cell.type = "button";
+      cell.addEventListener("click", (e) => {
+        practice.moved.add(i);
+        renderPracticeQuestion();
+        if (voiceLang()) say((D, N) => N(fill ? part + practice.moved.size : practice.moved.size), 1);
+        const ready = practice.moved.size === moves;
+        if (e.detail === 0) (ready ? options.firstElementChild : $("button:enabled", tray)).focus();
+        else if (ready) options.scrollIntoView({ block: "nearest" });
+      });
+      return cell;
+    }));
+    renderPracticeQuestion();
+    $("#practiceMenu").hidden = true;
+    $("#practiceSummary").hidden = true;
+    $("#practiceQuestion").hidden = false;
+    $("#practice").scrollTop = 0;
+    $("#practiceLessonTitle").focus({ preventScroll: true });
+  }
+
+  $("#practiceBtn").addEventListener("click", () => {
+    token++;  // a tap can switch modes while the city is waiting for fonts
+    musicStop();
+    setScreen("practice");
+    showPracticeMenu();
+  });
+  $("#practiceFill").addEventListener("click", () => startPractice("fill"));
+  $("#practiceSub").addEventListener("click", () => startPractice("sub"));
+  $("#practiceBack").addEventListener("click", practiceBack);
+  $("#practiceChoose").addEventListener("click", showPracticeMenu);
+  $("#practiceRepeat").addEventListener("click", () => startPractice(practice.kind));
+  $("#practiceSpeak").addEventListener("click", () => { primeVoice(); say(practicePrompt); });
+  $("#practicePicture").addEventListener("click", (e) => {
+    hush();
+    practice.picture = true;
+    practice.wrong = null;
+    renderPracticeQuestion();
+    if (e.detail === 0) $("#practiceTray button:enabled").focus();
+  });
+  $("#practiceModelToggle").addEventListener("click", () => {
+    practice.split = !practice.split;
+    renderPracticeModel();
+  });
+  $("#practiceNext").addEventListener("click", () => {
+    const { kind, index, pairs } = practice;
+    if (index + 1 < pairs.length) { showPracticeQuestion(practice, index + 1); return; }
+    hush();
+    $("#practiceSummaryNote").textContent = T().practice[kind].home(fmt(1), fmt(6));
+    $("#practiceQuestion").hidden = true;
+    $("#practiceSummary").hidden = false;
+    $("#practice").scrollTop = 0;
+    $("#practiceSummaryTitle").focus({ preventScroll: true });
+  });
+
   /* =====================================================================
      Buttons, keys and the first tap
      ===================================================================== */
@@ -3968,6 +4388,7 @@ button.obj:active { transform: scale(0.9); }
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       if (!$("#parentWrap").hidden) { closeParent(); return; }
+      if (current === "practice") { practiceBack(); return; }
       if (G && G.phase === "cut") skipCut();
       return;
     }
