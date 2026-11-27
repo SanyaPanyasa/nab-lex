@@ -215,6 +215,8 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-equation { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(32px, 9vw, 48px); font-weight: 700; line-height: 1.1; }
 .practice-equation .blank { display: grid; place-items: center; min-width: 48px; min-height: 48px; padding: 0 5px; border: 2px dashed var(--sky); border-radius: 12px; }
 .practice-bond { display: grid; grid-template-columns: 1fr 1fr; justify-items: center; width: min(100%, 220px); margin: 0 auto; }
+.practice-bond small { font: 600 14px/1.5 var(--font-text); color: var(--ink-soft); }
+#practiceBondWholeLabel { grid-column: 1 / -1; }
 .practice-bond span {
   display: grid; place-items: center; width: 52px; height: 52px; border: 2px solid var(--sky);
   border-radius: 12px; background: var(--sky-soft); font-size: 30px; font-weight: 700; line-height: 1;
@@ -233,8 +235,16 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-instruction { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-weight: 700; }
 #practiceSpeak { font-family: var(--font-emoji); font-size: 23px; }
 .practice-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.practice-compare-row { display: grid; align-content: start; min-width: 0; gap: 4px; padding: 6px; border-radius: 10px; background: var(--sky-soft); }
+.practice-compare-row {
+  display: grid; align-content: start; min-width: 0; min-height: 48px; gap: 4px; padding: 6px;
+  text-align: start; color: var(--ink); border: 2px solid var(--sky); border-radius: 10px; background: var(--sky-soft);
+}
 .practice-compare-row[data-second] { background: var(--sun-soft); }
+.practice-compare-row[data-second]:enabled { border-color: var(--sun); }
+.practice-compare-row:enabled { box-shadow: 0 3px 0 var(--line); }
+.practice-compare-row:enabled:active { transform: translateY(2px); }
+.practice-compare-row:disabled { opacity: 1; cursor: default; border-color: transparent; }
+.practice-compare-row[data-wrong] { border-style: dashed; }
 .practice-compare-row strong { font-size: 14px; }
 .practice-compare-stars { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
 .practice-compare-stars > span {
@@ -264,7 +274,7 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
   gap: clamp(3px, 1.4vw, 8px); padding: 6px; border-radius: 14px; background: var(--sky-soft);
 }
 .practice-cell {
-  display: grid; place-items: center;
+  display: grid; place-items: center; position: relative;
   min-width: 0; min-height: 44px; padding: 0; aspect-ratio: 1;
   border: 2px solid transparent; border-radius: 10px;
   background: #DCEBFC; color: #174B7D; font-size: clamp(22px, 7vw, 34px); line-height: 1;
@@ -273,6 +283,16 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-cell.empty { border: 2px dashed var(--sky); background: var(--card); color: var(--ink-soft); }
 .practice-cell.added { background: #FFE29A; color: #774300; border-radius: 50%; animation: pop 0.2s ease-out; }
 .practice-cell.removed { border: 2px dashed var(--line); background: var(--card); color: var(--ink-soft); }
+.practice-cell[data-next] { border: 3px solid var(--ink); box-shadow: 0 0 0 2px var(--card); }
+.practice-cell[data-next]::after {
+  content: "👆"; position: absolute; right: -3px; bottom: -3px; font: 19px/1 var(--font-emoji); pointer-events: none;
+}
+.practice-tray[data-count-added] .practice-cell:not(.added) { opacity: 0.6; }
+.practice-cell[data-count]::after {
+  content: attr(data-count); position: absolute; bottom: -1px; right: -1px; display: grid; place-items: center;
+  min-width: 19px; height: 19px; padding-inline: 2px; border-radius: 50%;
+  background: #774300; color: white; font: 700 14px/1 var(--font-num);
+}
 .practice-counting { display: grid; gap: 4px; }
 .practice-number-line { position: relative; padding: 30px 0 0; margin: 0 15px; }
 .practice-ticks { position: relative; height: 30px; border-top: 2px solid var(--ink-soft); }
@@ -301,6 +321,10 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-count span + span { background: var(--sun-soft); }
 .practice-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .practice-choices .btn { min-height: 52px; padding: 0; font-size: 28px; }
+.practice-choices small { display: block; font: 600 14px/1.4 var(--font-text); }
+.practice-choices[data-groups] { grid-template-columns: 1fr; }
+.practice-choices[data-groups] button:not([value="="]) { display: none; }
+.practice-choices[data-groups] button[value="="] { display: flex; gap: 8px; align-items: center; justify-content: center; }
 .practice-choices [data-wrong] { border-color: var(--sun); background: var(--sun-soft); }
 .practice-model { display: grid; gap: 10px; padding: 12px; border: 2px solid var(--line); border-radius: 16px; }
 .practice-model h3 { margin: 0; font-size: 17px; }
@@ -320,8 +344,9 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-model-labels span { padding: 2px 8px; border-radius: 7px; background: #DCEBFC; color: #174B7D; }
 .practice-model-labels span + span { border-radius: 999px; background: #FFE29A; color: #774300; }
 .practice-model-equation { text-align: center; font-size: 30px; font-weight: 700; line-height: 1.25; }
-.practice-guide { padding: 8px 12px; border-radius: 12px; background: var(--sky-soft); font-size: 15px; }
-.practice-guide strong { display: block; }
+.practice-guide { padding: 0 12px; border-radius: 12px; background: var(--sky-soft); font-size: 15px; }
+.practice-guide summary { min-height: 44px; padding-block: 10px; cursor: pointer; font-weight: 700; }
+.practice-guide[open] > span { display: block; padding-bottom: 10px; }
 .practice .btn.cta { background: var(--sun); border-color: var(--sun); color: var(--on-sun); box-shadow: 0 4px 0 var(--cta-deep); }
 
 /* ---------- play: HUD and question card ---------- */
@@ -635,6 +660,7 @@ button.obj:active { transform: scale(0.9); }
       <h1 id="practiceTitle"></h1>
     </header>
     <div class="practice-panel" id="practiceMenu">
+      <button class="btn small cta" id="practiceExample" type="button"></button>
       <p id="practiceIntro"></p>
       <div class="practice-rounds" id="practiceRounds" role="group">
         <button class="btn small" id="practiceShortRound" data-round="short" aria-pressed="true" type="button"></button>
@@ -656,16 +682,17 @@ button.obj:active { transform: scale(0.9); }
         <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
         <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
       </button>
-      <button class="btn small" id="practiceExample" type="button"></button>
     </div>
     <div class="practice-panel" id="practiceQuestion" hidden>
       <div class="practice-progress"><h2 id="practiceLessonTitle" tabindex="-1"></h2><span id="practiceProgress"></span></div>
       <div class="practice-equation num" id="practiceEquation"></div>
       <div class="practice-bond num" id="practiceBond" role="img" hidden>
+        <small id="practiceBondWholeLabel"></small>
         <span id="practiceBondWhole"></span>
         <div class="practice-bond-links" aria-hidden="true"></div>
         <span id="practiceBondPart"></span>
         <span id="practiceBondOther"></span>
+        <small class="part-label"></small><small class="part-label"></small>
       </div>
       <div class="practice-instruction">
         <p id="practicePrompt" aria-live="polite"></p>
@@ -708,8 +735,8 @@ button.obj:active { transform: scale(0.9); }
         <canvas class="practice-canvas" id="practiceCanvas" aria-describedby="practicePrompt"></canvas>
       </section>
       <div class="practice-compare" id="practiceCompare" hidden>
-        <div class="practice-compare-row" id="practiceCompareLeft"><strong></strong><div class="practice-compare-stars" aria-hidden="true"></div></div>
-        <div class="practice-compare-row" id="practiceCompareRight" data-second><strong></strong><div class="practice-compare-stars" aria-hidden="true"></div></div>
+        <button class="practice-compare-row" id="practiceCompareLeft" type="button" value="&gt;"><strong></strong><span class="practice-compare-stars" aria-hidden="true"></span></button>
+        <button class="practice-compare-row" id="practiceCompareRight" type="button" value="&lt;" data-second><strong></strong><span class="practice-compare-stars" aria-hidden="true"></span></button>
       </div>
       <div class="practice-choices" id="practiceChoices" hidden></div>
       <button class="btn small" id="practiceRecount" type="button" aria-controls="practiceTray practiceCounting" hidden></button>
@@ -724,7 +751,7 @@ button.obj:active { transform: scale(0.9); }
         <p class="practice-model-equation num" id="practiceModelEquation" aria-live="polite"></p>
         <button class="btn small" id="practiceModelToggle" type="button"></button>
       </section>
-      <aside class="practice-guide" id="practiceGuideBox"><strong id="practiceGuideTitle"></strong><span id="practiceGuide"></span></aside>
+      <details class="practice-guide" id="practiceGuideBox"><summary id="practiceGuideTitle"></summary><span id="practiceGuide"></span></details>
     </div>
     <div class="practice-panel" id="practiceSummary" hidden>
       <h2 id="practiceSummaryTitle" tabindex="-1"></h2>
@@ -947,7 +974,7 @@ button.obj:active { transform: scale(0.9); }
         stop: "ພໍແລ້ວມື້ນີ້", explain: "ເບິ່ງວິທີຄິດ", hideExplain: "ເຊື່ອງວິທີຄິດ", swap: "ສະຫຼັບຊ້າຍ–ຂວາ",
         progress: (n, total) => `ຂໍ້ ${n} / ${total}`, summary: (n) => `ຝຶກຄົບ ${n} ຂໍ້ແລ້ວ!`,
         stopped: (n) => `ມື້ນີ້ຝຶກໄດ້ ${n} ຂໍ້!`,
-        guide: "ຊວນລູກຄິດ", original: "ໂຕທີ່ມີຢູ່", added: "ໂຕທີ່ເຕີມ", removed: "ໂຕທີ່ເອົາອອກ",
+        guide: "ຄຳແນະນຳສຳລັບພໍ່ແມ່", original: "ໂຕທີ່ມີຢູ່", added: "ໂຕທີ່ເຕີມ", removed: "ໂຕທີ່ເອົາອອກ",
         put: "ເຕີມໃສ່ຊ່ອງນີ້", take: "ເອົາໂຕນີ້ອອກ",
         picture: "ໃຊ້ຮູບຊ່ວຍ", imagineAgain: "ລອງຄິດອີກເທື່ອ ຫຼື ແຕະໃຊ້ຮູບຊ່ວຍເດີ",
         example: "ລອງນັບ 1 ຂໍ້", recount: "ລອງນັບໃໝ່", offerPicture: "ແຕະໃຊ້ຮູບຊ່ວຍໄດ້ເດີ",
@@ -963,6 +990,7 @@ button.obj:active { transform: scale(0.9); }
           fill: (part, whole) => `ແຕ້ມໄຂ່ ${part} ໜ່ວຍ ແລ້ວເຕີມໃຫ້ຄົບ ${whole} ໜ່ວຍ`,
         },
         diagram: (whole, part, other) => `ຈຳນວນລວມ ${whole} ແຍກເປັນ ${part} ກັບ ${other}`, blank: "ຊ່ອງຫວ່າງ",
+        wholeLabel: "ທັງໝົດ", partLabel: "ສ່ວນຍ່ອຍ",
         stages: ["ໂຕນ້ອຍ", "ເຕີບໂຕ", "ຮ່າງພິເສດ"], stage: (n) => `ຂັ້ນ ${n}`,
         grew: (name) => `${name} ປ່ຽນຮ່າງແລ້ວ!`,
         growth: (n) => `ຕອບໂຈດລອງຄິດເອງຖືກເທື່ອທຳອິດອີກ ${n} ຂໍ້ ເພື່ອໃຫ້ເພື່ອນໂຕຂຶ້ນ`,
@@ -976,7 +1004,7 @@ button.obj:active { transform: scale(0.9); }
         },
         add: {
           title: "ບວກເລກ", intro: "ລວມສອງກຸ່ມເຂົ້າກັນ", animal: "ໄດໂນນ້ອຍ",
-          step: (part, whole, other, animal) => `ມີ${animal} ${part} ໂຕ ແຕະເຕີມອີກ ${other} ໂຕ`,
+          step: (now, remaining) => `ມີ ${now} ໂຕ. ແຕະເຕີມອີກ ${remaining} ໂຕ`,
           imagine: (part, whole, other, animal) => `ລອງນຶກວ່າມີ${animal} ${part} ໂຕ ເຕີມອີກ ${other} ໂຕ ຈະມີທັງໝົດຈັກໂຕ?`,
           count: (n, part, other) => `ເຕີມແລ້ວ ${n} ຈາກ ${other} ໂຕ`,
           ask: "ມີທັງໝົດຈັກໂຕ?", again: "ລອງຊີ້ນັບທັງສອງກຸ່ມອີກເທື່ອເດີ",
@@ -988,7 +1016,7 @@ button.obj:active { transform: scale(0.9); }
         },
         sub: {
           title: "ລົບເລກ", intro: "ເອົາອອກ ແລ້ວນັບທີ່ເຫຼືອ", animal: "ເຕົ່ານ້ອຍ",
-          step: (part, whole, other, animal) => `ມີ${animal} ${whole} ໂຕ ແຕະເອົາອອກ ${part} ໂຕ`,
+          step: (now, remaining) => `ມີເຕົ່າ ${now} ໂຕ. ແຕະເອົາອອກອີກ ${remaining} ໂຕ`,
           imagine: (part, whole, other, animal) => `ລອງນຶກວ່າມີ${animal} ${whole} ໂຕ ຖ້າເອົາອອກ ${part} ໂຕ ຈະເຫຼືອຈັກໂຕ?`,
           count: (n, part) => `ເອົາອອກແລ້ວ ${n} ຈາກ ${part} ໂຕ`,
           ask: "ເຫຼືອຈັກໂຕ?", again: "ລອງຊີ້ນັບສະເພາະໂຕທີ່ຍັງຢູ່ເບິ່ງເດີ",
@@ -1000,9 +1028,10 @@ button.obj:active { transform: scale(0.9); }
           home: "ວາງຝາຂວດ 6 ຝາ. ໃຫ້ລູກທາຍວ່າຖ້າເອົາອອກ 1 ຝາ ຈະເຫຼືອຈັກຝາ ແລ້ວລອງເອົາອອກຈິງເບິ່ງ.",
         },
         compare: {
-          title: "ປຽບທຽບ", intro: "ເລືອກເຄື່ອງໝາຍ > < ຫຼື =", animal: "ກົບນ້ອຍ",
+          title: "ປຽບທຽບ", intro: "ຝັ່ງໃດມີກົບຫຼາຍກວ່າ?", animal: "ກົບນ້ອຍ",
           left: (n) => `ຊ້າຍ ${n} ໂຕ`, right: (n) => `ຂວາ ${n} ໂຕ`,
-          ask: "ຈັບຄູ່ກົບທີລະຄູ່. ຝັ່ງໃດມີຫຼາຍກວ່າ ຫຼື ເທົ່າກັນ?",
+          ask: "ແຕະຝັ່ງທີ່ມີກົບຫຼາຍກວ່າ ຫຼື ແຕະ «ເທົ່າກັນ»",
+          same: "ເທົ່າກັນ", signQuestion: "ໃສ່ເຄື່ອງໝາຍໃດ?",
           imagine: (a, b) => `ລອງຄິດເບິ່ງ ລະຫວ່າງ ${a} ກັບ ${b} ຄວນໃຊ້ເຄື່ອງໝາຍໃດ?`,
           again: "ລອງຈັບຄູ່ອີກເທື່ອ ແລ້ວເບິ່ງວ່າຝັ່ງໃດມີກົບເຫຼືອ",
           during: "ໃຫ້ລູກຊີ້ທຽບກົບຈາກຊ່ອງດຽວກັນ. ປາກຂອງເຄື່ອງໝາຍອ້າຫາຈຳນວນທີ່ຫຼາຍກວ່າ.",
@@ -1012,7 +1041,7 @@ button.obj:active { transform: scale(0.9); }
         },
         fill: {
           title: "ເຕີມຊ່ອງຫວ່າງ", intro: "ຫາເລກທີ່ຂາດໃນສົມຜົນ ແລະ ແຜນຜັງ", animal: "ມັງກອນນ້ອຍ",
-          step: (part, whole, other, animal) => `ມີ${animal} ${part} ໂຕ ແຕະເຕີມໃຫ້ຄົບ ${whole} ໂຕ`,
+          step: (now, goal) => `ມີ ${now} ໂຕ. ແຕະຊ່ອງວ່າງໃຫ້ຄົບ ${goal} ໂຕ`,
           imagine: (part, whole, other, animal) => `ລອງນຶກວ່າມີ${animal} ${part} ໂຕ ຕ້ອງເຕີມຈັກໂຕຈຶ່ງຈະຄົບ ${whole}?`,
           count: (n) => `ເຕີມແລ້ວ ${n} ໂຕ`,
           ask: "ເຕີມໄປຈັກໂຕ?", again: "ລອງຊີ້ນັບສະເພາະໂຕທີ່ເຕີມ ຢູ່ໃນວົງມົນສີເຫຼືອງ",
@@ -1158,7 +1187,7 @@ button.obj:active { transform: scale(0.9); }
         stop: "จบวันนี้", explain: "ดูวิธีคิด", hideExplain: "ซ่อนวิธีคิด", swap: "สลับซ้าย–ขวา",
         progress: (n, total) => `ข้อ ${n} / ${total}`, summary: (n) => `ฝึกครบ ${n} ข้อแล้ว!`,
         stopped: (n) => `วันนี้ฝึกได้ ${n} ข้อ!`,
-        guide: "ชวนลูกคิด", original: "ตัวที่มีอยู่", added: "ตัวที่เติม", removed: "ตัวที่เอาออก",
+        guide: "คำแนะนำสำหรับพ่อแม่", original: "ตัวที่มีอยู่", added: "ตัวที่เติม", removed: "ตัวที่เอาออก",
         put: "เติมสัตว์ในช่องนี้", take: "เอาสัตว์ตัวนี้ออก",
         picture: "ใช้ภาพช่วย", imagineAgain: "ลองคิดอีกครั้ง หรือแตะใช้ภาพช่วยนะ",
         example: "ลองนับ 1 ข้อ", recount: "ลองนับใหม่", offerPicture: "แตะใช้ภาพช่วยได้นะ",
@@ -1174,6 +1203,7 @@ button.obj:active { transform: scale(0.9); }
           fill: (part, whole) => `วาดไข่ ${part} ฟอง แล้วเติมให้ครบ ${whole} ฟอง`,
         },
         diagram: (whole, part, other) => `จำนวนรวม ${whole} แยกเป็น ${part} กับ ${other}`, blank: "ช่องว่าง",
+        wholeLabel: "ทั้งหมด", partLabel: "ส่วนย่อย",
         stages: ["ตัวน้อย", "โตขึ้น", "ร่างพิเศษ"], stage: (n) => `ขั้น ${n}`,
         grew: (name) => `${name} เปลี่ยนร่างแล้ว!`,
         growth: (n) => `ตอบโจทย์คิดเองถูกครั้งแรกอีก ${n} ข้อ เพื่อให้เพื่อนโตขึ้น`,
@@ -1187,7 +1217,7 @@ button.obj:active { transform: scale(0.9); }
         },
         add: {
           title: "บวกเลข", intro: "รวมสัตว์สองกลุ่มเข้าด้วยกัน", animal: "ไดโนเสาร์น้อย",
-          step: (part, whole, other, animal) => `มี${animal} ${part} ตัว แตะเติมอีก ${other} ตัว`,
+          step: (now, remaining) => `มี ${now} ตัว แตะเติมอีก ${remaining} ตัว`,
           imagine: (part, whole, other, animal) => `ลองนึกว่ามี${animal} ${part} ตัว เติมอีก ${other} ตัว มีทั้งหมดกี่ตัว?`,
           count: (n, part, other) => `เติมแล้ว ${n} จาก ${other} ตัว`,
           ask: "มีทั้งหมดกี่ตัว?", again: "ลองชี้นับทั้งสองกลุ่มอีกครั้งนะ",
@@ -1199,7 +1229,7 @@ button.obj:active { transform: scale(0.9); }
         },
         sub: {
           title: "ลบเลข", intro: "แตะเอาออก แล้วนับที่เหลือ", animal: "เต่าน้อย",
-          step: (part, whole, other, animal) => `มี${animal} ${whole} ตัว แตะเอาออก ${part} ตัว`,
+          step: (now, remaining) => `มีเต่า ${now} ตัว แตะเอาออกอีก ${remaining} ตัว`,
           imagine: (part, whole, other, animal) => `ลองนึกว่ามี${animal} ${whole} ตัว หยิบออก ${part} ตัว จะเหลือกี่ตัว?`,
           count: (n, part) => `เอาออกแล้ว ${n} จาก ${part} ตัว`,
           ask: "เหลือกี่ตัว?", again: "ลองชี้นับเฉพาะตัวที่ยังอยู่ในถาดอีกครั้งนะ",
@@ -1211,9 +1241,10 @@ button.obj:active { transform: scale(0.9); }
           home: "ลองวางฝาขวด 6 ฝา ให้ลูกทายว่าหยิบออก 1 ฝาจะเหลือกี่ฝา แล้วให้หยิบออกจริงเพื่อตรวจคำตอบ",
         },
         compare: {
-          title: "เปรียบเทียบ", intro: "เลือกเครื่องหมาย > < หรือ =", animal: "กบน้อย",
+          title: "เปรียบเทียบ", intro: "ฝั่งไหนมีกบมากกว่า?", animal: "กบน้อย",
           left: (n) => `ซ้าย ${n} ตัว`, right: (n) => `ขวา ${n} ตัว`,
-          ask: "จับคู่กบทีละคู่ ฝั่งไหนมีมากกว่า หรือมีเท่ากัน?",
+          ask: "แตะฝั่งที่มีกบมากกว่า หรือแตะ “เท่ากัน”",
+          same: "เท่ากัน", signQuestion: "ใส่เครื่องหมายไหน?",
           imagine: (a, b) => `ลองคิดดู ระหว่าง ${a} กับ ${b} ควรใช้เครื่องหมายอะไร?`,
           again: "ลองจับคู่ใหม่ แล้วดูว่าฝั่งไหนมีกบเหลือนะ",
           during: "ให้ลูกชี้เทียบกบช่องเดียวกัน ปากของเครื่องหมายอ้าหาจำนวนที่มากกว่า",
@@ -1223,7 +1254,7 @@ button.obj:active { transform: scale(0.9); }
         },
         fill: {
           title: "เติมช่องว่าง", intro: "หาเลขที่หายในสมการและแผนผัง", animal: "มังกรน้อย",
-          step: (part, whole, other, animal) => `มี${animal} ${part} ตัว แตะเติมให้ครบ ${whole} ตัว`,
+          step: (now, goal) => `มี ${now} ตัว แตะช่องว่างให้ครบ ${goal} ตัว`,
           imagine: (part, whole, other, animal) => `ลองนึกว่ามี${animal} ${part} ตัว ต้องเติมอีกกี่ตัวถึงจะครบ ${whole}?`,
           count: (n) => `เติมแล้ว ${n} ตัว`,
           ask: "เติมไปกี่ตัว?", again: "ลองชี้นับเฉพาะตัวในวงกลมสีเหลืองอีกครั้งนะ",
@@ -4454,6 +4485,8 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceShortRound").textContent = P.short(fmt(SHORT_PRACTICE.length));
     $("#practiceFullRound").textContent = P.full(fmt(PRACTICE_FACTS.length));
     $("#practiceGuideTitle").textContent = P.guide;
+    $("#practiceBondWholeLabel").textContent = P.wholeLabel;
+    $$("#practiceBond .part-label").forEach((node) => { node.textContent = P.partLabel; });
     $("#practiceModelTitle").textContent = P.model.title;
     $("#practicePicture").textContent = P.picture;
     const example = COUNT_ON_EXAMPLE.questions[0];
@@ -4487,7 +4520,7 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceSummary").hidden = true;
     label("#practiceBack", T().back);
     $("#practice").scrollTop = 0;
-    $("#practiceAdd").focus({ preventScroll: true });
+    $("#practiceExample").focus({ preventScroll: true });
   }
 
   function practiceBack() {
@@ -4522,10 +4555,12 @@ button.obj:active { transform: scale(0.9); }
       return picture ? lesson.again : P.imagineAgain;
     }
     if (!picture) {
+      if (sketch && sketch.ready) return activity === "compare" ? lesson.signQuestion : lesson.ask;
       return sketch ? P.drawing[activity](N(part), N(whole), N(other)) : lesson.imagine(N(part), N(whole), N(other), animal);
     }
     if (moved.size === moves) return lesson.ask;
-    return lesson.step(N(part), N(whole), N(other), animal);
+    const target = activity === "fill" ? whole : moves - moved.size;
+    return lesson.step(N(practicePosition()), N(target));
   }
 
   function renderPracticeNotation() {
@@ -4584,19 +4619,29 @@ button.obj:active { transform: scale(0.9); }
     const change = lesson.count(fmt(moved.size), fmt(part), fmt(other));
     if ($("#practicePosition").textContent !== amount) $("#practicePosition").textContent = amount;
     if ($("#practiceChange").textContent !== change) $("#practiceChange").textContent = change;
-    [...$("#practiceTray").children].forEach((cell, i) => {
+    const tray = $("#practiceTray"), finished = moved.size === moves;
+    const countAdded = activity === "fill" && finished;
+    tray.toggleAttribute("data-count-added", countAdded);
+    let nextCell;
+    [...tray.children].forEach((cell, i) => {
       const changed = moved.has(i);
       const empty = adding && i >= part && !changed;
       const removed = !adding && changed;
-      cell.disabled = moved.size === moves || (adding ? !empty : removed);
+      cell.disabled = finished || (adding ? !empty : removed);
+      cell.removeAttribute("data-next");
+      if (!cell.disabled && (!nextCell || !adding)) nextCell = cell;
       cell.classList.toggle("empty", empty);
       cell.classList.toggle("added", adding && changed);
       cell.classList.toggle("removed", removed);
       if (empty || removed) cell.textContent = empty ? "+" : "×";
       else if (!cell.firstElementChild) cell.replaceChildren(practiceArt(kind));
       const name = empty ? P.put : removed ? P.removed : changed ? P.added : adding || cell.disabled ? P.original : P.take;
-      cell.setAttribute("aria-label", `${name} ${fmt(i + 1)}`);
+      const ordinal = fmt(countAdded && changed ? i - part + 1 : i + 1);
+      if (countAdded && changed) cell.dataset.count = ordinal;
+      else cell.removeAttribute("data-count");
+      cell.setAttribute("aria-label", `${name} ${ordinal}`);
     });
+    if (nextCell) nextCell.dataset.next = "";
   }
 
   function renderPracticeQuestion() {
@@ -4617,6 +4662,14 @@ button.obj:active { transform: scale(0.9); }
       $("#practiceDrawContinue").hidden = sketch.ready;
     }
     $("#practiceCompare").hidden = !compare || !(done ? showMethod : picture);
+    const choosingGroup = compare && picture && !done;
+    $("#practiceChoices").toggleAttribute("data-groups", choosingGroup);
+    if (compare) {
+      $$("#practiceCompare button").forEach((group) => {
+        group.disabled = !choosingGroup;
+        group.toggleAttribute("data-wrong", choosingGroup && wrong === group.value);
+      });
+    }
     if (counting) renderPracticeTray();
     if (!done) $("#practiceGuide").textContent = picture ? ready ? lesson.during : lesson.before : sketch ? P.drawing.guide : lesson.think;
     if (done && compare) $("#practiceGuide").textContent = lesson.after;
@@ -4700,7 +4753,7 @@ button.obj:active { transform: scale(0.9); }
         renderPracticeQuestion();
         if (voiceLang()) say((D, N) => N(practicePosition()), 1);
         const ready = practice.moved.size === moves, options = $("#practiceChoices");
-        if (e.detail === 0) (ready ? options.firstElementChild : $("button:enabled", tray)).focus();
+        if (e.detail === 0) (ready ? options.firstElementChild : $("[data-next]", tray)).focus();
         else if (ready) options.scrollIntoView({ block: "nearest" });
       });
       return cell;
@@ -4724,6 +4777,7 @@ button.obj:active { transform: scale(0.9); }
     const { kind, answer, picture, wrong, step } = practice;
     practice.done = value === answer;
     practice.wrong = practice.done ? null : value;
+    if (practice.done && kind === "compare" && picture) practice.showMethod = true;
     renderPracticeQuestion();
     if (!practice.done) return;
     hush();
@@ -4784,6 +4838,11 @@ button.obj:active { transform: scale(0.9); }
       b.type = "button";
       b.value = value;
       b.textContent = fmt(value);
+      if (compare) {
+        const word = el("small");
+        word.textContent = value === "=" ? P.compare.same : D.symWord[value];
+        b.append(word);
+      }
       b.addEventListener("click", (e) => answerPractice(value, e.detail === 0));
       return b;
     }));
@@ -4923,6 +4982,9 @@ button.obj:active { transform: scale(0.9); }
     else startPractice(practice.kind);
   });
   $("#practiceSpeak").addEventListener("click", () => { primeVoice(); say(practicePrompt); });
+  $$("#practiceCompare button").forEach((group) => group.addEventListener("click", (e) => {
+    answerPractice(group.value, e.detail === 0);
+  }));
   $$("#practiceSketchTools [data-ink]").forEach((button) => onPracticeSketchAction(button, () => selectPracticeInk(button)));
   onPracticeSketchAction($("#practiceDrawUndo"), () => {
     const { strokes } = practice.sketch;
@@ -4951,14 +5013,14 @@ button.obj:active { transform: scale(0.9); }
     practice.picture = true;
     practice.wrong = null;
     renderPracticeQuestion();
-    if (e.detail === 0) $(practice.kind === "compare" ? "#practiceChoices button" : "#practiceTray button:enabled").focus();
+    if (e.detail === 0) $(practice.kind === "compare" ? "#practiceCompareLeft" : "#practiceTray [data-next]").focus();
   });
   $("#practiceRecount").addEventListener("click", (e) => {
     hush();
     practice.moved.clear();
     practice.wrong = null;
     renderPracticeQuestion();
-    if (e.detail === 0) $("#practiceTray button:enabled").focus();
+    if (e.detail === 0) $("#practiceTray [data-next]").focus();
     else $("#practiceTray").scrollIntoView({ block: "nearest" });
   });
   $("#practiceModelToggle").addEventListener("click", () => {
