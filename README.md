@@ -6,6 +6,8 @@ A 3D maths game for young children (around 6 years old), in Lao or Thai.
 
 **Open the practice lessons directly:** https://sanyapanyasa.github.io/nab-lex/?mode=practice
 
+**Textbook lessons, chapter by chapter (Lao Grade 1 maths):** https://sanyapanyasa.github.io/nab-lex/lessons.html
+
 - Walk by dragging a finger (or the arrow keys) and punch 👊 the number bug that holds the right answer.
 - Beat the boss by hitting the crystal with the right answer, then rescue the dino egg.
 - Counting to 20, making 5 and 10, comparing with > < =, adding and subtracting within 20.

@@ -1,0 +1,1664 @@
+<!doctype html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F7F9">
+<meta name="description" content="ບົດຮຽນຄະນິດສາດ ປ.1 ຕາມແບບຮຽນລາວ ທີລະບົດ · บทเรียนคณิตศาสตร์ ป.1 ตามแบบเรียนลาว">
+<link rel="icon" href="icons/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>ຫ້ອງຮຽນໝີນ້ອຍ ປ.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Noto+Sans+Lao:wght@400;600;700&family=Noto+Sans+Thai:wght@400;600;700&display=swap">
+<style>
+/* Layout: one calm column. Contents is a plain list of chapters; a chapter shows one thing at a time
+   through three tabs (learn, practise, grown-ups), so the child only ever sees one picture, one
+   sentence and one row of big buttons. */
+:root {
+  --bg: #F6F7F9; --card: #FFFFFF; --ink: #1E2638; --soft: #697285; --line: #E3E6EB;
+  --accent: #D94A64; --accent-soft: #FCE9ED; --on-accent: #FFFFFF;
+  --good: #178A52; --good-soft: #E2F4EA; --on-good: #FFFFFF;
+  --sun: #F2B200; --sun-soft: #FFF5D6; --on-sun: #2A2108;
+  --sky: #2A78CF; --sky-soft: #E3EEFB; --tomato: #D9482F; --tomato-soft: #FDE6E0; --leaf: #17905A; --grape: #7452DB;
+  --focus: #2A78CF;
+  --font-lo: "Noto Sans Lao", "Phetsarath OT", "Saysettha OT", system-ui, sans-serif;
+  --font-th: "Noto Sans Thai", "Leelawadee UI", "Thonburi", system-ui, sans-serif;
+  --font-num: "Fredoka", "Noto Sans Lao", system-ui, sans-serif;
+  --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  --u: 28px;
+  --ink-soft: var(--soft); --rose: var(--accent);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161F; --card: #1B212D; --ink: #EDF0F6; --soft: #A3ABBC; --line: #2B3343;
+    --accent: #FF7A92; --accent-soft: #3A1F28; --on-accent: #2A0A12;
+    --good: #3DCB86; --good-soft: #143426; --on-good: #06200F;
+    --sun: #FFC93D; --sun-soft: #352C12; --on-sun: #231A04;
+    --sky: #6AB0F7; --sky-soft: #172C46; --tomato: #FF7E66; --tomato-soft: #3B2019; --leaf: #3DCB86; --grape: #A98CFF;
+    --focus: #6AB0F7; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161F; --card: #1B212D; --ink: #EDF0F6; --soft: #A3ABBC; --line: #2B3343;
+  --accent: #FF7A92; --accent-soft: #3A1F28; --on-accent: #2A0A12;
+  --good: #3DCB86; --good-soft: #143426; --on-good: #06200F;
+  --sun: #FFC93D; --sun-soft: #352C12; --on-sun: #231A04;
+  --sky: #6AB0F7; --sky-soft: #172C46; --tomato: #FF7E66; --tomato-soft: #3B2019; --leaf: #3DCB86; --grape: #A98CFF;
+  --focus: #6AB0F7; color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--font-lo);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 40px; -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+h1, h2, h3 { margin: 0; line-height: 1.35; text-wrap: balance; }
+.th { font-family: var(--font-th); }
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 640px; margin: 0 auto; }
+
+/* top bar */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; gap: 12px; padding: 12px 0; background: var(--bg); }
+.ttl { flex: 1; min-width: 0; }
+.kicker { font: 600 13px/1.3 var(--font-lo); color: var(--soft); }
+.top h1 { font-size: 21px; }
+.icon-btn { min-width: 44px; height: 44px; padding: 0 12px; border-radius: 999px; border: 0; background: var(--card); display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.icon-btn small { font: 600 13px/1 var(--font-lo); color: var(--soft); }
+
+/* contents */
+.lead { margin: 4px 0 16px; color: var(--soft); }
+.lead .th { display: block; font-size: 14px; }
+.toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.toc a { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 16px; background: var(--card); color: inherit; text-decoration: none; }
+.toc a:hover { background: var(--accent-soft); }
+.toc .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 700 16px/1 var(--font-num); }
+.toc .review .n { background: var(--good-soft); color: var(--good); }
+.toc .t { flex: 1; min-width: 0; font-weight: 600; line-height: 1.4; }
+.toc .t small { display: block; font: 13px/1.4 var(--font-th); color: var(--soft); }
+.toc .done { flex: none; font: 600 13px/1 var(--font-num); color: var(--sun); letter-spacing: 1px; }
+
+/* tabs */
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; margin-bottom: 14px; border-radius: 14px; background: var(--card); }
+.tabs button { min-height: 44px; border: 0; border-radius: 10px; background: transparent; color: var(--soft); font-weight: 700; font-size: 16px; }
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+
+/* learn */
+.stage { display: grid; place-items: center; min-height: 190px; padding: 18px 12px; border-radius: 20px; background: var(--card); overflow-x: auto; cursor: pointer; }
+.stage > * { animation: pop .3s ease; }
+.say { display: grid; gap: 4px; margin: 18px 4px 8px; text-align: center; cursor: pointer; }
+.say p { margin: 0; color: var(--soft); font-size: 17px; }
+.say p:first-child { color: var(--ink); font-size: 22px; font-weight: 700; line-height: 1.5; }
+.say.talk p:first-child { animation: nod .45s ease-in-out 2; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
+.round { width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--card); font: 700 26px/1 var(--font-num); }
+.round:disabled { opacity: .3; cursor: default; }
+.go { min-height: 52px; padding: 0 24px; border-radius: 999px; border: 0; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 18px; }
+.dots { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.dots span.on { background: var(--accent); }
+
+/* practice */
+.qdots { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; }
+.qdots i { width: 12px; height: 12px; border-radius: 50%; background: var(--line); }
+.qdots i.now { background: var(--accent); }
+.qdots i.ok { background: var(--sun); }
+.qdots i.help { background: var(--sky); }
+.qtext { margin: 0 4px 14px; font-size: 22px; font-weight: 700; line-height: 1.5; text-align: center; }
+.vis { display: grid; place-items: center; min-height: 120px; padding: 16px 12px; border-radius: 20px; background: var(--card); overflow-x: auto; }
+.choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 18px; }
+.choice { min-width: 84px; min-height: 72px; padding: 6px 18px; border-radius: 20px; border: 0; background: var(--card); font: 700 32px/1.2 var(--font-num); box-shadow: 0 2px 0 var(--line); }
+.choice.word { font: 700 20px/1.4 var(--font-lo); }
+.choice.pic { font: 40px/1 var(--font-emoji); }
+.choice:active { transform: translateY(2px); box-shadow: none; }
+.choice.right { background: var(--good); color: var(--on-good); box-shadow: none; }
+.choice.wrong { opacity: .3; animation: shake .3s; box-shadow: none; }
+.feedback { display: grid; gap: 12px; justify-items: center; margin-top: 18px; padding: 14px 16px; border-radius: 18px; text-align: center; }
+.feedback.good { background: var(--good-soft); }
+.feedback.help { background: var(--sky-soft); }
+.feedback p { margin: 0; font-weight: 600; }
+.feedback .th-soft { font-weight: 500; color: var(--soft); }
+.feedback .vis { background: transparent; min-height: 0; padding: 0; }
+.result { display: grid; gap: 14px; justify-items: center; padding: 20px 0; text-align: center; }
+.result .big { font: 700 44px/1 var(--font-num); color: var(--sun); letter-spacing: 6px; }
+.result .row { gap: 10px; }
+.plain { min-height: 52px; padding: 0 22px; border-radius: 999px; border: 0; background: var(--card); font-weight: 700; font-size: 17px; text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+
+/* grown-ups */
+.parent { font: 16px/1.65 var(--font-th); }
+.parent h3 { margin: 20px 0 8px; font-size: 16px; color: var(--soft); }
+.parent ol, .parent ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.idea { padding: 16px; border-radius: 18px; background: var(--sun-soft); }
+.idea .lo { font: 700 18px/1.6 var(--font-lo); }
+.idea .tr { margin-top: 6px; color: var(--soft); font-size: 15px; }
+.parent details { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--card); }
+.parent summary { cursor: pointer; font-weight: 600; }
+.parent details > :not(summary) { margin-top: 8px; }
+.parent .game { margin-top: 16px; color: var(--soft); }
+
+/* no-voice note */
+.novoice { margin-bottom: 12px; padding: 8px 14px; border-radius: 12px; background: var(--sun-soft); font-size: 14px; }
+.novoice summary { cursor: pointer; color: var(--soft); }
+.novoice ul { margin: 8px 0 4px; padding-left: 20px; display: grid; gap: 4px; }
+
+/* pictures */
+.items { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px; max-width: 100%; }
+.grp { display: grid; grid-template-columns: repeat(5, auto); gap: 4px; }
+.it { font: 30px/1.15 var(--font-emoji); position: relative; }
+.it.x { opacity: .35; }
+.it.x::after { content: ""; position: absolute; left: -2px; right: -2px; top: 50%; height: 4px; border-radius: 2px; background: var(--tomato); transform: rotate(-35deg); }
+.it.hl { filter: drop-shadow(0 0 6px var(--sun)); }
+.frames { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.frame { display: grid; grid-template-columns: repeat(5, 34px); gap: 4px; padding: 6px; border-radius: 10px; background: var(--bg); border: 2px solid var(--soft); }
+.cell { width: 34px; height: 34px; border-radius: 50%; border: 2px dashed var(--line); }
+.cell.c1 { background: var(--sky); border: 0; } .cell.c2 { background: var(--tomato); border: 0; } .cell.c3 { background: var(--leaf); border: 0; } .cell.c4 { background: var(--sun); border: 0; }
+.cell.w { background: var(--card); border: 2.5px solid var(--soft); }
+.cell.hid { background: var(--soft); border: 0; position: relative; }
+.cell.hid::after { content: "?"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--card); font: 700 18px/1 var(--font-num); }
+.cell.gone { background: transparent; border: 2px solid var(--tomato); position: relative; }
+.cell.gone::after { content: "×"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--tomato); font: 700 22px/1 var(--font-num); }
+.eq { font: 700 42px/1.2 var(--font-num); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.eq .box { min-width: 56px; height: 58px; padding: 0 8px; display: inline-grid; place-items: center; border: 3px dashed var(--accent); border-radius: 12px; color: var(--accent); }
+.eq .hit { color: var(--good); }
+.col { display: grid; gap: 12px; justify-items: center; }
+.row { display: flex; gap: 16px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.lbl { font: 600 15px/1.3 var(--font-lo); color: var(--soft); text-align: center; }
+.rods { display: flex; gap: 8px; align-items: flex-end; }
+.rod { display: grid; grid-template-rows: repeat(10, 12px); gap: 1px; padding: 2px; border-radius: 4px; background: var(--sky); }
+.rod i { width: 18px; background: var(--card); opacity: .35; border-radius: 2px; }
+.cube { width: 22px; height: 22px; border-radius: 3px; background: var(--tomato); }
+.ones { display: grid; grid-template-columns: repeat(5, 22px); gap: 3px; align-content: end; }
+.pv { display: grid; grid-template-columns: repeat(2, 110px); border: 2px solid var(--soft); border-radius: 10px; overflow: hidden; text-align: center; background: var(--card); }
+.pv span { padding: 4px; border-bottom: 2px solid var(--soft); font: 600 14px/1.3 var(--font-lo); }
+.pv b { font: 700 36px/1.4 var(--font-num); }
+.pv span:first-child, .pv b:nth-of-type(1) { border-right: 2px solid var(--soft); }
+.strip { display: flex; gap: 2px; }
+.strip i { width: calc(var(--u) - 2px); height: calc(var(--u) - 2px); border-radius: 4px; }
+.bars { display: grid; gap: 8px; justify-items: start; }
+.bars .row { justify-content: flex-start; gap: 8px; flex-wrap: nowrap; }
+.grid100 { display: grid; grid-template-columns: repeat(10, minmax(26px, 1fr)); gap: 2px; width: min(100%, 420px); font: 600 13px/26px var(--font-num); text-align: center; }
+.grid100 span { border-radius: 4px; background: var(--bg); }
+.grid100 span.on { background: var(--sun); color: var(--on-sun); }
+svg text { font-family: var(--font-num); }
+.big-lao { font: 700 56px/1.2 var(--font-lo); letter-spacing: 6px; }
+
+@keyframes shake { 0%, 100% { translate: 0; } 25% { translate: -6px; } 75% { translate: 6px; } }
+@keyframes nod { 0%, 100% { transform: none; } 40% { transform: scale(1.04); } }
+@keyframes pop { from { transform: scale(.92); opacity: .5; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+@media (max-width: 480px) {
+  :root { --u: 22px; }
+  .eq { font-size: 34px; gap: 8px; } .say p:first-child { font-size: 20px; } .qtext { font-size: 20px; }
+  .frame { grid-template-columns: repeat(5, 28px); } .cell { width: 28px; height: 28px; }
+  .icon-btn small { display: none; }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <button class="icon-btn" id="backBtn" type="button" aria-label="ສາລະບານ" hidden>←</button>
+    <div class="ttl"><div class="kicker" id="kicker">ຄະນິດສາດ ປ.1</div><h1 id="topTitle">ຫ້ອງຮຽນໝີນ້ອຍ</h1></div>
+    <button class="icon-btn" id="voiceBtn" type="button" aria-pressed="true">🔊</button>
+  </header>
+
+  <details class="novoice" id="noVoice" hidden>
+    <summary>🔇 ເຄື່ອງນີ້ບໍ່ມີສຽງລາວ/ໄທ · <span class="th">ดูวิธีเปิดเสียง</span></summary>
+    <ul class="th">
+      <li>คอมพิวเตอร์: เปิดด้วย <b>Microsoft Edge</b> มีเสียงลาวและไทยในตัว</li>
+      <li>Windows: Settings → Time &amp; language → Speech → Add voices → Thai</li>
+      <li>Android: ตั้งค่า → การช่วยเหลือพิเศษ → เอาต์พุตการอ่านออกเสียง → ติดตั้งเสียงไทย</li>
+    </ul>
+  </details>
+
+  <main id="home">
+    <p class="lead">ເລືອກບົດຮຽນ ແລ້ວຮຽນນຳໝີນ້ອຍ 🐻<span class="th">ตามแบบเรียนคณิตศาสตร์ ป.1 ของลาว · ทุกบทมีแท็บ “พ่อแม่” สรุปวิธีสอน</span></p>
+    <ol class="toc" id="toc"></ol>
+  </main>
+
+  <main id="chapter" hidden>
+    <nav class="tabs" role="tablist" aria-label="ບົດຮຽນ">
+      <button type="button" role="tab" id="tabLearn" aria-selected="true">ຮຽນ</button>
+      <button type="button" role="tab" id="tabPractice" aria-selected="false">ຝຶກ</button>
+      <button type="button" role="tab" id="tabParent" aria-selected="false" class="th">พ่อแม่</button>
+    </nav>
+
+    <section id="viewLearn" role="tabpanel" aria-labelledby="tabLearn">
+      <div class="stage" id="stepVis"></div>
+      <div class="say" id="stepSay" aria-live="polite"><div id="stepText"></div></div>
+      <div class="nav">
+        <button class="round" id="stepPrev" type="button" aria-label="ກັບຄືນ">‹</button>
+        <div class="dots" id="stepDots" aria-hidden="true"></div>
+        <button class="go" id="stepNext" type="button">ຕໍ່ໄປ</button>
+      </div>
+    </section>
+
+    <section id="viewPractice" role="tabpanel" aria-labelledby="tabPractice" hidden>
+      <div class="qdots" id="qStars"></div>
+      <div id="practice"></div>
+    </section>
+
+    <section id="viewParent" class="parent" role="tabpanel" aria-labelledby="tabParent" hidden>
+      <div id="parentBody"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  const shuffle = (list) => { for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; } return list; };
+  const range = (n) => Array.from({ length: n }, (_, i) => i);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+  /* ---------- saved on this device only: best stars per chapter, voice on/off ---------- */
+  const KEY = "ph1-lessons.v1";
+  let saved = { best: {}, voice: true };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === "object") saved = { best: s.best || {}, voice: s.voice !== false }; } catch (e) { /* storage blocked */ }
+  const store = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* storage blocked */ } };
+
+  /* ---------- voice: Lao where the device has it, otherwise the Thai line ---------- */
+  const synth = "speechSynthesis" in window ? window.speechSynthesis : null;
+  let voices = [];
+  const findVoices = () => { try { voices = synth ? synth.getVoices() || [] : []; } catch (e) { voices = []; } };
+  if (synth) { findVoices(); try { synth.addEventListener("voiceschanged", findVoices); } catch (e) { synth.onvoiceschanged = findVoices; } }
+  const voiceFor = (lang) => voices.find((v) => new RegExp("^" + lang + "([-_]|$)", "i").test(v.lang)) || null;
+  /* Lao voice when the device has one, otherwise the Thai sentence in a Thai voice. With neither, stay
+     silent: the browser's default voice is usually English and would read the words wrongly. */
+  function waitVoices() {
+    return new Promise((res) => {
+      findVoices();
+      if (voices.length || !synth) { res(); return; }
+      const done = () => { findVoices(); res(); };
+      const t = setTimeout(done, 1500);
+      try { synth.addEventListener("voiceschanged", () => { clearTimeout(t); done(); }, { once: true }); } catch (e) { /* older browsers */ }
+    });
+  }
+  function pickVoice() {
+    const lao = voiceFor("lo");
+    if (lao) return { v: lao, tag: "lo-LA", lang: "lo" };
+    const thai = voiceFor("th");
+    if (thai) return { v: thai, tag: "th-TH", lang: "th" };
+    return null;
+  }
+  function renderVoice(p) {
+    const label = !saved.voice ? "ປິດສຽງ" : p ? (p.lang === "lo" ? "ລາວ" : "ไทย") : "ບໍ່ມີສຽງ";
+    $("#voiceBtn").innerHTML = `${saved.voice && p ? "🔊" : "🔇"} <small>${label}</small>`;
+    $("#voiceBtn").setAttribute("aria-label", label);
+    $("#noVoice").hidden = !(saved.voice && synth && !p && voicesChecked);
+  }
+  let voicesChecked = false;
+  async function speak(lo, th) {
+    if (!synth || !saved.voice) return;
+    if (!voices.length) await waitVoices();
+    voicesChecked = true;
+    const p = pickVoice();
+    renderVoice(p);
+    if (!p) return;
+    let text = p.lang === "lo" ? lo : th;
+    if (!text) return;
+    text = String(text).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "").replace(/<[^>]+>/g, "");
+    if (p.lang === "th") text = text.replace(/[\u0E80-\u0EFF]+/g, " ");   // a Thai voice cannot read Lao letters
+    // signs are read as words in the chosen language
+    const W = p.lang === "lo" ? { "+": " ບວກ ", "−": " ລົບ ", "=": " ເທົ່າກັບ ", ">": " ຫຼາຍກວ່າ ", "<": " ໜ້ອຍກວ່າ ", "□": " ຫ້ອງວ່າງ " } : { "+": " บวก ", "−": " ลบ ", "=": " เท่ากับ ", ">": " มากกว่า ", "<": " น้อยกว่า ", "□": " ช่องว่าง " };
+    text = text.replace(/[+−=<>□]/g, (c) => W[c]).replace(/·/g, ", ").replace(/\s+/g, " ").trim();
+    if (!text) return;
+    try {
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = p.tag; u.voice = p.v; u.rate = 0.85; u.pitch = 1.08;
+      synth.speak(u);
+    } catch (e) { /* no voice */ }
+    const say = $("#stepSay");
+    say.classList.remove("talk"); void say.offsetWidth; say.classList.add("talk");
+  }
+
+  /* ---------- tiny sounds ---------- */
+  let audio = null;
+  function tone(f, d, type = "sine", vol = 0.12, when = 0) {
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const t = audio.currentTime + when, o = audio.createOscillator(), g = audio.createGain();
+      o.type = type; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + d);
+      o.connect(g).connect(audio.destination); o.start(t); o.stop(t + d);
+    } catch (e) { /* no audio */ }
+  }
+  const ding = () => { tone(880, 0.15); tone(1320, 0.25, "sine", 0.1, 0.1); };
+  const boing = () => { tone(220, 0.25, "triangle", 0.12); };
+
+  /* ---------- pictures: plain HTML/SVG built from numbers ---------- */
+  const P = {
+    // objects in rows of five, optional crossed-out or highlighted ones
+    items(e, n, o = {}) {
+      const out = [];
+      for (let g = 0; g < n; g += 5) {
+        const cells = range(Math.min(5, n - g)).map((i) => {
+          const k = g + i, cls = ["it"];
+          if (o.cross && k >= n - o.cross) cls.push("x");
+          if (o.hl && k < o.hl) cls.push("hl");
+          return `<span class="${cls.join(" ")}">${e}</span>`;
+        });
+        out.push(`<div class="grp">${cells.join("")}</div>`);
+      }
+      return `<div class="items" aria-hidden="true">${out.join("")}</div>`;
+    },
+    // a ten-frame: parts = [[count, "c1"], [count, "c2"], [count, "gone"]]
+    frame(parts, size = 10) {
+      const cells = [];
+      parts.forEach(([n, c]) => { for (let i = 0; i < n; i++) cells.push(c); });
+      while (cells.length < size) cells.push("");
+      const frames = [];
+      for (let f = 0; f < cells.length; f += size) frames.push(`<div class="frame">${cells.slice(f, f + size).map((c) => `<span class="cell ${c}"></span>`).join("")}</div>`);
+      return `<div class="frames" aria-hidden="true">${frames.join("")}</div>`;
+    },
+    // a number sentence; "?" becomes an empty box, {v} a highlighted answer
+    eq(parts) {
+      return `<div class="eq" aria-hidden="true">${parts.map((p) => p === "?" ? `<span class="box">?</span>` : typeof p === "object" ? `<span class="hit">${p.v}</span>` : `<span>${esc(p)}</span>`).join("")}</div>`;
+    },
+    // a number split into two parts (the book's "partner" picture): whole on top, parts below
+    split(whole, a, b, hide) {
+      const show = (v, k) => (hide === k ? "?" : v);
+      const ball = (x, y, v, k, col) => `<circle cx="${x}" cy="${y}" r="30" fill="var(--card)" stroke="${hide === k ? "var(--rose)" : col}" stroke-width="4" ${hide === k ? 'stroke-dasharray="7 5"' : ""}/><text x="${x}" y="${y + 12}" text-anchor="middle" font-size="34" font-weight="700" fill="${hide === k ? "var(--rose)" : "var(--ink)"}">${show(v, k)}</text>`;
+      return `<svg viewBox="0 0 220 170" width="220" height="170" role="img" aria-label="${whole} = ${a} + ${b}"><line x1="110" y1="52" x2="50" y2="122" stroke="var(--ink-soft)" stroke-width="4"/><line x1="110" y1="52" x2="170" y2="122" stroke="var(--ink-soft)" stroke-width="4"/>${ball(110, 36, whole, "w", "var(--ink-soft)")}${ball(50, 132, a, "a", "var(--sky)")}${ball(170, 132, b, "b", "var(--tomato)")}</svg>`;
+    },
+    // number line from a to b with optional hops [{from, to, label}] and a marked point
+    line(a, b, o = {}) {
+      const W = 40 * (b - a) + 40, x = (v) => 20 + (v - a) * 40;
+      let s = `<line x1="10" y1="70" x2="${W - 10}" y2="70" stroke="var(--ink)" stroke-width="3"/>`;
+      for (let v = a; v <= b; v++) s += `<line x1="${x(v)}" y1="62" x2="${x(v)}" y2="78" stroke="var(--ink)" stroke-width="${v % 5 === 0 ? 3 : 2}"/><text x="${x(v)}" y="100" text-anchor="middle" font-size="17" fill="${o.mark === v ? "var(--rose)" : "var(--ink)"}" font-weight="${o.mark === v ? 700 : 500}">${v}</text>`;
+      (o.hops || []).forEach((h) => {
+        const x1 = x(h.from), x2 = x(h.to), mid = (x1 + x2) / 2, up = h.to > h.from;
+        s += `<path d="M${x1} 62 Q${mid} ${up ? 18 : 22} ${x2} 62" fill="none" stroke="${up ? "var(--leaf)" : "var(--tomato)"}" stroke-width="3" marker-end="url(#ah)"/>`;
+        if (h.label) s += `<text x="${mid}" y="22" text-anchor="middle" font-size="16" font-weight="700" fill="${up ? "var(--leaf)" : "var(--tomato)"}">${h.label}</text>`;
+      });
+      if (o.mark !== undefined) s += `<circle cx="${x(o.mark)}" cy="70" r="7" fill="var(--rose)"/>`;
+      return `<svg viewBox="0 0 ${W} 110" width="${W}" height="110" role="img" aria-label="number line"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="var(--ink-soft)"/></marker></defs>${s}</svg>`;
+    },
+    // tens as rods of ten, ones as single cubes
+    tens(t, o) {
+      return `<div class="rods" aria-hidden="true">${range(t).map(() => `<div class="rod">${range(10).map(() => "<i></i>").join("")}</div>`).join("")}<div class="ones">${range(o).map(() => '<span class="cube"></span>').join("")}</div></div>`;
+    },
+    pv(t, o, hideT, hideO) {
+      return `<div class="pv" aria-hidden="true"><span>ຫຼັກຫົວສິບ</span><span>ຫຼັກຫົວໜ່ວຍ</span><b class="num">${hideT ? "?" : t}</b><b class="num">${hideO ? "?" : o}</b></div>`;
+    },
+    // an analogue clock
+    clock(h, m) {
+      const ha = ((h % 12) + m / 60) * 30, ma = m * 6;
+      let s = `<circle cx="80" cy="80" r="72" fill="var(--card)" stroke="var(--ink)" stroke-width="5"/>`;
+      for (let i = 1; i <= 12; i++) { const a = (i * 30 - 90) * Math.PI / 180; s += `<text x="${80 + Math.cos(a) * 54}" y="${86 + Math.sin(a) * 54}" text-anchor="middle" font-size="17" font-weight="600" fill="var(--ink)">${i}</text>`; }
+      for (let i = 0; i < 60; i++) { if (i % 5) { const a = (i * 6 - 90) * Math.PI / 180; s += `<circle cx="${80 + Math.cos(a) * 66}" cy="${80 + Math.sin(a) * 66}" r="1.4" fill="var(--ink-soft)"/>`; } }
+      const hand = (ang, len, w, col) => { const a = (ang - 90) * Math.PI / 180; return `<line x1="80" y1="80" x2="${80 + Math.cos(a) * len}" y2="${80 + Math.sin(a) * len}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`; };
+      s += hand(ha, 36, 7, "var(--rose)") + hand(ma, 56, 4, "var(--sky)") + `<circle cx="80" cy="80" r="5" fill="var(--ink)"/>`;
+      return `<svg viewBox="0 0 160 160" width="170" height="170" role="img" aria-label="${h}:${String(m).padStart(2, "0")}">${s}</svg>`;
+    },
+    // a strip of unit squares, for length
+    strip(n, col = "var(--sky)", label = "") {
+      return `<div class="row" style="justify-content:flex-start;gap:10px"><span class="lbl" style="min-width:56px;text-align:right">${label}</span><div class="strip">${range(n).map(() => `<i style="background:${col}"></i>`).join("")}</div></div>`;
+    },
+    shape(kind, size = 90) {
+      const c = { box: "var(--tomato)", can: "var(--sky)", ball: "var(--leaf)", cube: "var(--sun)", circle: "var(--leaf)", triangle: "var(--tomato)", square: "var(--sun)", rect: "var(--sky)" }[kind];
+      const svgs = {
+        box: `<path d="M15 35 L55 15 L95 35 L95 80 L55 100 L15 80 Z" fill="${c}"/><path d="M15 35 L55 55 L95 35 M55 55 L55 100" stroke="var(--card)" stroke-width="3" fill="none"/>`,
+        cube: `<path d="M22 30 L55 14 L88 30 L88 72 L55 90 L22 72 Z" fill="${c}"/><path d="M22 30 L55 46 L88 30 M55 46 L55 90" stroke="var(--card)" stroke-width="3" fill="none"/>`,
+        can: `<rect x="25" y="22" width="60" height="64" fill="${c}"/><ellipse cx="55" cy="86" rx="30" ry="10" fill="${c}"/><ellipse cx="55" cy="22" rx="30" ry="10" fill="var(--card)" stroke="${c}" stroke-width="4"/>`,
+        ball: `<circle cx="55" cy="55" r="40" fill="${c}"/><ellipse cx="42" cy="40" rx="12" ry="8" fill="var(--card)" opacity="0.5"/>`,
+        circle: `<circle cx="55" cy="55" r="40" fill="${c}"/>`,
+        triangle: `<path d="M55 12 L98 92 L12 92 Z" fill="${c}"/>`,
+        square: `<rect x="17" y="17" width="76" height="76" fill="${c}"/>`,
+        rect: `<rect x="6" y="30" width="98" height="52" fill="${c}"/>`,
+      };
+      return `<svg viewBox="0 0 110 110" width="${size}" height="${size}" aria-hidden="true">${svgs[kind]}</svg>`;
+    },
+    // squares for comparing how much space something covers
+    area(w, h, col) {
+      return `<div style="display:grid;grid-template-columns:repeat(${w},22px);gap:2px" aria-hidden="true">${range(w * h).map(() => `<i style="width:22px;height:22px;border-radius:3px;background:${col}"></i>`).join("")}</div>`;
+    },
+    hundred(mark = [], tensCol) {
+      return `<div class="grid100" aria-hidden="true">${range(100).map((i) => `<span class="${mark.includes(i + 1) ? "on" : tensCol === (i % 10) + 1 ? "tens" : ""}">${i + 1}</span>`).join("")}</div>`;
+    },
+    lbl: (t) => `<div class="lbl">${t}</div>`,
+    row: (...xs) => `<div class="row">${xs.join("")}</div>`,
+    col: (...xs) => `<div class="col">${xs.join("")}</div>`,
+  };
+
+  /* ---------- number words, so the voice never reads a digit in the wrong language ---------- */
+  const LO = ["ສູນ", "ໜຶ່ງ", "ສອງ", "ສາມ", "ສີ່", "ຫ້າ", "ຫົກ", "ເຈັດ", "ແປດ", "ເກົ້າ"];
+  const TH = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
+  function words(n, U, ten, one, twenty) {
+    if (n < 10) return U[n];
+    if (n === 100) return U === LO ? "ໜຶ່ງຮ້ອຍ" : "หนึ่งร้อย";
+    const t = Math.floor(n / 10), o = n % 10;
+    const tens = t === 1 ? ten : t === 2 ? twenty : U[t] + ten;
+    return tens + (o === 0 ? "" : o === 1 ? one : U[o]);
+  }
+  const wlo = (n) => words(n, LO, "ສິບ", "ເອັດ", "ຊາວ");
+  const wth = (n) => words(n, TH, "สิบ", "เอ็ด", "ยี่สิบ");
+
+  const CH = [];
+  /* ---------- shared pieces for the chapters ---------- */
+  // things to count: emoji, Lao name and counting word, Thai name and counting word
+  const THINGS = [
+    { e: "🍎", lo: "ໝາກໂປມ", c: "ໜ່ວຍ", th: "แอปเปิ้ล", tc: "ลูก" },
+    { e: "🍌", lo: "ໝາກກ້ວຍ", c: "ໜ່ວຍ", th: "กล้วย", tc: "ลูก" },
+    { e: "🐱", lo: "ແມວ", c: "ໂຕ", th: "แมว", tc: "ตัว" },
+    { e: "🐦", lo: "ນົກ", c: "ໂຕ", th: "นก", tc: "ตัว" },
+    { e: "🐟", lo: "ປາ", c: "ໂຕ", th: "ปลา", tc: "ตัว" },
+    { e: "🦆", lo: "ເປັດ", c: "ໂຕ", th: "เป็ด", tc: "ตัว" },
+    { e: "🚗", lo: "ລົດ", c: "ຄັນ", th: "รถ", tc: "คัน" },
+    { e: "🌸", lo: "ດອກໄມ້", c: "ດອກ", th: "ดอกไม้", tc: "ดอก" },
+    { e: "✏️", lo: "ສໍດຳ", c: "ກ້ານ", th: "ดินสอ", tc: "แท่ง" },
+    { e: "🎈", lo: "ໝາກປຸມເປົ້າ", c: "ໜ່ວຍ", th: "ลูกโป่ง", tc: "ลูก" },
+    { e: "📘", lo: "ປຶ້ມ", c: "ຫົວ", th: "หนังสือ", tc: "เล่ม" },
+    { e: "⭐", lo: "ດາວ", c: "ດວງ", th: "ดาว", tc: "ดวง" },
+  ];
+  // three answer buttons around the right number, inside [lo, hi]
+  function nums(ans, lo = 0, hi = 20) {
+    const pool = new Set([ans]);
+    const near = shuffle([-2, -1, 1, 2, 3, -3]);
+    for (const d of near) { if (pool.size >= 3) break; const v = ans + d; if (v >= lo && v <= hi) pool.add(v); }
+    for (let v = lo; pool.size < 3 && v <= hi; v++) pool.add(v);
+    return [...pool].sort((a, b) => a - b).map((v) => ({ label: String(v), value: v, say: wlo(v) }));
+  }
+  const opts = (list) => list.map(([label, value, say]) => ({ label, value, say: say || label }));
+  // two rows of counters paired one to one; the extras of the longer row are marked
+  P.pairs = (a, b, ca = "var(--sky)", cb = "var(--tomato)") => {
+    const n = Math.max(a, b), dot = (on, col, extra) => `<span style="width:26px;height:26px;border-radius:50%;${on ? `background:${col}` : "border:2px dashed var(--line)"};${extra ? "box-shadow:0 0 0 4px var(--sun)" : ""}"></span>`;
+    const rowOf = (k, col, other) => `<div style="display:grid;grid-template-columns:repeat(${n},26px);gap:6px">${range(n).map((i) => dot(i < k, col, i < k && i >= other)).join("")}</div>`;
+    return `<div class="col" aria-hidden="true">${rowOf(a, ca, b)}<div style="display:grid;grid-template-columns:repeat(${n},26px);gap:6px;height:14px">${range(n).map((i) => `<i style="justify-self:center;width:2px;background:${i < Math.min(a, b) ? "var(--ink-soft)" : "transparent"}"></i>`).join("")}</div>${rowOf(b, cb, a)}</div>`;
+  };
+
+  /* two rows of things one above the other; spread lets a row look longer without having more */
+  P.match = (eA, a, eB, b, o = {}) => {
+    const w = 40, n = Math.max(a, b), gapA = o.spreadA ? 1.6 : 1, gapB = o.spreadB ? 1.6 : 1, lines = o.lines;
+    const W = Math.ceil(n * w * Math.max(gapA, gapB)) + 10;
+    const row = (e, k, gap, y) => range(k).map((i) => `<text x="${20 + i * w * gap}" y="${y}" text-anchor="middle" font-size="30" style="font-family:var(--font-emoji)">${e}</text>`).join("");
+    let s = row(eA, a, gapA, 34) + row(eB, b, gapB, 104);
+    if (lines) for (let i = 0; i < Math.min(a, b); i++) s += `<line x1="${20 + i * w * gapA}" y1="44" x2="${20 + i * w * gapB}" y2="74" stroke="var(--ink-soft)" stroke-width="2.5"/>`;
+    if (lines) { const long = a > b ? "A" : b > a ? "B" : ""; for (let i = Math.min(a, b); i < n; i++) { const x = 20 + i * w * (long === "A" ? gapA : gapB), y = long === "A" ? 22 : 92; s += `<circle cx="${x}" cy="${y}" r="21" fill="none" stroke="var(--sun)" stroke-width="3.5"/>`; } }
+    return `<svg viewBox="0 0 ${W} 120" width="${W}" height="120" role="img" aria-label="${a} / ${b}">${s}</svg>`;
+  };
+  const PAIRS = [["🧒", "ເດັກນ້ອຍ", "🪑", "ຕັ່ງ"], ["🐸", "ກົບ", "🍃", "ໃບບົວ"], ["🦋", "ແມງກະເບື້ອ", "🌼", "ດອກໄມ້"], ["🍌", "ໝາກກ້ວຍ", "🍽️", "ຈານ"], ["🐶", "ໝາ", "🦴", "ກະດູກ"]];
+
+  /* ===== Chapter 1: comparing quantities (book pp. 6–9) ===== */
+  CH.push({
+    id: 1, lo: "ການປຽບທຽບຈຳນວນ", th: "การเปรียบเทียบจำนวน", pages: "6–9",
+    learn: [
+      { vis: P.match("🧒", 6, "🪑", 5), lo: "ມາຫຼິ້ນເກມຍາດຕັ່ງ · ເດັກນ້ອຍ 6 ຄົນ ຕັ່ງ 5 ໜ່ວຍ · ມີຈັກຄົນບໍ່ໄດ້ນັ່ງຕັ່ງ?", th: "เล่นแย่งเก้าอี้ เด็ก 6 คน เก้าอี้ 5 ตัว มีกี่คนไม่ได้นั่ง" },
+      { vis: P.match("🧒", 6, "🪑", 5, { lines: true }), lo: "ຈັບຄູ່ກັນເທື່ອລະຄົນ · ຍັງເຫຼືອ 1 ຄົນບໍ່ມີຕັ່ງ · ເດັກນ້ອຍຫຼາຍກວ່າ", th: "จับคู่ทีละคน เหลือ 1 คนไม่มีเก้าอี้ เด็กมากกว่า" },
+      { vis: P.match("🍌", 7, "🍽️", 7, { spreadB: true }), lo: "ແຖວຈານເບິ່ງຄືຍາວກວ່າ ແຕ່ມີຫຼາຍກວ່າແທ້ບໍ່?", th: "แถวจานดูยาวกว่า แต่มีมากกว่าจริงไหม" },
+      { vis: P.match("🍌", 7, "🍽️", 7, { spreadB: true, lines: true }), lo: "ຈັບຄູ່ກັນເບິ່ງ · ພໍດີກັນ ບໍ່ມີເຫຼືອ · ແຖວຍາວ ບໍ່ແມ່ນວ່າມີຫຼາຍກວ່າສະເໝີ", th: "จับคู่ดู พอดีกัน ไม่มีเหลือ แถวยาวไม่ได้แปลว่ามากกว่าเสมอ" },
+      { vis: P.col(P.row(P.items("🚗", 4), P.items("🚙", 3)), P.pairs(4, 3)), lo: "ແບ່ງອອກເປັນສອງກຸ່ມ · ວາງເມັດນັບແຖວລະກຸ່ມ · ແຖວທີ່ມີເຫຼືອ ແມ່ນກຸ່ມທີ່ຫຼາຍກວ່າ", th: "แบ่งเป็นสองกลุ่ม วางเม็ดนับแถวละกลุ่ม แถวที่มีเหลือคือกลุ่มที่มากกว่า" },
+    ],
+    quiz() {
+      const [eA, nA, eB, nB] = pick(PAIRS);
+      const a = rnd(3, 8), b = Math.random() < 0.25 ? a : rnd(3, 8), spread = a < b ? { spreadA: true } : a > b ? { spreadB: true } : { spreadB: true };
+      const ans = a > b ? "A" : b > a ? "B" : "=";
+      return { sig: eA + a + b, kind: "word", text: `${nA} ກັບ ${nB} ອັນໃດຫຼາຍກວ່າ?`, th: "อันไหนมากกว่า", vis: P.match(eA, a, eB, b, spread),
+        choices: opts([[`${eA} ${nA}`, "A", nA], [`${eB} ${nB}`, "B", nB], ["ພໍດີກັນ", "=", "ພໍດີກັນ"]]), answer: ans,
+        why: ans === "=" ? "ຈັບຄູ່ແລ້ວ ພໍດີກັນ ບໍ່ມີເຫຼືອ" : `ຈັບຄູ່ແລ້ວ ${ans === "A" ? nA : nB} ມີເຫຼືອ ຈຶ່ງຫຼາຍກວ່າ`, whyTh: "จับคู่แล้วดูว่าฝั่งไหนเหลือ",
+        hint: "ຢ່າເບິ່ງວ່າແຖວໃດຍາວ · ຈັບຄູ່ເທື່ອລະອັນ ແລ້ວເບິ່ງວ່າຝັ່ງໃດມີເຫຼືອ", hintTh: "อย่าดูว่าแถวไหนยาว จับคู่ทีละอัน แล้วดูว่าฝั่งไหนเหลือ", hintVis: P.match(eA, a, eB, b, { lines: true }) };
+    },
+    parent: {
+      book: [
+        "หน้า 6: เกมแย่งเก้าอี้ เด็ก 6 คน เก้าอี้ 5 ตัว “ມີຈັກຄົນບໍ່ໄດ້ນັ່ງຕັ່ງ?”",
+        "หน้า 6–7: “ມາປຽບທຽບຈຳນວນນຳກັນ ໂດຍບໍ່ນັບ” เปรียบเทียบโดยไม่นับ ด้วยการจับคู่ 1 ต่อ 1: เด็ก 6 กับเก้าอี้ 5 · กล้วย 7 กับจาน 7 (วางเยื้องให้ดูยาวไม่เท่ากัน) · กบ 8 กับใบบัว 8 “พอไหม” · ผีเสื้อ 6 กับดอกไม้ 8 ที่วางเป็นรูปตัว L",
+        "หน้า 8–9: “ແບ່ງອອກເປັນສອງກຸ່ມ ກຸ່ມໃດຫຼາຍກວ່າ?” รถแดง/ขาว แมวเทา/ขาว รูปทรงต่าง ๆ โดยวางเม็ดนับลงในตาราง 2 แถว แถวที่ยาวกว่าคือกลุ่มที่มากกว่า",
+      ],
+      idea: { lo: "ມາປຽບທຽບຈຳນວນນຳກັນ ໂດຍບໍ່ນັບ", th: "เปรียบเทียบจำนวนโดยไม่ต้องนับ: จับคู่ทีละอัน ฝั่งที่มีเหลือคือฝั่งที่มากกว่า (บทนี้เกิดก่อนการนับเลข)" },
+      home: [
+        "จับคู่ของจริง: ช้อนกับถ้วย คนในบ้านกับเก้าอี้ แล้วถามว่า “ພໍບໍ່?” (พอไหม) “ອັນໃດຫຼາຍກວ່າ?”",
+        "วางของสองกลุ่มให้แถวหนึ่งห่าง ๆ ดูยาวกว่า แล้วให้ลูกพิสูจน์ด้วยการจับคู่",
+        "เล่นแย่งเก้าอี้จริงในบ้าน ถามว่ามีกี่คนไม่ได้นั่ง",
+      ],
+      watch: [
+        "เลือกแถวที่ดูยาวกว่าว่ามากกว่า (หนังสือตั้งใจวางกล้วยกับจานให้เยื้องเพื่อดักข้อนี้)",
+        "จับคู่ข้ามหรือซ้ำ ให้ลูกลากเส้นหรือวางของคู่กันจริง ๆ",
+      ],
+      words: "ປຽບທຽບ = เปรียบเทียบ · ຫຼາຍກວ່າ = มากกว่า · ໂດຍບໍ່ນັບ = โดยไม่นับ · ພໍກັບ…ບໍ່? = พอกับ…ไหม · ກຸ່ມ = กลุ่ม · ແບ່ງອອກເປັນສອງກຸ່ມ = แบ่งเป็นสองกลุ่ม",
+      game: "เกมไม่มีส่วนนี้โดยตรง แต่เมืองท่าเรือ ⚓ (เครื่องหมาย > <) ใช้ภาพจุดเปรียบเทียบเหมือนกัน",
+    },
+  });
+
+  /* ===== Chapter 2: numbers 1 to 10 and 0 (book pp. 10–21) ===== */
+  CH.push({
+    id: 2, lo: "ຈຳນວນແຕ່ 1 ເຖິງ 10 ແລະ 0", th: "จำนวน 1 ถึง 10 และ 0", pages: "10–21",
+    learn: [
+      { vis: P.row(P.col(P.items("🐐", 1), `<div class="eq">1</div>`, P.lbl("ໜຶ່ງ")), P.col(P.items("🐄", 2), `<div class="eq">2</div>`, P.lbl("ສອງ")), P.col(P.items("🐱", 3), `<div class="eq">3</div>`, P.lbl("ສາມ"))), lo: "ແບ້ 1 ໂຕ ຂຽນ 1 ອ່ານວ່າ ໜຶ່ງ · ງົວ 2 ໂຕ ຂຽນ 2 · ແມວ 3 ໂຕ ຂຽນ 3", th: "แพะ 1 ตัว วัว 2 ตัว แมว 3 ตัว" },
+      { vis: P.col(P.frame([[4, "c2"]]), `<div class="eq">4 · ສີ່</div>`), lo: "ເມັດຈຸດຈັດເປັນແຖວລະ 5 · ນີ້ແມ່ນ 4 · ຍັງຫວ່າງ 6 ຊ່ອງ", th: "จุดเรียงแถวละ 5 นี่คือ 4" },
+      { vis: P.col(P.frame([[5, "c2"], [2, "c1"]]), `<div class="eq">7 · ເຈັດ</div>`), lo: "6 ເຖິງ 10 ເບິ່ງເປັນ 5 ກັບອີກຈັກໜຶ່ງ · 7 ແມ່ນ 5 ກັບ 2", th: "6 ถึง 10 มองเป็น 5 กับอีกเท่าไร 7 คือ 5 กับ 2" },
+      { vis: `<div class="eq" style="font-size:30px">✍️ 1 2 3 4 5</div>`, lo: "ມາຂຽນຕົວເລກດ້ວຍນິ້ວມືກາງອາກາດກ່ອນ · ທຳອິດເຮັດຊ້າໆກໍໄດ້ ແຕ່ໃຫ້ຂຽນຢ່າງລະມັດລະວັງ", th: "เขียนตัวเลขกลางอากาศด้วยนิ้วก่อน ช้า ๆ ก็ได้ แต่ต้องเขียนอย่างระมัดระวัง" },
+      { vis: P.col(P.eq([5, "<", 8]), P.eq([8, ">", 5])), lo: "ປາກຂອງເຄື່ອງໝາຍ ອ້າໃສ່ເລກທີ່ຫຼາຍກວ່າ · 5 ໜ້ອຍກວ່າ 8 · 8 ຫຼາຍກວ່າ 5", th: "ปากเครื่องหมายอ้าไปทางเลขที่มากกว่า 5 น้อยกว่า 8 และ 8 มากกว่า 5" },
+      { vis: P.line(0, 10, { mark: 6 }), lo: "ນັບຂຶ້ນ 1 ເຖິງ 10 ແລະ ນັບລົງ 10, 9, 8 … 1 · ນັບຕໍ່ຈາກໝູ່ກໍໄດ້", th: "นับขึ้น 1 ถึง 10 และนับถอยหลัง 10 9 8 ... 1" },
+      { vis: P.row(P.col(`<div class="eq">🧺</div>`, P.lbl("ບໍ່ມີຈັກໜ່ວຍ")), `<div class="eq">= 0</div>`), lo: "ເວລາທີ່ບໍ່ມີຈັກໜ່ວຍ ໃຫ້ຂຽນ 0 ເອີ້ນວ່າ ສູນ", th: "เวลาไม่มีเลยสักอัน ให้เขียน 0 เรียกว่า ศูนย์" },
+    ],
+    quiz() {
+      const k = pick(["count", "count", "dots", "cmp", "seq", "zero"]);
+      if (k === "count") {
+        const n = rnd(1, 10), t = pick(THINGS);
+        return { sig: "c" + n + t.e, text: `ມີ${t.lo}ຈັກ${t.c}?`, th: `มี${t.th}กี่${t.tc}`, vis: P.items(t.e, n), choices: nums(n, 0, 10), answer: n,
+          why: `ມີ ${n} ${t.c}`, whyTh: `มี ${n} ${t.tc}`, hint: "ຊີ້ ແລ້ວນັບເທື່ອລະອັນ ບໍ່ໃຫ້ນັບຊ້ຳ", hintTh: "ชี้แล้วนับทีละอัน อย่านับซ้ำ", hintVis: P.frame([[n, "c1"]]) };
+      }
+      if (k === "dots") {
+        const n = rnd(1, 10);
+        return { sig: "d" + n, text: "ມີຈັກເມັດ?", th: "มีกี่จุด", vis: P.frame([[Math.min(n, 5), "c2"], [Math.max(0, n - 5), "c1"]]), choices: nums(n, 0, 10), answer: n,
+          why: n > 5 ? `5 ກັບ ${n - 5} ເປັນ ${n}` : `ມີ ${n} ເມັດ`, whyTh: n > 5 ? `5 กับ ${n - 5} เป็น ${n}` : `มี ${n} จุด`, hint: "ແຖວເທິງເຕັມແມ່ນ 5 · ແລ້ວນັບຕໍ່ແຖວລຸ່ມ", hintTh: "แถวบนเต็มคือ 5 แล้วนับต่อแถวล่าง" };
+      }
+      if (k === "cmp") {
+        const a = rnd(0, 10); let b = rnd(0, 10); if (a === b) b = a < 10 ? a + 1 : a - 1;
+        const ans = a > b ? ">" : "<";
+        return { sig: "y" + a + b, text: "ໃສ່ເຄື່ອງໝາຍ < ຫຼື >", th: "ใส่เครื่องหมาย น้อยกว่า หรือ มากกว่า", vis: P.eq([a, "?", b]), choices: opts([["<", "<", "ໜ້ອຍກວ່າ"], [">", ">", "ຫຼາຍກວ່າ"]]), answer: ans,
+          why: `${a} ${ans} ${b}`, whyTh: `${a} ${ans === ">" ? "มากกว่า" : "น้อยกว่า"} ${b}`, hint: "ປາກອ້າໃສ່ເລກທີ່ຫຼາຍກວ່າ", hintTh: "ปากอ้าไปทางเลขที่มากกว่า", hintVis: P.row(P.frame([[a, "c1"]]), P.frame([[b, "c2"]])) };
+      }
+      if (k === "seq") {
+        const down = Math.random() < 0.3, start = down ? rnd(4, 10) : rnd(0, 6), seq = range(5).map((i) => (down ? start - i : start + i)).filter((v) => v >= 0 && v <= 10);
+        const hole = rnd(1, seq.length - 2), ans = seq[hole];
+        return { sig: "s" + start + down, text: "ເລກໃດຫາຍໄປ?", th: "เลขอะไรหายไป", vis: `<div class="eq">${seq.map((v, i) => (i === hole ? '<span class="box">?</span>' : `<span>${v}</span>`)).join("<span>–</span>")}</div>`,
+          choices: nums(ans, 0, 10), answer: ans, why: down ? `ນັບລົງ: ${seq.join(", ")}` : `ນັບຂຶ້ນ: ${seq.join(", ")}`, whyTh: "ถูกต้อง", hint: down ? "ນັບລົງເທື່ອລະ 1" : "ນັບຂຶ້ນເທື່ອລະ 1", hintTh: down ? "นับถอยหลังทีละ 1" : "นับขึ้นทีละ 1", hintVis: P.line(0, 10, { mark: ans }) };
+      }
+      const n = rnd(0, 3), t = pick(THINGS);
+      return { sig: "z" + n, text: `ໃນກະຕ່າມີ${t.lo}ຈັກ${t.c}?`, th: `ในตะกร้ามี${t.th}กี่${t.tc}`, vis: `<div class="eq">🧺 ${n ? P.items(t.e, n) : ""}</div>`, choices: nums(n, 0, 5), answer: n,
+        why: n ? `ມີ ${n} ${t.c}` : "ບໍ່ມີຈັກໜ່ວຍ ຂຽນ 0", whyTh: n ? `มี ${n}` : "ไม่มีเลยเขียน 0", hint: "ຖ້າບໍ່ມີຈັກໜ່ວຍ ຂຽນ 0", hintTh: "ถ้าไม่มีเลย เขียน 0" };
+    },
+    parent: {
+      book: [
+        "หน้า 10–13: จำนวน 1–5 หาภาพในฟาร์มที่มี 1, 2, 3 และริมแม่น้ำที่มี 4, 5 · ฝึกเขียนตัวเลขด้วยนิ้วกลางอากาศพร้อมครู แล้วเขียนตามรอย · เขียนจำนวนของ 10 ภาพ",
+        "หน้า 14–17: จำนวน 6–10 จากภาพสวนสัตว์ · การ์ดตัวเลขทุกใบมีจุดเรียงแถวละ 5 (6 = 5 กับ 1 … 10 = 5 กับ 5) และตาราง 2×5",
+        "หน้า 18: นับของ นับจุด นับเสียงปรบมือ แล้วจับคู่กับตัวเลข · หน้า 19: เปรียบเทียบด้วย < > และเรียงเลขจากน้อยไปมาก (หมายเหตุ: หนังสือพิมพ์แถวเรียงเลขผิดเป็น “8 8 10” ช่องที่ 9 ที่ถูกคือ 9)",
+        "หน้า 20: นับออกเสียงถึง 10 · นับถอยหลังจาก 10 · นับต่อจากเพื่อน 3 จำนวน · นับคนละ 2 จำนวน",
+        "หน้า 21: เลขศูนย์ สัตว์ 3 ตัวโยนลูกบอลลงตะกร้า หมาไม่ลงเลย “ເວລາທີ່ບໍ່ມີຈັກໜ່ວຍ ໃຫ້ຂຽນ 0 ເອີ້ນວ່າ ສູນ”",
+      ],
+      idea: { lo: "ທຳອິດເຮັດຊ້າໆກໍໄດ້, ແຕ່ໃຫ້ຂຽນຢ່າງລະມັດລະວັງ · ເວລາທີ່ບໍ່ມີຈັກໜ່ວຍ ໃຫ້ຂຽນ 0", th: "ช้าได้แต่ต้องเขียนอย่างระวัง · ไม่มีเลยให้เขียน 0 — หนังสือเชื่อม 3 อย่างเข้าด้วยกัน: ของจริง ตัวเลข/คำอ่าน และจุดที่เรียงแถวละ 5" },
+      home: [
+        "นับของจริงทุกวัน (ไข่ ช้อน รองเท้า) ให้ชี้ทีละชิ้นและพูดคำนับลาว ໜຶ່ງ ສອງ ສາມ …",
+        "วาดตาราง 2 แถว แถวละ 5 ช่อง วางเม็ดถั่วแทนจำนวน ให้ลูกเห็นว่า 7 คือ “5 กับ 2” โดยไม่ต้องนับ",
+        "ฝึกเขียน 0–10 ทีละตัว เริ่มจากเขียนกลางอากาศ แล้วเขียนตามรอย ระวังเลขกลับด้าน 2 3 5 6 9",
+        "นับถอยหลังแบบจรวด 10, 9, 8 … 1 และเกมนับต่อ “พ่อพูด 3 ลูกนับต่อ 4 5 6”",
+      ],
+      watch: [
+        "นับภาพที่กระจายหรือปนกันแล้วนับซ้ำ/ข้าม",
+        "เขียน 2, 3, 5, 6, 9 กลับด้าน",
+        "นับถอยหลังไม่คล่อง และสับสนทิศของ < >",
+      ],
+      words: "ໜຶ່ງ ສອງ ສາມ ສີ່ ຫ້າ ຫົກ ເຈັດ ແປດ ເກົ້າ ສິບ ສູນ = 1–10 และ 0 · ຕົວເລກ = ตัวเลข · ມີຈັກອັນ? = มีกี่อัน · ໜ້ອຍກວ່າ / ຫຼາຍກວ່າ = น้อยกว่า มากกว่า · ຈັດລຽງ = เรียง · ນັບຕໍ່ = นับต่อ · ບໍ່ມີຈັກໜ່ວຍ = ไม่มีเลย",
+      game: "เมืองริมทะเล 🏖️ ด่าน 1–2 (นับ 1–10) และเมืองท่าเรือ ⚓ ด่าน 1 (เครื่องหมาย < > ถึง 10)",
+    },
+  });
+
+  /* ===== Chapter 3: ordinal position (book pp. 22–24) ===== */
+  const QUEUE = ["🛻", "🚗", "🛺", "🚌", "🏍️", "🚲", "🚙", "🚕"];
+  const ZOO = ["🐶", "🐱", "🐰", "🐸", "🐵", "🐷", "🐮"];
+  const ZOO_LO = { "🐶": "ໝາ", "🐱": "ແມວ", "🐰": "ກະຕ່າຍ", "🐸": "ກົບ", "🐵": "ລີງ", "🐷": "ໝູ", "🐮": "ງົວ" };
+  const lineUp = (list, mark) => `<div class="col"><div class="row" style="gap:6px;flex-wrap:nowrap">${list.map((e, i) => `<span class="it${i === mark ? " hl" : ""}" style="font-size:34px">${e}</span>`).join("")}</div><div class="row" style="justify-content:space-between;width:100%"><span class="lbl">← ຊ້າຍ</span><span class="lbl">ຂວາ →</span></div></div>`;
+  CH.push({
+    id: 3, lo: "ລຳດັບທີ", th: "ลำดับที่", pages: "22–24",
+    learn: [
+      { vis: `<div class="col"><div class="lbl">ທາງໜ້າ ←</div><div class="row" style="gap:6px;flex-wrap:nowrap;font:34px/1 var(--font-emoji)">${QUEUE.map((e) => `<span style="transform:scaleX(1)">${e}</span>`).join("")}</div></div>`, lo: "ລົດລໍຖ້າເປັນແຖວ · ທາງໜ້າຢູ່ເບື້ອງຊ້າຍ", th: "รถต่อแถว ด้านหน้าอยู่ทางซ้าย" },
+      { vis: lineUp(QUEUE, 3), lo: "ນັບຈາກທາງໜ້າ ລົດເມຢູ່ລຳດັບທີ 4", th: "นับจากด้านหน้า รถเมล์อยู่ลำดับที่ 4" },
+      { vis: lineUp(QUEUE, 3), lo: "ນັບຈາກທາງຫຼັງ ລົດເມຢູ່ລຳດັບທີ 5 · ນັບຈາກທາງໃດ ຄຳຕອບກໍປ່ຽນໄປ", th: "นับจากด้านหลัง รถเมล์อยู่ลำดับที่ 5 นับจากคนละทาง คำตอบก็ต่างกัน" },
+      { vis: P.col(`<div class="row" style="font:30px/1 var(--font-emoji);gap:4px">🙂🙂<span class="it hl">🙂</span>🙂🙂</div>`, P.lbl("ຄົນທີ 3 = ຄົນດຽວ"), `<div class="row" style="font:30px/1 var(--font-emoji);gap:4px"><span class="it hl">🙂</span><span class="it hl">🙂</span><span class="it hl">🙂</span>🙂🙂</div>`, P.lbl("3 ຄົນ = ສາມຄົນ")), lo: "ຄົນທີ 3 ແມ່ນຄົນດຽວ · ແຕ່ 3 ຄົນ ແມ່ນສາມຄົນທຳອິດ", th: "คนที่ 3 คือคนเดียว แต่ 3 คน คือสามคนแรก" },
+      { vis: lineUp(["🍍", "🥭", "🍌", "🍎", "🍊", "🍈"], 2), lo: "ນັບຈາກເບື້ອງຊ້າຍ ໝາກກ້ວຍຢູ່ລຳດັບທີ 3 · ນັບຈາກເບື້ອງຂວາ ຢູ່ລຳດັບທີ 4", th: "นับจากซ้าย กล้วยอยู่ที่ 3 นับจากขวาอยู่ที่ 4" },
+    ],
+    quiz() {
+      const list = shuffle(ZOO.slice()).slice(0, rnd(5, 7)), i = rnd(0, list.length - 1), fromLeft = Math.random() < 0.6;
+      const pos = fromLeft ? i + 1 : list.length - i;
+      const side = fromLeft ? "ນັບຈາກເບື້ອງຊ້າຍ" : "ນັບຈາກເບື້ອງຂວາ", sideTh = fromLeft ? "นับจากซ้าย" : "นับจากขวา";
+      if (Math.random() < 0.5) {
+        return { sig: list.join("") + i + fromLeft, text: `${side} ${ZOO_LO[list[i]]}ຢູ່ລຳດັບທີເທົ່າໃດ?`, th: `${sideTh} สัตว์ตัวนี้อยู่ลำดับที่เท่าไร`, vis: lineUp(list, i), choices: nums(pos, 1, list.length), answer: pos,
+          why: `${side} ຢູ່ລຳດັບທີ ${pos}`, whyTh: `${sideTh} อยู่ลำดับที่ ${pos}`, hint: `ເລີ່ມນັບຈາກ${fromLeft ? "ຊ້າຍ" : "ຂວາ"} 1, 2, 3 … ຈົນຮອດໂຕທີ່ມີແສງ`, hintTh: `เริ่มนับจาก${fromLeft ? "ซ้าย" : "ขวา"} จนถึงตัวที่มีแสง` };
+      }
+      const choices = shuffle([list[i], ...shuffle(list.filter((e) => e !== list[i])).slice(0, 2)]).map((e) => ({ label: e, value: e, say: ZOO_LO[e] }));
+      return { sig: "w" + list.join("") + pos + fromLeft, kind: "pic", text: `${side} ໂຕທີ ${pos} ແມ່ນໂຕໃດ?`, th: `${sideTh} ตัวที่ ${pos} คือตัวไหน`, vis: lineUp(list, -1), choices, answer: list[i],
+        why: `${side} ໂຕທີ ${pos} ແມ່ນ${ZOO_LO[list[i]]}`, whyTh: "ถูกต้อง", hint: `ຊີ້ ແລ້ວນັບຈາກ${fromLeft ? "ຊ້າຍ" : "ຂວາ"}: 1, 2, 3 …`, hintTh: `ชี้แล้วนับจาก${fromLeft ? "ซ้าย" : "ขวา"}`, hintVis: lineUp(list, i) };
+    },
+    parent: {
+      book: [
+        "หน้า 22–23: รถ 8 คันต่อแถว หันไปทางซ้าย (ด้านหน้าอยู่ซ้าย) “ນັບຈາກທາງໜ້າ ລົດເມຢູ່ລຳດັບທີເທົ່າໃດ?” = ที่ 4 · จากด้านหลัง = ที่ 5 (แถวต่อข้าม 2 หน้า ต้องนับทั้ง 8 คัน)",
+        "หน้า 22: ครูสั่ง “ນັບຈາກທາງໜ້າຄົນທີ 3” ลุกคนเดียว กับ “ນັບຈາກທາງໜ້າ 3 ຄົນ” ลุกสามคน",
+        "หน้า 23–24: ผลไม้เรียงแนวตั้ง (จากบน/จากล่าง) และแนวนอน (จากซ้าย/จากขวา) · แบบทดสอบตาราง 6×6 บอกตำแหน่งสัตว์ เช่น “แมวอยู่ที่ 5 จากบน ที่ 4 จากซ้าย”",
+      ],
+      idea: { lo: "ນັບຈາກທາງໜ້າຄົນທີ 3 · ນັບຈາກທາງໜ້າ 3 ຄົນ", th: "“คนที่ 3” คือคนเดียว ส่วน “3 คน” คือทั้งกลุ่ม · ตำแหน่งขึ้นกับว่าเริ่มนับจากทางไหน" },
+      home: [
+        "เรียงตุ๊กตา 5–7 ตัว ถามว่า “นับจากซ้าย ตัวที่ 3 คือตัวไหน” แล้วถามกลับจากขวา",
+        "ให้ครอบครัวต่อแถว ถามลูกว่าแม่อยู่ที่เท่าไรนับจากหน้า และนับจากหลัง",
+        "สั่งให้หยิบ “ลูกอมเม็ดที่ 3” กับ “ลูกอม 3 เม็ด” ให้เห็นความต่าง",
+      ],
+      watch: [
+        "ลืมว่าเริ่มนับจากด้านไหน",
+        "สับสนซ้าย/ขวา (ให้ติดสติกเกอร์ที่มือขวา)",
+        "ถูกถามหา “ตัวที่ 3” แต่ไปเลือกสามตัวแรก",
+      ],
+      words: "ລຳດັບທີ = ลำดับที่ · ນັບຈາກ = นับจาก · ທາງໜ້າ / ທາງຫຼັງ = ด้านหน้า ด้านหลัง · ທາງເທິງ / ທາງລຸ່ມ = ด้านบน ด้านล่าง · ເບື້ອງຊ້າຍ / ເບື້ອງຂວາ = ทางซ้าย ทางขวา · ຄົນທີ 3 / 3 ຄົນ = คนที่ 3 / 3 คน",
+      game: "เกมไม่มีส่วนนี้ ฝึกในหน้านี้และกับของจริง",
+    },
+  });
+
+  /* ===== Chapter 4: splitting a number into two parts (book pp. 25–41) ===== */
+  CH.push({
+    id: 4, lo: "ການແບ່ງຈຳນວນອອກເປັນສອງສ່ວນ", th: "การแยกจำนวนเป็นสองส่วน", pages: "25–41",
+    learn: [
+      { vis: P.frame([[3, "w"], [2, "c1"]], 5), lo: "ໄດ້ຝາກະຕຸກມາ 5 ຝາ · ສີຂາວ 3 ສີຟ້າ 2", th: "ได้ฝาขวดมา 5 ฝา สีขาว 3 สีฟ้า 2" },
+      { vis: P.col(P.split(5, 3, 2), `<div class="lbl">5 ແມ່ນ 3 ລວມກັບ 2</div>`), lo: "5 ສາມາດແບ່ງເປັນ 3 ກັບ 2 · ເວົ້າວ່າ: 5 ແມ່ນ 3 ລວມກັບ 2", th: "5 แยกได้เป็น 3 กับ 2 พูดว่า 5 คือ 3 รวมกับ 2" },
+      { vis: P.row(P.split(5, 1, 4), P.split(5, 2, 3), P.split(5, 3, 2), P.split(5, 4, 1)), lo: "5 ແບ່ງໄດ້ຫຼາຍແບບ: 1 ກັບ 4 · 2 ກັບ 3 · 3 ກັບ 2 · 4 ກັບ 1", th: "5 แยกได้หลายแบบ 1 กับ 4, 2 กับ 3, 3 กับ 2, 4 กับ 1" },
+      { vis: P.col(P.frame([[4, "c1"], [3, "hid"]], 10).replace('class="frames"', 'class="frames"'), `<div class="lbl">ມີ 7 · ເຫັນ 4 · ລີ້ໄວ້ຈັກອັນ?</div>`), lo: "ມີ 7 ອັນ ເອົາມືປິດໄວ້ບາງອັນ · ເຫັນ 4 ອັນ · ລີ້ໄວ້ 3 ອັນ · 7 ແມ່ນ 4 ລວມກັບ 3", th: "มี 7 อัน เอามือปิดไว้บางอัน เห็น 4 ซ่อนไว้ 3" },
+      { vis: P.col(P.frame([[7, "c1"], [3, "c2"]]), P.split(10, 7, 3)), lo: "10 ສຳຄັນທີ່ສຸດ · 10 ແມ່ນ 7 ລວມກັບ 3 · ມາຝຶກຫຼາຍໆເທື່ອ ເພາະແຕ່ນີ້ຕໍ່ໄປຈະໄດ້ໃຊ້ 10 ເລື້ອຍໆ", th: "10 สำคัญที่สุด 10 คือ 7 รวมกับ 3 ฝึกบ่อย ๆ เพราะต่อจากนี้จะใช้ 10 ตลอด" },
+      { vis: `<div class="eq" style="font-size:26px;flex-direction:column;gap:2px">${[[1, 9], [2, 8], [3, 7], [4, 6], [5, 5]].map(([a, b]) => `<span>10 = ${a} ກັບ ${b}</span>`).join("")}</div>`, lo: "ຄູ່ທີ່ລວມກັນເປັນ 10: 1 ກັບ 9 · 2 ກັບ 8 · 3 ກັບ 7 · 4 ກັບ 6 · 5 ກັບ 5", th: "คู่ที่รวมกันได้ 10 คือ 1 กับ 9, 2 กับ 8, 3 กับ 7, 4 กับ 6, 5 กับ 5" },
+    ],
+    quiz() {
+      const k = pick(["split", "split", "combine", "more", "hidden"]);
+      const X = Math.random() < 0.35 ? 10 : rnd(5, 9), a = rnd(1, X - 1), b = X - a;
+      if (k === "split") {
+        const left = Math.random() < 0.5;
+        return { sig: "s" + X + a + left, text: `${X} ແມ່ນ ${left ? `ເທົ່າໃດ ລວມກັບ ${b}` : `${a} ລວມກັບເທົ່າໃດ`}?`, th: `${X} คือ ${left ? `เท่าไรรวมกับ ${b}` : `${a} รวมกับเท่าไร`}`, vis: P.split(X, a, b, left ? "a" : "b"),
+          choices: nums(left ? a : b, 0, 10), answer: left ? a : b, why: `${X} ແມ່ນ ${a} ລວມກັບ ${b}`, whyTh: `${X} คือ ${a} รวมกับ ${b}`,
+          hint: `ມີ ${X} ເມັດ · ສ່ວນໜຶ່ງແມ່ນ ${left ? b : a} · ອີກສ່ວນໜຶ່ງມີຈັກເມັດ?`, hintTh: `มี ${X} ส่วนหนึ่งคือ ${left ? b : a} อีกส่วนมีเท่าไร`, hintVis: P.frame(left ? [[a, "hid"], [b, "c2"]] : [[a, "c1"], [b, "hid"]]) };
+      }
+      if (k === "combine") return { sig: "c" + a + b, text: `${a} ກັບ ${b} ລວມກັນເປັນເທົ່າໃດ?`, th: `${a} กับ ${b} รวมกันเป็นเท่าไร`, vis: P.split("?", a, b, "w"), choices: nums(X, 0, 10), answer: X,
+        why: `${a} ລວມກັບ ${b} ເປັນ ${X}`, whyTh: `${a} รวมกับ ${b} เป็น ${X}`, hint: "ລວມເມັດທັງສອງສີ ແລ້ວນັບ", hintTh: "รวมเม็ดทั้งสองสีแล้วนับ", hintVis: P.frame([[a, "c1"], [b, "c2"]]) };
+      if (k === "more") return { sig: "m" + X + a, text: `${a} ຍັງອີກເທົ່າໃດ ຈະເປັນ ${X}?`, th: `${a} ขาดอีกเท่าไรจะเป็น ${X}`, vis: P.frame([[a, "c1"]], X <= 5 ? 5 : 10), choices: nums(b, 0, 10), answer: b,
+        why: `${a} ກັບ ${b} ເປັນ ${X}`, whyTh: `${a} กับ ${b} เป็น ${X}`, hint: X === 10 ? "ນັບຊ່ອງທີ່ຍັງຫວ່າງ" : `ນັບຕໍ່ຈາກ ${a} ໄປຮອດ ${X}`, hintTh: X === 10 ? "นับช่องที่ยังว่าง" : `นับต่อจาก ${a} ไปจนถึง ${X}`, hintVis: P.frame([[a, "c1"], [b, "c2"]], X <= 5 ? 5 : 10) };
+      return { sig: "h" + X + a, text: `ມີ ${X} ເມັດ ເຫັນ ${a} ເມັດ · ລີ້ໄວ້ຈັກເມັດ?`, th: `มี ${X} เม็ด เห็น ${a} เม็ด ซ่อนไว้กี่เม็ด`, vis: P.frame([[a, "c1"], [b, "hid"]]), choices: nums(b, 0, 10), answer: b,
+        why: `${X} ແມ່ນ ${a} ລວມກັບ ${b}`, whyTh: `${X} คือ ${a} รวมกับ ${b}`, hint: `${X} ແມ່ນ ${a} ລວມກັບເທົ່າໃດ?`, hintTh: `${X} คือ ${a} รวมกับเท่าไร`, hintVis: P.split(X, a, b, "b") };
+    },
+    parent: {
+      book: [
+        "หน้า 25: หยิบฝาขวด 5 ฝาจากถุงที่มีสีขาวและฟ้า แต่ละคนได้สีต่างกัน → “5 ສາມາດແບ່ງເປັນ 3 ກັບ 2” และแนะนำแผนภาพแยกจำนวน (เลขรวมอยู่บน แยกเป็นสองส่วนข้างล่าง)",
+        "หน้า 26–35: เลข 5, 6, 7, 8, 9 ทีละตัว ใช้ประโยค “X ແມ່ນ __ ລວມກັບ __” เขียนทุกวิธีที่แยกได้ แล้วฝึก 3 แบบ: แยก (หาส่วนที่หาย) · รวม (ລວມກັນເປັນເທົ່າໃດ?) · เติม (ຍັງອີກເທົ່າໃດ ຈະເປັນ X?) และเกมการ์ด “รวมให้เป็น 5”",
+        "หน้า 36–38: เลข 10 และเกมหาคู่ที่รวมเป็น 10 ในตาราง 5×5 (แนวตั้ง แนวนอน แนวทแยง)",
+        "หน้า 39–41: ฝึกรวม · ตารางรวมแบบขั้นบันได · เกม “รวมให้เป็น 10” (ครูโชว์ 7 เด็กตอบ 3)",
+        "หมายเหตุ: ในแบบฝึก “รวม” ของเลข 7, 8, 9, 10 มีบางข้อที่ผลรวมไม่ใช่เลขของหน้านั้น (เช่น 5 + 1 = 6 ในหน้าเลข 7) ถ้าลูกเขียนเลขของหน้าทุกข้อจะผิด ให้ลูกคิดทีละข้อจริง ๆ",
+      ],
+      idea: { lo: "ຈະຄິດວ່າ 5 ແມ່ນ 3 ລວມກັບ 2 ກໍໄດ້ຄືກັນ · ມາຝຶກຫຼາຍໆເທື່ອ ເພາະແຕ່ນີ້ຕໍ່ໄປຈະໄດ້ໃຊ້ 10 ເລື້ອຍໆ", th: "5 คือ 3 รวมกับ 2 ก็ได้เหมือนกัน · ฝึกบ่อย ๆ เพราะต่อไปจะใช้ 10 ตลอด — บทนี้คือรากฐานของบวก ลบ และการทำให้ครบ 10 ทั้งหมด" },
+      home: [
+        "เกม “ซ่อนในมือ”: วางฝาขวด 7 อัน เอามือปิดบางส่วน ให้ลูกบอกว่าซ่อนไว้กี่อัน แล้วพูด “7 ແມ່ນ 4 ລວມກັບ 3”",
+        "เกมการ์ดคู่ 10: พ่อแม่ชูเลข 7 ลูกตอบ 3 เร็ว ๆ วันละ 2–3 นาที จนตอบได้โดยไม่นับนิ้ว",
+        "ให้ลูกเขียนทุกวิธีที่แยกเลขได้ เช่น 6 = 1 กับ 5, 2 กับ 4, 3 กับ 3 … ให้เห็นว่าเป็นคู่สลับกัน",
+        "ใช้ไข่ในแผงไข่ 10 ช่องเป็นตาราง 10 จริง",
+      ],
+      watch: [
+        "ช่องที่หายสลับข้างซ้าย/ขวาในแผนภาพแล้วลูกงง",
+        "ไม่เข้าใจคำถาม “ຍັງອີກເທົ່າໃດ ຈະເປັນ …” (ขาดอีกเท่าไรจะเป็น…)",
+        "นับทีละ 1 แทนการจำคู่ ถ้ายังนับอยู่ บทที่ 5, 6, 12, 14 จะยากมาก",
+      ],
+      words: "ແບ່ງ = แยก/แบ่ง · ສອງສ່ວນ = สองส่วน · X ແມ່ນ B ລວມກັບ C = X คือ B รวมกับ C · ລວມກັນເປັນ = รวมกันเป็น · ຍັງອີກເທົ່າໃດ ຈະເປັນ … = ขาดอีกเท่าไรจะเป็น … · ຝາກະຕຸກ = ฝาขวด",
+      game: "เมืองริมทะเล 🏖️ คำถามแบบ “เติมให้ครบ 5 และ 10” คือบทนี้โดยตรง",
+    },
+  });
+
+  /* ===== Chapter 5: addition (book pp. 42–55) ===== */
+  CH.push({
+    id: 5, lo: "ການບວກ", th: "การบวก", pages: "42–55",
+    learn: [
+      { vis: P.row(P.items("🍎", 3), P.items("🍎", 2)), lo: "ມີໝາກໂປມ 3 ໜ່ວຍຢູ່ໃນຈານ ແລະ 2 ໜ່ວຍຢູ່ໃນຖາດ", th: "มีแอปเปิ้ล 3 ลูกในจาน และ 2 ลูกในถาด" },
+      { vis: P.frame([[3, "c1"], [2, "c2"]]), lo: "ເອົາມາລວມເຂົ້າກັນ ນັບທັງໝົດໄດ້ 5 ໜ່ວຍ", th: "เอามารวมกัน นับทั้งหมดได้ 5 ลูก" },
+      { vis: P.col(P.eq([3, "+", 2, "=", { v: 5 }]), P.split(5, 3, 2)), lo: "ຂຽນເປັນປະໂຫຍກສັນຍະລັກ 3 + 2 = 5 · ອ່ານວ່າ ສາມ ບວກ ສອງ ເທົ່າກັບ ຫ້າ", th: "เขียนเป็นประโยคสัญลักษณ์ 3 + 2 = 5 อ่านว่า สามบวกสองเท่ากับห้า" },
+      { vis: P.row(P.items("🚗", 3), P.lbl("ມາອີກ →"), P.items("🚗", 2)), lo: "ມີລົດຈອດຢູ່ 3 ຄັນ ມາອີກ 2 ຄັນ ລວມທັງໝົດ 5 ຄັນ · ມາເພີ່ມກໍແມ່ນການບວກ 3 + 2 = 5", th: "มีรถจอดอยู่ 3 คัน มาอีก 2 คัน รวมเป็น 5 คัน การมาเพิ่มก็คือการบวก" },
+      { vis: P.row(P.col(P.lbl("ເທື່ອທີ 1"), `<div class="eq">🧺 0</div>`), P.col(P.lbl("ເທື່ອທີ 2"), `<div class="eq">🧺 2</div>`)), lo: "ຖ້າບໍ່ເຂົ້າຈັກໜ່ວຍ ຂຽນ 0 · 0 + 2 = 2", th: "ถ้าไม่ลงเลยสักลูก เขียน 0 · 0 + 2 = 2" },
+      { vis: P.col(P.eq([7, "+", 3, "=", { v: 10 }]), P.eq([3, "+", 7, "=", { v: 10 }])), lo: "ປ່ຽນບ່ອນກັນ ຄຳຕອບກໍຄືກັນ · 7 + 3 ກັບ 3 + 7 ເທົ່າກັບ 10 ຄືກັນ", th: "สลับที่กัน คำตอบก็เท่าเดิม 7 บวก 3 กับ 3 บวก 7 ได้ 10 เหมือนกัน" },
+    ],
+    quiz() {
+      const t = pick(THINGS), k = pick(["together", "more", "fact", "fact", "zero", "swap"]);
+      if (k === "together" || k === "more") {
+        const a = rnd(1, 6), b = rnd(1, 10 - a), s = a + b;
+        const join = k === "more" ? "ໄດ້ມາອີກ" : "ແລະ ມີອີກ";
+        return { sig: k + a + b, text: `ມີ${t.lo} ${a} ${t.c} ${join} ${b} ${t.c} ລວມທັງໝົດມີຈັກ${t.c}?`, th: `มี${t.th} ${a} ${t.tc} ${k === "more" ? "ได้มาอีก" : "และมีอีก"} ${b} ${t.tc} รวมทั้งหมดกี่${t.tc}`,
+          vis: P.row(P.items(t.e, a), P.lbl("+"), P.items(t.e, b)), choices: nums(s, 0, 10), answer: s,
+          why: `${a} + ${b} = ${s} ${t.c}`, whyTh: `${a} + ${b} = ${s} ${t.tc}`,
+          hint: `ລວມເຂົ້າກັນ ແລ້ວນັບທັງໝົດເບິ່ງ`, hintTh: "รวมกันแล้วนับทั้งหมดดู", hintVis: P.frame([[a, "c1"], [b, "c2"]]) };
+      }
+      if (k === "zero") {
+        const a = rnd(1, 9), first = Math.random() < 0.5, x = first ? 0 : a, y = first ? a : 0;
+        return { sig: "z" + x + y, text: `${x} + ${y} = ?`, th: `${x} + ${y} เท่ากับเท่าไร`, vis: P.eq([x, "+", y, "=", "?"]), choices: nums(a, 0, 10), answer: a,
+          why: `ບວກກັບ 0 ໄດ້ເທົ່າເດີມ`, whyTh: "บวกกับ 0 ได้เท่าเดิม", hint: `0 ແມ່ນບໍ່ມີຈັກອັນ · ມີ ${a} ຢູ່ແລ້ວ ກໍຍັງແມ່ນ ${a}`, hintTh: `0 คือไม่มีเลย มี ${a} อยู่แล้วก็ยังเป็น ${a}`, hintVis: P.frame([[a, "c1"]]) };
+      }
+      if (k === "swap") {
+        const a = rnd(1, 8), b = rnd(1, 10 - a);
+        return { sig: "w" + a + b, text: "ໃສ່ເລກໃນຫ້ອງວ່າງ", th: "เติมเลขในช่องว่าง", vis: P.eq([a, "+", b, "=", "?", "+", a]), choices: nums(b, 0, 10), answer: b,
+          why: `${a} + ${b} = ${b} + ${a} · ປ່ຽນບ່ອນກັນ ຄຳຕອບຄືກັນ`, whyTh: "สลับที่กัน คำตอบเท่ากัน", hint: "ສອງຂ້າງຕ້ອງມີເລກຄືກັນ ພຽງແຕ່ປ່ຽນບ່ອນ", hintTh: "สองข้างต้องมีเลขชุดเดียวกัน แค่สลับที่", hintVis: P.row(P.frame([[a, "c1"], [b, "c2"]]), P.frame([[b, "c2"], [a, "c1"]])) };
+      }
+      const a = rnd(1, 9), b = rnd(1, 10 - a), s = a + b;
+      return { sig: "f" + a + b, text: `${a} + ${b} = ?`, th: `${a} + ${b} เท่ากับเท่าไร`, vis: P.eq([a, "+", b, "=", "?"]), choices: nums(s, 0, 10), answer: s,
+        why: `${a} + ${b} = ${s}`, whyTh: `${a} + ${b} = ${s}`, hint: `ນັບເມັດທັງສອງສີລວມກັນ`, hintTh: "นับเม็ดทั้งสองสีรวมกัน", hintVis: P.col(P.frame([[a, "c1"], [b, "c2"]]), P.split("?", a, b)) };
+    },
+    parent: {
+      book: [
+        "หน้า 42–43: แนะนำเครื่องหมาย + และ = จากแอปเปิ้ล 3 ลูกในจานกับ 2 ลูกในถาด อ่านว่า “3 ບວກ 2 ເທົ່າກັບ 5” และเรียก 3 + 2 = 5 ว่า ປະໂຫຍກສັນຍະລັກ (ประโยคสัญลักษณ์) มีลำดับการเขียนเครื่องหมายด้วย",
+        "หน้า 44–45: บวกแบบ “รวมกัน” (ລວມເຂົ້າກັນ) สองกลุ่มที่มีอยู่พร้อมกัน เช่น แมวขาว 2 ตัว แมวดำ 1 ตัว · หลอด 4 + 2",
+        "หน้า 46–49: บวกแบบ “เพิ่มขึ้น” (ເພີ່ມຂຶ້ນ) มีอยู่ก่อนแล้วมาเพิ่ม เช่น รถจอด 3 คัน มาอีก 2 คัน แล้วมีโจทย์ปัญหา 7 ข้อ",
+        "หน้า 50: บวกกับ 0 (โยนลูกบอลไม่ลงตะกร้าเลย เขียน 0) · หน้า 51: สลับที่แล้วคำตอบเท่าเดิม 7 + 3 = 3 + 7",
+        "หน้า 52–53: อ่านออกเสียงและคิด 45 ข้อ และตารางบวก (ผลบวกไม่เกิน 10) · หน้า 54: ให้เด็กแต่งโจทย์เองให้ได้ 5 + 3 = 8 · หน้า 55: ทบทวน 20 ข้อ",
+      ],
+      idea: { lo: "ຖ້າລວມ 2 ກັບ 1 ເຂົ້າກັນຈະເປັນ 3 · ຖ້າບວກ 2 ໃສ່ 3 ຈະເປັນ 5", th: "ถ้ารวม 2 กับ 1 จะได้ 3 · ถ้าเติม 2 เข้าไปใน 3 จะได้ 5 — หนังสือวางเม็ดนับใต้ภาพ 1 เม็ดต่อ 1 ชิ้น แล้ววาดมือดันเม็ดมารวมกัน (รวมกัน = สองมือดันเข้าหากัน, มาเพิ่ม = มือเดียวดันกลุ่มใหม่เข้าไป)" },
+      home: [
+        "ใช้ฝาขวดหรือเม็ดถั่วเป็นเม็ดนับ วางใต้ของจริงทีละ 1 เม็ด แล้วให้ลูกดันมารวมกันแบบในหนังสือ",
+        "ให้ลูกพูดประโยคเต็มเป็นภาษาลาว “ສາມ ບວກ ສອງ ເທົ່າກັບ ຫ້າ” แล้วตอบพร้อมคำนับ เช่น “5 ໜ່ວຍ”",
+        "ชวนแต่งโจทย์จากของในบ้าน เช่น “ມີບ່ວງ 4 ອັນ ເອົາມາອີກ 3 ອັນ” แล้วสลับให้ลูกเป็นคนตั้งโจทย์ให้พ่อแม่ตอบ",
+        "ท่องตารางบวกถึง 10 วันละ 5–10 ข้อ ใช้กฎสลับที่ช่วย: รู้ 7 + 2 ก็รู้ 2 + 7 จำแค่ครึ่งเดียว",
+      ],
+      watch: [
+        "นับนิ้วทีละ 1 ทุกข้อ: หนังสืออยากให้ใช้ “คู่ของตัวเลข” จากบทที่ 4 (5 คือ 3 กับ 2) ถ้ายังนับนิ้วอยู่ให้กลับไปฝึกบทที่ 4",
+        "3 + 0 บางคนตอบ 30 หรือบอกว่าทำไม่ได้ ให้เล่นโยนของลงตะกร้า ไม่ลงเลย = 0",
+        "โจทย์ 3 + 2 = □ + 3 เป็นของใหม่และยาก ให้วางเม็ดนับสองฝั่งแล้วเทียบ",
+        "ตอบไม่ครบ: หนังสือต้องการทั้งประโยคสัญลักษณ์และคำตอบพร้อมคำนับ",
+      ],
+      words: "ລວມ / ລວມເຂົ້າກັນ = รวมกัน · ມາອີກ / ໄດ້ອີກ / ຊື້ອີກ = มาเพิ่ม ได้เพิ่ม ซื้อเพิ่ม · ທັງໝົດ = ทั้งหมด · ມີຈັກ…? = มีกี่…? · ເທົ່າກັບ / ເປັນ = เท่ากับ เป็น · ຄຳຕອບ = คำตอบ · ໂຈດ = โจทย์",
+      game: "เมืองป่า 🌴 ฝึกการบวกล้วน ๆ (ด่าน 1–3 ผลบวกไม่เกิน 10 ตรงกับบทนี้)",
+    },
+  });
+
+  /* ===== Chapter 6: subtraction (book pp. 56–71) ===== */
+  CH.push({
+    id: 6, lo: "ການລົບ", th: "การลบ", pages: "56–71",
+    learn: [
+      { vis: P.items("🍌", 5), lo: "ມີໝາກກ້ວຍ 5 ໜ່ວຍ", th: "มีกล้วย 5 ลูก" },
+      { vis: P.items("🍌", 5, { cross: 3 }), lo: "ກິນໝົດ 3 ໜ່ວຍ · ຍັງເຫຼືອຈັກໜ່ວຍ?", th: "กินไป 3 ลูก เหลือกี่ลูก" },
+      { vis: P.col(P.eq([5, "−", 3, "=", { v: 2 }]), P.split(5, 3, 2, "b")), lo: "ຍັງເຫຼືອ 2 ໜ່ວຍ · ຂຽນວ່າ 5 − 3 = 2 · ອ່ານວ່າ ຫ້າ ລົບ ສາມ ເປັນ ສອງ", th: "เหลือ 2 ลูก เขียนว่า 5 − 3 = 2 อ่านว่า ห้าลบสามเป็นสอง" },
+      { vis: P.row(P.items("🐱", 3), P.items("🐈‍⬛", 2)), lo: "ມີແມວ 5 ໂຕ ແມວຂາວ 3 ໂຕ ແມວດຳມີຈັກໂຕ? · 5 − 3 = 2 ໂຕ", th: "มีแมว 5 ตัว แมวขาว 3 ตัว แมวดำมีกี่ตัว 5 − 3 = 2 ตัว" },
+      { vis: P.pairs(8, 5), lo: "ແມວຂາວ 8 ໂຕ ແມວດຳ 5 ໂຕ · ຈັບຄູ່ກັນເທື່ອລະໂຕ · ຍັງເຫຼືອ 3 ໂຕທີ່ບໍ່ມີຄູ່ · ແມວຂາວຫຼາຍກວ່າ 3 ໂຕ: 8 − 5 = 3", th: "แมวขาว 8 ตัว แมวดำ 5 ตัว จับคู่ทีละตัว เหลือ 3 ตัวที่ไม่มีคู่ แมวขาวมากกว่า 3 ตัว" },
+      { vis: P.col(P.eq([3, "−", 3, "=", { v: 0 }]), P.eq([3, "−", 0, "=", { v: 3 }])), lo: "ກິນໝົດທັງ 3 ໜ່ວຍ ເຫຼືອ 0 · ບໍ່ກິນຈັກໜ່ວຍ ກໍຍັງເຫຼືອ 3", th: "กินหมดทั้ง 3 ลูกเหลือ 0 ไม่กินเลยก็ยังเหลือ 3" },
+      { vis: P.col(`<div class="eq" style="font-size:24px">ທັງໝົດ · ມາອີກ → +</div>`, `<div class="eq" style="font-size:24px">ເຫຼືອ · ຫຼາຍກວ່າຈັກ → −</div>`), lo: "ຖ້າຖາມວ່າ ທັງໝົດ ຫຼື ມາອີກ ໃຊ້ການບວກ · ຖ້າຖາມວ່າ ເຫຼືອ ຫຼື ຫຼາຍກວ່າຈັກ ໃຊ້ການລົບ", th: "ถ้าถามว่าทั้งหมดหรือมาเพิ่ม ใช้บวก ถ้าถามว่าเหลือหรือมากกว่ากี่ ใช้ลบ" },
+    ],
+    quiz() {
+      const t = pick(THINGS), k = pick(["take", "take", "part", "compare", "fact", "zero", "which"]);
+      if (k === "take") {
+        const n = rnd(3, 10), r = rnd(1, n - 1), left = n - r;
+        return { sig: "t" + n + r, text: `ມີ${t.lo} ${n} ${t.c} ເອົາອອກໄປ ${r} ${t.c} ຍັງເຫຼືອຈັກ${t.c}?`, th: `มี${t.th} ${n} ${t.tc} เอาออกไป ${r} ${t.tc} เหลือกี่${t.tc}`,
+          vis: P.items(t.e, n, { cross: r }), choices: nums(left, 0, 10), answer: left, why: `${n} − ${r} = ${left} ${t.c}`, whyTh: `${n} − ${r} = ${left} ${t.tc}`,
+          hint: "ນັບແຕ່ອັນທີ່ບໍ່ຖືກຂີດອອກ", hintTh: "นับเฉพาะอันที่ไม่ถูกขีดออก", hintVis: P.frame([[left, "c1"], [r, "gone"]]) };
+      }
+      if (k === "part") {
+        const n = rnd(4, 10), a = rnd(1, n - 1), b = n - a;
+        return { sig: "p" + n + a, text: `ມີແມວ ${n} ໂຕ ແມວຂາວ ${a} ໂຕ ແມວດຳມີຈັກໂຕ?`, th: `มีแมว ${n} ตัว แมวขาว ${a} ตัว แมวดำมีกี่ตัว`,
+          vis: P.row(P.items("🐱", a), P.items("❔", b)), choices: nums(b, 0, 10), answer: b, why: `${n} − ${a} = ${b} ໂຕ`, whyTh: `${n} − ${a} = ${b} ตัว`,
+          hint: `ທັງໝົດ ${n} ໂຕ ເອົາແມວຂາວອອກ ${a} ໂຕ ທີ່ເຫຼືອແມ່ນແມວດຳ`, hintTh: `ทั้งหมด ${n} ตัว เอาแมวขาวออก ${a} ตัว ที่เหลือคือแมวดำ`, hintVis: P.split(n, a, b, "b") };
+      }
+      if (k === "compare") {
+        const a = rnd(4, 10), b = rnd(1, a - 1), d = a - b;
+        return { sig: "c" + a + b, text: `ດອກໄມ້ແດງ ${a} ດອກ ດອກໄມ້ຂາວ ${b} ດອກ · ດອກແດງຫຼາຍກວ່າຈັກດອກ?`, th: `ดอกไม้แดง ${a} ดอก ดอกไม้ขาว ${b} ดอก ดอกแดงมากกว่ากี่ดอก`,
+          vis: P.col(P.items("🌹", a), P.items("🤍", b)), choices: nums(d, 0, 10), answer: d, why: `${a} − ${b} = ${d} · ດອກແດງຫຼາຍກວ່າ ${d} ດອກ`, whyTh: `ดอกแดงมากกว่า ${d} ดอก`,
+          hint: "ຈັບຄູ່ກັນເທື່ອລະອັນ ແລ້ວນັບອັນທີ່ບໍ່ມີຄູ່", hintTh: "จับคู่ทีละอัน แล้วนับอันที่ไม่มีคู่", hintVis: P.pairs(a, b) };
+      }
+      if (k === "zero") {
+        const n = rnd(1, 9), all = Math.random() < 0.5, r = all ? n : 0, left = n - r;
+        return { sig: "z" + n + r, text: `${n} − ${r} = ?`, th: `${n} − ${r} เท่ากับเท่าไร`, vis: P.eq([n, "−", r, "=", "?"]), choices: nums(left, 0, 10), answer: left,
+          why: all ? "ເອົາອອກໝົດ ກໍບໍ່ເຫຼືອຈັກອັນ = 0" : "ບໍ່ເອົາອອກຈັກອັນ ກໍຍັງເທົ່າເດີມ", whyTh: all ? "เอาออกหมด ก็เหลือ 0" : "ไม่เอาออกเลย ก็ยังเท่าเดิม",
+          hint: all ? `ມີ ${n} ເອົາອອກທັງ ${n} ຈະເຫຼືອຈັກອັນ?` : `ລົບ 0 ແມ່ນບໍ່ໄດ້ເອົາອອກຈັກອັນ`, hintTh: all ? "เอาออกหมดทุกอัน จะเหลือกี่อัน" : "ลบ 0 คือไม่ได้เอาอะไรออก", hintVis: P.frame(all ? [[n, "gone"]] : [[n, "c1"]]) };
+      }
+      if (k === "which") {
+        const add = Math.random() < 0.5, a = rnd(2, 6), b = rnd(1, 4);
+        const text = add ? `ມີ${t.lo} ${a} ${t.c} ມາອີກ ${b} ${t.c} ລວມທັງໝົດມີຈັກ${t.c}? · ໃຊ້ການຄິດໄລ່ແບບໃດ?` : `ມີ${t.lo} ${a + b} ${t.c} ເອົາອອກໄປ ${b} ${t.c} ຍັງເຫຼືອຈັກ${t.c}? · ໃຊ້ການຄິດໄລ່ແບບໃດ?`;
+        return { sig: "q" + add + a + b, kind: "word", text, th: add ? `มี${t.th} ${a} มาอีก ${b} รวมทั้งหมดเท่าไร ใช้บวกหรือลบ` : `มี${t.th} ${a + b} เอาออก ${b} เหลือเท่าไร ใช้บวกหรือลบ`,
+          choices: opts([["ບວກ +", "+", "ບວກ"], ["ລົບ −", "−", "ລົບ"]]), answer: add ? "+" : "−",
+          why: add ? `ມີຄຳວ່າ ທັງໝົດ / ມາອີກ ຈຶ່ງບວກ: ${a} + ${b} = ${a + b}` : `ມີຄຳວ່າ ເຫຼືອ ຈຶ່ງລົບ: ${a + b} − ${b} = ${a}`, whyTh: add ? "มีคำว่าทั้งหมด มาเพิ่ม จึงบวก" : "มีคำว่าเหลือ จึงลบ",
+          hint: "ຟັງຄຳສຳຄັນ: ທັງໝົດ ມາອີກ → ບວກ · ເຫຼືອ ຫຼາຍກວ່າຈັກ → ລົບ", hintTh: "ฟังคำสำคัญ ทั้งหมด มาเพิ่ม ใช้บวก เหลือ มากกว่ากี่ ใช้ลบ" };
+      }
+      const n = rnd(2, 10), r = rnd(1, n - 1), left = n - r;
+      return { sig: "f" + n + r, text: `${n} − ${r} = ?`, th: `${n} − ${r} เท่ากับเท่าไร`, vis: P.eq([n, "−", r, "=", "?"]), choices: nums(left, 0, 10), answer: left,
+        why: `${n} − ${r} = ${left}`, whyTh: `${n} − ${r} = ${left}`, hint: `${n} ແບ່ງເປັນ ${r} ກັບຈັກ?`, hintTh: `${n} แบ่งเป็น ${r} กับเท่าไร`, hintVis: P.col(P.frame([[left, "c1"], [r, "gone"]]), P.split(n, r, left, "b")) };
+    },
+    parent: {
+      book: [
+        "หน้า 56–57: แนะนำเครื่องหมาย − จากกล้วย 5 ลูก กินไป 3 ลูก เหลือ 2 อ่านว่า “5 ລົບ 3 ເປັນ 2” และใช้แผนภาพแยกจำนวน (5 แยกเป็น 3 กับ ?)",
+        "หน้า 58–61: หา “ส่วนที่เหลือ” (ສ່ວນທີ່ຍັງເຫຼືອ) ทั้งแบบเอาออก (หมา 3 ตัว ออกไป 1) และแบบส่วนหนึ่งของทั้งหมด (แมว 5 ตัว ขาว 3 ตัว ดำกี่ตัว) แล้วโจทย์ปัญหา 4 ข้อ",
+        "หน้า 62–65: หา “ผลต่าง” (ຄວາມແຕກຕ່າງ) โดยเรียงเป็นสองแถว จับคู่ทีละตัวด้วยเส้น แล้วนับตัวที่ไม่มีคู่ว่า “ຫຼາຍກວ່າ” เช่น แมวขาว 8 แมวดำ 5",
+        "หน้า 66: ลบกับ 0 (3 − 3 = 0, 3 − 0 = 3) · หน้า 67–68: อ่านออกเสียง 50 ข้อ รวมชุด 10 − □ และตารางลบ",
+        "หน้า 69: แต่งโจทย์เองให้ได้ 8 − 3 = 5 · หน้า 70: ทบทวน · หน้า 71: เลือกเองว่าจะใช้ + หรือ −",
+      ],
+      idea: { lo: "ຖ້າ 3 ລົບອອກ 1 ຈະເປັນ 2 · ຄິດວ່າອັນໃດຫຼາຍ? ຄິດວ່າຫຼາຍກວ່າຈັກ?", th: "ถ้า 3 เอาออก 1 จะเหลือ 2 · คิดว่าอันไหนมากกว่า แล้วมากกว่ากี่อัน — หนังสือใช้มือคั่นแล้วดันเม็ดที่เอาออกไปทางขวา และใช้การจับคู่ทีละตัวสำหรับการเปรียบเทียบ" },
+      home: [
+        "เล่น “กินขนม”: วางขนม 7 ชิ้น ให้ลูกกิน 2 ชิ้น แล้วถามว่าเหลือกี่ชิ้น ให้พูดเป็นภาษาลาว “7 ລົບ 2 ເປັນ 5”",
+        "เปรียบเทียบ: เรียงช้อนกับส้อมเป็นสองแถว จับคู่ทีละอัน แล้วนับอันที่ไม่มีคู่ (ทำแบบเดียวกับหนังสือ)",
+        "ฝึกคู่บวก-ลบจากแผนภาพเดียวกัน: 5 คือ 3 กับ 2 ได้ทั้ง 3 + 2 = 5, 5 − 3 = 2, 5 − 2 = 3",
+        "ฝึกฟังคำสำคัญ: “ທັງໝົດ / ມາອີກ” ใช้บวก · “ເຫຼືອ / ຫຼາຍກວ່າຈັກ” ใช้ลบ",
+      ],
+      watch: [
+        "โจทย์แบบส่วนหนึ่งของทั้งหมด และแบบเปรียบเทียบ ไม่มีการ “เอาออก” จริง เด็กมักไปบวกแทน (5 + 3) ให้ทำด้วยของจริง",
+        "เมื่อเลขมากอยู่หลังในโจทย์ (นกพิราบ 7 นกกระจอก 9) ต้องเขียนเลขมากก่อนเสมอ 9 − 7",
+        "คำตอบเปรียบเทียบต้องบอกชื่อกลุ่มด้วย เช่น “ດອກແດງຫຼາຍກວ່າ 2 ດອກ”",
+        "ระวัง n − n = 0 และ n − 0 = n ที่เด็กมักสับสน",
+      ],
+      words: "ລົບ / ລົບອອກ = ลบ เอาออก · ເຫຼືອ / ຍັງເຫຼືອ = เหลือ · ອອກໄປ ກິນໝົດ ໃຊ້ແລ້ວ ບິນໄປ = ออกไป กินไป ใช้แล้ว บินไป · ຄວາມແຕກຕ່າງ = ผลต่าง · ຫຼາຍກວ່າຈັກ…? = มากกว่ากี่…? · ເປັນ = เป็น (ใช้อ่านประโยคลบ)",
+      game: "เมืองภูเขาไฟ 🌋 ฝึกการลบ (ด่าน 1–2 ไม่เกิน 10) และเมืองหุ่นยนต์ 🤖 ผสมบวกลบ",
+    },
+  });
+
+  /* ===== Chapter 7: numbers greater than 10 (book pp. 72–83) ===== */
+  const READ = (n) => wlo(n);
+  P.bundle = (ones) => P.row(`<div class="col">${P.tens(1, 0)}<div class="lbl">10</div></div>`, ones ? `<div class="col">${P.tens(0, ones)}<div class="lbl">${ones}</div></div>` : "");
+  CH.push({
+    id: 7, lo: "ຈຳນວນທີ່ຫຼາຍກວ່າ 10", th: "จำนวนที่มากกว่า 10", pages: "72–83",
+    learn: [
+      { vis: P.items("🔵", 16), lo: "ມານັບຝາຕຸກນ້ຳນຳກັນ · ມີຈັກອັນ?", th: "มานับฝาขวดกัน มีกี่อัน" },
+      { vis: P.frame([[10, "c1"], [6, "c2"]]), lo: "ມີ 10 ແລ້ວ ນັບສ່ວນທີ່ເຫຼືອ · 10 ກັບ 6 ເປັນ 16 · ອ່ານວ່າ ສິບຫົກ", th: "ครบ 10 แล้ว นับส่วนที่เหลือ 10 กับ 6 เป็น 16 อ่านว่า สิบหก" },
+      { vis: P.col(P.bundle(5), P.split(15, 10, 5)), lo: "ມັດໄມ້ 10 ອັນເປັນ 1 ມັດ · 10 ກັບ 5 ເປັນ 15 · ສິບຫ້າ", th: "มัดไม้ 10 อันเป็น 1 มัด 10 กับ 5 เป็น 15" },
+      { vis: P.col(`<div class="eq"><span class="hit">16</span> <span>✓</span></div>`, `<div class="eq" style="opacity:.5"><s>106</s> ✗</div>`), lo: "10 ກັບ 6 ຂຽນເປັນ 16 · ບໍ່ໃຫ້ຂຽນເປັນ 106 ເດີ", th: "10 กับ 6 เขียนเป็น 16 ห้ามเขียนเป็น 106 นะ" },
+      { vis: `<div class="eq" style="font-size:22px;flex-direction:column;gap:4px">${[11, 12, 15, 19, 20].map((n) => `<span><b class="num">${n}</b> · ${READ(n)}</span>`).join("")}</div>`, lo: "11 ອ່ານວ່າ ສິບເອັດ ບໍ່ແມ່ນ ສິບໜຶ່ງ · 20 ອ່ານວ່າ ຊາວ", th: "11 อ่านว่า สิบเอ็ด 20 อ่านว่า ซาว (ภาษาลาว)" },
+      { vis: P.line(0, 20, { mark: 13 }), lo: "ນີ້ແມ່ນເສັ້ນຈຳນວນ · ເລີ່ມຈາກ 0 · ໄປທາງຂວາຫຼາຍຂຶ້ນເທື່ອລະ 1", th: "นี่คือเส้นจำนวน เริ่มจาก 0 ไปทางขวามากขึ้นทีละ 1" },
+      { vis: P.col(P.bundle(2), P.eq([12, "+", 3, "=", { v: 15 }])), lo: "12 + 3: ບວກໃສ່ສ່ວນທີ່ເຫຼືອ 2 + 3 = 5 · 10 ກັບ 5 ເປັນ 15 · ມັດ 10 ບໍ່ຕ້ອງແຕະ", th: "12 + 3 บวกที่ส่วนเศษ 2 + 3 = 5 แล้ว 10 กับ 5 เป็น 15 มัดสิบไม่ต้องแตะ" },
+    ],
+    quiz() {
+      const k = pick(["count", "make", "split", "line", "cmp", "calc", "calc"]);
+      if (k === "count") {
+        const n = rnd(11, 20), t = pick(THINGS);
+        return { sig: "c" + n, text: `ມີ${t.lo}ຈັກ${t.c}?`, th: `มี${t.th}กี่${t.tc}`, vis: P.items(t.e, n), choices: nums(n, 10, 20), answer: n,
+          why: `10 ກັບ ${n - 10} ເປັນ ${n}`, whyTh: `10 กับ ${n - 10} เป็น ${n}`, hint: "ນັບໃຫ້ຮອດ 10 ກ່ອນ ແລ້ວນັບສ່ວນທີ່ເຫຼືອ", hintTh: "นับให้ครบ 10 ก่อน แล้วนับส่วนที่เหลือ", hintVis: P.frame([[10, "c1"], [n - 10, "c2"]]) };
+      }
+      if (k === "make") {
+        const o = rnd(1, 10), n = 10 + o;
+        return { sig: "m" + o, text: `10 ກັບ ${o} ເປັນເທົ່າໃດ?`, th: `10 กับ ${o} เป็นเท่าไร`, vis: P.split("?", 10, o, "w"), choices: nums(n, 10, 20), answer: n,
+          why: `10 ກັບ ${o} ຂຽນເປັນ ${n} · ${READ(n)}`, whyTh: `10 กับ ${o} เขียนเป็น ${n}`, hint: `ບໍ່ແມ່ນ 10${o} · ຂຽນ 1 ແທນ 10 ແລ້ວຕາມດ້ວຍ ${o}`, hintTh: "ไม่ใช่เขียน 10 ต่อด้วยเลข ให้เขียน 1 แล้วตามด้วยเศษ", hintVis: P.bundle(o) };
+      }
+      if (k === "split") {
+        const n = rnd(11, 19), o = n - 10;
+        return { sig: "s" + n, text: `${n} ແມ່ນ 10 ກັບຈັກ?`, th: `${n} คือ 10 กับเท่าไร`, vis: P.split(n, 10, o, "b"), choices: nums(o, 0, 10), answer: o,
+          why: `${n} ແມ່ນ 10 ກັບ ${o}`, whyTh: `${n} คือ 10 กับ ${o}`, hint: "ນັບ 10 ອັນທຳອິດອອກ ແລ້ວນັບທີ່ເຫຼືອ", hintTh: "แยก 10 อันแรกออก แล้วนับที่เหลือ", hintVis: P.frame([[10, "c1"], [o, "c2"]]) };
+      }
+      if (k === "line") {
+        const from = pick([10, 12, 15]), up = Math.random() < 0.6, d = rnd(1, 5), to = up ? from + d : from - d;
+        return { sig: "l" + from + up + d, text: up ? `ຈຳນວນທີ່ຫຼາຍກວ່າ ${from} ຢູ່ ${d} ຂີດໝາຍ ແມ່ນເທົ່າໃດ?` : `ຈຳນວນທີ່ໜ້ອຍກວ່າ ${from} ຢູ່ ${d} ຂີດໝາຍ ແມ່ນເທົ່າໃດ?`, th: up ? `จำนวนที่มากกว่า ${from} อยู่ ${d} ขีด` : `จำนวนที่น้อยกว่า ${from} อยู่ ${d} ขีด`,
+          vis: P.line(5, 20, { mark: from }), choices: nums(to, 0, 20), answer: to, why: `${up ? "ໄປທາງຂວາ" : "ໄປທາງຊ້າຍ"} ${d} ຂີດ ຮອດ ${to}`, whyTh: `${up ? "ไปทางขวา" : "ไปทางซ้าย"} ${d} ขีด ถึง ${to}`,
+          hint: up ? "ຫຼາຍກວ່າ ໃຫ້ຍ່າງໄປທາງຂວາ" : "ໜ້ອຍກວ່າ ໃຫ້ຍ່າງໄປທາງຊ້າຍ", hintTh: up ? "มากกว่าให้เดินไปทางขวา" : "น้อยกว่าให้เดินไปทางซ้าย", hintVis: P.line(5, 20, { hops: [{ from, to, label: (up ? "+" : "−") + d }], mark: from }) };
+      }
+      if (k === "cmp") {
+        const a = rnd(0, 20); let b = rnd(0, 20); if (b === a) b = a < 20 ? a + 1 : a - 1;
+        const ans = a > b ? ">" : "<";
+        return { sig: "y" + a + b, text: "ໃສ່ເຄື່ອງໝາຍ > ຫຼື <", th: "ใส่เครื่องหมาย มากกว่า หรือ น้อยกว่า", vis: P.eq([a, "?", b]), choices: opts([[">", ">", "ຫຼາຍກວ່າ"], ["<", "<", "ໜ້ອຍກວ່າ"]]), answer: ans,
+          why: `${a} ${ans} ${b}`, whyTh: `${a} ${ans === ">" ? "มากกว่า" : "น้อยกว่า"} ${b}`, hint: "ປາກແຂ້ອ້າໃສ່ເລກທີ່ໃຫຍ່ກວ່າ · ເລກໃຫຍ່ຢູ່ທາງຂວາຂອງເສັ້ນຈຳນວນ", hintTh: "ปากจระเข้อ้าใส่เลขที่มากกว่า เลขมากอยู่ทางขวาของเส้นจำนวน", hintVis: P.line(Math.max(0, Math.min(a, b) - 1), Math.min(20, Math.max(a, b) + 1), { mark: Math.max(a, b) }) };
+      }
+      const f = pick(["10+n", "teen-n", "teen-10", "teen+n"]);
+      let a, b, op, ans;
+      if (f === "10+n") { a = 10; b = rnd(1, 9); op = "+"; ans = a + b; }
+      else if (f === "teen-10") { a = rnd(11, 19); b = 10; op = "−"; ans = a - 10; }
+      else if (f === "teen-n") { a = rnd(12, 19); b = rnd(1, a - 10); op = "−"; ans = a - b; }
+      else { a = rnd(11, 16); b = rnd(1, 19 - a); op = "+"; ans = a + b; }
+      const o = a % 10;
+      return { sig: "k" + a + op + b, text: `${a} ${op} ${b} = ?`, th: `${a} ${op} ${b} เท่ากับเท่าไร`, vis: P.eq([a, op, b, "=", "?"]), choices: nums(ans, 0, 20), answer: ans,
+        why: `${a} ${op} ${b} = ${ans}`, whyTh: `${a} ${op} ${b} = ${ans}`, hint: b === 10 ? "ເອົາມັດ 10 ອອກ ຍັງເຫຼືອສ່ວນທີ່ເຫຼືອ" : "ມັດ 10 ບໍ່ຕ້ອງແຕະ · ຄິດໄລ່ແຕ່ສ່ວນທີ່ເຫຼືອ", hintTh: b === 10 ? "เอามัดสิบออก ก็เหลือเศษ" : "มัดสิบไม่ต้องแตะ คิดเฉพาะส่วนเศษ", hintVis: P.bundle(o || (op === "+" ? 0 : 0)) };
+    },
+    parent: {
+      book: [
+        "หน้า 72–73: นับคุกกี้ 13 ชิ้น และฝาขวด 16 อัน ด้วยหลัก “ครบ 10 แล้ว นับส่วนที่เหลือ” → “10 ກັບ 6 ເປັນ 16” พร้อมคำเตือนว่า “ห้ามเขียน 106”",
+        "หน้า 74–77: มัดไม้ 10 อันด้วยยาง แล้วนับเศษ ตารางอ่านเลข 10–20 (ສິບ, ສິບເອັດ … ຊາວ) และแบบฝึกนับ/แยกจำนวน เช่น 17 → 10 กับ 7",
+        "หน้า 78–79: เส้นจำนวน 0–20 (ເສັ້ນຈຳນວນ) สังเกตว่าเริ่มที่ 0 และไปทางขวามากขึ้นทีละ 1 · นับต่อจากเพื่อน และนับทีละ 2",
+        "หน้า 80–81: 10 + 5, 15 − 5, 15 − 10 และ 12 + 3, 15 − 3 โดยไม่แตะมัดสิบ คิดเฉพาะเศษ · หน้า 76–77 มีเปรียบเทียบด้วย > <",
+        "หน้า 82–83: สรุปบท และทบทวนบวกลบที่ผ่านมา",
+      ],
+      idea: { lo: "ມີ 10 ແລ້ວ, ນັບສ່ວນທີ່ເຫຼືອວ່າມີຈັກອັນ · 10 ກັບ 6 ບໍ່ໃຫ້ຂຽນເປັນ 106 ເດີ", th: "ครบ 10 แล้ว นับส่วนที่เหลือว่ามีกี่อัน · 10 กับ 6 อย่าเขียนเป็น 106 — บทนี้ไม่ใช้ตารางหลักสิบหลักหน่วย ใช้แค่ “10 ກັບ 6” และมัดไม้" },
+      home: [
+        "ใช้ไม้จิ้มฟันหรือหลอด มัดทีละ 10 ด้วยหนังยาง ให้ลูกนับของจริงเกิน 10 แล้วบอกว่า “10 ກັບ __ ເປັນ __”",
+        "ฝึกอ่าน 11–20 เป็นภาษาลาวให้ถูก โดยเฉพาะ ສິບເອັດ (11) และ ຊາວ (20)",
+        "วาดเส้นจำนวน 0–20 บนกระดาษยาว ให้ลูกเดินนิ้ว “มากกว่า 3 ขีด” ไปทางขวา “น้อยกว่า” ไปทางซ้าย",
+        "ถามเร็ว ๆ วันละนิด: “14 คือ 10 กับเท่าไร” “10 กับ 7 เป็นเท่าไร” ต้องตอบได้ทันที เพราะบทที่ 12 และ 14 ใช้เรื่องนี้ทั้งหมด",
+      ],
+      watch: [
+        "เขียน 106 แทน 16 (หนังสือเตือนตรง ๆ)",
+        "นับภาพที่กระจัดกระจายแล้วหลง ให้ลูกวงกลมล้อมให้ครบ 10 ก่อน",
+        "อ่าน 11 ว่า “ສິບໜຶ່ງ” ที่ถูกคือ ສິບເອັດ",
+        "เส้นจำนวนที่เขียนเลขแค่ 0, 5, 10, 15, 20 ต้องนับขีดจากเลขที่ใกล้ที่สุด และลืมว่าเส้นเริ่มที่ 0",
+      ],
+      words: "ມີ 10 ແລ້ວ = ครบ 10 แล้ว · ສ່ວນທີ່ເຫຼືອ = ส่วนที่เหลือ · ຂຽນເປັນ / ອ່ານວ່າ = เขียนเป็น อ่านว่า · ເສັ້ນຈຳນວນ = เส้นจำนวน · ຂີດໝາຍ = ขีด · ເບື້ອງຂວາ / ເບື້ອງຊ້າຍ = ทางขวา ทางซ้าย · ຫຼາຍກວ່າ > / ໜ້ອຍກວ່າ < = มากกว่า น้อยกว่า",
+      game: "เมืองริมทะเล 🏖️ (นับ 11–20 และเติมให้ครบ 10) และเมืองท่าเรือ ⚓ (เปรียบเทียบ > < = ถึง 20)",
+    },
+  });
+
+  /* ===== Chapter 8: time (book pp. 84–85) ===== */
+  const timeLo = (h, half) => `${h} ໂມງ${half ? "ເຄິ່ງ" : ""}`;
+  const timeTh = (h, half) => `${h} โมง${half ? "ครึ่ง" : ""}`;
+  CH.push({
+    id: 8, lo: "ເວລາ", th: "เวลา (การดูนาฬิกา)", pages: "84–85",
+    learn: [
+      { vis: P.clock(7, 0), lo: "ເຂັມສັ້ນ (ສີແດງ) ແມ່ນເຂັມຊີ້ບອກຊົ່ວໂມງ · ຊີ້ໃສ່ 7 · ແມ່ນ 7 ໂມງ", th: "เข็มสั้นสีแดงบอกชั่วโมง ชี้ที่ 7 คือ 7 โมง" },
+      { vis: P.clock(7, 30), lo: "ເຂັມສັ້ນຊີ້ໃສ່ລະຫວ່າງກາງຂອງ 7 ກັບ 8 · ແມ່ນ 7 ໂມງເຄິ່ງ", th: "เข็มสั้นชี้ตรงกลางระหว่าง 7 กับ 8 คือ 7 โมงครึ่ง" },
+      { vis: P.clock(8, 0), lo: "ເຂັມສັ້ນຊີ້ໃສ່ 8 · ແມ່ນ 8 ໂມງ · ເຖິງເວລາເຂົ້າຮຽນແລ້ວ", th: "เข็มสั้นชี้ที่ 8 คือ 8 โมง ถึงเวลาเข้าเรียนแล้ว" },
+      { vis: P.row(P.clock(2, 30), P.clock(12, 30)), lo: "ຖ້າເຂັມສັ້ນຢູ່ລະຫວ່າງກາງ ໃຫ້ອ່ານເລກທີ່ນ້ອຍກວ່າ ແລ້ວຕື່ມ ເຄິ່ງ · 2 ໂມງເຄິ່ງ · 12 ໂມງເຄິ່ງ", th: "ถ้าเข็มสั้นอยู่ตรงกลาง ให้อ่านเลขที่มาก่อน แล้วเติมคำว่าครึ่ง" },
+    ],
+    quiz() {
+      const h = rnd(1, 12), half = Math.random() < 0.5;
+      const opts = new Map([[timeLo(h, half), true]]);
+      const others = shuffle([[h, !half], [h % 12 + 1, half], [(h + 10) % 12 + 1, half], [h % 12 + 1, false]]);
+      for (const [hh, hf] of others) { if (opts.size >= 3) break; if (!opts.has(timeLo(hh, hf))) opts.set(timeLo(hh, hf), false); }
+      const choices = shuffle([...opts.keys()]).map((l) => ({ label: l, value: l, say: l }));
+      return { sig: "t" + h + half, kind: "word", text: "ໂມງນີ້ແມ່ນຈັກໂມງ?", th: "นาฬิกานี้กี่โมง", vis: P.clock(h, half ? 30 : 0), choices, answer: timeLo(h, half),
+        why: `ແມ່ນ ${timeLo(h, half)}`, whyTh: timeTh(h, half), hint: half ? "ເບິ່ງເຂັມສັ້ນ: ຢູ່ລະຫວ່າງກາງສອງເລກ · ອ່ານເລກທີ່ນ້ອຍກວ່າ ແລ້ວຕື່ມ ເຄິ່ງ" : "ເບິ່ງແຕ່ເຂັມສັ້ນສີແດງ ມັນຊີ້ໃສ່ເລກໃດ?", hintTh: half ? "ดูเข็มสั้น อยู่ตรงกลางสองเลข อ่านเลขที่มาก่อนแล้วเติมครึ่ง" : "ดูเฉพาะเข็มสั้นสีแดง ชี้ที่เลขอะไร" };
+    },
+    parent: {
+      book: [
+        "หน้า 84: ภาพชีวิตประจำวันพร้อมนาฬิกา: ออกจากบ้าน 7:00 · เดินไปโรงเรียน 7:30 · เข้าเรียน 8:00 และกรอบ “ວິທີອ່ານເວລາໃນໂມງ (ໂມງ, ໂມງເຄິ່ງ)”",
+        "สอนแค่ “ตรงชั่วโมง” (ໂມງ) และ “ครึ่งชั่วโมง” (ໂມງເຄິ່ງ) เท่านั้น ยังไม่มีนาที ไม่มีสิบห้านาที",
+        "หน้า 85: เล่น 10:00 · เรียน 2:30 · กลับบ้าน 4:30 · แบบฝึกเลือกนาฬิกาที่เป็น 6 โมง และ 11 โมงครึ่ง และอ่านนาฬิกา 12 เรือน",
+      ],
+      idea: { lo: "ເຂັມສັ້ນ ແມ່ນເຂັມຊີ້ບອກຊົ່ວໂມງ · ຊີ້ໃສ່ 7 → 7 ໂມງ · ຊີ້ໃສ່ລະຫວ່າງກາງຂອງ 7 ກັບ 8 → 7 ໂມງເຄິ່ງ", th: "เข็มสั้นคือเข็มบอกชั่วโมง ชี้ที่ 7 คือ 7 โมง ชี้กลางระหว่าง 7 กับ 8 คือ 7 โมงครึ่ง (เข็มยาวอยู่ที่ 12 หรือ 6 เท่านั้น)" },
+      home: [
+        "ใช้นาฬิกาเข็มจริงในบ้าน (หรือวาดบนจานกระดาษ) ให้ลูกหมุนเข็มสั้นเอง แล้วอ่าน “X ໂມງ / X ໂມງເຄິ່ງ”",
+        "ผูกเวลากับกิจวัตร: ตื่น 6 โมง · ไปโรงเรียน 7 โมงครึ่ง · กินข้าวเที่ยง 12 โมง ถามลูกทุกวัน",
+        "เวลาครึ่ง ให้ลูกพูดเลขที่มาก่อน (เลขน้อยกว่า) แล้วเติม ເຄິ່ງ",
+      ],
+      watch: [
+        "อ่านเข็มยาวเป็นชั่วโมง (เห็น 7:30 แล้วตอบ 6)",
+        "เวลาครึ่งไปอ่านเลขถัดไป (7:30 ตอบ 8 โมงครึ่ง)",
+        "12:30 เข็มสั้นอยู่ระหว่าง 12 กับ 1 คือ “12 ໂມງເຄິ່ງ”",
+      ],
+      words: "ເວລາ = เวลา · ໂມງ = โมง/นาฬิกา · ເຄິ່ງ = ครึ่ง · ເຂັມສັ້ນ = เข็มสั้น · ຊົ່ວໂມງ = ชั่วโมง · ຊີ້ໃສ່ = ชี้ที่ · ລະຫວ່າງກາງ = ตรงกลางระหว่าง",
+      game: "เกมยังไม่มีเรื่องเวลา ฝึกในหน้านี้และกับนาฬิกาจริงที่บ้าน",
+    },
+  });
+
+  /* ===== Chapter 9: shapes of things around us (book pp. 86–89) ===== */
+  const OBJ3 = [
+    { e: "📦", g: "box", lo: "ກ່ອງ" }, { e: "🧃", g: "box", lo: "ກ່ອງນ້ຳ" }, { e: "🎁", g: "box", lo: "ກ່ອງຂອງຂວັນ" },
+    { e: "⚽", g: "ball", lo: "ໝາກບານ" }, { e: "🍊", g: "ball", lo: "ໝາກກ້ຽງ" }, { e: "🏀", g: "ball", lo: "ໝາກບານບ້ວງ" },
+    { e: "🥫", g: "can", lo: "ກະປ໋ອງ" }, { e: "🧻", g: "can", lo: "ມ້ວນເຈ້ຍ" }, { e: "🥤", g: "can", lo: "ຈອກ" },
+  ];
+  const GROUP = { box: "ແບບກ່ອງ", ball: "ແບບໝາກບານ", can: "ແບບກະປ໋ອງ" };
+  CH.push({
+    id: 9, lo: "ຮູບຮ່າງຂອງສິ່ງຕ່າງໆທີ່ຢູ່ອ້ອມຕົວເຮົາ", th: "รูปทรงของสิ่งของรอบตัว", pages: "86–89",
+    learn: [
+      { vis: P.row(P.shape("box"), P.shape("can"), P.shape("ball")), lo: "ສິ່ງຂອງອ້ອມຕົວເຮົາ ມີຮູບຮ່າງຫຼາຍແບບ: ແບບກ່ອງ ແບບກະປ໋ອງ ແລະ ແບບໝາກບານ", th: "ของรอบตัวมีหลายรูปทรง แบบกล่อง แบบกระป๋อง และแบบลูกบอล" },
+      { vis: P.row(P.shape("ball"), P.shape("can")), lo: "ຮູບຮ່າງໃດກິ້ງໄດ້? · ໝາກບານກິ້ງໄດ້ທຸກທາງ · ກະປ໋ອງກິ້ງໄດ້ເມື່ອວາງນອນ", th: "อะไรกลิ้งได้ ลูกบอลกลิ้งได้ทุกทาง กระป๋องกลิ้งได้เมื่อวางนอน" },
+      { vis: P.row(P.shape("box"), P.shape("cube")), lo: "ຮູບຮ່າງໃດມີໜ້າພຽງ? · ກ່ອງມີໜ້າພຽງທຸກດ້ານ ວາງຊ້ອນກັນໄດ້ · ກະປ໋ອງກໍມີໜ້າພຽງຢູ່ເທິງ ແລະ ລຸ່ມ", th: "อะไรมีหน้าแบน กล่องมีหน้าแบนทุกด้าน วางซ้อนได้ กระป๋องมีหน้าแบนด้านบนและล่าง" },
+      { vis: P.row(P.shape("can", 70), `<div class="eq">→</div>`, P.shape("circle", 70), P.shape("box", 70), `<div class="eq">→</div>`, P.shape("rect", 70)), lo: "ເອົາກະປ໋ອງມາແຕ້ມຕາມ ໄດ້ຮູບວົງມົນ · ເອົາໜ້າຂອງກ່ອງມາແຕ້ມ ໄດ້ຮູບສີ່ແຈ", th: "เอากระป๋องมาวาดตามขอบได้วงกลม เอาหน้ากล่องมาวาดได้สี่เหลี่ยม" },
+    ],
+    quiz() {
+      const k = pick(["roll", "group", "group", "flat"]);
+      if (k === "group") {
+        const o = pick(OBJ3);
+        return { sig: "g" + o.e, kind: "pic", text: `${o.lo} ຢູ່ກຸ່ມດຽວກັບຮູບໃດ?`, th: "อยู่กลุ่มเดียวกับรูปไหน", vis: `<div class="eq" style="font-size:64px">${o.e}</div>`,
+          choices: ["box", "ball", "can"].map((g) => ({ label: P.shape(g, 64), value: g, say: GROUP[g] })), answer: o.g,
+          why: `${o.lo} ແມ່ນ${GROUP[o.g]}`, whyTh: "ถูกต้อง", hint: o.g === "ball" ? "ມັນກົມທຸກດ້ານ ກິ້ງໄດ້ທຸກທາງບໍ່?" : o.g === "can" ? "ມັນກິ້ງໄດ້ເມື່ອວາງນອນ ແລະ ມີໜ້າພຽງຢູ່ເທິງ ລຸ່ມ" : "ມັນມີໜ້າພຽງທຸກດ້ານ ແລະ ມີແຈ", hintTh: "ดูว่ากลิ้งได้ไหม มีหน้าแบนไหม" };
+      }
+      const roll = k === "roll";
+      const right = roll ? pick(["ball", "can"]) : pick(["box", "cube"]);
+      const wrong = roll ? pick(["box", "cube"]) : "ball";
+      const choices = shuffle([right, wrong]).map((g) => ({ label: P.shape(g, 64), value: g, say: g }));
+      return { sig: k + right + wrong, kind: "pic", text: roll ? "ອັນໃດກິ້ງໄດ້?" : "ອັນໃດວາງຊ້ອນກັນໄດ້ ເພາະມີໜ້າພຽງ?", th: roll ? "อันไหนกลิ้งได้" : "อันไหนวางซ้อนกันได้", choices, answer: right,
+        why: roll ? "ອັນທີ່ກົມ ກິ້ງໄດ້" : "ໜ້າພຽງ ວາງຊ້ອນກັນໄດ້", whyTh: roll ? "ทรงกลมกลิ้งได้" : "หน้าแบนวางซ้อนได้", hint: roll ? "ອັນທີ່ມີແຈ ກິ້ງບໍ່ໄດ້" : "ອັນທີ່ກົມທຸກດ້ານ ຈະກິ້ງຕົກ", hintTh: roll ? "อันที่มีมุมกลิ้งไม่ได้" : "อันที่กลมทุกด้านจะกลิ้งตก" };
+    },
+    parent: {
+      book: [
+        "หน้า 86: เอากล่องและกระป๋องมาประกอบเป็นสิ่งต่าง ๆ (ยีราฟ รถ)",
+        "หน้า 87: สังเกตลักษณะพิเศษ: อันไหนกลิ้งได้ (ກິ້ງໄດ້) อันไหนมีหน้าแบน (ໜ້າພຽງ) แล้วแบ่งเป็น 3 กลุ่ม: แบบกล่อง · แบบลูกบอล · แบบกระป๋อง",
+        "หน้า 88: วาดรูปโดยวาดตามขอบก้นกระป๋อง (ได้วงกลม) และหน้ากล่อง (ได้สี่เหลี่ยม)",
+        "หน้า 89: ทบทวนบวกลบ (มี 9 + 3 = 12 โผล่มาก่อนบทที่ 12) และโจทย์ดินสอ 10 แท่ง ใช้ไป 3",
+        "หนังสือยังไม่สอนชื่อทางการ (ทรงกระบอก ทรงกลม) ใช้แค่ “กล่อง กระป๋อง ลูกบอล”",
+      ],
+      idea: { lo: "ຮູບຮ່າງໃດທີ່ກິ້ງໄດ້? ຮູບຮ່າງໃດທີ່ມີໜ້າເປັນໜ້າພຽງ? ມາສັງເກດເບິ່ງຈຸດພິເສດ ແລ້ວຈັດແບ່ງເປັນກຸ່ມ", th: "รูปทรงไหนกลิ้งได้ รูปทรงไหนมีหน้าแบน สังเกตลักษณะพิเศษแล้วแบ่งกลุ่ม" },
+      home: [
+        "เก็บกล่องนม กระป๋อง ลูกบอล ส้ม มาให้ลูกลองกลิ้ง ลองวางซ้อน แล้วแบ่งเป็น 3 กลุ่ม",
+        "ให้ลูกต่อหุ่นยนต์หรือรถจากกล่องและกระป๋อง แล้วเล่าว่าใช้รูปทรงอะไร",
+        "วางกระป๋องและกล่องบนกระดาษ วาดตามขอบ ดูว่าได้วงกลมหรือสี่เหลี่ยม",
+      ],
+      watch: [
+        "กระป๋องทั้ง “กลิ้งได้” และ “มีหน้าแบน” เด็กมักเลือกได้แค่อย่างเดียว",
+        "กล่องที่ยาว/แบน ก็ยังอยู่กลุ่มกล่อง (รูปร่างต่างแต่ลักษณะเหมือนกัน)",
+      ],
+      words: "ຮູບຮ່າງ = รูปทรง · ກ່ອງ = กล่อง · ກະປ໋ອງ = กระป๋อง · ກິ້ງໄດ້ = กลิ้งได้ · ໜ້າພຽງ = หน้าแบน · ຈັດແບ່ງເປັນກຸ່ມ = แบ่งกลุ่ม · ແຕ້ມ = วาด",
+      game: "บทนี้ฝึกกับของจริงดีที่สุด เกมยังไม่มีเรื่องรูปทรง",
+    },
+  });
+
+  /* ===== Chapter 10: calculations with 3 numbers (book pp. 90–94) ===== */
+  function three() {
+    for (;;) {
+      const kind = pick(["++", "--", "-+", "+-"]), a = rnd(1, 9), b = rnd(1, 9), c = rnd(1, 9);
+      const s1 = kind[0] === "+" ? a + b : a - b; if (s1 < 0 || s1 > 10) continue;
+      const s2 = kind[1] === "+" ? s1 + c : s1 - c; if (s2 < 0 || s2 > 10) continue;
+      return { kind, a, b, c, s1, s2 };
+    }
+  }
+  const opSym = (o) => (o === "+" ? "+" : "−");
+  CH.push({
+    id: 10, lo: "ການຄິດໄລ່ຂອງ 3 ຈຳນວນ", th: "การคำนวณ 3 จำนวน", pages: "90–94",
+    learn: [
+      { vis: P.items("🐱", 3), lo: "ໃນລົດເມ ມີແມວ 3 ໂຕແລ້ວ", th: "บนรถเมล์มีแมว 3 ตัวแล้ว" },
+      { vis: P.row(P.items("🐱", 3), P.lbl("+"), P.items("🐱", 2)), lo: "ມີແມວ 2 ໂຕຂຶ້ນອີກ · 3 + 2 = 5", th: "มีแมวขึ้นมาอีก 2 ตัว 3 + 2 = 5" },
+      { vis: P.row(P.items("🐱", 5), P.lbl("+"), P.items("🐱", 4)), lo: "ມີແມວ 4 ໂຕຂຶ້ນຕື່ມອີກ · 5 + 4 = 9", th: "ขึ้นมาอีก 4 ตัว 5 + 4 = 9" },
+      { vis: P.col(P.eq([3, "+", 2, "+", 4, "=", { v: 9 }]), `<div class="lbl">3 + 2 = 5 → 5 + 4 = 9</div>`), lo: "ຂຽນເປັນປະໂຫຍກດຽວ 3 + 2 + 4 = 9 · ຄິດໄລ່ຕາມລຳດັບ ຈາກເບື້ອງຊ້າຍເດີ", th: "เขียนเป็นประโยคเดียว 3 + 2 + 4 = 9 คิดตามลำดับจากซ้ายไปขวา" },
+      { vis: P.col(P.eq([8, "−", 3, "−", 2, "=", { v: 3 }]), `<div class="lbl">8 − 3 = 5 → 5 − 2 = 3</div>`), lo: "ມີແມວ 8 ໂຕ ລົງ 3 ໂຕ ແລ້ວລົງອີກ 2 ໂຕ · 8 − 3 − 2 = 3", th: "มีแมว 8 ตัว ลง 3 ตัว แล้วลงอีก 2 ตัว 8 − 3 − 2 = 3" },
+      { vis: P.col(P.eq([5, "−", 3, "+", 4, "=", { v: 6 }]), `<div class="lbl">5 − 3 = 2 → 2 + 4 = 6</div>`), lo: "ລົງກ່ອນ ແລ້ວຂຶ້ນອີກ: 5 − 3 = 2 ແລ້ວ 2 + 4 = 6", th: "ลงก่อนแล้วขึ้น 5 − 3 = 2 แล้ว 2 + 4 = 6" },
+    ],
+    quiz() {
+      const { kind, a, b, c, s1, s2 } = three(), o1 = opSym(kind[0]), o2 = opSym(kind[1]);
+      return { sig: `${a}${kind}${b}${c}`, text: `${a} ${o1} ${b} ${o2} ${c} = ?`, th: `${a} ${o1} ${b} ${o2} ${c} เท่ากับเท่าไร`, vis: P.eq([a, o1, b, o2, c, "=", "?"]), choices: nums(s2, 0, 10), answer: s2,
+        why: `${a} ${o1} ${b} = ${s1} · ${s1} ${o2} ${c} = ${s2}`, whyTh: `${a} ${o1} ${b} = ${s1} แล้ว ${s1} ${o2} ${c} = ${s2}`,
+        hint: `ຄິດຈາກຊ້າຍກ່ອນ: ${a} ${o1} ${b} ເທົ່າກັບຈັກ?`, hintTh: `คิดจากซ้ายก่อน ${a} ${o1} ${b} เท่ากับเท่าไร`, hintVis: P.eq([a, o1, b, "=", { v: s1 }]) };
+    },
+    parent: {
+      book: [
+        "หน้า 90: เรื่องแมวขึ้นรถเมล์ 2 ตัว ขึ้นอีก 1 ขึ้นอีก 3 → เขียน 2 + 1 + 3",
+        "หน้า 91: บวก-บวก 3 + 2 + 4 = 9 · หน้า 92: ลบ-ลบ 8 − 3 − 2 = 3 · หน้า 93: ลบแล้วบวก 5 − 3 + 4 = 6 · หน้า 94: บวกแล้วลบ 5 + 3 − 1 = 7",
+        "แบบฝึกซ่อนการเตรียมบทถัดไป เช่น 9 + 1 + 3 (ทำให้ครบ 10 ก่อน) และ 10 − 9 + 3 (วิธีลบข้ามสิบในบทที่ 14)",
+        "หน้า 94 โจทย์ท้าทาย: เติมเลข □ + □ + □ = 10 (มีหลายคำตอบ)",
+      ],
+      idea: { lo: "ຄິດໄລ່ຕາມລຳດັບ ຈາກເບື້ອງຊ້າຍເດີ", th: "คิดตามลำดับจากซ้ายไปขวา ทีละขั้น จดผลขั้นแรกไว้ได้" },
+      home: [
+        "เล่นรถเมล์ด้วยตุ๊กตา: ขึ้น ลง ทีละรอบ ให้ลูกบอกจำนวนหลังแต่ละรอบ แล้วค่อยเขียนเป็นประโยคเดียว",
+        "ให้ลูกเขียนผลขั้นแรกเล็ก ๆ ไว้ใต้โจทย์ (เช่น เขียน 5 ใต้ 3 + 2) แล้วค่อยทำขั้นต่อไป",
+        "ฝึกคู่ที่รวมกันได้ 10 ให้คล่อง (1+9, 2+8, 3+7, 4+6, 5+5) เตรียมบทที่ 12",
+      ],
+      watch: [
+        "เห็นมีเครื่องหมายลบแต่บวกทั้งสามตัว",
+        "ทำขั้นที่สองก่อน (ไม่ไล่จากซ้าย)",
+      ],
+      words: "ຂຶ້ນ = ขึ้น (รถ) · ລົງ = ลง · ອີກ / ຕື່ມອີກ = อีก เพิ่มอีก · ຕາມລຳດັບ = ตามลำดับ · ຈາກເບື້ອງຊ້າຍ = จากทางซ้าย · ສຸດທ້າຍ = สุดท้าย",
+      game: "เมืองหุ่นยนต์ 🤖 สลับบวกลบ ช่วยให้คิดเครื่องหมายทุกข้อ",
+    },
+  });
+
+  /* ===== Chapter 11: comparing length (book pp. 95–98) ===== */
+  P.bars = (list) => `<div class="bars" aria-hidden="true">${list.map(([n, off, col, label]) => `<div class="row"><span class="lbl" style="min-width:26px">${label}</span><div class="strip" style="margin-left:calc(var(--u) * ${off})">${range(n).map(() => `<i style="background:${col}"></i>`).join("")}</div></div>`).join("")}</div>`;
+  CH.push({
+    id: 11, lo: "ການປຽບທຽບຄວາມຍາວ", th: "การเปรียบเทียบความยาว", pages: "95–98",
+    learn: [
+      { vis: P.bars([[7, 2, "var(--tomato)", "ກ"], [8, 0, "var(--sky)", "ຂ"]]), lo: "ສໍດຳກ້ານໃດຍາວກວ່າ? ເບິ່ງດ້ວຍຕາເປົ່າ ອາດຈະຜິດ ເພາະປາຍບໍ່ຢູ່ບ່ອນດຽວກັນ", th: "ดินสอแท่งไหนยาวกว่า ดูด้วยตาเปล่าอาจผิด เพราะปลายไม่ตรงกัน" },
+      { vis: P.bars([[7, 0, "var(--tomato)", "ກ"], [8, 0, "var(--sky)", "ຂ"]]), lo: "ກຳນົດສົ້ນໃຫ້ພຽງກັນ ແລ້ວເບິ່ງປາຍ · ຂ ຍາວກວ່າ", th: "วางปลายด้านหนึ่งให้ตรงกัน แล้วดูอีกปลาย ข ยาวกว่า" },
+      { vis: `<div class="eq" style="font-size:26px">〰️ → ➖</div>`, lo: "ເຊືອກທີ່ຄົດ ຕ້ອງເຮັດໃຫ້ຊື່ກ່ອນ ຈຶ່ງປຽບທຽບໄດ້ · ຖ້າເອົາມາວາງຄຽງກັນບໍ່ໄດ້ ໃຊ້ເຊືອກແທກແທນກໍໄດ້", th: "เชือกที่คดต้องดึงให้ตรงก่อน ถ้าเอามาวางเทียบกันไม่ได้ ใช้เชือกวัดแทนก็ได้" },
+      { vis: P.bars([[6, 0, "var(--leaf)", "ຈ"], [9, 0, "var(--grape)", "ສ"]]), lo: "ນັບຕາກາໂຮ: ຈ ຍາວ 6 ຕາ · ສ ຍາວ 9 ຕາ · ສ ຍາວກວ່າ 3 ຕາ", th: "นับช่องตาราง จ ยาว 6 ช่อง ส ยาว 9 ช่อง ส ยาวกว่า 3 ช่อง" },
+      { vis: `<div class="eq" style="font-size:40px">✋✋✋✋</div>`, lo: "ແທກໂຕະດ້ວຍຄືບມື ໄດ້ຈັກຄືບ? · ຕ້ອງໃຊ້ຫົວໜ່ວຍດຽວກັນ ແລະ ວາງຕໍ່ກັນບໍ່ໃຫ້ມີຊ່ອງວ່າງ", th: "วัดโต๊ะด้วยคืบมือได้กี่คืบ ต้องใช้หน่วยเดียวกัน วางต่อกันไม่เว้นช่อง" },
+    ],
+    quiz() {
+      const k = pick(["longer", "longer", "count", "diff"]);
+      if (k === "count") {
+        const n = rnd(3, 10);
+        return { sig: "n" + n, text: "ອັນນີ້ຍາວຈັກຕາກາໂຮ?", th: "ยาวกี่ช่อง", vis: P.bars([[n, 0, "var(--sky)", ""]]), choices: nums(n, 1, 12), answer: n,
+          why: `ຍາວ ${n} ຕາກາໂຮ`, whyTh: `ยาว ${n} ช่อง`, hint: "ນັບທີລະຕາ ແຕ່ຊ້າຍໄປຂວາ", hintTh: "นับทีละช่องจากซ้ายไปขวา" };
+      }
+      let a = rnd(3, 9), b = rnd(3, 9); if (a === b) b = a + 1;
+      if (k === "diff") {
+        const big = Math.max(a, b), small = Math.min(a, b);
+        return { sig: "d" + a + b, text: "ອັນໃດຍາວກວ່າກັນຈັກຕາ?", th: "ยาวกว่ากันกี่ช่อง", vis: P.bars([[a, 0, "var(--tomato)", "ກ"], [b, 0, "var(--sky)", "ຂ"]]), choices: nums(big - small, 0, 10), answer: big - small,
+          why: `${big} − ${small} = ${big - small} ຕາ`, whyTh: `${big} − ${small} = ${big - small} ช่อง`, hint: "ນັບແຕ່ຕາທີ່ຍາວເກີນມາ", hintTh: "นับเฉพาะช่องที่เกินออกมา" };
+      }
+      const offA = a < b ? rnd(1, 3) : 0, offB = b < a ? rnd(1, 3) : 0, ans = a > b ? "ກ" : "ຂ";
+      return { sig: "l" + a + b, kind: "word", text: "ອັນໃດຍາວກວ່າ?", th: "อันไหนยาวกว่า", vis: P.bars([[a, offA, "var(--tomato)", "ກ"], [b, offB, "var(--sky)", "ຂ"]]),
+        choices: opts([["ກ", "ກ"], ["ຂ", "ຂ"]]), answer: ans, why: `${ans} ຍາວກວ່າ`, whyTh: "ถูกต้อง", hint: "ຢ່າເບິ່ງແຕ່ປາຍ · ນັບຕາກາໂຮຂອງແຕ່ລະອັນ ຫຼື ວາງສົ້ນໃຫ້ພຽງກັນ", hintTh: "อย่าดูแค่ปลาย นับช่องของแต่ละอัน หรือวางปลายให้ตรงกัน",
+        hintVis: P.bars([[a, 0, "var(--tomato)", "ກ"], [b, 0, "var(--sky)", "ຂ"]]) };
+    },
+    parent: {
+      book: [
+        "หน้า 95–96: ดินสอสองแท่งที่ซ่อนปลายไว้ ดูด้วยตาเปล่ารู้ไหมว่าอันไหนยาวกว่า → วางปลายให้ตรงกัน (ກຳນົດສົ້ນໃຫ້ພຽງກັນ) และดึงเชือกให้ตรง (ເຮັດໃຫ້ຊື່)",
+        "หน้า 96: โต๊ะที่ยกมาเทียบกันไม่ได้ ใช้เชือกวัดแทน (เปรียบเทียบทางอ้อม)",
+        "หน้า 97: วัดด้วยหน่วยที่ไม่ใช่มาตรฐาน: คืบมือ (ຄືບ) และความยาวดินสอ (ເທື່ອ) แล้วหาว่ายาวกว่ากันเท่าไร",
+        "หน้า 98: นับช่องตาราง (ຕາກາໂຮ) ของดินสอ 6 แท่ง หายาวที่สุด/สั้นที่สุด · ต่อบล็อกสีไหนสูงที่สุด",
+      ],
+      idea: { lo: "ເມື່ອບໍ່ສາມາດປຽບທຽບຄວາມຍາວໂດຍກົງໄດ້ ແມ່ນໃຊ້ເຊືອກແທນກໍໄດ້ · ກຳນົດເອົາຄວາມຍາວ 1 ເທື່ອ ແລ້ວແທກວ່າມີຈັກເທື່ອ", th: "ถ้าเทียบตรง ๆ ไม่ได้ ใช้เชือกแทนได้ · กำหนดความยาว 1 หน่วย แล้ววัดว่าได้กี่หน่วย" },
+      home: [
+        "เทียบความยาวของช้อน ดินสอ ตะเกียบ: วางปลายด้านหนึ่งชิดขอบโต๊ะก่อนเสมอ",
+        "วัดโต๊ะ ประตู เตียง ด้วยคืบมือของลูก นับให้ดัง ๆ แล้วเทียบกับคืบมือพ่อแม่ (ได้ไม่เท่ากันเพราะมือไม่เท่ากัน)",
+        "ใช้เชือกวัดของที่ยกมาเทียบกันไม่ได้ เช่น ความกว้างประตูกับความยาวโต๊ะ",
+      ],
+      watch: [
+        "ตัดสินจากปลายที่ยื่นออกมา โดยไม่ดูว่าอีกปลายเริ่มตรงกันหรือไม่",
+        "คิดว่าเชือกที่คดสั้นกว่า",
+        "วัดด้วยหน่วยแล้ววางเว้นช่องหรือซ้อนกัน",
+        "“ยาวกว่ากันเท่าไร” ต้องใช้การลบ",
+      ],
+      words: "ຄວາມຍາວ = ความยาว · ຍາວກວ່າ / ຍາວທີ່ສຸດ / ສັ້ນທີ່ສຸດ = ยาวกว่า ยาวที่สุด สั้นที่สุด · ແທກ = วัด · ເຊືອກ = เชือก · ຄືບ = คืบ · ຕາກາໂຮ = ช่องตาราง · ສົ້ນ = ปลาย · ພຽງກັນ = ตรงกัน",
+      game: "เกมยังไม่มีเรื่องความยาว ฝึกในหน้านี้และวัดของจริง",
+    },
+  });
+
+  /* ===== Chapter 12: addition crossing 10, "make 10" (book pp. 99–110) ===== */
+  function make10Steps(a, b) {
+    const need = 10 - a, rest = b - need;
+    return {
+      need, rest,
+      lo: [`${a} ຍັງອີກ ${need} ຈະເທົ່າກັບ 10`, `ແບ່ງ ${b} ອອກເປັນ ${need} ກັບ ${rest}`, `ເອົາ ${need} ບວກໃສ່ ${a} ເທົ່າກັບ 10`, `10 ກັບ ${rest} ເທົ່າກັບ ${10 + rest}`],
+      th: [`${a} ขาดอีก ${need} จะครบ 10`, `แบ่ง ${b} เป็น ${need} กับ ${rest}`, `เอา ${need} บวก ${a} ได้ 10`, `10 กับ ${rest} ได้ ${10 + rest}`],
+    };
+  }
+  const m94 = make10Steps(9, 4), m83 = make10Steps(8, 3);
+  CH.push({
+    id: 12, lo: "ການບວກ (ຕໍ່)", th: "การบวก (ต่อ) ผลบวกเกิน 10", pages: "99–110",
+    learn: [
+      { vis: P.row(P.items("🍎", 9), P.lbl("+"), P.items("🍏", 4)), lo: "ໝາກໂປມແດງ 9 ໜ່ວຍ ໝາກໂປມຂຽວ 4 ໜ່ວຍ · ທັງໝົດມີຈັກໜ່ວຍ? · ນັບທຸກເທື່ອມັນຍາກ ມາເຮັດໃຫ້ເປັນ 10 ກ່ອນ", th: "แอปเปิ้ลแดง 9 เขียว 4 รวมกี่ลูก นับทุกครั้งมันยาก มาทำให้ครบ 10 ก่อน" },
+      { vis: P.frame([[9, "c1"], [0, ""]]) + `<div class="lbl">ຍັງອີກ 1 ຊ່ອງ</div>`, lo: `① ${m94.lo[0]}`, th: m94.th[0] },
+      { vis: P.col(P.eq([9, "+", 4]), P.split(4, 1, 3)), lo: `② ${m94.lo[1]}`, th: m94.th[1] },
+      { vis: P.frame([[9, "c1"], [1, "c2"], [3, "c2"]]), lo: `③ ${m94.lo[2]}`, th: m94.th[2] },
+      { vis: P.col(P.frame([[9, "c1"], [1, "c2"], [3, "c2"]]), P.eq([9, "+", 4, "=", { v: 13 }])), lo: `④ ${m94.lo[3]} · ດັ່ງນັ້ນ 9 + 4 = 13`, th: `${m94.th[3]} ดังนั้น 9 + 4 = 13` },
+      { vis: P.col(P.eq([8, "+", 3, "=", { v: 11 }]), P.split(3, 2, 1), P.frame([[8, "c1"], [2, "c2"], [1, "c2"]])), lo: `8 + 3: ${m83.lo.join(" · ")}`, th: m83.th.join(" ") },
+      { vis: P.col(P.eq([4, "+", 9, "=", { v: 13 }]), P.row(P.split(9, 6, 3), P.split(4, 3, 1))), lo: "4 + 9 ເຮັດໄດ້ 2 ແບບ: ແບ່ງ 9 ເປັນ 6 ກັບ 3 (4 + 6 = 10) · ຫຼື ແບ່ງ 4 ເປັນ 3 ກັບ 1 (1 + 9 = 10) · ໄດ້ 13 ຄືກັນ", th: "4 + 9 ทำได้สองแบบ แบ่ง 9 เป็น 6 กับ 3 หรือแบ่ง 4 เป็น 3 กับ 1 ได้ 13 เหมือนกัน" },
+    ],
+    quiz() {
+      const k = pick(["sum", "sum", "sum", "need", "split", "cmp"]);
+      const a = rnd(5, 9), b = rnd(11 - a, 9), s = a + b, m = make10Steps(a, b);
+      if (k === "need") return { sig: "n" + a, text: `${a} ຍັງອີກຈັກ ຈະເທົ່າກັບ 10?`, th: `${a} ขาดอีกเท่าไรจะครบ 10`, vis: P.frame([[a, "c1"]]), choices: nums(10 - a, 0, 10), answer: 10 - a,
+        why: `${a} + ${10 - a} = 10`, whyTh: `${a} + ${10 - a} = 10`, hint: "ນັບຊ່ອງທີ່ຍັງຫວ່າງ", hintTh: "นับช่องที่ยังว่าง" };
+      if (k === "split") return { sig: "p" + a + b, text: `${a} + ${b}: ແບ່ງ ${b} ເປັນ ${m.need} ກັບຈັກ?`, th: `${a} + ${b} แบ่ง ${b} เป็น ${m.need} กับเท่าไร`, vis: P.split(b, m.need, m.rest, "b"), choices: nums(m.rest, 0, 9), answer: m.rest,
+        why: `${b} ແມ່ນ ${m.need} ກັບ ${m.rest}`, whyTh: `${b} คือ ${m.need} กับ ${m.rest}`, hint: `ມີ ${b} ເອົາອອກ ${m.need} ຍັງເຫຼືອຈັກ?`, hintTh: `มี ${b} เอาออก ${m.need} เหลือเท่าไร`, hintVis: P.frame([[m.need, "gone"], [m.rest, "c2"]]) };
+      if (k === "cmp") {
+        const r = rnd(11, 18), ans = s > r ? ">" : s < r ? "<" : "=";
+        return { sig: "c" + a + b + r, text: "ໃສ່ເຄື່ອງໝາຍ > < ຫຼື =", th: "ใส่เครื่องหมาย", vis: `<div class="eq"><span>${a} + ${b}</span><span class="box">?</span><span>${r}</span></div>`,
+          choices: opts([[">", ">", "ຫຼາຍກວ່າ"], ["=", "=", "ເທົ່າກັບ"], ["<", "<", "ໜ້ອຍກວ່າ"]]), answer: ans, why: `${a} + ${b} = ${s} · ${s} ${ans} ${r}`, whyTh: `${a} + ${b} = ${s}`, hint: `ຄິດໄລ່ ${a} + ${b} ກ່ອນ ແລ້ວຈຶ່ງປຽບທຽບ`, hintTh: `คิด ${a} + ${b} ก่อนแล้วค่อยเทียบ` };
+      }
+      const swap = Math.random() < 0.25, x = swap ? b : a, y = swap ? a : b;
+      return { sig: "s" + x + y, text: `${x} + ${y} = ?`, th: `${x} + ${y} เท่ากับเท่าไร`, vis: P.eq([x, "+", y, "=", "?"]), choices: nums(s, 10, 18), answer: s,
+        why: m.lo.join(" · "), whyTh: m.th.join(" "), hint: m.lo[0] + " · " + m.lo[1], hintTh: m.th[0] + " " + m.th[1], hintVis: P.col(P.split(b, m.need, m.rest), P.frame([[a, "c1"], [m.need, "c2"], [m.rest, "c2"]])) };
+    },
+    parent: {
+      book: [
+        "หน้า 99: หมา 9 กับ 5 ตัว ย้ายหมา 1 ตัวไปรวมให้ครบ 10 · “นับได้ แต่นับทุกครั้งยากมาก”",
+        "หน้า 100–101: วิธีหลัก 9 + 4 ใช้ 4 ประโยค (ดูกรอบด้านล่าง) และวงรอบ 9 กับ 1 เป็น ⑩ · ฝึกพูดวิธีคิด 9 + 5 ออกเสียง และขยับฝาขวดจริงทำ 9 + 3",
+        "หน้า 102–104: 8 + 3 (ขาด 2) · 7 + 5 (ขาด 3) · 6 + 5, 5 + 6 · แถบฝึก 9 + □, 8 + □, 7 + □, 6 + □, 5 + □",
+        "หน้า 105: 4 + 9 ทำได้สองแบบ: ก) ทำ 10 จากตัวหน้า (แบ่ง 9 เป็น 6 กับ 3) ข) ทำ 10 จากตัวหลัง (แบ่ง 4 เป็น 3 กับ 1) ให้ลองทั้งสองแบบแล้วเช็กว่าได้เท่ากัน",
+        "หน้า 106–110: ฝึก 44 ข้อ · เปรียบเทียบผลบวกด้วย > < = · ตารางบวก 9×9 · โจทย์ปัญหา · สรุปและทบทวน (มีดูนาฬิกาและความยาวด้วย)",
+      ],
+      idea: { lo: "① 9 ແມ່ນຍັງອີກ 1 ຈະເທົ່າກັບ 10 ② ແບ່ງ 4 ອອກໃຫ້ເປັນ 1 ກັບ 3 ③ ເອົາ 1 ບວກ 9 ເທົ່າກັບ 10 ④ 10 ກັບ 3 ເທົ່າກັບ 13", th: "① 9 ขาดอีก 1 จะครบ 10 ② แบ่ง 4 เป็น 1 กับ 3 ③ เอา 1 บวก 9 ได้ 10 ④ 10 กับ 3 ได้ 13 — ให้ลูกพูดสี่ประโยคนี้ออกเสียงทุกครั้ง" },
+      home: [
+        "เตรียมฝาขวด 20 อัน วางแถวละ 10 ให้ลูกขยับฝาจากกลุ่มหลังไปเติมกลุ่มแรกให้ครบ 10 แบบเดียวกับภาพในหนังสือ",
+        "ให้ลูกพูด 4 ประโยคเป็นภาษาลาวทุกข้อ: “__ ຍັງອີກ __ ຈະເທົ່າກັບ 10 · ແບ່ງ __ ເປັນ __ ກັບ __ · … · 10 ກັບ __ ເທົ່າກັບ __”",
+        "ก่อนเริ่มบทนี้ ต้องคล่อง 3 อย่าง: คู่ที่รวมได้ 10 · การแยกเลขไม่เกิน 9 (บทที่ 4) · “10 กับ 3 เป็น 13” (บทที่ 7) ถ้ายังไม่คล่องให้ย้อนไปฝึกก่อน",
+        "เลขเล็ก + เลขใหญ่ (3 + 9) สอนให้สลับเป็น 9 + 3 ได้ ผลเท่ากัน",
+      ],
+      watch: [
+        "แยกผิดตัว (ไปแบ่งตัวแรกแทนตัวที่สองในแบบปกติ)",
+        "ทำครบ 10 แล้วลืมเศษที่เหลือ ตอบ 10",
+        "ยังนับนิ้วทีละ 1 ต่อจาก 9 (ได้คำตอบแต่ช้าและผิดง่าย)",
+      ],
+      words: "ຍັງອີກ 1 = ขาดอีก 1 · ຈະເທົ່າກັບ 10 = จะครบ 10 · ແບ່ງ … ອອກເປັນ = แบ่ง…ออกเป็น · ເອົາ … ມາບວກໃສ່ = เอา…มาบวกเข้า · ເຮັດໃຫ້ເປັນ 10 = ทำให้ครบ 10 · ຈຳນວນທີ່ຢູ່ທາງໜ້າ / ທາງຫຼັງ = ตัวหน้า ตัวหลัง",
+      game: "เมืองป่า 🌴 ด่าน 4 ขึ้นไปเป็นบวกข้ามสิบ (11–18) ถ้าลูกตอบผิด หมีน้อยจะพานับต่อให้ดู",
+    },
+  });
+
+  /* ===== Chapter 13: comparing amounts of water (book pp. 111–114) ===== */
+  P.glass = (w, h, level, col = "var(--sky)") => {
+    const x = (60 - w) / 2, y = 100 - h, wl = h * level;
+    return `<svg viewBox="0 0 60 104" width="${60}" height="104" aria-hidden="true"><rect x="${x}" y="${100 - wl}" width="${w}" height="${wl}" fill="${col}" opacity="0.75"/><path d="M${x} ${y} V100 H${x + w} V${y}" fill="none" stroke="var(--ink)" stroke-width="3"/></svg>`;
+  };
+  P.cups = (n) => `<div class="items" style="gap:4px;font:26px/1 var(--font-emoji)" aria-hidden="true">${"🥛".repeat(n)}</div>`;
+  CH.push({
+    id: 13, lo: "ການປຽບທຽບປະລິມານ", th: "การเปรียบเทียบปริมาตร (ปริมาณน้ำ)", pages: "111–114",
+    learn: [
+      { vis: P.row(P.glass(30, 70, 0.5), `<div class="eq">→</div>`, P.glass(56, 40, 0.55), P.glass(18, 96, 0.6)), lo: "ນ້ຳຈອກດຽວກັນ ຖອກໃສ່ພາຊະນະອື່ນ ຮູບຮ່າງປ່ຽນ ແຕ່ປະລິມານນ້ຳບໍ່ປ່ຽນແປງເດີ", th: "น้ำแก้วเดียวกัน เทใส่ภาชนะอื่น รูปร่างเปลี่ยน แต่ปริมาณน้ำไม่เปลี่ยน" },
+      { vis: P.row(P.col(P.glass(40, 60, 0.9), P.lbl("ກ")), `<div class="eq">→</div>`, P.col(P.glass(24, 80, 1), P.lbl("ຂ ລົ້ນ!"))), lo: "ຖອກນ້ຳຈາກ ກ ໃສ່ ຂ · ຖ້າລົ້ນ ສະແດງວ່າ ກ ມີນ້ຳຫຼາຍກວ່າ", th: "เทน้ำจาก ก ใส่ ข ถ้าล้น แปลว่า ก มีน้ำมากกว่า" },
+      { vis: P.row(P.col(P.glass(30, 90, 0.7), P.lbl("ກ")), P.col(P.glass(30, 90, 0.55), P.lbl("ຂ"))), lo: "ຫຼື ຖອກໃສ່ຈອກຄືກັນສອງໜ່ວຍ ແລ້ວເບິ່ງຄວາມສູງຂອງນ້ຳ", th: "หรือเทใส่แก้วที่เหมือนกันสองใบ แล้วดูความสูงของน้ำ" },
+      { vis: P.col(P.row(P.lbl("ກ"), P.cups(7)), P.row(P.lbl("ຂ"), P.cups(6))), lo: "ໃຊ້ຈອກນ້ອຍວັດແທກ: ກ ໄດ້ 7 ຈອກ · ຂ ໄດ້ 6 ຈອກ · ກ ຫຼາຍກວ່າ 1 ຈອກ", th: "ใช้แก้วเล็กตวง ก ได้ 7 แก้ว ข ได้ 6 แก้ว ก มากกว่า 1 แก้ว" },
+    ],
+    quiz() {
+      const k = pick(["more", "more", "diff", "same"]);
+      if (k === "same") return { sig: "same" + rnd(1, 3), kind: "word", text: "ຖອກນ້ຳຈອກນີ້ໃສ່ຈອກທີ່ສູງ ແລະ ແຄບ · ນ້ຳປ່ຽນແປງແນວໃດ?", th: "เทน้ำแก้วนี้ใส่แก้วสูงแคบ น้ำเปลี่ยนไปอย่างไร", vis: P.row(P.glass(50, 40, 0.8), `<div class="eq">→</div>`, P.glass(18, 96, 0.75)),
+        choices: opts([["ຫຼາຍຂຶ້ນ", "up"], ["ເທົ່າເດີມ", "same"], ["ໜ້ອຍລົງ", "down"]]), answer: "same", why: "ນ້ຳເທົ່າເດີມ ພຽງແຕ່ຮູບຮ່າງປ່ຽນ", whyTh: "น้ำเท่าเดิม แค่รูปร่างเปลี่ยน", hint: "ບໍ່ໄດ້ຕື່ມນ້ຳ ແລະ ບໍ່ໄດ້ເທຖິ້ມ · ນ້ຳສູງຂຶ້ນເພາະຈອກແຄບ", hintTh: "ไม่ได้เติมและไม่ได้เททิ้ง น้ำสูงขึ้นเพราะแก้วแคบ" };
+      const a = rnd(3, 9); let b = rnd(3, 9); if (a === b) b = a > 3 ? a - 1 : a + 1;
+      const vis = P.col(P.row(P.lbl("ກ"), P.cups(a)), P.row(P.lbl("ຂ"), P.cups(b)));
+      if (k === "diff") return { sig: "d" + a + b, text: "ຫຼາຍກວ່າກັນຈັກຈອກ?", th: "มากกว่ากันกี่แก้ว", vis, choices: nums(Math.abs(a - b), 0, 9), answer: Math.abs(a - b),
+        why: `${Math.max(a, b)} − ${Math.min(a, b)} = ${Math.abs(a - b)} ຈອກ`, whyTh: `${Math.abs(a - b)} แก้ว`, hint: "ນັບຈອກຂອງແຕ່ລະອັນ ແລ້ວເອົາມາລົບກັນ", hintTh: "นับแก้วของแต่ละอัน แล้วเอามาลบกัน", hintVis: P.pairs(a, b) };
+      const ans = a > b ? "ກ" : "ຂ";
+      return { sig: "m" + a + b, kind: "word", text: "ອັນໃດບັນຈຸນ້ຳໄດ້ຫຼາຍກວ່າ?", th: "อันไหนจุน้ำได้มากกว่า", vis, choices: opts([["ກ", "ກ"], ["ຂ", "ຂ"]]), answer: ans,
+        why: `${ans} ໄດ້ ${Math.max(a, b)} ຈອກ ຫຼາຍກວ່າ`, whyTh: `${ans} ได้มากกว่า`, hint: "ນັບວ່າແຕ່ລະອັນໄດ້ຈັກຈອກ", hintTh: "นับว่าแต่ละอันได้กี่แก้ว", hintVis: P.pairs(a, b) };
+    },
+    parent: {
+      book: [
+        "หน้า 111: น้ำในถุงที่ถือคนละแบบ และน้ำแก้วเดียวเทใส่ชามกว้าง/แก้วสูงแคบ “ຮູບຮ່າງ ແລະ ພາຊະນະປ່ຽນ ແຕ່ປະລິມານນ້ຳບໍ່ປ່ຽນແປງ”",
+        "หน้า 112: ขวดไหนจุมากกว่า 2 วิธี: เทจากขวดหนึ่งใส่อีกขวด (ล้นไหม) และเทใส่ภาชนะเหมือนกันสองใบแล้วดูความสูง",
+        "หน้า 112–113: ตวงด้วยขวดเล็ก ก ได้ 7 ข ได้ 6 → ก มากกว่า 1 · แบบฝึก: กระป๋องกับแก้ว · เหยือก 9 ขวด 7 กว่า กล่อง 5 แก้ว อันไหนจุมากที่สุด",
+        "หน้า 114: ทบทวนบวกลบ เครื่องหมาย > < = เส้นจำนวน และรูปทรง",
+      ],
+      idea: { lo: "ເວລາປຽບທຽບວ່າ ມີນ້ຳຫຼາຍກວ່າກັນເທົ່າໃດ ແມ່ນໃຫ້ກຳນົດເອົາຈອກ ແລ້ວມາກວດເບິ່ງວ່າມີຈັກຈອກ", th: "จะรู้ว่ามากกว่ากันเท่าไร ให้เลือกแก้วหนึ่งใบเป็นหน่วย แล้วนับว่าได้กี่แก้ว (ต้องใช้แก้วใบเดียวกัน)" },
+      home: [
+        "เล่นน้ำในครัว: เทน้ำแก้วเดียวกันใส่ชามกับแก้วทรงสูง ถามว่าน้ำเพิ่มขึ้นไหม",
+        "ตวงขวดน้ำ 2 ใบด้วยแก้วเล็กใบเดียวกัน นับว่าได้กี่แก้ว แล้วหาว่ามากกว่ากันกี่แก้ว",
+        "ให้ลูกเดาก่อนเท แล้วตรวจด้วยการเทจริง",
+      ],
+      watch: [
+        "ถูกหลอกด้วยภาชนะสูงแคบ คิดว่าน้ำมากกว่า",
+        "ตวงด้วยแก้วคนละขนาด หรือเติมไม่เต็มแก้ว",
+      ],
+      words: "ປະລິມານ = ปริมาณ/ปริมาตร · ບັນຈຸ = จุ · ພາຊະນະ = ภาชนะ · ຕຸກ = ขวด · ຈອກ = แก้ว · ປ່ຽນແປງ = เปลี่ยนแปลง · ວັດແທກ = วัด/ตวง · ຫຼາຍທີ່ສຸດ = มากที่สุด",
+      game: "บทนี้ฝึกกับน้ำจริงดีที่สุด",
+    },
+  });
+
+  /* ===== Chapter 14: subtraction across 10, "take from 10" (book pp. 115–127) ===== */
+  function from10(n, k) {
+    const o = n - 10, left = 10 - k;
+    return {
+      o, left, ans: left + o,
+      lo: [`ລົບ ${k} ອອກຈາກ ${o} ບໍ່ໄດ້`, `ແບ່ງ ${n} ອອກເປັນ 10 ກັບ ${o}`, `ລົບ ${k} ອອກຈາກ 10 ເຫຼືອ ${left}`, `${left} ກັບ ${o} ເທົ່າກັບ ${left + o}`],
+      th: [`${o} ลบ ${k} ไม่ได้`, `แบ่ง ${n} เป็น 10 กับ ${o}`, `เอา 10 ลบ ${k} เหลือ ${left}`, `${left} กับ ${o} ได้ ${left + o}`],
+    };
+  }
+  const s139 = from10(13, 9);
+  CH.push({
+    id: 14, lo: "ການລົບ (ຕໍ່)", th: "การลบ (ต่อ) ลบข้ามสิบ", pages: "115–127",
+    learn: [
+      { vis: P.items("🍎", 13), lo: "ມີໝາກໂປມ 13 ໜ່ວຍ ກິນໝົດ 9 ໜ່ວຍ · ຍັງເຫຼືອຈັກໜ່ວຍ?", th: "มีแอปเปิ้ล 13 ลูก กินไป 9 ลูก เหลือกี่ลูก" },
+      { vis: P.frame([[10, "c1"], [3, "c2"]]), lo: `① ${s139.lo[0]}`, th: s139.th[0] },
+      { vis: P.col(P.split(13, 10, 3), P.frame([[10, "c1"], [3, "c2"]])), lo: `② ${s139.lo[1]}`, th: s139.th[1] },
+      { vis: P.frame([[9, "gone"], [1, "c1"], [3, "c2"]]), lo: `③ ${s139.lo[2]}`, th: s139.th[2] },
+      { vis: P.col(P.frame([[9, "gone"], [1, "c1"], [3, "c2"]]), P.eq([13, "−", 9, "=", { v: 4 }])), lo: `④ ${s139.lo[3]} · ດັ່ງນັ້ນ 13 − 9 = 4`, th: `${s139.th[3]} ดังนั้น 13 − 9 = 4` },
+      { vis: P.col(P.eq([12, "−", 3, "=", { v: 9 }]), P.row(P.split(12, 10, 2), P.split(3, 2, 1))), lo: "12 − 3 ເຮັດໄດ້ 2 ແບບ: ກ ແບ່ງ 12 ເປັນ 10 ກັບ 2 · 10 − 3 = 7 · 7 ກັບ 2 = 9 · ຂ ແບ່ງ 3 ເປັນ 2 ກັບ 1 · 12 − 2 = 10 · 10 − 1 = 9", th: "12 − 3 ทำได้สองแบบ แบบ ก ลบจากสิบ แบบ ข ลบทีละส่วน ได้ 9 เหมือนกัน" },
+    ],
+    quiz() {
+      const k = pick(["sub", "sub", "sub", "ten", "split", "box"]);
+      const n = rnd(11, 18), kk = rnd(n - 9, 9), m = from10(n, kk);
+      if (k === "ten") return { sig: "t" + kk, text: `10 − ${kk} = ?`, th: `10 − ${kk} เท่ากับเท่าไร`, vis: P.frame([[10, "c1"]]), choices: nums(10 - kk, 0, 10), answer: 10 - kk,
+        why: `10 − ${kk} = ${10 - kk}`, whyTh: `10 − ${kk} = ${10 - kk}`, hint: `10 ແມ່ນ ${kk} ລວມກັບເທົ່າໃດ?`, hintTh: `10 คือ ${kk} รวมกับเท่าไร`, hintVis: P.col(P.frame([[kk, "gone"], [10 - kk, "c1"]]), P.split(10, kk, 10 - kk, "b")) };
+      if (k === "split") return { sig: "p" + n, text: `${n} − ${kk}: ແບ່ງ ${n} ອອກເປັນ 10 ກັບຈັກ?`, th: `แบ่ง ${n} เป็น 10 กับเท่าไร`, vis: P.split(n, 10, m.o, "b"), choices: nums(m.o, 0, 9), answer: m.o,
+        why: `${n} ແມ່ນ 10 ກັບ ${m.o}`, whyTh: `${n} คือ 10 กับ ${m.o}`, hint: "ນັບແຕ່ສ່ວນທີ່ເກີນ 10", hintTh: "นับเฉพาะส่วนที่เกิน 10", hintVis: P.frame([[10, "c1"], [m.o, "c2"]]) };
+      if (k === "box") return { sig: "b" + n + kk, text: `□ − ${kk} = ${m.ans} · □ ແມ່ນເທົ່າໃດ?`, th: `ช่องว่างลบ ${kk} ได้ ${m.ans} ช่องว่างคือเท่าไร`, vis: P.eq(["?", "−", kk, "=", m.ans]), choices: nums(n, 10, 20), answer: n,
+        why: `${n} − ${kk} = ${m.ans}`, whyTh: `${n} − ${kk} = ${m.ans}`, hint: `ລອງຄິດກັບຄືນ: ${m.ans} + ${kk} ເທົ່າກັບຈັກ?`, hintTh: `ลองคิดกลับ ${m.ans} + ${kk} เท่ากับเท่าไร` };
+      return { sig: "s" + n + kk, text: `${n} − ${kk} = ?`, th: `${n} − ${kk} เท่ากับเท่าไร`, vis: P.eq([n, "−", kk, "=", "?"]), choices: nums(m.ans, 0, 10), answer: m.ans,
+        why: m.lo.join(" · "), whyTh: m.th.join(" "), hint: `${m.lo[1]} · ${m.lo[2]}`, hintTh: `${m.th[1]} ${m.th[2]}`, hintVis: P.col(P.split(n, 10, m.o), P.frame([[kk, "gone"], [m.left, "c1"], [m.o, "c2"]])) };
+    },
+    parent: {
+      book: [
+        "หน้า 115: กล้วย □ ลูก กิน 6 ลูก ที่เคยเรียนคือ 9 − 6, 10 − 6, 16 − 6 “แล้วถ้า □ เป็น 14 ล่ะ?” บทนี้เรียน “ลบ 2–9 ออกจาก 11–18”",
+        "หน้า 116–117: วิธีหลัก 13 − 9 มี 4 ประโยค (ดูกรอบด้านล่าง) ใช้เม็ดนับแถว 10 กับ 3 เอา 9 ออกจากแถว 10 · ฝึกอ่านวิธีคิด 12 − 9 ออกเสียง และขยับฝาขวด 14 − 9",
+        "หน้า 118–120: −8 (11 − 8), −7 (12 − 7), −6, −5 ตามลำดับ และตารางฝึกแต่ละตัวลบ",
+        "หน้า 121: 12 − 3 ทำได้ 2 วิธี: ก) ลบจากสิบ ข) ลบทีละส่วน (แบ่ง 3 เป็น 2 กับ 1) ให้ลองทั้งสองแล้วเช็กว่าได้เท่ากัน ใช้วิธีที่ง่ายกว่า",
+        "หน้า 122–127: เปรียบเทียบ > < = · หาเลขใน □ (□ − 4 = 9) · ตารางลบ · โจทย์ปัญหา · สรุป · และให้เลือกเองว่าโจทย์ไหนบวกหรือลบ",
+      ],
+      idea: { lo: "① ລົບ 9 ອອກຈາກ 3 ບໍ່ໄດ້ ② ແບ່ງ 13 ອອກເປັນ 10 ກັບ 3 ③ ລົບ 9 ອອກຈາກ 10 ເຫຼືອ 1 ④ 1 ກັບ 3 ເທົ່າກັບ 4", th: "① 3 ลบ 9 ไม่ได้ ② แบ่ง 13 เป็น 10 กับ 3 ③ เอา 10 ลบ 9 เหลือ 1 ④ 1 กับ 3 ได้ 4 — เรียกว่า “ลบจากสิบ” ให้ลูกพูด 4 ประโยคนี้ทุกข้อ" },
+      home: [
+        "วางฝาขวดแถวละ 10 กับเศษ (เช่น 10 กับ 3) ให้ลูกหยิบออกจากแถว 10 แล้วรวมที่เหลือกับเศษ แบบเดียวกับหนังสือ",
+        "ก่อนเริ่มบทนี้ต้องตอบ 10 − 1 … 10 − 9 ได้ทันที และรู้ว่า 13 คือ 10 กับ 3",
+        "ตัวลบเล็ก (−2, −3, −4) ให้ลองแบบ “ลบทีละส่วน” เช่น 12 − 3: ลบ 2 ได้ 10 แล้วลบอีก 1 ได้ 9",
+      ],
+      watch: [
+        "นับถอยหลังทีละ 9 ด้วยนิ้ว (ช้าและผิดบ่อย)",
+        "ลืมขั้นที่ 4 (เอาที่เหลือจากสิบไปรวมกับเศษ) ตอบ 1 แทน 4",
+        "สับสนกับข้อที่ไม่ต้องข้ามสิบ เช่น 18 − 6 ทำได้เลย 8 − 6 = 2 แล้ว 10 กับ 2 เป็น 12",
+      ],
+      words: "ລົບ … ອອກຈາກ … = ลบ … ออกจาก … · … ບໍ່ໄດ້ = … ไม่ได้ · ແບ່ງ … ອອກເປັນ … ກັບ … = แบ่ง…เป็น…กับ… · ເຫຼືອ = เหลือ · ເບື້ອງໃດ = ด้านไหน · ເຄື່ອນຍ້າຍ = ขยับ ย้าย",
+      game: "เมืองภูเขาไฟ 🌋 ด่าน 3 และ 5 เป็นการลบเลขสิบกว่า (11–20) ตรงกับบทนี้",
+    },
+  });
+
+  /* ===== Chapter 15: comparing area (book pp. 128–129) ===== */
+  CH.push({
+    id: 15, lo: "ການປຽບທຽບຄວາມກວ້າງ", th: "การเปรียบเทียบพื้นที่ (ความกว้าง)", pages: "128–129",
+    learn: [
+      { vis: `<svg viewBox="0 0 160 110" width="200" height="140" aria-hidden="true"><rect x="10" y="10" width="140" height="90" fill="var(--sun)" opacity="0.8"/><rect x="10" y="10" width="100" height="70" fill="var(--sky)" opacity="0.85"/><text x="120" y="95" font-size="16" fill="var(--ink)">ກ</text><text x="50" y="50" font-size="16" fill="var(--card)">ຂ</text></svg>`, lo: "ສາດ 2 ຜືນ ອັນໃດກວ້າງກວ່າ? · ເອົາມາວາງຊ້ອນກັນ ໃຫ້ແຈ ແລະ ສອງຂ້າງເຕັ້ງກັນ · ກ ເກີນອອກມາ ກ ຈຶ່ງກວ້າງກວ່າ", th: "เสื่อสองผืน ผืนไหนกว้างกว่า วางซ้อนให้มุมและขอบตรงกัน ก ยื่นออกมา ก จึงกว้างกว่า" },
+      { vis: P.row(P.col(P.area(4, 4, "var(--sky)"), P.lbl("16 ຕາ")), P.col(P.area(5, 3, "var(--sun)"), P.lbl("15 ຕາ")), P.col(P.area(9, 2, "var(--rose)"), P.lbl("18 ຕາ"))), lo: "ຖ້າວາງຊ້ອນບໍ່ໄດ້ ໃຫ້ນັບຕາກາໂຣ · ອັນຍາວແຕ່ແຄບ ກໍອາດຈະກວ້າງທີ່ສຸດ: 18 ຕາ", th: "ถ้าวางซ้อนไม่ได้ ให้นับช่องตาราง อันที่ยาวแต่แคบอาจกว้างที่สุดก็ได้ 18 ช่อง" },
+      { vis: P.area(5, 4, "var(--line)"), lo: "ມາຫຼິ້ນເກມທາສີຕາກາໂຣ: ຜູ້ຊະນະຕີຊຸ້ມ ທາສີ 1 ຕາ · ຜູ້ທີ່ໄດ້ຕາຫຼາຍກວ່າ ຊະນະ", th: "เล่นเกมระบายช่อง ใครชนะเป่ายิ้งฉุบระบาย 1 ช่อง ใครได้ช่องมากกว่าชนะ" },
+    ],
+    quiz() {
+      const k = pick(["which", "which", "count"]);
+      if (k === "count") {
+        const w = rnd(2, 5), h = rnd(2, 4);
+        return { sig: "c" + w + h, text: "ຮູບນີ້ມີຈັກຕາກາໂຣ?", th: "รูปนี้มีกี่ช่อง", vis: P.area(w, h, "var(--grape)"), choices: nums(w * h, 1, 20), answer: w * h,
+          why: `ມີ ${w * h} ຕາ`, whyTh: `มี ${w * h} ช่อง`, hint: `ນັບເທື່ອລະແຖວ: ແຖວລະ ${w} ຕາ`, hintTh: `นับทีละแถว แถวละ ${w} ช่อง` };
+      }
+      let a = [rnd(2, 6), rnd(2, 4)], b = [rnd(2, 8), rnd(1, 3)];
+      while (a[0] * a[1] === b[0] * b[1]) b = [rnd(2, 8), rnd(1, 3)];
+      const ans = a[0] * a[1] > b[0] * b[1] ? "ກ" : "ຂ";
+      return { sig: "w" + a + b, kind: "word", text: "ອັນໃດກວ້າງກວ່າ?", th: "อันไหนกว้างกว่า", vis: P.row(P.col(P.area(a[0], a[1], "var(--sky)"), P.lbl("ກ")), P.col(P.area(b[0], b[1], "var(--sun)"), P.lbl("ຂ"))),
+        choices: opts([["ກ", "ກ"], ["ຂ", "ຂ"]]), answer: ans, why: `ກ ${a[0] * a[1]} ຕາ · ຂ ${b[0] * b[1]} ຕາ`, whyTh: `ก ${a[0] * a[1]} ช่อง ข ${b[0] * b[1]} ช่อง`, hint: "ຢ່າເບິ່ງແຕ່ວ່າອັນໃດຍາວ · ນັບຕາກາໂຣຂອງແຕ່ລະອັນ", hintTh: "อย่าดูแค่ความยาว นับช่องของแต่ละอัน" };
+    },
+    parent: {
+      book: [
+        "หน้า 128: เสื่อสองผืน ผืนไหนกว้างกว่า → วางซ้อนให้มุมหนึ่งและขอบสองด้านตรงกัน (ເອົາສອງຂ້າງເຕັ້ງກັນ) ดูว่าอันไหนยื่นออกมา · เรียงหนังสือ 3 เล่มจากกว้างไปแคบ",
+        "หน้า 129: แผ่นสี่เหลี่ยมจัตุรัสเรียงเป็นรูปต่าง ๆ: 4×4 = 16, 5×3 = 15, 9×2 = 18 → รูปยาวแคบกว้างที่สุด · เกมเป่ายิ้งฉุบระบายช่อง ใครได้มากกว่าชนะ",
+      ],
+      idea: { lo: "ເອົາສອງຂ້າງເຕັ້ງກັນ · ນັບຕາກາໂຣ", th: "วางซ้อนให้ขอบสองด้านตรงกัน · ถ้าซ้อนไม่ได้ ให้นับช่องสี่เหลี่ยมที่เท่ากัน" },
+      home: [
+        "วางกระดาษ/ผ้าเช็ดหน้า 2 แผ่นซ้อนกันให้มุมตรงกัน ถามว่าแผ่นไหนกว้างกว่า",
+        "เล่นเกมระบายช่องบนกระดาษตาราง กับลูก (เป่ายิ้งฉุบ ใครชนะระบาย 1 ช่อง)",
+      ],
+      watch: [
+        "ตัดสินจากความยาวอย่างเดียว (รูป 9×2 ยาวแต่แคบ)",
+        "วางซ้อนโดยไม่ให้มุมตรงกัน",
+      ],
+      words: "ຄວາມກວ້າງ = ความกว้าง/พื้นที่ · ກວ້າງກວ່າ / ກວ້າງທີ່ສຸດ = กว้างกว่า กว้างที่สุด · ແຜ່ນກາໂຣ / ຕາກາໂຣ = แผ่นสี่เหลี่ยม ช่องตาราง · ທາສີ = ระบายสี · ຕີຊຸ້ມ = เป่ายิ้งฉุบ · ຊະນະ = ชนะ",
+      game: "บทนี้ฝึกกับกระดาษตารางดีที่สุด",
+    },
+  });
+
+  /* ===== Chapter 16: shapes continued, building with triangles (book pp. 130–135) ===== */
+  P.tris = (w, h, col = "var(--tomato)") => {
+    const u = 30, W = w * u, H = h * u;
+    let s = `<rect x="2" y="2" width="${W}" height="${H}" fill="${col}"/>`;
+    for (let i = 0; i < w; i++) for (let j = 0; j < h; j++) s += `<path d="M${2 + i * u} ${2 + j * u} l${u} ${u}" stroke="var(--card)" stroke-width="2"/><rect x="${2 + i * u}" y="${2 + j * u}" width="${u}" height="${u}" fill="none" stroke="var(--card)" stroke-width="2"/>`;
+    return `<svg viewBox="0 0 ${W + 4} ${H + 4}" width="${W + 4}" height="${H + 4}" aria-hidden="true">${s}</svg>`;
+  };
+  CH.push({
+    id: 16, lo: "ຮູບຮ່າງຂອງສິ່ງຕ່າງໆທີ່ຢູ່ອ້ອມຕົວເຮົາ (ຕໍ່)", th: "รูปทรงรอบตัว (ต่อ) ต่อรูปจากสามเหลี่ยม", pages: "130–135",
+    learn: [
+      { vis: P.shape("triangle", 80), lo: "ນີ້ແມ່ນແຜ່ນຮູບສາມແຈ · ມາລຽນເພື່ອສ້າງເປັນຮູບຕ່າງໆ ເຊັ່ນ ເຮືອນ ເຮືອ ປາ", th: "นี่คือแผ่นสามเหลี่ยม เอามาเรียงสร้างเป็นรูปต่าง ๆ เช่น บ้าน เรือ ปลา" },
+      { vis: P.row(P.tris(1, 1), `<div class="eq">=</div>`, `<div class="lbl">2 ແຜ່ນ</div>`), lo: "ສາມແຈ 2 ແຜ່ນ ຕໍ່ກັນ ໄດ້ຮູບສີ່ແຈ", th: "สามเหลี่ยม 2 แผ่นต่อกันได้สี่เหลี่ยม" },
+      { vis: P.row(P.tris(2, 1), P.tris(1, 2, "var(--sky)")), lo: "ໃຊ້ 4 ແຜ່ນ ສ້າງໄດ້ຫຼາຍແບບ · ຮູບຮ່າງຕ່າງກັນ ແຕ່ຄວາມກວ້າງເທົ່າກັນ ເພາະໃຊ້ 4 ແຜ່ນຄືກັນ", th: "ใช้ 4 แผ่นสร้างได้หลายแบบ รูปร่างต่างกันแต่พื้นที่เท่ากัน เพราะใช้ 4 แผ่นเท่ากัน" },
+      { vis: `<div class="eq" style="font-size:36px">🐟 🏠 ⛵</div>`, lo: "ໃຊ້ໄມ້ດີ້ວ ຫຼື ຂີດເສັ້ນເຊື່ອມຈຸດ ກໍສ້າງຮູບປາ ເຮືອນ ເຮືອໄດ້", th: "ใช้ไม้หรือลากเส้นต่อจุด ก็สร้างรูปปลา บ้าน เรือได้" },
+    ],
+    quiz() {
+      const w = rnd(1, 3), h = rnd(1, 2), n = 2 * w * h;
+      if (Math.random() < 0.6) return { sig: "n" + w + h, text: "ຮູບນີ້ໃຊ້ແຜ່ນສາມແຈຈັກແຜ່ນ?", th: "รูปนี้ใช้สามเหลี่ยมกี่แผ่น", vis: P.tris(w, h), choices: nums(n, 1, 14), answer: n,
+        why: `ໃຊ້ ${n} ແຜ່ນ`, whyTh: `ใช้ ${n} แผ่น`, hint: "ແຕ່ລະຫ້ອງສີ່ແຈ ມີສາມແຈ 2 ແຜ່ນ", hintTh: "แต่ละช่องสี่เหลี่ยมมีสามเหลี่ยม 2 แผ่น" };
+      const options = shuffle([[w, h], [w + 1, h], [Math.max(1, w - 1) === w ? w + 2 : w - 1, h]].filter((v, i, arr) => arr.findIndex((x) => x[0] * x[1] === v[0] * v[1]) === i)).slice(0, 3);
+      if (!options.some((o) => o[0] * o[1] === w * h)) options[0] = [h, w];
+      const ans = options.findIndex((o) => o[0] * o[1] === w * h);
+      return { sig: "s" + w + h, kind: "pic", text: "ຮູບໃດມີຄວາມກວ້າງເທົ່າກັບຮູບນີ້?", th: "รูปไหนมีพื้นที่เท่ากับรูปนี้", vis: P.tris(w, h, "var(--grape)"),
+        choices: options.map((o, i) => ({ label: P.tris(o[0], o[1], "var(--sky)"), value: i, say: `${2 * o[0] * o[1]}` })), answer: ans,
+        why: `ໃຊ້ສາມແຈ ${n} ແຜ່ນເທົ່າກັນ`, whyTh: `ใช้สามเหลี่ยม ${n} แผ่นเท่ากัน`, hint: "ນັບແຜ່ນສາມແຈຂອງແຕ່ລະຮູບ", hintTh: "นับสามเหลี่ยมของแต่ละรูป" };
+    },
+    parent: {
+      book: [
+        "หน้า 130: เรียงแผ่นสามเหลี่ยมมุมฉาก (ครึ่งหนึ่งของสี่เหลี่ยมจัตุรัส) เป็นบ้าน เรือ ปลา",
+        "หน้า 131: ใช้ 4 แผ่นสร้างสี่เหลี่ยมผืนผ้า สามเหลี่ยมใหญ่ สี่เหลี่ยมด้านขนาน ฯลฯ “แต่ละรูปกว้างเท่ากันไหม” (เท่ากัน เพราะใช้ 4 แผ่น) · ย้ายทีละ 1 แผ่นเพื่อเปลี่ยนเป็นรูปถัดไป",
+        "หน้า 132–133: ใช้ไม้ต่อรูปและลวดลาย และลากเส้นต่อจุดบนตารางจุด",
+        "หน้า 134–135: ทบทวน: นับเลขถึง 20 · ดูนาฬิกา · > < = · บวกลบ · เส้นจำนวน",
+      ],
+      idea: { lo: "ແຕ່ລະຮູບຮ່າງຄວາມກວ້າງເທົ່າກັນບໍ່ນໍ", th: "แต่ละรูปกว้างเท่ากันไหม — ใช้แผ่นจำนวนเท่ากัน พื้นที่ก็เท่ากัน แม้หน้าตาจะต่างกัน" },
+      home: [
+        "ตัดกระดาษสี่เหลี่ยมจัตุรัสตามแนวทแยง ได้สามเหลี่ยม 8 แผ่น ให้ลูกต่อเป็นบ้าน ปลา เรือ",
+        "ท้าให้ลูกย้ายทีละ 1 แผ่น เปลี่ยนสี่เหลี่ยมเป็นสามเหลี่ยมใหญ่",
+        "ใช้ไม้จิ้มฟันหรือก้านไม้ขีดต่อเป็นรูปต่าง ๆ",
+      ],
+      watch: [
+        "หมุนหรือพลิกแผ่นไม่เป็น ให้ลองกับแผ่นจริงหลาย ๆ ครั้ง",
+        "คิดว่ารูปที่หน้าตาต่างกันจะกว้างไม่เท่ากัน",
+      ],
+      words: "ລຽນ = เรียง · ສ້າງ = สร้าง · ລວດລາຍ = ลวดลาย · ໄມ້ດີ້ວ = ไม้เล็ก ๆ · ຂີດເສັ້ນເຊື່ອມຕໍ່ = ลากเส้นเชื่อม · ຄວາມກວ້າງເທົ່າກັນ = พื้นที่เท่ากัน",
+      game: "บทนี้ฝึกกับกระดาษจริงดีที่สุด",
+    },
+  });
+
+  /* ===== Chapter 17: numbers greater than 20 (book pp. 136–153) ===== */
+  CH.push({
+    id: 17, lo: "ຈຳນວນທີ່ຫຼາຍກວ່າ 20", th: "จำนวนที่มากกว่า 20 (ถึง 100)", pages: "136–153",
+    learn: [
+      { vis: P.tens(2, 4), lo: "ສໍແດງ 2 ກຸ່ມ ກຸ່ມລະ 10 ກ້ານ ເປັນ 20 ແລະ ອີກ 4 ກ້ານ · 20 ກັບ 4 ຂຽນເປັນ 24 · ອ່ານວ່າ ຊາວສີ່", th: "2 กลุ่ม กลุ่มละ 10 เป็น 20 กับอีก 4 เขียน 24 อ่านว่า ซาวสี่" },
+      { vis: P.col(P.tens(2, 6), P.pv(2, 6)), lo: "ຖ້າເຮັດເປັນກຸ່ມລະ 10 ເບິ່ງບາດດຽວກໍຮູ້ · ກຸ່ມລະ 10 ມີ 2 ກຸ່ມ ແລະ 6 ອັນ · ຂຽນເປັນ 26 · ຊາວຫົກ", th: "ถ้าจัดเป็นกลุ่มละ 10 ดูแวบเดียวก็รู้ 2 กลุ่มกับ 6 อัน เขียน 26" },
+      { vis: P.col(P.tens(3, 0), P.pv(3, 0)), lo: "ກຸ່ມລະ 10 ມີ 3 ກຸ່ມ ບໍ່ມີອັນເຫຼືອ · ບໍ່ມີຈັກອັນເລີຍ ຈຶ່ງຂຽນ 0 · 30 ອ່ານວ່າ ສາມສິບ", th: "3 กลุ่ม ไม่มีเศษ จึงเขียน 0 เป็น 30 อ่านว่า สามสิบ" },
+      { vis: P.hundred([3, 13, 23, 33, 43, 53, 63, 73, 83, 93]), lo: "ຕາຕະລາງຈຳນວນ: ໄປທາງຂວາ ເພີ່ມ 1 · ລົງລຸ່ມ ເພີ່ມ 10 · ຈຳນວນທີ່ລົງທ້າຍດ້ວຍ 3 ຢູ່ຖັນດຽວກັນ", th: "ตารางร้อย ไปทางขวาเพิ่ม 1 ลงล่างเพิ่ม 10 เลขที่ลงท้ายด้วย 3 อยู่แถวตั้งเดียวกัน" },
+      { vis: P.col(P.tens(10, 0), `<div class="eq">100</div>`), lo: "ກຸ່ມລະ 10 ມີ 10 ກຸ່ມ ເອີ້ນວ່າ ໜຶ່ງຮ້ອຍ · ຂຽນ 100 · ຫຼາຍກວ່າ 99 ໜຶ່ງຈຳນວນ", th: "10 กลุ่ม กลุ่มละ 10 เรียกว่า หนึ่งร้อย เขียน 100 มากกว่า 99 อยู่หนึ่ง" },
+      { vis: P.col(P.eq([50, "+", 20, "=", { v: 70 }]), P.lbl("5 ກຸ່ມ + 2 ກຸ່ມ = 7 ກຸ່ມ")), lo: "50 + 20: ຄິດເປັນກຸ່ມລະ 10 · 5 ກຸ່ມ ກັບ 2 ກຸ່ມ ເປັນ 7 ກຸ່ມ · ເທົ່າກັບ 70", th: "50 + 20 คิดเป็นกลุ่มละ 10 ห้ากลุ่มกับสองกลุ่มเป็นเจ็ดกลุ่ม ได้ 70" },
+      { vis: P.col(P.eq([30, "+", 5, "=", { v: 35 }]), P.pv(3, 5)), lo: "30 + 5: ແຍກຫຼັກຫົວສິບ ກັບຫຼັກຫົວໜ່ວຍ · 3 ຫົວສິບ ແລະ 5 ຫົວໜ່ວຍ ເປັນ 35", th: "30 + 5 แยกหลักสิบกับหลักหน่วย ได้ 35" },
+    ],
+    quiz() {
+      const k = pick(["count", "pv", "chart", "line", "tens", "tensOnes", "cmp", "read"]);
+      if (k === "count" || k === "pv") {
+        const t = rnd(2, 9), o = rnd(0, 9), n = 10 * t + o;
+        const vis = k === "count" ? P.tens(t, o) : `<div class="lbl" style="font-size:18px">${t} ຫົວສິບ ແລະ ${o} ຫົວໜ່ວຍ</div>`;
+        return { sig: k + n, text: k === "count" ? "ມີຈັກອັນ?" : "ແມ່ນຈຳນວນໃດ?", th: k === "count" ? "มีกี่อัน" : "คือจำนวนอะไร", vis, choices: nums(n, 20, 99), answer: n,
+          why: `ກຸ່ມລະ 10 ມີ ${t} ກຸ່ມ ແລະ ${o} ອັນ · ${n} · ${wlo(n)}`, whyTh: `${t} กลุ่มกับ ${o} เป็น ${n}`, hint: "ນັບກຸ່ມລະ 10 ກ່ອນ: 10, 20, 30 … ແລ້ວນັບອັນທີ່ເຫຼືອ", hintTh: "นับกลุ่มละ 10 ก่อน สิบ ยี่สิบ สามสิบ แล้วนับที่เหลือ", hintVis: P.pv(t, o) };
+      }
+      if (k === "chart") {
+        const n = rnd(12, 88), dir = pick([1, -1, 10, -10]), ans = n + dir;
+        return { sig: "h" + n + dir, text: `ໃນຕາຕະລາງ ຈຳນວນທີ່ຢູ່${dir === 1 ? "ທາງຂວາ" : dir === -1 ? "ທາງຊ້າຍ" : dir === 10 ? "ລຸ່ມ" : "ເທິງ"}ຂອງ ${n} ແມ່ນເທົ່າໃດ?`, th: `ในตาราง จำนวนที่อยู่${dir === 1 ? "ทางขวา" : dir === -1 ? "ทางซ้าย" : dir === 10 ? "ข้างล่าง" : "ข้างบน"}ของ ${n} คือเท่าไร`,
+          vis: P.hundred([n]), choices: nums(ans, 1, 100), answer: ans, why: `${dir > 0 ? "ເພີ່ມ" : "ຫຼຸດ"} ${Math.abs(dir)} ເປັນ ${ans}`, whyTh: `ได้ ${ans}`, hint: Math.abs(dir) === 10 ? "ຂຶ້ນລົງ ປ່ຽນ 10 · ຫຼັກຫົວໜ່ວຍຄືເກົ່າ" : "ຊ້າຍຂວາ ປ່ຽນ 1", hintTh: Math.abs(dir) === 10 ? "ขึ้นลงเปลี่ยนทีละ 10" : "ซ้ายขวาเปลี่ยนทีละ 1" };
+      }
+      if (k === "line") {
+        const n = rnd(25, 95), up = Math.random() < 0.5, d = rnd(1, 5), ans = up ? n + d : n - d;
+        return { sig: "l" + n + up + d, text: `ຈຳນວນທີ່${up ? "ຫຼາຍກວ່າ" : "ໜ້ອຍກວ່າ"} ${n} ${wlo(d)}ຈຳນວນ ແມ່ນເທົ່າໃດ?`, th: `จำนวนที่${up ? "มากกว่า" : "น้อยกว่า"} ${n} อยู่ ${d} คือเท่าไร`, vis: P.line(n - 6, n + 6, { mark: n }), choices: nums(ans, 1, 100), answer: ans,
+          why: `${n} ${up ? "+" : "−"} ${d} = ${ans}`, whyTh: `ได้ ${ans}`, hint: up ? "ຫຼາຍກວ່າ ໄປທາງຂວາ" : "ໜ້ອຍກວ່າ ໄປທາງຊ້າຍ", hintTh: up ? "มากกว่าไปทางขวา" : "น้อยกว่าไปทางซ้าย", hintVis: P.line(n - 6, n + 6, { mark: n, hops: [{ from: n, to: ans, label: (up ? "+" : "−") + d }] }) };
+      }
+      if (k === "tens") {
+        const a = rnd(1, 8), b = rnd(1, 10 - a), add = Math.random() < 0.6, x = add ? a * 10 : (a + b) * 10, y = b * 10, ans = add ? x + y : x - y;
+        return { sig: "t" + x + add + y, text: `${x} ${add ? "+" : "−"} ${y} = ?`, th: `${x} ${add ? "+" : "−"} ${y} เท่ากับเท่าไร`, vis: P.eq([x, add ? "+" : "−", y, "=", "?"]), choices: nums(ans, 0, 100).map((c) => c), answer: ans,
+          why: `${x / 10} ${add ? "+" : "−"} ${y / 10} = ${ans / 10} ກຸ່ມ · ${ans}`, whyTh: `${ans}`, hint: "ໃຫ້ຄິດເປັນກຸ່ມລະ 10", hintTh: "ให้คิดเป็นกลุ่มละ 10", hintVis: P.tens(x / 10, 0) };
+      }
+      if (k === "tensOnes") {
+        const t = rnd(2, 9), o = rnd(1, 9), n = t * 10 + o, f = pick(["t+o", "n-o", "n-t"]);
+        const [q, ans] = f === "t+o" ? [`${t * 10} + ${o}`, n] : f === "n-o" ? [`${n} − ${o}`, t * 10] : [`${n} − ${t * 10}`, o];
+        return { sig: "o" + q, text: `${q} = ?`, th: `${q} เท่ากับเท่าไร`, vis: `<div class="eq">${q} = <span class="box">?</span></div>`, choices: nums(ans, 0, 99), answer: ans,
+          why: `${q} = ${ans}`, whyTh: `${ans}`, hint: "ແຍກຫຼັກຫົວສິບ ກັບຫຼັກຫົວໜ່ວຍ", hintTh: "แยกหลักสิบกับหลักหน่วย", hintVis: P.pv(t, o) };
+      }
+      if (k === "cmp") {
+        const a = rnd(20, 99); let b = rnd(20, 99); if (a === b) b = a + 1;
+        const ans = a > b ? ">" : "<";
+        return { sig: "y" + a + b, text: "ໃສ່ເຄື່ອງໝາຍ > ຫຼື <", th: "ใส่เครื่องหมาย", vis: P.eq([a, "?", b]), choices: opts([[">", ">", "ຫຼາຍກວ່າ"], ["<", "<", "ໜ້ອຍກວ່າ"]]), answer: ans,
+          why: `${a} ${ans} ${b}`, whyTh: `${a} ${ans === ">" ? "มากกว่า" : "น้อยกว่า"} ${b}`, hint: "ເບິ່ງຫຼັກຫົວສິບກ່ອນ · ຖ້າເທົ່າກັນ ຈຶ່ງເບິ່ງຫຼັກຫົວໜ່ວຍ", hintTh: "ดูหลักสิบก่อน ถ้าเท่ากันค่อยดูหลักหน่วย" };
+      }
+      const n = rnd(20, 99), wrong = shuffle([n % 10 * 10 + Math.floor(n / 10), n + 10, n - 1].filter((v) => v !== n && v >= 1 && v <= 100)).slice(0, 2);
+      const choices = shuffle([n, ...wrong]).map((v) => ({ label: String(v), value: v, say: String(v) }));
+      return { sig: "r" + n, text: `"${wlo(n)}" ຂຽນເປັນຕົວເລກແນວໃດ?`, th: `"${wth(n)}" เขียนเป็นตัวเลขอย่างไร`, say: `${wlo(n)} ຂຽນເປັນຕົວເລກແນວໃດ`, choices, answer: n,
+        why: `${wlo(n)} = ${n}`, whyTh: `${n}`, hint: "ຄຳທຳອິດບອກຫຼັກຫົວສິບ · ຄຳສຸດທ້າຍບອກຫຼັກຫົວໜ່ວຍ · ຊາວ = 2 ຫົວສິບ · ເອັດ = 1", hintTh: "คำแรกบอกหลักสิบ คำท้ายบอกหลักหน่วย ซาว = 20 เอ็ด = 1" };
+    },
+    parent: {
+      book: [
+        "หน้า 136: ดินสอ 2 กลุ่ม กลุ่มละ 10 เป็น 20 กับอีก 4 → 24 อ่านว่า ຊາວສີ່",
+        "หน้า 137–142: กำไม้แล้วนับ 26 กับ 30 “ถ้าจัดเป็นกลุ่มละ 10 ดูแวบเดียวก็รู้” และตาราง ຫຼັກຫົວສິບ | ຫຼັກຫົວໜ່ວຍ (ไม่มีเศษ เขียน 0) · ฝึกนับของที่จัดกลุ่มแล้วและยังไม่จัด",
+        "หน้า 143: 100 = 10 กลุ่มของ 10 “มากกว่า 99 หนึ่งจำนวน”",
+        "หน้า 144–147: ตารางร้อย (สังเกตแนวตั้ง +10 แนวนอน +1) · หาเลขที่ถูกซ่อน · เส้นจำนวนถึง 120 · มากกว่า/น้อยกว่า n จำนวน · จำนวน 101–120",
+        "หน้า 148–149: บวกลบเป็นกลุ่มสิบ (50 + 20, 50 − 30) และแยกหลัก (30 + 5, 35 − 5, 35 − 30) · หน้า 150–151 เกมทอยลูกเต๋าถึง 100 · หน้า 152–153 สรุป",
+      ],
+      idea: { lo: "ຖ້າເຮົາເຮັດເປັນກຸ່ມລະ 10, ຈະເຮັດໃຫ້ສາມາດນັບໄດ້ງ່າຍ · ຍ້ອນວ່າບໍ່ມີຈັກອັນເລີຍ ຈຶ່ງຂຽນເປັນ 0", th: "ถ้าจัดเป็นกลุ่มละ 10 จะนับง่าย · หลักหน่วยไม่มีเลยจึงเขียน 0" },
+      home: [
+        "ใช้หลอดหรือไม้ไอติม มัดทีละ 10 ด้วยหนังยาง แล้ววางบนกระดาษ 2 ช่อง (ซ้าย = กลุ่มสิบ ขวา = อันเดี่ยว)",
+        "ฝึกอ่านเลขลาวให้ถูก: ຊາວ (20) ຊາວເອັດ (21) ສາມສິບເອັດ (31) ໜຶ່ງຮ້ອຍ (100)",
+        "พิมพ์หรือวาดตารางร้อย เล่นปิดเลขแล้วให้ลูกทาย ใช้กฎขวา +1 ลง +10",
+        "เล่นเกมทอยลูกเต๋าเดินจาก 0 ถึง 100 แบบในหนังสือหน้า 150–151",
+      ],
+      watch: [
+        "เขียน 30 เป็น 3 หรือ 300 (ไม่เข้าใจ 0 ในหลักหน่วย)",
+        "สลับหลัก 45 กับ 54",
+        "มีของเดี่ยวเกิน 10 แต่ไม่รวบเป็นกลุ่มใหม่ (เช่น 4 มัดกับ 16 อัน = 56)",
+        "อ่าน ສອງສິບ แทน ຊາວ หรือ ສິບໜຶ່ງ แทน ສິບເອັດ",
+      ],
+      words: "ກຸ່ມລະ 10 = กลุ่มละ 10 · ຫົວສິບ / ຫົວໜ່ວຍ = สิบ / หน่วย · ຫຼັກຫົວສິບ / ຫຼັກຫົວໜ່ວຍ = หลักสิบ / หลักหน่วย · ໜຶ່ງຮ້ອຍ = หนึ่งร้อย · ເຊື່ອງ = ซ่อน · ແຍກ = แยก · ໝາກກະລອກ = ลูกเต๋า",
+      game: "เกมยังไปถึงแค่ 20 ฝึกบทนี้ในหน้านี้และกับมัดไม้จริง",
+    },
+  });
+
+  /* ===== Chapter 18: Lao numerals (book pp. 154–155) ===== */
+  const LD = "໐໑໒໓໔໕໖໗໘໙", toLao = (n) => String(n).replace(/\d/g, (d) => LD[d]);
+  CH.push({
+    id: 18, lo: "ເລກລາວ", th: "เลขลาว", pages: "154–155",
+    learn: [
+      { vis: `<div class="col"><div class="eq" style="font-size:28px;letter-spacing:8px">0 1 2 3 4</div><div class="big-lao">໐ ໑ ໒ ໓ ໔</div></div>`, lo: "ເລກລາວ ໐ ໑ ໒ ໓ ໔ ຄືກັບ 0 1 2 3 4", th: "เลขลาว ๐ ถึง ๔ เหมือนกับ 0 ถึง 4" },
+      { vis: `<div class="col"><div class="eq" style="font-size:28px;letter-spacing:8px">5 6 7 8 9</div><div class="big-lao">໕ ໖ ໗ ໘ ໙</div></div>`, lo: "ໄປຕໍ່ ໕ ໖ ໗ ໘ ໙ ຄືກັບ 5 6 7 8 9", th: "ต่อด้วย ๕ ถึง ๙ เหมือนกับ 5 ถึง 9" },
+      { vis: `<div class="col"><div class="eq">24 = <span class="big-lao" style="font-size:44px">${toLao(24)}</span></div><div class="eq">100 = <span class="big-lao" style="font-size:44px">${toLao(100)}</span></div></div>`, lo: "ຂຽນແບບດຽວກັນ: ຫຼັກຫົວສິບຢູ່ເບື້ອງຊ້າຍ ຫຼັກຫົວໜ່ວຍຢູ່ເບື້ອງຂວາ · 24 ຂຽນ ໒໔", th: "เขียนแบบเดียวกัน หลักสิบอยู่ซ้าย หลักหน่วยอยู่ขวา" },
+      { vis: `<div class="big-lao">໔ ໕ · ໒ ໖ · ໑ ໙</div>`, lo: "ລະວັງ ເລກທີ່ຄ້າຍກັນ: ໔ ກັບ ໕ · ໒ ກັບ ໖ · ໑ ກັບ ໙", th: "ระวังเลขที่หน้าตาคล้ายกัน" },
+    ],
+    quiz() {
+      const n = Math.random() < 0.5 ? rnd(0, 9) : rnd(10, 99), toArabic = Math.random() < 0.5;
+      const pool = new Set([n]);
+      const near = n < 10 ? shuffle(range(10).filter((d) => d !== n)) : shuffle([n % 10 * 10 + Math.floor(n / 10), n + 1, n - 1, n + 10].filter((v) => v !== n && v >= 0 && v <= 99));
+      for (const v of near) { if (pool.size >= 3) break; pool.add(v); }
+      const vals = shuffle([...pool]);
+      return { sig: (toArabic ? "a" : "l") + n, kind: toArabic ? "num" : "word", text: toArabic ? "ເລກລາວນີ້ແມ່ນເລກໃດ?" : "ຂຽນເປັນເລກລາວແນວໃດ?", th: toArabic ? "เลขลาวนี้คือเลขอะไร" : "เขียนเป็นเลขลาวอย่างไร",
+        vis: toArabic ? `<div class="big-lao">${toLao(n)}</div>` : `<div class="eq">${n}</div>`,
+        choices: vals.map((v) => ({ label: toArabic ? String(v) : `<span class="big-lao" style="font-size:34px">${toLao(v)}</span>`, value: v, say: wlo(v) })), answer: n,
+        why: `${toLao(n)} = ${n} · ${wlo(n)}`, whyTh: `${n}`, hint: "ທຽບທີລະຕົວກັບຕາຕະລາງຂ້າງລຸ່ມ", hintTh: "เทียบทีละตัวกับตารางด้านล่าง",
+        hintVis: `<div class="col"><div class="eq" style="font-size:22px;letter-spacing:6px">0 1 2 3 4 5 6 7 8 9</div><div class="big-lao" style="font-size:30px;letter-spacing:6px">${LD.split("").join(" ")}</div></div>` };
+    },
+    parent: {
+      book: [
+        "หน้า 154: ตาราง 0–100 เทียบเลขอารบิก (แถวบน) กับเลขลาว (แถวล่าง) “มีอะไรเหมือนกันบ้าง”",
+        "หน้า 155: ข้อสังเกตของเด็ก: ทุกจำนวนมีหลักสิบกับหลักหน่วย · ใช้ตัวเลข 0–9 เหมือนกัน · หลักสิบอยู่ซ้าย หลักหน่วยอยู่ขวา · ฝึกอ่าน ໖ ໒໐ ໔໕ ໕໔ ໓໓ ໑໙ ໘໗ ໒໖ ໓໑ ໑໐໐ และฝึกเขียน ໐–໙ ตามลูกศร",
+      ],
+      idea: { lo: "ຈຳນວນໃດກໍລ້ວນແຕ່ເອົາຫຼັກຫົວສິບໄວ້ເບື້ອງຊ້າຍ ແລະ ເອົາຫຼັກຫົວໜ່ວຍໄວ້ເບື້ອງຂວາ", th: "ทุกจำนวนเอาหลักสิบไว้ซ้าย หลักหน่วยไว้ขวา — ระบบเหมือนกันทุกอย่าง ต่างแค่รูปตัวเลข" },
+      home: [
+        "ทำบัตรคู่: เลขอารบิกกับเลขลาว เล่นจับคู่หรือเกมจำ",
+        "ชวนหาเลขลาวรอบตัว เช่น ปฏิทิน ป้าย ธนบัตร",
+        "เปิด “ใช้เลขลาว” ในมุมผู้ปกครองของเกม ให้ลูกเห็นเลขลาวระหว่างเล่น",
+      ],
+      watch: ["สับสนตัวที่คล้ายกัน ໔/໕ · ໒/໖ · ໑/໙"],
+      words: "ເລກລາວ = เลขลาว · ເລກອາຣັບ = เลขอารบิก · ສົມທຽບ = เปรียบเทียบ · ຄືກັນ = เหมือนกัน · ຝຶກຂຽນ = ฝึกเขียน",
+      game: "ในมุมผู้ปกครองของเกม เปิดสวิตช์ “ໃຊ້ເລກລາວ” ได้",
+    },
+  });
+
+  /* ===== Review of the whole year (book pp. 156–160) ===== */
+  CH.push({
+    id: "r", review: true, lo: "ທວນຄືນບົດຮຽນຊັ້ນ ປ.1", th: "ทบทวนทั้งปี ป.1", pages: "156–160",
+    learn: [
+      { vis: P.row(P.split(10, 7, 3), P.frame([[10, "c1"], [3, "c2"]])), lo: "ສອງເລື່ອງໃຫຍ່ຂອງ ປ.1: ຄູ່ທີ່ລວມກັນເປັນ 10 · ແລະ 10 ກັບ 3 ເປັນ 13", th: "สองเรื่องใหญ่ของ ป.1 คู่ที่รวมเป็น 10 และ 10 กับ 3 เป็น 13" },
+      { vis: P.col(P.eq([9, "+", 4, "=", { v: 13 }]), P.eq([13, "−", 9, "=", { v: 4 }])), lo: "ບວກ ແລະ ລົບ ຂ້າມ 10 ໃຊ້ 10 ເປັນຕົວຊ່ວຍສະເໝີ", th: "บวกและลบข้ามสิบ ใช้ 10 เป็นตัวช่วยเสมอ" },
+      { vis: P.col(P.tens(4, 7), P.pv(4, 7)), lo: "ຈຳນວນໃຫຍ່ ແບ່ງເປັນກຸ່ມລະ 10 · 47 ແມ່ນ 4 ຫົວສິບ ແລະ 7 ຫົວໜ່ວຍ", th: "จำนวนใหญ่แบ่งเป็นกลุ่มละ 10 47 คือ 4 สิบกับ 7 หน่วย" },
+    ],
+    quiz() {
+      const pool = CH.filter((c) => !c.review && [2, 4, 5, 6, 7, 8, 10, 12, 14, 17].includes(c.id));
+      return pick(pool).quiz();
+    },
+    parent: {
+      book: [
+        "หน้า 156–159 ทบทวนทั้งปี: นับและเขียนเลขถึง 120 · หลักสิบหลักหน่วย · เส้นจำนวน · บวกลบไม่เกิน 20 และบวกลบเป็นสิบ · > < = · โจทย์ปัญหา · ดูนาฬิกา · ต่อรูปจากสามเหลี่ยม · ความยาว · ปริมาตร",
+        "หน้า 160: ตารางอ่านเลข 0–100 ภาษาลาว: 11 ສິບເອັດ · 20 ຊາວ · 21 ຊາວເອັດ · 30 ສາມສິບ · 31 ສາມສິບເອັດ · 100 ໜຶ່ງຮ້ອຍ (หลักหน่วย 1 หลังสิบอ่าน ເອັດ เสมอ)",
+        "แบบฝึกในหน้านี้สุ่มโจทย์จากบท 2, 4, 5, 6, 7, 8, 10, 12, 14 และ 17",
+      ],
+      idea: { lo: "ເຮັດໃຫ້ເປັນ 10 · ກຸ່ມລະ 10", th: "หัวใจของ ป.1 มี 2 อย่าง: “ทำให้ครบ 10” (บวกลบข้ามสิบ) และ “กลุ่มละ 10” (หลักสิบหลักหน่วย)" },
+      home: [
+        "ถ้าลูกยังอ่อนเลข ให้ฝึกตามลำดับนี้ก่อนบทที่ 12 และ 14: ① คู่ที่รวมเป็น 10 ให้ตอบทันที ② 10 ลบอะไรก็ได้ ③ “13 คือ 10 กับ 3”",
+        "ก่อนบทที่ 17 ให้มัดของจริงเป็นกลุ่มละ 10 บ่อย ๆ",
+        "ใช้ประโยคพูดแบบในหนังสือ (ภาษาลาว) และพูดออกเสียงด้วยกัน เพราะหนังสือให้เด็กอ่านวิธีคิดออกเสียงตลอด",
+        "ทดสอบด้วยกระดาษเดือนละครั้ง: บวก 5 ข้อ ลบ 5 ข้อ จดคะแนนและเวลา เพื่อดูว่าเก่งขึ้นจริง",
+      ],
+      watch: [
+        "คำอ่านเลข ສິບເອັດ ຊາວ ຊາວເອັດ ที่เด็กมักพูดเป็น ສິບໜຶ່ງ ສອງສິບ",
+        "ยังนับนิ้วทีละ 1 ในโจทย์ข้ามสิบ แปลว่าพื้นฐานบทที่ 4 และ 7 ยังไม่แน่น",
+      ],
+      words: "ທວນຄືນ = ทบทวน · ວິທີອ່ານ = วิธีอ่าน · ຈຳນວນ = จำนวน",
+      game: "เมืองหุ่นยนต์ 🤖 ผสมบวกลบ > < = เหมาะเป็นการทบทวน",
+    },
+  });
+
+  const CHAPTERS = CH.sort((a, b) => (a.review ? 99 : a.id) - (b.review ? 99 : b.id));
+
+  /* ---------- contents ---------- */
+  function renderToc() {
+    $("#toc").innerHTML = CHAPTERS.map((c) => {
+      const best = saved.best[c.id];
+      return `<li><a href="#bot-${c.id}" class="${c.review ? "review" : ""}"><span class="n">${c.review ? "★" : c.id}</span><span class="t">${c.lo}<small>${c.th}</small></span>${best !== undefined ? `<span class="done" aria-label="${best}/5">${"★".repeat(best)}</span>` : ""}</a></li>`;
+    }).join("");
+  }
+
+  /* ---------- a chapter: three tabs ---------- */
+  let cur = null, stepI = 0, quiz = null;
+  const TABS = { learn: ["#tabLearn", "#viewLearn"], practice: ["#tabPractice", "#viewPractice"], parent: ["#tabParent", "#viewParent"] };
+  function showTab(name) {
+    Object.entries(TABS).forEach(([k, [tab, view]]) => { $(tab).setAttribute("aria-selected", String(k === name)); $(view).hidden = k !== name; });
+    if (synth) try { synth.cancel(); } catch (e) { /* ignore */ }
+    if (name === "practice" && quiz && quiz.i < quiz.qs.length) { const q = quiz.qs[quiz.i]; speak(q.say || q.text, q.th); }
+    window.scrollTo(0, 0);
+  }
+  $("#tabLearn").addEventListener("click", () => showTab("learn"));
+  $("#tabPractice").addEventListener("click", () => showTab("practice"));
+  $("#tabParent").addEventListener("click", () => showTab("parent"));
+  function openChapter(c) {
+    cur = c;
+    $("#home").hidden = true;
+    $("#chapter").hidden = false;
+    $("#backBtn").hidden = false;
+    $("#kicker").textContent = c.review ? `ໜ້າ ${c.pages}` : `ບົດທີ ${c.id} · ໜ້າ ${c.pages}`;
+    $("#topTitle").textContent = c.lo;
+    $("#parentBody").innerHTML = renderParent(c);
+    stepI = 0;
+    showStep(false);
+    startQuiz(false);
+    showTab("learn");
+  }
+  function showStep(talk = true) {
+    const st = cur.learn[stepI];
+    $("#stepVis").innerHTML = st.vis;
+    // one idea per line: the first line is the point, the rest explain it
+    $("#stepText").innerHTML = st.lo.split(" · ").map((line) => `<p>${line}</p>`).join("");
+    $("#stepDots").innerHTML = cur.learn.map((_, i) => `<span class="${i <= stepI ? "on" : ""}"></span>`).join("");
+    $("#stepPrev").disabled = stepI === 0;
+    $("#stepNext").textContent = stepI === cur.learn.length - 1 ? "ໄປຝຶກ →" : "ຕໍ່ໄປ →";
+    if (talk) speak(st.lo, st.th);
+  }
+  $("#stepPrev").addEventListener("click", () => { if (stepI > 0) { stepI--; showStep(); } });
+  $("#stepNext").addEventListener("click", () => { if (stepI < cur.learn.length - 1) { stepI++; showStep(); } else showTab("practice"); });
+  $("#stepVis").addEventListener("click", () => speak(cur.learn[stepI].lo, cur.learn[stepI].th));
+  $("#stepSay").addEventListener("click", () => speak(cur.learn[stepI].lo, cur.learn[stepI].th));
+
+  /* ---------- practice: five questions, a hint after a miss, a star for each first-try answer ---------- */
+  const PRAISE = [["ເກັ່ງຫຼາຍ!", "เก่งมาก!"], ["ຖືກຕ້ອງ!", "ถูกต้อง!"], ["ສຸດຍອດ!", "สุดยอด!"], ["ແມ່ນແລ້ວ!", "ใช่แล้ว!"]];
+  function startQuiz(talk = true) {
+    const seen = new Set(), qs = [];
+    for (let g = 0; qs.length < 5 && g < 60; g++) {
+      const q = cur.quiz();
+      const sig = q.sig || q.text + q.answer;
+      if (!seen.has(sig) || g > 40) { seen.add(sig); qs.push(q); }
+    }
+    quiz = { qs, i: 0, marks: [], tries: 0 };
+    showQ(talk);
+  }
+  function renderStars() {
+    $("#qStars").innerHTML = range(5).map((i) => `<i class="${quiz.marks[i] === 1 ? "ok" : quiz.marks[i] === 0 ? "help" : i === quiz.i ? "now" : ""}"></i>`).join("");
+    $("#qStars").setAttribute("aria-label", `${Math.min(quiz.i + 1, 5)}/5`);
+  }
+  function showQ(talk = true) {
+    renderStars();
+    const box = $("#practice");
+    if (quiz.i >= quiz.qs.length) {
+      const got = quiz.marks.filter((m) => m === 1).length;
+      if (saved.best[cur.id] === undefined || got > saved.best[cur.id]) { saved.best[cur.id] = got; store(); }
+      const i = CHAPTERS.indexOf(cur), next = CHAPTERS[i + 1];
+      const msg = got >= 4 ? ["ເກັ່ງຫຼາຍ! ພ້ອມຮຽນບົດຕໍ່ໄປແລ້ວ", "เก่งมาก พร้อมเรียนบทต่อไปแล้ว"] : got >= 2 ? ["ດີແລ້ວ! ລອງອີກຮອບເພື່ອໃຫ້ໄດ້ດາວຫຼາຍຂຶ້ນ", "ดีแล้ว ลองอีกรอบนะ"] : ["ບໍ່ເປັນຫຍັງ ກັບໄປຟັງໝີນ້ອຍອີກເທື່ອ ແລ້ວລອງໃໝ່", "ไม่เป็นไร กลับไปฟังหมีน้อยอีกครั้งแล้วลองใหม่"];
+      box.innerHTML = `<div class="result"><div class="big">${"★".repeat(got)}${"☆".repeat(5 - got)}</div><p class="qtext">${msg[0]}</p><div class="row"><button class="plain" id="again" type="button">↺ ອີກຮອບ</button>${next ? `<a class="go" style="display:inline-flex;align-items:center;text-decoration:none" href="#bot-${next.id}">ບົດຕໍ່ໄປ →</a>` : ""}</div></div>`;
+      speak(...msg);
+      $("#again").addEventListener("click", () => startQuiz());
+      renderToc();
+      return;
+    }
+    const q = quiz.qs[quiz.i];
+    quiz.tries = 0;
+    const kind = q.kind || "num";
+    const words = /[\u0E80-\u0EFF]/.test(q.text) || !q.vis;
+    box.innerHTML = `${words ? `<p class="qtext">${q.text}</p>` : ""}${q.vis ? `<div class="vis">${q.vis}</div>` : ""}<div class="choices">${q.choices.map((c, i) => `<button class="choice ${kind}" type="button" data-i="${i}" aria-label="${esc(c.say || c.label)}">${c.label}</button>`).join("")}</div><div id="fb"></div>`;
+    if (talk) speak(q.say || q.text, q.th);
+    box.querySelectorAll(".choice").forEach((b) => b.addEventListener("click", () => answer(q, q.choices[+b.dataset.i], b)));
+  }
+  function answer(q, c, btn) {
+    if (btn.classList.contains("wrong") || $("#practice .choice.right")) return;
+    const fb = $("#fb");
+    if (c.value === q.answer) {
+      btn.classList.add("right");
+      ding();
+      quiz.marks[quiz.i] = quiz.tries === 0 ? 1 : 0;
+      renderStars();
+      const [lo, th] = pick(PRAISE);
+      fb.innerHTML = `<div class="feedback good"><div>${[lo, ...String(q.why || "").split(" · ")].filter(Boolean).map((l, i) => (i ? `<p class="th-soft">${l}</p>` : `<p><b>${l}</b></p>`)).join("")}</div><button class="go" id="nextQ" type="button">ຂໍ້ຕໍ່ໄປ →</button></div>`;
+      speak(`${lo} ${q.why || ""}`, `${th} ${q.whyTh || ""}`);
+      $("#nextQ").addEventListener("click", () => { quiz.i++; showQ(); });
+      $("#nextQ").focus();
+    } else {
+      quiz.tries++;
+      btn.classList.add("wrong");
+      boing();
+      fb.innerHTML = `<div class="feedback help"><p>🐻 ${q.hint}</p>${q.hintVis ? `<div class="vis">${q.hintVis}</div>` : ""}</div>`;
+      speak(q.hint, q.hintTh);
+    }
+  }
+
+  /* ---------- grown-ups: the key idea and what to do at home first; the rest folds away ---------- */
+  function renderParent(c) {
+    const p = c.parent, list = (xs, tag = "ul") => `<${tag}>${xs.map((x) => `<li>${x}</li>`).join("")}</${tag}>`;
+    // numbered ideas (① … ②) read better one per line
+    const lines = (s) => s.replace(/\s*([②-⑨])/g, "<br>$1").replace(/\s*—\s*/g, "<br>");
+    return `
+      ${p.idea ? `<div class="idea"><div class="lo">${lines(p.idea.lo)}</div><div class="tr">${lines(p.idea.th)}</div></div>` : ""}
+      <h3>สอนที่บ้าน</h3>${list(p.home, "ol")}
+      <h3>ระวัง</h3>${list(p.watch)}
+      <details><summary>ในแบบเรียน หน้า ${c.pages} สอนอะไร</summary>${list(p.book)}</details>
+      ${p.words ? `<details><summary>คำลาวที่ลูกต้องเข้าใจ</summary><p>${p.words}</p></details>` : ""}
+      ${p.game ? `<p class="game">🎮 ${p.game}</p>` : ""}`;
+  }
+
+  /* ---------- pages ---------- */
+  function route() {
+    const m = /^#bot-(\w+)$/.exec(location.hash);
+    const c = m && CHAPTERS.find((x) => String(x.id) === m[1]);
+    if (c) { openChapter(c); return; }
+    cur = null;
+    $("#home").hidden = false;
+    $("#chapter").hidden = true;
+    $("#backBtn").hidden = true;
+    $("#kicker").textContent = "ຄະນິດສາດ ປ.1";
+    $("#topTitle").textContent = "ຫ້ອງຮຽນໝີນ້ອຍ";
+    if (synth) try { synth.cancel(); } catch (e) { /* ignore */ }
+    renderToc();
+    window.scrollTo(0, 0);
+  }
+  $("#backBtn").addEventListener("click", () => { location.hash = ""; });
+  $("#voiceBtn").addEventListener("click", () => {
+    saved.voice = !saved.voice; store();
+    $("#voiceBtn").setAttribute("aria-pressed", String(saved.voice));
+    if (!saved.voice && synth) try { synth.cancel(); } catch (e) { /* ignore */ }
+    renderVoice(pickVoice());
+  });
+  $("#voiceBtn").setAttribute("aria-pressed", String(saved.voice));
+  if (synth) waitVoices().then(() => { voicesChecked = true; renderVoice(pickVoice()); });
+  else renderVoice(null);
+  window.addEventListener("hashchange", route);
+  route();
+})();
+</script>
+
+</html>
