@@ -1,0 +1,49 @@
+{
+  "id": "./",
+  "name": "ນັບເລກກັບໝີນ້ອຍ",
+  "short_name": "ນັບເລກ",
+  "description": "ເກມເລກ 3D ສຳລັບເດັກນ້ອຍ: ຕີແມງເລກທີ່ເປັນຄຳຕອບຖືກ ແລ້ວຊ່ວຍເອົາໄຂ່ໄດໂນຄືນ",
+  "lang": "lo",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ],
+  "orientation": "any",
+  "background_color": "#BFE8FF",
+  "theme_color": "#2F8BE0",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
