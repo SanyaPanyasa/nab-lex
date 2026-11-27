@@ -1,7 +1,7 @@
 /* Offline support: the game's files stay on the phone. Each launch is answered from the phone at once,
    while a fresh copy is fetched in the background, so a new version arrives on the following launch. */
 const CACHE_PREFIX = "nab-lek-";
-const CACHE = CACHE_PREFIX + "v7";
+const CACHE = CACHE_PREFIX + "v8";
 const GAME = "three.min.js";
 const CORE = [
   "./", "index.html", "manifest.webmanifest",

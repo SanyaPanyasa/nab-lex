@@ -222,6 +222,9 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 #practiceBondWhole { grid-column: 1 / -1; background: var(--card); }
 #practiceBondOther { border-color: var(--sun); background: var(--sun-soft); }
 .practice-bond .blank { border-style: dashed; }
+.practice-equation .filled, .practice-bond .filled {
+  padding-inline: 6px; border-radius: 8px; background: var(--leaf-soft); box-shadow: inset 0 -3px var(--leaf);
+}
 .practice-bond-links { grid-column: 1 / -1; width: 50%; height: 26px; display: grid; grid-template-columns: 1fr 1fr; }
 .practice-bond-links::before, .practice-bond-links::after {
   content: ""; background: linear-gradient(to bottom right, transparent calc(50% - 1px), var(--ink-soft) 50%, transparent calc(50% + 1px));
@@ -270,7 +273,32 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-cell.empty { border: 2px dashed var(--sky); background: var(--card); color: var(--ink-soft); }
 .practice-cell.added { background: #FFE29A; color: #774300; border-radius: 50%; animation: pop 0.2s ease-out; }
 .practice-cell.removed { border: 2px dashed var(--line); background: var(--card); color: var(--ink-soft); }
-.practice-count { text-align: center; font-size: 16px; font-weight: 700; }
+.practice-counting { display: grid; gap: 4px; }
+.practice-number-line { position: relative; padding: 30px 0 0; margin: 0 15px; }
+.practice-ticks { position: relative; height: 30px; border-top: 2px solid var(--ink-soft); }
+.practice-tick { position: absolute; top: -1px; width: 10%; }
+.practice-tick:last-child { width: 0; }
+.practice-tick::before {
+  content: ""; position: absolute; left: -2px; top: -3px; width: 4px; height: 6px; background: var(--ink-soft);
+}
+.practice-tick.start::before {
+  top: -5px; left: -5px; width: 10px; height: 10px; background: var(--card); border: 2px solid var(--ink); border-radius: 50%;
+}
+.practice-tick.hop::after {
+  content: ""; position: absolute; bottom: 100%; left: 0; width: 100%; height: 11px;
+  border: 2px solid var(--sky); border-bottom: 0; border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.practice-tick > span {
+  position: absolute; top: 5px; left: 0; transform: translateX(-50%); min-width: 20px; padding: 0 2px;
+  border-radius: 5px; text-align: center; font-size: 15px; font-weight: 700; line-height: 21px;
+}
+.practice-tick.current > span { background: var(--ink); color: var(--card); }
+.practice-number-line .practice-creature {
+  --creature-size: 28px; position: absolute; top: -2px; transform: translateX(-50%); transition: left 160ms ease-out;
+}
+.practice-count { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 8px; font-size: 15px; font-weight: 700; }
+.practice-count span { padding: 2px 8px; border-radius: 6px; background: var(--sky-soft); }
+.practice-count span + span { background: var(--sun-soft); }
 .practice-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .practice-choices .btn { min-height: 52px; padding: 0; font-size: 28px; }
 .practice-choices [data-wrong] { border-color: var(--sun); background: var(--sun-soft); }
@@ -628,6 +656,7 @@ button.obj:active { transform: scale(0.9); }
         <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
         <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
       </button>
+      <button class="btn small" id="practiceExample" type="button"></button>
     </div>
     <div class="practice-panel" id="practiceQuestion" hidden>
       <div class="practice-progress"><h2 id="practiceLessonTitle" tabindex="-1"></h2><span id="practiceProgress"></span></div>
@@ -656,7 +685,15 @@ button.obj:active { transform: scale(0.9); }
         <span class="practice-creature" aria-hidden="true"></span><div><strong></strong><small></small></div>
       </div>
       <div class="practice-tray" id="practiceTray"></div>
-      <p class="practice-count" id="practiceCount" aria-live="polite"></p>
+      <div class="practice-counting" id="practiceCounting" hidden>
+        <div class="practice-number-line num" aria-hidden="true">
+          <div class="practice-ticks" id="practiceTicks"></div>
+          <span class="practice-creature" id="practiceWalker"></span>
+        </div>
+        <p class="practice-count" id="practiceCount" aria-live="polite" aria-atomic="true">
+          <span id="practicePosition"></span><span id="practiceChange"></span>
+        </p>
+      </div>
       <section class="practice-drawing" id="practiceDrawing" aria-labelledby="practiceDrawTitle" hidden>
         <div class="practice-drawing-head">
           <div class="practice-drawing-title"><span class="practice-creature" id="practiceDrawArt" aria-hidden="true"></span><h3 id="practiceDrawTitle"></h3></div>
@@ -675,7 +712,8 @@ button.obj:active { transform: scale(0.9); }
         <div class="practice-compare-row" id="practiceCompareRight" data-second><strong></strong><div class="practice-compare-stars" aria-hidden="true"></div></div>
       </div>
       <div class="practice-choices" id="practiceChoices" hidden></div>
-      <button class="btn small" id="practicePicture" type="button" aria-controls="practiceTray practiceCompare" hidden></button>
+      <button class="btn small" id="practiceRecount" type="button" aria-controls="practiceTray practiceCounting" hidden></button>
+      <button class="btn small" id="practicePicture" type="button" aria-controls="practiceTray practiceCounting practiceCompare" hidden></button>
       <section class="practice-model" id="practiceModel" aria-labelledby="practiceModelTitle" hidden>
         <h3 id="practiceModelTitle" tabindex="-1"></h3>
         <div class="practice-model-stars" id="practiceModelStars" aria-hidden="true">
@@ -912,6 +950,9 @@ button.obj:active { transform: scale(0.9); }
         guide: "ຊວນລູກຄິດ", original: "ໂຕທີ່ມີຢູ່", added: "ໂຕທີ່ເຕີມ", removed: "ໂຕທີ່ເອົາອອກ",
         put: "ເຕີມໃສ່ຊ່ອງນີ້", take: "ເອົາໂຕນີ້ອອກ",
         picture: "ໃຊ້ຮູບຊ່ວຍ", imagineAgain: "ລອງຄິດອີກເທື່ອ ຫຼື ແຕະໃຊ້ຮູບຊ່ວຍເດີ",
+        example: "ລອງນັບ 1 ຂໍ້", recount: "ລອງນັບໃໝ່", offerPicture: "ແຕະໃຊ້ຮູບຊ່ວຍໄດ້ເດີ",
+        exampleHome: "ວາງຝາຂວດ 3 ຝາ. ໃຫ້ລູກເຕີມໃຫ້ຄົບ 5 ຝາ ແລ້ວຖາມວ່າ ເຕີມໄປຈັກຝາ?",
+        totalNow: (n) => `ຕອນນີ້ມີ ${n} ໂຕ`,
         drawing: {
           title: "ແຕ້ມແລ້ວເລົ່າ", paper: "ແຕ້ມໃສ່ເຈ້ຍ", screen: "ແຕ້ມໃນຈໍ", choose: "ເລືອກຄຳຕອບເລີຍ",
           tools: "ເຄື່ອງມືແຕ້ມ", undo: "ຍ້ອນຄືນ", blue: "ສີຟ້າ", orange: "ສີສົ້ມ",
@@ -940,7 +981,7 @@ button.obj:active { transform: scale(0.9); }
           count: (n, part, other) => `ເຕີມແລ້ວ ${n} ຈາກ ${other} ໂຕ`,
           ask: "ມີທັງໝົດຈັກໂຕ?", again: "ລອງຊີ້ນັບທັງສອງກຸ່ມອີກເທື່ອເດີ",
           done: (part, whole, other) => `${part} ໂຕ ກັບອີກ ${other} ໂຕ ລວມເປັນ ${whole} ໂຕ`,
-          before: "ໃຫ້ລູກນັບທີ່ເຕີມເທື່ອລະໂຕ",
+          before: "ຊວນລູກເວົ້າຈຳນວນທີ່ມີຢູ່ ແລ້ວນັບຕໍ່ໜຶ່ງກ້າວທຸກເທື່ອທີ່ເຕີມ",
           during: "ຊວນລູກຊີ້ນັບທັງສອງກຸ່ມ ຫຼື ນັບຕໍ່ຈາກກຸ່ມທຳອິດ",
           think: "ໃຫ້ລູກນຶກເຖິງສອງກຸ່ມ ແລ້ວເລົ່າວ່ານັບຕໍ່ແນວໃດ",
           home: "ວາງຝາຂວດ 2 ຝາ ແລ້ວເພີ່ມອີກ 4 ຝາ. ໃຫ້ລູກທາຍຈຳນວນລວມ ແລ້ວນັບກວດຄຳຕອບ.",
@@ -951,8 +992,9 @@ button.obj:active { transform: scale(0.9); }
           imagine: (part, whole, other, animal) => `ລອງນຶກວ່າມີ${animal} ${whole} ໂຕ ຖ້າເອົາອອກ ${part} ໂຕ ຈະເຫຼືອຈັກໂຕ?`,
           count: (n, part) => `ເອົາອອກແລ້ວ ${n} ຈາກ ${part} ໂຕ`,
           ask: "ເຫຼືອຈັກໂຕ?", again: "ລອງຊີ້ນັບສະເພາະໂຕທີ່ຍັງຢູ່ເບິ່ງເດີ",
+          countedTaken: (n) => `${n} ໂຕແມ່ນໂຕທີ່ເອົາອອກ. ຍັງເຫຼືອຈັກໂຕ?`,
           done: (part, whole, other) => `ມີ ${whole} ໂຕ ເອົາອອກ ${part} ໂຕ ເຫຼືອ ${other} ໂຕ`,
-          before: "ໃຫ້ລູກນັບໂຕທີ່ເອົາອອກເທື່ອລະໂຕ",
+          before: "ໃຫ້ລູກເວົ້າຈຳນວນເຕົ່າຕອນເລີ່ມ ແລ້ວນັບຖອຍໜຶ່ງກ້າວທຸກເທື່ອທີ່ເອົາອອກໜຶ່ງໂຕ",
           during: "ໃຫ້ລູກຊີ້ນັບສະເພາະໂຕທີ່ຍັງຢູ່ໃນຖາດ",
           think: "ຊວນລູກນຶກພາບວ່າຢິບອອກເທື່ອລະໂຕ ແລ້ວເລົ່າວ່າເຫຼືອຈັກໂຕ",
           home: "ວາງຝາຂວດ 6 ຝາ. ໃຫ້ລູກທາຍວ່າຖ້າເອົາອອກ 1 ຝາ ຈະເຫຼືອຈັກຝາ ແລ້ວລອງເອົາອອກຈິງເບິ່ງ.",
@@ -972,11 +1014,13 @@ button.obj:active { transform: scale(0.9); }
           title: "ເຕີມຊ່ອງຫວ່າງ", intro: "ຫາເລກທີ່ຂາດໃນສົມຜົນ ແລະ ແຜນຜັງ", animal: "ມັງກອນນ້ອຍ",
           step: (part, whole, other, animal) => `ມີ${animal} ${part} ໂຕ ແຕະເຕີມໃຫ້ຄົບ ${whole} ໂຕ`,
           imagine: (part, whole, other, animal) => `ລອງນຶກວ່າມີ${animal} ${part} ໂຕ ຕ້ອງເຕີມຈັກໂຕຈຶ່ງຈະຄົບ ${whole}?`,
-          count: (n) => `ຕອນນີ້ມີທັງໝົດ ${n} ໂຕ`,
+          count: (n) => `ເຕີມແລ້ວ ${n} ໂຕ`,
           ask: "ເຕີມໄປຈັກໂຕ?", again: "ລອງຊີ້ນັບສະເພາະໂຕທີ່ເຕີມ ຢູ່ໃນວົງມົນສີເຫຼືອງ",
+          countedTotal: (start, end) => `${end} ແມ່ນຈຳນວນທັງໝົດ. ຈາກ ${start} ຫາ ${end} ເດີນໄປຈັກກ້າວ?`,
+          countedStart: (n) => `${n} ໂຕມີຢູ່ແລ້ວ. ລອງນັບສະເພາະໂຕທີ່ເຕີມເບິ່ງເດີ`,
           done: (part, whole, other) => `ມີ ${part} ໂຕ ເຕີມ ${other} ໂຕ ລວມເປັນ ${whole} ໂຕ`,
           before: "ຊວນລູກເລີ່ມນັບຕໍ່ຈາກຈຳນວນທີ່ມີ ແລ້ວເວົ້າຈຳນວນລວມທຸກເທື່ອທີ່ເຕີມ",
-          during: "ໃຫ້ລູກຊີ້ນັບສະເພາະໂຕໃນວົງມົນສີເຫຼືອງ ເລີ່ມຈາກໜຶ່ງ",
+          during: "ຖາມລູກວ່າ ເດີນໄປຈັກກ້າວ? ໃຫ້ລູກຊີ້ໂຕທີ່ເຕີມໜຶ່ງໂຕຕໍ່ໜຶ່ງກ້າວ",
           think: "ຊວນລູກນັບຕໍ່ໃນໃຈ ແລ້ວເລົ່າວ່າເຕີມໄປຈັກໂຕກ່ອນແຕະຄຳຕອບ",
           home: "ໃຊ້ຝາຂວດ 6 ຝາ ແຍກເປັນສອງກຸ່ມ. ວາງ 1 ຝາໃນກຸ່ມທຳອິດ ແລ້ວໃຫ້ລູກເຕີມເລກຂອງອີກກຸ່ມໃນແຜນຜັງ.",
         },
@@ -1117,6 +1161,9 @@ button.obj:active { transform: scale(0.9); }
         guide: "ชวนลูกคิด", original: "ตัวที่มีอยู่", added: "ตัวที่เติม", removed: "ตัวที่เอาออก",
         put: "เติมสัตว์ในช่องนี้", take: "เอาสัตว์ตัวนี้ออก",
         picture: "ใช้ภาพช่วย", imagineAgain: "ลองคิดอีกครั้ง หรือแตะใช้ภาพช่วยนะ",
+        example: "ลองนับ 1 ข้อ", recount: "ลองนับใหม่", offerPicture: "แตะใช้ภาพช่วยได้นะ",
+        exampleHome: "วางฝาขวด 3 ฝา ให้ลูกเติมให้ครบ 5 ฝา แล้วถามว่า เติมไปกี่ฝา?",
+        totalNow: (n) => `ตอนนี้มี ${n} ตัว`,
         drawing: {
           title: "วาดแล้วเล่า", paper: "วาดบนกระดาษ", screen: "วาดบนจอ", choose: "ตอบเลย",
           tools: "เครื่องมือวาด", undo: "ย้อนเส้นล่าสุด", blue: "สีน้ำเงิน", orange: "สีส้ม",
@@ -1145,7 +1192,7 @@ button.obj:active { transform: scale(0.9); }
           count: (n, part, other) => `เติมแล้ว ${n} จาก ${other} ตัว`,
           ask: "มีทั้งหมดกี่ตัว?", again: "ลองชี้นับทั้งสองกลุ่มอีกครั้งนะ",
           done: (part, whole, other) => `${part} ตัว กับอีก ${other} ตัว รวมเป็น ${whole} ตัว`,
-          before: "ให้ลูกนับตัวที่เติมทีละตัว",
+          before: "ชวนลูกพูดจำนวนที่มีอยู่ แล้วนับต่อหนึ่งก้าวทุกครั้งที่เติม",
           during: "ชวนลูกชี้นับทั้งสองกลุ่ม หรือนับต่อจากจำนวนในกลุ่มแรก",
           think: "ชวนลูกนึกถึงสองกลุ่ม แล้วเล่าว่านับต่ออย่างไร",
           home: "วางฝาขวด 2 ฝา แล้วเพิ่มอีก 4 ฝา ให้ลูกทายยอดรวม แล้วนับตรวจคำตอบ",
@@ -1156,8 +1203,9 @@ button.obj:active { transform: scale(0.9); }
           imagine: (part, whole, other, animal) => `ลองนึกว่ามี${animal} ${whole} ตัว หยิบออก ${part} ตัว จะเหลือกี่ตัว?`,
           count: (n, part) => `เอาออกแล้ว ${n} จาก ${part} ตัว`,
           ask: "เหลือกี่ตัว?", again: "ลองชี้นับเฉพาะตัวที่ยังอยู่ในถาดอีกครั้งนะ",
+          countedTaken: (n) => `${n} ตัวคือจำนวนที่เอาออก แล้วยังเหลือกี่ตัว?`,
           done: (part, whole, other) => `มี ${whole} ตัว เอาออก ${part} ตัว เหลือ ${other} ตัว`,
-          before: "ให้ลูกนับตัวที่เอาออกทีละตัว",
+          before: "ชวนลูกพูดจำนวนเต่าตอนเริ่ม แล้วนับถอยหนึ่งก้าวทุกครั้งที่เอาออกหนึ่งตัว",
           during: "ให้ลูกชี้นับเฉพาะตัวที่ยังอยู่ในถาด",
           think: "ชวนลูกนึกว่าหยิบออกทีละตัว แล้วเล่าว่าเหลือกี่ตัว",
           home: "ลองวางฝาขวด 6 ฝา ให้ลูกทายว่าหยิบออก 1 ฝาจะเหลือกี่ฝา แล้วให้หยิบออกจริงเพื่อตรวจคำตอบ",
@@ -1177,11 +1225,13 @@ button.obj:active { transform: scale(0.9); }
           title: "เติมช่องว่าง", intro: "หาเลขที่หายในสมการและแผนผัง", animal: "มังกรน้อย",
           step: (part, whole, other, animal) => `มี${animal} ${part} ตัว แตะเติมให้ครบ ${whole} ตัว`,
           imagine: (part, whole, other, animal) => `ลองนึกว่ามี${animal} ${part} ตัว ต้องเติมอีกกี่ตัวถึงจะครบ ${whole}?`,
-          count: (n) => `ตอนนี้มีทั้งหมด ${n} ตัว`,
+          count: (n) => `เติมแล้ว ${n} ตัว`,
           ask: "เติมไปกี่ตัว?", again: "ลองชี้นับเฉพาะตัวในวงกลมสีเหลืองอีกครั้งนะ",
+          countedTotal: (start, end) => `${end} คือจำนวนทั้งหมด จาก ${start} ถึง ${end} เดินไปกี่ก้าว?`,
+          countedStart: (n) => `${n} ตัวมีอยู่แล้ว ลองนับเฉพาะตัวที่เติมดูนะ`,
           done: (part, whole, other) => `มี ${part} ตัว เติม ${other} ตัว รวมเป็น ${whole} ตัว`,
           before: "ชวนลูกนับต่อจากจำนวนที่มี แล้วพูดจำนวนรวมทุกครั้งที่เติม",
-          during: "ให้ลูกชี้นับเฉพาะตัวในวงกลมสีเหลือง เริ่มจากหนึ่ง",
+          during: "ถามลูกว่า เดินไปกี่ก้าว? ให้ลูกชี้ตัวที่เติมหนึ่งตัวต่อหนึ่งก้าว",
           think: "ชวนลูกนับต่อในใจ แล้วเล่าว่าเติมไปกี่ตัวก่อนแตะคำตอบ",
           home: "ใช้ฝาขวด 6 ฝาเพื่อแยกเป็นสองกลุ่ม วาง 1 ฝาในกลุ่มแรก แล้วให้ลูกเติมเลขอีกกลุ่มในแผนผัง",
         },
@@ -4355,6 +4405,10 @@ button.obj:active { transform: scale(0.9); }
     ],
   };
   const PRACTICE_DIAGRAMS = ["part", null, "whole", "part", "whole"];
+  const COUNT_ON_EXAMPLE = {
+    id: "2-to-7", kind: "fill",
+    questions: [{ part: 2, whole: 7, diagram: null, step: "objects" }],
+  };
   const SHORT_PRACTICE = [0, 1, 3];
   const GUIDED_QUESTIONS = 3;
   let practiceRound = "short";
@@ -4402,6 +4456,9 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceGuideTitle").textContent = P.guide;
     $("#practiceModelTitle").textContent = P.model.title;
     $("#practicePicture").textContent = P.picture;
+    const example = COUNT_ON_EXAMPLE.questions[0];
+    $("#practiceExample").textContent = `${digitsIn(P.example)} · ${fmt(example.part)} + □ = ${fmt(example.whole)}`;
+    $("#practiceRecount").textContent = P.recount;
     $("#practiceStop").textContent = P.stop;
     $("#practiceSwap").textContent = P.swap;
     $("#practiceDrawTitle").textContent = drawing.title;
@@ -4419,6 +4476,11 @@ button.obj:active { transform: scale(0.9); }
   function showPracticeMenu() {
     practice = null;
     hush();
+    const url = new URL(location.href);
+    if (url.searchParams.get("example") === COUNT_ON_EXAMPLE.id) {
+      url.searchParams.delete("example");
+      history.replaceState(history.state, "", url);
+    }
     renderPracticeLessons();
     $("#practiceMenu").hidden = false;
     $("#practiceQuestion").hidden = true;
@@ -4451,11 +4513,17 @@ button.obj:active { transform: scale(0.9); }
       }
       return lesson.done(N(part), N(whole), N(other));
     }
+    if (wrong !== null) {
+      let hint;
+      if (activity === "fill" && wrong === whole) hint = lesson.countedTotal(N(part), N(whole));
+      if (activity === "fill" && wrong === part) hint = lesson.countedStart(N(part));
+      if (activity === "sub" && wrong === part) hint = lesson.countedTaken(N(part));
+      if (hint) return picture ? hint : `${hint} ${P.offerPicture}`;
+      return picture ? lesson.again : P.imagineAgain;
+    }
     if (!picture) {
-      if (wrong !== null) return P.imagineAgain;
       return sketch ? P.drawing[activity](N(part), N(whole), N(other)) : lesson.imagine(N(part), N(whole), N(other), animal);
     }
-    if (wrong !== null) return lesson.again;
     if (moved.size === moves) return lesson.ask;
     return lesson.step(N(part), N(whole), N(other), animal);
   }
@@ -4463,7 +4531,7 @@ button.obj:active { transform: scale(0.9); }
   function renderPracticeNotation() {
     const { activity, part, whole, other, answer, diagram, done } = practice;
     $("#practiceBond").hidden = !diagram;
-    $("#practiceEquation").hidden = !!diagram || (done && activity !== "compare");
+    $("#practiceEquation").hidden = !!diagram;
     if (diagram) {
       const P = T().practice;
       const values = [diagram === "whole" && !done ? "?" : fmt(whole), fmt(part), diagram === "part" && !done ? "?" : fmt(other)];
@@ -4471,6 +4539,7 @@ button.obj:active { transform: scale(0.9); }
         const node = $(id);
         node.textContent = values[i];
         node.classList.toggle("blank", values[i] === "?");
+        node.classList.toggle("filled", done && i === (diagram === "whole" ? 0 : 2));
       });
       label("#practiceBond", P.diagram(...values.map((v) => v === "?" ? P.blank : v)));
       return;
@@ -4487,17 +4556,34 @@ button.obj:active { transform: scale(0.9); }
         fill: [part, "+", box, "=", whole],
       }[activity];
     }
-    $("#practiceEquation").replaceChildren(...terms.map((term) => {
+    const blankIndex = activity === "compare" ? 1 : activity === "fill" ? 2 : 4;
+    $("#practiceEquation").replaceChildren(...terms.map((term, index) => {
       const span = el("span", term === "?" ? "blank" : "");
+      span.classList.toggle("filled", done && index === blankIndex);
       span.textContent = fmt(term);
       return span;
     }));
   }
 
+  function practicePosition() {
+    const { activity, part, whole, moved } = practice;
+    return activity === "sub" ? whole - moved.size : part + moved.size;
+  }
+
   function renderPracticeTray() {
-    const { kind, activity, part, other, moved, moves } = practice;
+    const { kind, activity, part, whole, other, moved, moves } = practice;
     const P = T().practice, lesson = P[activity], adding = activity !== "sub";
-    $("#practiceCount").textContent = lesson.count(fmt(activity === "fill" ? part + moved.size : moved.size), fmt(part), fmt(other));
+    const start = adding ? part : whole, position = practicePosition();
+    $("#practiceWalker").style.left = `${position * 10}%`;
+    [...$("#practiceTicks").children].forEach((tick, n) => {
+      tick.classList.toggle("start", n === start);
+      tick.classList.toggle("current", n === position);
+      tick.classList.toggle("hop", n >= Math.min(start, position) && n < Math.max(start, position));
+    });
+    const amount = adding ? P.totalNow(fmt(position)) : P.model.left(fmt(position));
+    const change = lesson.count(fmt(moved.size), fmt(part), fmt(other));
+    if ($("#practicePosition").textContent !== amount) $("#practicePosition").textContent = amount;
+    if ($("#practiceChange").textContent !== change) $("#practiceChange").textContent = change;
     [...$("#practiceTray").children].forEach((cell, i) => {
       const changed = moved.has(i);
       const empty = adding && i >= part && !changed;
@@ -4519,8 +4605,10 @@ button.obj:active { transform: scale(0.9); }
     const compare = kind === "compare", ready = picture ? moved.size === moves : !sketch || sketch.ready;
     const prompt = practicePrompt(T(), fmt);
     if ($("#practicePrompt").textContent !== prompt) $("#practicePrompt").textContent = prompt;
-    $("#practiceTray").hidden = !picture || compare || done;
-    $("#practiceCount").hidden = !picture || compare || done;
+    const counting = picture && !compare && !done;
+    $("#practiceTray").hidden = !counting;
+    $("#practiceCounting").hidden = !counting;
+    $("#practiceRecount").hidden = !counting || wrong === null;
     $("#practiceDrawing").hidden = !sketch || picture || done;
     if (!$("#practiceDrawing").hidden) {
       $("#practiceCanvas").hidden = sketch.paper;
@@ -4529,7 +4617,7 @@ button.obj:active { transform: scale(0.9); }
       $("#practiceDrawContinue").hidden = sketch.ready;
     }
     $("#practiceCompare").hidden = !compare || !(done ? showMethod : picture);
-    if (picture && !compare && !done) renderPracticeTray();
+    if (counting) renderPracticeTray();
     if (!done) $("#practiceGuide").textContent = picture ? ready ? lesson.during : lesson.before : sketch ? P.drawing.guide : lesson.think;
     if (done && compare) $("#practiceGuide").textContent = lesson.after;
     $("#practiceChoices").hidden = !ready || done;
@@ -4587,12 +4675,20 @@ button.obj:active { transform: scale(0.9); }
   }
 
   function buildPracticePicture() {
-    const { kind, activity, part, whole, other, moves } = practice;
+    const { kind, part, whole, other, moves } = practice;
     const tray = $("#practiceTray");
     if (kind === "compare") {
       renderPracticeComparison();
       return;
     }
+    practiceArt(kind, practiceStage(kind), $("#practiceWalker"));
+    $("#practiceTicks").replaceChildren(...range(11).map((n) => {
+      const tick = el("span", "practice-tick"), number = el("span");
+      tick.style.left = `${n * 10}%`;
+      number.textContent = fmt(n);
+      tick.append(number);
+      return tick;
+    }));
     $("#practiceModelStars").style.gridTemplateColumns = `${part}fr ${other}fr`;
     $("#practiceModelPart").replaceChildren(...range(part).map(() => practiceArt(kind)));
     $("#practiceModelOther").replaceChildren(...range(other).map(() => practiceArt(kind)));
@@ -4602,7 +4698,7 @@ button.obj:active { transform: scale(0.9); }
       cell.addEventListener("click", (e) => {
         practice.moved.add(i);
         renderPracticeQuestion();
-        if (voiceLang()) say((D, N) => N(activity === "fill" ? part + practice.moved.size : practice.moved.size), 1);
+        if (voiceLang()) say((D, N) => N(practicePosition()), 1);
         const ready = practice.moved.size === moves, options = $("#practiceChoices");
         if (e.detail === 0) (ready ? options.firstElementChild : $("button:enabled", tray)).focus();
         else if (ready) options.scrollIntoView({ block: "nearest" });
@@ -4705,7 +4801,7 @@ button.obj:active { transform: scale(0.9); }
     const P = T().practice, completed = fmt(index + 1);
     hush();
     $("#practiceSummaryTitle").textContent = index + 1 === questions.length ? P.summary(completed) : P.stopped(completed);
-    $("#practiceSummaryNote").textContent = digitsIn(P[kind].home);
+    $("#practiceSummaryNote").textContent = digitsIn(questions === COUNT_ON_EXAMPLE.questions ? P.exampleHome : P[kind].home);
     renderPracticeCompanion($("#practiceSummaryCompanion"), kind, false);
     $("#practiceQuestion").hidden = true;
     $("#practiceSummary").hidden = false;
@@ -4804,7 +4900,8 @@ button.obj:active { transform: scale(0.9); }
     token++;  // a tap can switch modes while the city is waiting for fonts
     musicStop();
     setScreen("practice");
-    showPracticeMenu();
+    if (new URLSearchParams(location.search).get("example") === COUNT_ON_EXAMPLE.id) showPracticeQuestion(COUNT_ON_EXAMPLE, 0);
+    else showPracticeMenu();
   }
   $("#practiceBtn").addEventListener("click", openPractice);
   $$("#practiceRounds [data-round]").forEach((button) => button.addEventListener("click", () => {
@@ -4812,9 +4909,19 @@ button.obj:active { transform: scale(0.9); }
     $$("#practiceRounds [data-round]").forEach((node) => node.setAttribute("aria-pressed", String(node === button)));
   }));
   $$("#practiceMenu [data-lesson]").forEach((b) => b.addEventListener("click", () => startPractice(b.dataset.lesson)));
+  $("#practiceExample").addEventListener("click", () => {
+    const url = new URL(location.href);
+    url.searchParams.set("mode", "practice");
+    url.searchParams.set("example", COUNT_ON_EXAMPLE.id);
+    history.replaceState(history.state, "", url);
+    showPracticeQuestion(COUNT_ON_EXAMPLE, 0);
+  });
   $("#practiceBack").addEventListener("click", practiceBack);
   $("#practiceChoose").addEventListener("click", showPracticeMenu);
-  $("#practiceRepeat").addEventListener("click", () => startPractice(practice.kind));
+  $("#practiceRepeat").addEventListener("click", () => {
+    if (practice.questions.length === 1) showPracticeQuestion(practice, 0);
+    else startPractice(practice.kind);
+  });
   $("#practiceSpeak").addEventListener("click", () => { primeVoice(); say(practicePrompt); });
   $$("#practiceSketchTools [data-ink]").forEach((button) => onPracticeSketchAction(button, () => selectPracticeInk(button)));
   onPracticeSketchAction($("#practiceDrawUndo"), () => {
@@ -4845,6 +4952,14 @@ button.obj:active { transform: scale(0.9); }
     practice.wrong = null;
     renderPracticeQuestion();
     if (e.detail === 0) $(practice.kind === "compare" ? "#practiceChoices button" : "#practiceTray button:enabled").focus();
+  });
+  $("#practiceRecount").addEventListener("click", (e) => {
+    hush();
+    practice.moved.clear();
+    practice.wrong = null;
+    renderPracticeQuestion();
+    if (e.detail === 0) $("#practiceTray button:enabled").focus();
+    else $("#practiceTray").scrollIntoView({ block: "nearest" });
   });
   $("#practiceModelToggle").addEventListener("click", () => {
     practice.split = !practice.split;
