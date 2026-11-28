@@ -188,6 +188,50 @@ svg text { font-family: var(--font-num); }
 .big-lao { font: 700 56px/1.2 var(--font-lo); letter-spacing: 6px; }
 .start-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; margin-bottom: 18px; border: 1px solid var(--sky); border-radius: 16px; background: var(--sky-soft); color: var(--ink); text-decoration: none; font-weight: 700; }
 .start-link .start-name { flex: 1; }
+.start-link strong, .start-link small { display: block; }
+.start-link small { color: var(--ink); font-size: 14px; font-weight: 600; margin-top: 2px; }
+.foundation-link { background: var(--good-soft); border-color: var(--good); }
+.school-links { display: flex; gap: 8px 18px; flex-wrap: wrap; margin-bottom: 10px; }
+.school-links .secondary { display: inline-flex; align-items: center; margin: 0; }
+.quick-coach { padding: 4px 14px; margin-top: 10px; border-radius: 14px; background: var(--card); font-size: 15px; }
+.quick-coach summary { cursor: pointer; min-height: 44px; align-content: center; font-weight: 700; }
+.quick-coach[open] { padding-bottom: 10px; }
+.quick-coach p { margin: 6px 0 10px; }
+.quick-coach strong { display: block; }
+.quick-coach button { min-height: 44px; }
+.quick-coach .secondary, .reflection .secondary { margin-inline: 0; }
+.reflection { padding: 12px; margin-top: 10px; border-radius: 14px; background: var(--good-soft); text-align: center; }
+.reflection p { margin: 0 0 6px; }
+.reflection a { display: inline-flex; align-items: center; }
+.count-on-board { display: grid; gap: 10px; justify-items: center; width: 100%; }
+.count-on-board svg { max-height: 126px; }
+.homework-form { display: grid; gap: 12px; max-width: 420px; margin: 0 auto; text-align: start; }
+.homework-form p { margin: 0; }
+.homework-fields, .work-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.homework-form label { display: grid; gap: 4px; align-content: end; font-size: 15px; font-weight: 700; }
+.homework-form input, .homework-form select { width: 100%; min-height: 46px; padding: 6px 10px; border: 1px solid var(--soft); border-radius: 10px; background: var(--bg); color: var(--ink); font: inherit; }
+.homework-form input { font: 600 23px/1 var(--font-num); }
+.homework-form [aria-invalid="true"] { border-color: var(--tomato); }
+.work-error { color: var(--ink); background: var(--tomato-soft); padding: 8px 12px; border-radius: 10px; }
+#workNest #nestBook, #workNest #nestFinish { display: none; }
+#workBond { padding-top: 10px; }
+#workBond svg { max-height: 130px; }
+.work-groups { margin: 12px 0; }
+.work-groups > div { padding: 8px 4px; background: var(--sky-soft); border-radius: 12px; }
+.work-groups h3 { font-size: 15px; margin-bottom: 6px; }
+.work-groups .frames { display: grid; gap: 4px; width: min(100%, 130px); margin: auto; }
+.work-groups .frame { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; padding: 3px; }
+.work-groups .cell { width: 100%; height: auto; aspect-ratio: 1; }
+.work-groups .cell.c2 { border-radius: 4px; animation: pop .3s ease-out; }
+.work-groups .rods { justify-content: center; flex-wrap: wrap; gap: 5px; }
+.work-groups .rod { grid-template-rows: repeat(10, 4px); }
+.work-groups .rod i { width: 9px; }
+.work-groups .ones { grid-template-columns: repeat(5, 10px); }
+.work-groups .cube { width: 10px; height: 10px; }
+.work-footer { text-align: center; }
+.work-footer > p { margin: 8px 0; }
+.work-footer .secondary { display: inline-flex; align-items: center; margin-inline: 6px; }
+.work-footer .quick-coach { text-align: start; }
 .lesson-dino { display: inline-block; vertical-align: middle; width: 52px; height: 52px; flex: none; background: url("icons/practice-creatures.webp") 0 0 / 400% 300% no-repeat; }
 .activity .lesson-dino { width: 40px; height: 40px; margin-inline-end: 6px; }
 .phase-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
@@ -195,6 +239,10 @@ svg text { font-family: var(--font-num); }
 .act-listen { border: 1px solid var(--line); border-radius: 50%; min-width: 44px; min-height: 44px; background: var(--bg); }
 .feedback .frames { margin-top: 8px; }
 .activity .finish-link { display: inline-flex; align-items: center; }
+.activity .finish-link.go { text-decoration: none; }
+.stage-move { max-width: 100%; padding: 6px; border: 2px dashed var(--sky); border-radius: 14px; background: var(--bg); }
+.bridge-picture { animation: pop .26s ease-out; }
+#toc { scroll-margin-top: 86px; }
 .activity { padding: clamp(14px, 4vw, 28px); border-radius: 20px; background: var(--card); text-align: center; }
 .activity .phase { margin: 0 0 8px; font-size: 14px; color: var(--soft); }
 .activity h2 { font-size: clamp(20px, 4vw, 26px); line-height: 1.55; }
@@ -243,7 +291,7 @@ svg text { font-family: var(--font-num); }
 .nest-links div { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; margin-top: 8px; }
 .nest-links a, .nest-launch { display: grid; align-content: center; min-height: 44px; border-radius: 10px; background: var(--good-soft); color: var(--ink); text-decoration: none; text-align: center; font-weight: 700; }
 .nest-links #nestContinue { background: transparent; font-size: 15px; text-decoration: underline; }
-.nest-launch { padding: 7px 12px; margin: 0 0 12px; }
+.nest-launch { padding: 7px 12px; margin: 10px 0 0; }
 .nest-game { padding: clamp(12px,3vw,22px); border-radius: 22px; background: var(--card); }
 .nest-game h2 { margin: 4px 0 10px; font: 700 clamp(20px,4vw,25px)/1.45 var(--font-lo); text-align: center; }
 .nest-level { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--soft); font-size: 14px; }
@@ -309,13 +357,59 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   </header>
 
   <main id="home">
-    <p class="lead">ເລືອກບົດທີ່ລູກກຳລັງຮຽນຢູ່ໂຮງຮຽນ</p>
-    <a class="start-link" href="#bot-4"><span class="lesson-dino" aria-hidden="true"></span><span class="start-name">ລອງຕື່ມໄຂ່ໃຫ້ຄົບ 7</span><span aria-hidden="true">→</span></a>
+    <a class="start-link foundation-link" id="foundationLink" href="#bot-2"><span class="lesson-dino" aria-hidden="true"></span><span class="start-name"><strong id="foundationTitle">ເລີ່ມນັບທີລະອັນ</strong><small id="foundationTopic"></small></span><span aria-hidden="true">→</span></a>
+    <div class="school-links">
+      <a class="secondary" href="#toc" id="schoolLink">ເລືອກບົດທີ່ຮຽນຢູ່ໂຮງຮຽນ ↓</a>
+      <a class="secondary" href="#homework">ເຮັດວຽກບ້ານດ້ວຍຮູບ</a>
+    </div>
     <section class="nest-links"><h2>ຮັງໄຂ່ໄດໂນເສົາ · ຖາດລະ 10</h2><div>
       <a href="#bot-7-nest">10 + 10</a><a href="#bot-14-nest">14 − 13</a>
       <a href="#bot-17-nest">15 + 20</a><a href="#bot-14-exchange">25 − 16</a>
     </div><a id="nestContinue" class="secondary" hidden></a></section>
-    <ol class="toc" id="toc"></ol>
+    <p class="lead">ເລືອກບົດທີ່ລູກກຳລັງຮຽນຢູ່ໂຮງຮຽນ</p>
+    <ol class="toc" id="toc" tabindex="-1"></ol>
+  </main>
+
+  <main id="homework" hidden>
+    <form class="activity homework-form" id="workForm" novalidate>
+      <label>ປະເພດໂຈດ
+        <select id="workOp">
+          <option value="fill">ຕື່ມໂຕເລກ (2 + □ = 7)</option>
+          <option value="first">ຕື່ມໂຕເລກ (□ + 2 = 7)</option>
+          <option value="add">ບວກ (+)</option>
+          <option value="take">ລົບ (−)</option>
+          <option value="compare">ປຽບທຽບ (&lt; = &gt;)</option>
+        </select>
+      </label>
+      <div class="homework-fields">
+        <label><span id="workLabelA"></span><input id="workA" inputmode="numeric" maxlength="3" required></label>
+        <label><span id="workLabelB"></span><input id="workB" inputmode="numeric" maxlength="3" required></label>
+      </div>
+      <p>ໃສ່ໂຕເລກຈາກໂຈດ 0–100.</p>
+      <div id="workPreview"></div>
+      <p class="work-error" id="workError" role="alert" hidden></p>
+      <button class="go" type="submit">ເລີ່ມເຮັດໂຈດ</button>
+    </form>
+    <section id="workProblem" hidden>
+      <div id="workNest"></div>
+      <div class="activity" id="workCompare" hidden>
+        <div class="phase-row"><p class="phase" id="workComparePhase"></p><button class="act-listen" id="workCompareListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
+        <h2 id="workComparePrompt" tabindex="-1">ຕື່ມເຄື່ອງໝາຍໃດ?</h2>
+        <div id="workCompareEq"></div>
+        <div class="work-groups" id="workCompareBoard"></div>
+        <div id="workCompareChoices" class="choices"></div>
+        <button type="button" class="secondary" id="workCompareHelp"></button>
+        <div id="workCompareFeedback" class="feedback" role="status"></div>
+      </div>
+      <div class="work-footer">
+        <div id="workBond" hidden></div>
+        <p id="workResult" role="status" hidden></p>
+        <button class="go" id="workTry" type="button" hidden>ລອງເຮັດເອງອີກ 1 ຂໍ້</button>
+        <details class="quick-coach" id="workCoach"><summary>ວິທີສອນສຳລັບພໍ່ແມ່</summary><p id="workParent"></p><a id="workBook" class="secondary"></a></details>
+        <button class="secondary" id="workEdit" type="button">ປ່ຽນໂຈດ</button>
+        <a class="secondary" href="#">ພໍແລ້ວມື້ນີ້</a>
+      </div>
+    </section>
   </main>
 
   <main id="chapter" hidden>
@@ -326,14 +420,13 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     </nav>
 
     <section id="viewLearn" role="tabpanel" aria-labelledby="tabLearn">
-      <a id="nestLaunch" class="nest-launch" hidden></a>
       <div id="nestPanel" hidden>
         <div class="nest-game" id="nestGame">
           <div class="nest-level"><span class="lesson-dino" aria-hidden="true"></span><span id="nestLevel"></span><button class="act-listen" id="nestListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
           <h2 id="nestPrompt" tabindex="-1"></h2>
           <div class="nest-eq" id="nestEq" role="img"></div>
           <div class="nest-board" id="nestBoard">
-            <div class="nest-zone"><h3>ໃນຮັງ</h3><div class="nest-cargo" id="nestHome"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
+            <div class="nest-zone"><h3 id="nestHomeLabel">ໃນຮັງ</h3><div class="nest-cargo" id="nestHome"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
             <div class="nest-zone"><h3 id="nestSideLabel"></h3><div class="nest-cargo" id="nestSide"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
           </div>
           <div class="nest-stats" id="nestStats" aria-live="polite"></div>
@@ -352,6 +445,15 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           <div class="feedback" id="actFeedback" role="status"></div>
           <button class="secondary" id="actHint" type="button" hidden>ຂໍຄຳໃບ້</button>
         </div>
+        <div class="reflection" id="actReflection" hidden>
+          <p id="actResult"></p>
+          <a class="secondary" id="actReview" href="#" hidden></a>
+        </div>
+        <details class="quick-coach" id="quickCoach">
+          <summary>ວິທີສອນສຳລັບພໍ່ແມ່</summary>
+          <div id="coachText"></div>
+          <button class="secondary" id="coachConfirm" type="button" aria-pressed="false">ລູກສະແດງວິທີຄິດໄດ້</button>
+        </details>
         <button class="secondary" id="toBook" type="button">ເບິ່ງບົດຮຽນຕາມປຶ້ມ →</button>
       </div>
       <div id="bookSteps" hidden>
@@ -364,6 +466,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       </div>
       <button class="secondary" id="toStarter" type="button">ກັບໄປລອງເຮັດ</button>
       </div>
+      <a id="nestLaunch" class="nest-launch" hidden></a>
     </section>
 
     <section id="viewPractice" role="tabpanel" aria-labelledby="tabPractice" hidden>
@@ -660,12 +763,12 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
 
   /* ---------- saved on this device only: best stars per chapter, voice on/off ---------- */
   const KEY = "ph1-lessons.v1";
-  let saved = { best: {}, shortBest: {}, voice: true, thaiVoice: false };
+  let saved = { best: {}, shortBest: {}, explained: {}, voice: true, thaiVoice: false };
   try {
     const s = JSON.parse(localStorage.getItem(KEY));
     if (s && typeof s === "object") {
       const scores = (record, max) => Object.fromEntries(Object.entries(record || {}).filter(([, n]) => Number.isInteger(n) && n >= 0 && n <= max));
-      saved = { best: scores(s.best, 5), shortBest: scores(s.shortBest, 3), voice: s.voice !== false, thaiVoice: s.thaiVoice === true };
+      saved = { best: scores(s.best, 5), shortBest: scores(s.shortBest, 3), explained: scores(s.explained, 1), voice: s.voice !== false, thaiVoice: s.thaiVoice === true };
     }
   } catch (e) { /* storage blocked */ }
   const store = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) { /* storage blocked */ } };
@@ -720,6 +823,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     voiceMenu(p);
     $("#nestListen").hidden = !(saved.voice && p);
     $("#actListen").hidden = !(saved.voice && p);
+    $("#workCompareListen").hidden = !(saved.voice && p);
   }
   let voicesChecked = false;
   let speechRequest = 0;
@@ -1937,10 +2041,10 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       ],
       idea: { lo: "ເຮັດໃຫ້ເປັນ 10 · ກຸ່ມລະ 10", th: "หัวใจของ ป.1 มี 2 อย่าง: “ทำให้ครบ 10” (บวกลบข้ามสิบ) และ “กลุ่มละ 10” (หลักสิบหลักหน่วย)" },
       home: [
-        "ถ้าลูกยังอ่อนเลข ให้ฝึกตามลำดับนี้ก่อนบทที่ 12 และ 14: ① คู่ที่รวมเป็น 10 ให้ตอบทันที ② 10 ลบอะไรก็ได้ ③ “13 คือ 10 กับ 3”",
+        "ก่อนบทที่ 12 และ 14 ให้ลูกใช้ฝาขวดหาคู่ที่รวมเป็น 10 ลองเอาฝาออกจากกองสิบ แล้วจัดฝา 13 ฝาเป็น 10 กับ 3",
         "ก่อนบทที่ 17 ให้มัดของจริงเป็นกลุ่มละ 10 บ่อย ๆ",
         "ใช้ประโยคพูดแบบในหนังสือ (ภาษาลาว) และพูดออกเสียงด้วยกัน เพราะหนังสือให้เด็กอ่านวิธีคิดออกเสียงตลอด",
-        "ทดสอบด้วยกระดาษเดือนละครั้ง: บวก 5 ข้อ ลบ 5 ข้อ จดคะแนนและเวลา เพื่อดูว่าเก่งขึ้นจริง",
+        "ลองให้ลูกเลือกโจทย์หนึ่งข้อ แล้วชี้ภาพ วาดจุด หรือใช้ฝาขวดเล่าวิธีคิด ให้เวลาเขาคิดตามจังหวะของเขา",
       ],
       watch: [
         "คำอ่านเลข ສິບເອັດ ຊາວ ຊາວເອັດ ที่เด็กมักพูดเป็น ສິບໜຶ່ງ ສອງສິບ",
@@ -1969,10 +2073,10 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   const activities = {
     1: lessonActivity(line("ວາງຝາຂວດ 4 ຝາແຖວເທິງ ແລະ ບ່ວງ 3 ກ້ານແຖວລຸ່ມ. ໃຫ້ລູກຈັບຄູ່ທີລະຄູ່.", "วางฝาขวด 4 ฝาแถวบน กับช้อน 3 คันแถวล่าง ให้ลูกจับคู่ทีละคู่"),
       line("ອັນໃດເຫຼືອຢູ່ອັນດຽວ?", "อะไรเหลืออยู่โดยไม่มีคู่?"), line("ລູກຊີ້ອັນທີ່ບໍ່ມີຄູ່ໄດ້. ລອງເພີ່ມບ່ວງອີກ 1 ກ້ານ ແລ້ວຖາມອີກ.", "ให้ลูกชี้ชิ้นที่เหลือ แล้วเพิ่มช้อนอีก 1 คัน ลองถามอีกครั้ง"),
-      question(line("ກົບ ຫຼື ໃບບົວ ອັນໃດຫຼາຍກວ່າ?", "กบกับใบบัว อะไรมีมากกว่า?"), "", ["ກົບ", "ໃບບົວ", "ເທົ່າກັນ"], "ກົບ", line("ຊີ້ຫາໂຕທີ່ຍັງບໍ່ມີໃບບົວ.", "ลองชี้กบตัวที่ยังไม่มีใบบัว"), line("ກົບເຫຼືອ 1 ໂຕ. ກົບ 4 ໂຕ ຫຼາຍກວ່າໃບບົວ 3 ໃບ.", "กบเหลือ 1 ตัว กบ 4 ตัวจึงมากกว่าใบบัว 3 ใบ"), P.eq([4, ">", 3])),
-      question(line("ກົບ 2 ໂຕ ກັບ ໃບບົວ 3 ໃບ. ຕື່ມເຄື່ອງໝາຍໃດ?", "มีกบ 2 ตัวกับใบบัว 3 ใบ เติมเครื่องหมายไหนดี?"), P.col(P.match("🐸", 2, "🍃", 3), P.eq([2, "?", 3])), choiceSigns, "<", line("ຈັບຄູ່ກົບກັບໃບບົວ. ຫັນປາກກວ້າງໄປຫາກຸ່ມທີ່ຫຼາຍກວ່າ.", "จับคู่กบกับใบบัว แล้วหันปากกว้างของเครื่องหมายไปหากลุ่มที่มีมากกว่า"), line("2 ໜ້ອຍກວ່າ 3. ໃບບົວເຫຼືອ 1 ໃບ.", "2 น้อยกว่า 3 ใบบัวเหลือ 1 ใบ"), P.eq([2, "<", 3]))),
+      question(line("ກົບ ຫຼື ໃບບົວ ອັນໃດຫຼາຍກວ່າ?", "กบกับใบบัว อะไรมีมากกว่า?"), "", ["ກົບ", "ໃບບົວ", "ເທົ່າກັນ"], "ກົບ", line("ຊີ້ຫາໂຕທີ່ຍັງບໍ່ມີໃບບົວ.", "ลองชี้กบตัวที่ยังไม่มีใบบัว"), line("ກົບເຫຼືອ 1 ໂຕ. ກົບ 4 ໂຕ ຫຼາຍກວ່າໃບບົວ 3 ໃບ.", "กบเหลือ 1 ตัว กบ 4 ตัวจึงมากกว่าใบบัว 3 ใบ"), P.match("🐸", 4, "🍃", 3, {lines: true})),
+      question(line("ກົບ ຫຼື ໃບບົວ ອັນໃດຫຼາຍກວ່າ?", "กบกับใบบัว อะไรมีมากกว่า?"), P.match("🐸", 4, "🍃", 5, {spreadA: true}), ["ກົບ", "ໃບບົວ", "ເທົ່າກັນ"], "ໃບບົວ", line("ຈັບຄູ່ໃຫ້ກົບໂຕລະໃບ. ເບິ່ງວ່າອັນໃດເຫຼືອ.", "จับคู่ให้กบตัวละใบ แล้วดูว่าอะไรเหลือ"), line("ໃບບົວເຫຼືອ 1 ໃບ. ໃບບົວຈຶ່ງຫຼາຍກວ່າ.", "ใบบัวเหลือ 1 ใบ จึงมีใบบัวมากกว่า"), P.match("🐸", 4, "🍃", 5, {spreadA: true, lines: true}))),
     2: lessonActivity(line("ວາງຝາຂວດ 4 ຝາ. ເລື່ອນຝາໄປທາງຂ້າງທີລະຝາ ພ້ອມກັບນັບອອກສຽງ.", "วางฝาขวด 4 ฝา ให้ลูกเลื่อนทีละฝาพร้อมนับออกเสียง"),
-      line("ນັບແລ້ວ ມີທັງໝົດຈັກຝາ?", "นับแล้วมีทั้งหมดกี่ฝา?"), line("ລູກແຕະຝາລະເທື່ອ ແລະ ບອກຈຳນວນທັງໝົດດ້ວຍເລກສຸດທ້າຍທີ່ນັບ.", "ลองดูว่าลูกแตะฝาละครั้ง และใช้เลขตัวสุดท้ายบอกว่ามีทั้งหมดเท่าไร"),
+      line("ນັບແລ້ວ ມີທັງໝົດຈັກຝາ? ລອງວາງຝາໃຫ້ຫ່າງກັນ. ຈຳນວນຝາປ່ຽນບໍ?", "นับแล้วมีทั้งหมดกี่ฝา? ลองเลื่อนฝาให้ห่างกัน จำนวนฝาเปลี่ยนไหม?"), line("ລູກແຕະຝາລະເທື່ອ ແລະ ບອກຈຳນວນທັງໝົດດ້ວຍເລກສຸດທ້າຍທີ່ນັບ.", "ลองดูว่าลูกแตะฝาละครั้ง และใช้เลขตัวสุดท้ายบอกว่ามีทั้งหมดเท่าไร"),
       question(line("ມີເຕົ່າທັງໝົດຈັກໂຕ?", "มีเต่าทั้งหมดกี่ตัว?"), "", [3, 4, 5], 4, line("ເບິ່ງເລກທີ່ເຕົ່າໂຕສຸດທ້າຍ.", "ดูเลขที่เต่าตัวสุดท้าย"), line("ເຮົານັບ 1, 2, 3, 4. ມີເຕົ່າ 4 ໂຕ.", "เรานับ 1, 2, 3, 4 มีเต่า 4 ตัว")),
       question(line("ຄັ້ງນີ້ ມີໄຂ່ຈັກໜ່ວຍ?", "คราวนี้มีไข่กี่ฟอง?"), eggPicture(3), [2, 3, 4], 3, line("ໃຊ້ນິ້ວຊີ້ໄຂ່ທີລະໜ່ວຍ ແລ້ວນັບ.", "ชี้ไข่ทีละฟองแล้วนับไปด้วย"), line("1, 2, 3. ມີໄຂ່ 3 ໜ່ວຍ.", "1, 2, 3 มีไข่ 3 ฟอง"))),
     3: lessonActivity(line("ໃຫ້ລູກວາງຂອງຫຼິ້ນ 3 ອັນເປັນແຖວ. ແຕະອັນທຳອິດທາງຊ້າຍ.", "วางของเล่น 3 ชิ้นเป็นแถว ให้ลูกแตะชิ้นแรกทางซ้าย"),
@@ -1992,7 +2096,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       question(line("ຍັງເຫຼືອເຕົ່າຢູ່ຝັ່ງຈັກໂຕ?", "เหลือเต่าอยู่บนฝั่งกี่ตัว?"), "", [2, 3, 5], 2, line("ນັບແຕ່ເຕົ່າທີ່ຍັງຢູ່. ເຕົ່າທີ່ມີກາກະບາດລົງນ້ຳແລ້ວ.", "นับเต่าที่ยังอยู่บนฝั่ง ตัวที่มีกากบาทลงน้ำไปแล้ว"), line("ມີ 5 ໂຕ. ລົງນ້ຳ 3 ໂຕ. ເຫຼືອ 2 ໂຕ.", "มี 5 ตัว ลงน้ำ 3 ตัว เหลือ 2 ตัว"), P.eq([5, "−", 3, "=", {v: 2}])),
       question(line("ເຕົ່າ 7 ໂຕ ເຫຼືອຢູ່ຝັ່ງ 4 ໂຕ. ລົງນ້ຳໄປຈັກໂຕ?", "เต่า 7 ตัว เหลือบนฝั่ง 4 ตัว ลงน้ำไปกี่ตัว?"), P.eq([7, "−", "?", "=", 4]), [3, 4, 7], 3, line("ວາງຝາ 7 ຝາ. ເລື່ອນອອກຈົນເຫຼືອ 4. ນັບຝາທີ່ເລື່ອນອອກ.", "วางฝา 7 ฝา เลื่อนออกจนเหลือ 4 แล้วนับฝาที่เลื่อนออก"), line("ມີ 7 ໂຕ. ລົງນ້ຳໄປ 3 ໂຕ ຈຶ່ງເຫຼືອ 4 ໂຕ.", "เอาออก 3 จาก 7 จึงเหลือ 4"), P.eq([7, "−", {v: 3}, "=", 4]))),
     7: lessonActivity(line("ມັດຫຼອດ 10 ຫຼອດໄວ້ນຳກັນ ແລ້ວວາງຫຼອດອີກ 3 ຫຼອດຂ້າງມັດ.", "มัดหลอด 10 หลอดเข้าด้วยกัน วางหลอดอีก 3 หลอดข้างมัด"), line("ມີໜຶ່ງສິບແລ້ວ. ນັບຕໍ່ແນວໃດ?", "มีสิบแล้ว จะนับต่อยังไง?"), line("ລູກຊີ້ມັດແລ້ວເວົ້າ 10 ກ່ອນນັບສ່ວນທີ່ເຫຼືອ.", "ให้ลูกชี้ที่มัดแล้วพูดว่า สิบ ก่อนนับหลอดที่อยู่ข้างนอก"),
-      question(line("ມີມັດໜຶ່ງ 10 ອັນ ກັບອີກ 3 ອັນ. ລວມມີເທົ່າໃດ?", "หนึ่งมัดมี 10 ชิ้น มีอีก 3 ชิ้น รวมเท่าไร?"), blocks(1, 3), [3, 13, 16], 13, line("ຈັບມັດໄວ້ໃນໃຈວ່າ 10 ແລ້ວນັບຕໍ່.", "จำว่ามัดนี้มี 10 แล้วนับต่อ"), line("10 ກັບ 3 ເປັນ 13.", "10 กับ 3 เป็น 13")),
+      question(line("ໃນຖາດມີໄຂ່ 10 ໜ່ວຍ. ນອກຖາດມີອີກ 3 ໜ່ວຍ. ລວມມີຈັກໜ່ວຍ?", "ในถาดมีไข่ 10 ฟอง นอกถาดอีก 3 ฟอง รวมกี่ฟอง?"), P.col(P.frame([[10, "c1"]]), P.items("🥚", 3)), [3, 13, 16], 13, line("ຈັບມັດໄວ້ໃນໃຈວ່າ 10 ແລ້ວນັບຕໍ່.", "จำว่ามัดนี้มี 10 แล้วนับต่อ"), line("10 ກັບ 3 ເປັນ 13.", "10 กับ 3 เป็น 13")),
       question(line("ມີ 16 ອັນ. ມັດໄວ້ 10 ອັນ. ຢູ່ນອກມັດຈັກອັນ?", "มี 16 ชิ้น มัดไว้ 10 ชิ้น อยู่นอกมัดกี่ชิ้น?"), P.split(16, 10, 6, "b"), [6, 10, 16], 6, line("ນັບຈາກ 11 ຮອດ 16 ແລ້ວຊູນິ້ວໄປນຳ.", "ชูนิ้วขณะนับจาก 11 ถึง 16"), line("16 ແມ່ນ 10 ກັບ 6.", "16 คือ 10 กับ 6"), blocks(1, 6))),
     8: lessonActivity(line("ແຕ້ມໜ້າປັດໂມງໃສ່ເຈ້ຍ. ໃຊ້ເຈ້ຍສອງເສັ້ນ ເສັ້ນໜຶ່ງສັ້ນ ອີກເສັ້ນໜຶ່ງຍາວ ເຮັດເປັນເຂັມ.", "วาดหน้าปัดนาฬิกาบนกระดาษ ใช้กระดาษเส้นสั้นกับเส้นยาวแทนเข็ม"), line("ເຂັມສັ້ນບອກຫຍັງ? ເຂັມຍາວຊີ້ໃສ່ເລກໃດ?", "เข็มสั้นบอกอะไร? เข็มยาวชี้เลขไหน?"), line("ເມື່ອເຂັມຍາວຊີ້ 6 ລູກຊີ້ບ່ອນຂອງເຂັມສັ້ນລະຫວ່າງສອງເລກໄດ້.", "เมื่อเข็มยาวชี้ 6 ให้ลูกชี้ว่าเข็มสั้นอยู่ระหว่างเลขอะไร"),
       question(line("ຮອດເວລາກິນເຂົ້າ. ຈັກໂມງແລ້ວ?", "ถึงเวลากินข้าวแล้ว ตอนนี้กี่โมง?"), P.clock(7, 0), ["6 ໂມງ", "7 ໂມງ", "12 ໂມງ"], "7 ໂມງ", line("ເຂັມຍາວຊີ້ 12. ເບິ່ງເຂັມສັ້ນ.", "เข็มยาวชี้ 12 ลองดูเข็มสั้น"), line("ເຂັມສັ້ນຊີ້ 7 ແລະ ເຂັມຍາວຊີ້ 12. ແມ່ນ 7 ໂມງ.", "เข็มสั้นชี้ 7 เข็มยาวชี้ 12 ตอนนี้ 7 โมง")),
@@ -2007,14 +2111,14 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       question(line("ສອງແຖວເລີ່ມສະເໝີກັນ. ແຖວໃດຍາວກວ່າ?", "สองแถวเริ่มที่เดียวกัน แถวไหนยาวกว่า?"), P.bars([[5,0,"var(--sky)","ກ"], [3,0,"var(--tomato)","ຂ"]]), ["ກ", "ຂ", "ເທົ່າກັນ"], "ກ", line("ຊີ້ປາຍຂວາຂອງແຕ່ລະແຖວ.", "ชี้ปลายขวาของแต่ละแถว"), line("ແຖວ ກ ຍາວ 5 ຕາ. ແຖວ ຂ ຍາວ 3 ຕາ.", "แถว ก ยาว 5 ช่อง แถว ข ยาว 3 ช่อง")),
       question(line("ແຖວ ຂ ຍາວກວ່າແຖວ ກ ຈັກຕາ?", "แถว ข ยาวกว่าแถว ก กี่ช่อง?"), P.bars([[4,0,"var(--sky)","ກ"], [6,0,"var(--tomato)","ຂ"]]), [2, 4, 6], 2, line("ນັບແຕ່ຕາທີ່ຍື່ນອອກມາ.", "นับเฉพาะช่องที่ยื่นออกมา"), line("ແຖວ ຂ ຍື່ນອອກມາ 2 ຕາ. 6 − 4 = 2.", "แถว ข ยื่นออกมา 2 ช่อง 6 − 4 = 2"))),
     12: lessonActivity(line("ແຕ້ມຕາ 2 ແຖວ ແຖວລະ 5 ຕາ. ໃສ່ຝາ 8 ຝາ ແລ້ວວາງອີກ 5 ຝາໄວ້ຂ້າງນອກ.", "วาดช่องสองแถว แถวละ 5 วางฝาลงในช่อง 8 ฝา แล้ววางอีก 5 ฝาไว้ข้างนอก"), line("ຈະຍ້າຍຈັກຝາເຂົ້າໄປໃຫ້ຄົບ 10?", "ต้องย้ายเข้าไปกี่ฝาถึงจะครบ 10?"), line("ລູກຍ້າຍພໍໃຫ້ເຕັມ 10 ແລ້ວນັບຝາທີ່ເຫຼືອຂ້າງນອກ.", "ให้ลูกย้ายเท่าที่พอดีสิบ แล้วนับฝาที่เหลือข้างนอก"),
-      question(line("ມີ 8 ແລ້ວ. ຍ້າຍຈັກຝາຈາກກອງ 5 ຝາ ເຂົ້າມາໃຫ້ຄົບ 10?", "มี 8 แล้ว จะย้ายจากกอง 5 เข้ามากี่ฝาให้ครบ 10?"), P.col(P.frame([[8,"c1"]]), eggPicture(5)), [2, 5, 8], 2, line("ຊີ້ຕາຫວ່າງທີລະຕາ.", "ชี้ช่องว่างทีละช่อง"), line("ຍ້າຍ 2 ແລ້ວເຫຼືອ 3. ຈຶ່ງໄດ້ 10 + 3 = 13.", "ย้าย 2 เหลือ 3 จึงได้ 10 + 3 = 13"), P.frame([[8,"c1"],[2,"c2"],[3,"c2"]])),
-      question(line("ໄຂ່ 9 ໜ່ວຍ ກັບອີກ 4 ໜ່ວຍ ລວມກັນເທົ່າໃດ?", "ไข่ 9 ฟองกับอีก 4 ฟอง รวมได้เท่าไร?"), P.eq([9, "+", 4, "=", "?"]), [10, 12, 13], 13, line("ເອົາ 1 ຈາກ 4 ໄປໃຫ້ 9 ຄົບ 10. ຍັງເຫຼືອຈັກໜ່ວຍ?", "แบ่ง 1 จาก 4 ไปเติม 9 ให้ครบสิบ แล้วเหลือกี่ฟอง?"), line("9 + 1 = 10. ເຫຼືອ 3. 10 + 3 = 13.", "9 + 1 = 10 เหลืออีก 3 ได้ 10 + 3 = 13"))),
+      question(line("ຖາດເຕັມມີ 10. ມີຢູ່ນອກຖາດອີກ 3. ລວມໄດ້ຈັກໜ່ວຍ?", "ถาดเต็มมี 10 ฟอง นอกถาดอีก 3 ฟอง รวมกี่ฟอง?"), P.frame([[8,"c1"],[5,"c2"]]), [10, 12, 13], 13, line("ເລີ່ມຈາກ 10 ແລ້ວນັບໄຂ່ອີກ 3 ໜ່ວຍ.", "เริ่มที่ 10 แล้วนับไข่อีก 3 ฟอง"), line("8 ເພີ່ມ 2 ເປັນ 10. ຍັງມີອີກ 3. ສະນັ້ນ 8 + 5 = 13.", "8 เติม 2 เป็น 10 ยังมีอีก 3 ดังนั้น 8 + 5 = 13"), P.col(P.frame([[8,"c1"],[5,"c2"]]), P.eq([8, "+", 5, "=", {v: 13}]))),
+      question(line("ໄຂ່ 9 ໜ່ວຍ ກັບອີກ 3 ໜ່ວຍ ລວມກັນເທົ່າໃດ?", "ไข่ 9 ฟองกับอีก 3 ฟอง รวมได้เท่าไร?"), P.eq([9, "+", 3, "=", "?"]), [10, 11, 12], 12, line("ເອົາ 1 ຈາກ 3 ໄປຕື່ມໃຫ້ 9 ຄົບ 10. ຍັງເຫຼືອຈັກໜ່ວຍ?", "แบ่ง 1 จาก 3 ไปเติม 9 ให้ครบสิบ แล้วเหลือกี่ฟอง?"), line("9 + 1 = 10. ເຫຼືອ 2. 10 + 2 = 12.", "9 + 1 = 10 เหลืออีก 2 ได้ 10 + 2 = 12"))),
     13: lessonActivity(line("ໃຊ້ຈອກນ້ອຍໃບດຽວຕວງນ້ຳສາມຈອກໃສ່ຖ້ວຍໜຶ່ງ ແລະ ສອງຈອກໃສ່ອີກຖ້ວຍໜຶ່ງ.", "ใช้ถ้วยเล็กใบเดิมตวงน้ำ 3 ถ้วยใส่ชามใบหนึ่ง และ 2 ถ้วยใส่อีกใบ"), line("ເປັນຫຍັງເຮົາຈຶ່ງໃຊ້ຈອກໃບດຽວກັນຕວງ?", "ทำไมถึงใช้ถ้วยใบเดิมตวงทุกครั้ง?"), line("ລູກຕວງແຕ່ລະຈອກໃຫ້ເຕັມເທົ່າກັນ ແລ້ວປຽບທຽບຈຳນວນຈອກ.", "ให้ลูกตวงเต็มถ้วยเท่ากันทุกครั้ง แล้วเปรียบเทียบจำนวนถ้วย"),
       question(line("ໃຊ້ຈອກໃບດຽວຕວງ. ຖ້ວຍໃດມີນ້ຳຫຼາຍກວ່າ?", "ใช้ถ้วยใบเดิมตวง ชามไหนมีน้ำมากกว่า?"), P.col(P.row(P.lbl("ກ"), P.cups(3)), P.row(P.lbl("ຂ"), P.cups(2))), ["ກ", "ຂ", "ເທົ່າກັນ"], "ກ", line("ນັບຈຳນວນຈອກຂອງແຕ່ລະຖ້ວຍ.", "นับจำนวนถ้วยของแต่ละชาม"), line("ຖ້ວຍ ກ ມີ 3 ຈອກ. ຖ້ວຍ ຂ ມີ 2 ຈອກ.", "ชาม ก มี 3 ถ้วย ชาม ข มี 2 ถ้วย")),
       question(line("ຖອກນ້ຳທັງໝົດຈາກຈອກເຕ້ຍໃສ່ຈອກສູງ ໂດຍບໍ່ໃຫ້ເຮ່ຍ. ນ້ຳປ່ຽນແນວໃດ?", "เทน้ำทั้งหมดจากแก้วเตี้ยใส่แก้วสูงโดยไม่หก ปริมาณน้ำเป็นอย่างไร?"), P.row(P.glass(48,60,0.5), P.lbl("→"), P.glass(24,90,2 / 3)), ["ຫຼາຍຂຶ້ນ", "ເທົ່າເດີມ", "ໜ້ອຍລົງ"], "ເທົ່າເດີມ", line("ເຮົາໄດ້ເຕີມນ້ຳ ຫຼື ເອົານ້ຳອອກບໍ?", "เราได้เติมน้ำหรือตักน้ำออกไหม?"), line("ເຮົາປ່ຽນຈອກ. ນ້ຳຍັງມີເທົ່າເດີມ.", "เราเปลี่ยนแก้ว ปริมาณน้ำยังเท่าเดิม"))),
     14: lessonActivity(line("ວາງຝາ 13 ຝາເປັນກຸ່ມ 10 ແລະ 3. ເອົາ 8 ຝາອອກຈາກກຸ່ມ 10.", "วางฝา 13 ฝา แยกเป็นกลุ่ม 10 กับ 3 หยิบ 8 ฝาออกจากกลุ่มสิบ"), line("ໃນກຸ່ມ 10 ເຫຼືອຈັກຝາ? ອີກກຸ່ມຍັງມີຈັກຝາ?", "กลุ่มสิบเหลือกี่ฝา? อีกกลุ่มมีกี่ฝา?"), line("ລູກນຳສອງກຸ່ມທີ່ເຫຼືອມາລວມກັນ.", "ให้ลูกนำของที่เหลือจากสองกลุ่มมารวมกัน"),
       question(line("13 ແມ່ນ 10 ກັບ 3. ເອົາ 8 ອອກຈາກກຸ່ມ 10. ລວມແລ້ວເຫຼືອຈັກອັນ?", "13 คือ 10 กับ 3 เอา 8 ออกจากกลุ่มสิบ เหลือทั้งหมดกี่ชิ้น?"), P.frame([[2,"c1"],[8,"gone"],[3,"c2"]]), [2, 3, 5], 5, line("ຊີ້ຕາທີ່ຍັງມີສີຈາກທັງສອງກຸ່ມ.", "ชี้ช่องที่ยังมีสีในทั้งสองกลุ่ม"), line("10 − 8 = 2. ເອົາ 2 ມາລວມກັບ 3 ໄດ້ 5.", "10 − 8 = 2 เอา 2 มารวมกับ 3 ได้ 5")),
-      question(line("ໄຂ່ 12 ໜ່ວຍ ແຕກອອກເປັນໂຕ 7 ໜ່ວຍ. ເຫຼືອໄຂ່ຈັກໜ່ວຍ?", "ไข่ 12 ฟอง ฟักเป็นตัวแล้ว 7 ฟอง เหลือไข่กี่ฟอง?"), P.eq([12, "−", 7, "=", "?"]), [3, 5, 7], 5, line("ແບ່ງ 12 ເປັນ 10 ກັບ 2. ເອົາ 7 ອອກຈາກ 10 ກ່ອນ.", "แยก 12 เป็น 10 กับ 2 เอา 7 ออกจากสิบก่อน"), line("10 − 7 = 3. ຍັງມີອີກ 2. 3 + 2 = 5.", "10 − 7 = 3 ยังมีอีก 2 จึงได้ 3 + 2 = 5"))),
+      question(line("ໄຂ່ 12 ໜ່ວຍ ແຕກອອກເປັນໂຕ 6 ໜ່ວຍ. ເຫຼືອໄຂ່ຈັກໜ່ວຍ?", "ไข่ 12 ฟอง ฟักไปแล้ว 6 ฟอง เหลือไข่กี่ฟอง?"), P.eq([12, "−", 6, "=", "?"]), [4, 5, 6], 6, line("ແບ່ງ 12 ເປັນ 10 ກັບ 2. ເອົາ 6 ອອກຈາກ 10 ກ່ອນ.", "แยก 12 เป็น 10 กับ 2 เอา 6 ออกจากสิบก่อน"), line("10 − 6 = 4. ຍັງມີອີກ 2. 4 + 2 = 6.", "10 − 6 = 4 ยังมีอีก 2 จึงได้ 4 + 2 = 6"))),
     15: lessonActivity(line("ໃຊ້ເຈ້ຍຕາກາໂລ. ແຕ້ມຄອກເຕົ່າ 2 ແຖວ ແຖວລະ 3 ຕາ ແລ້ວໃຫ້ລູກລະບາຍສີທີລະຕາ.", "วาดคอกเต่าบนกระดาษตารางให้มี 2 แถว แถวละ 3 ช่อง ให้ลูกระบายสีทีละช่อง"), line("ຄອກເຕົ່າກວມເອົາຈັກຕາ?", "คอกเต่ากินพื้นที่กี่ช่อง?"), line("ລູກນັບຕາທຸກຕາທີ່ຢູ່ຂ້າງໃນ ລຽງໄປທີລະແຖວ.", "ให้ลูกนับช่องข้างในทุกช่อง เรียงไปทีละแถว"),
       question(line("ຄອກເຕົ່ານີ້ມີຈັກຕາ?", "คอกเต่านี้มีกี่ช่อง?"), areaPicture(3, 2), [3, 5, 6], 6, line("ນັບແຖວເທິງ ແລ້ວນັບແຖວລຸ່ມຕໍ່.", "นับแถวบน แล้วนับแถวล่างต่อ"), line("3 ຕາກັບອີກ 3 ຕາ ລວມເປັນ 6 ຕາ.", "3 ช่องกับอีก 3 ช่อง รวมเป็น 6 ช่อง")),
       question(line("ຄອກໃໝ່ນີ້ມີຈັກຕາ?", "คอกใหม่นี้มีกี่ช่อง?"), areaPicture(4, 2), [4, 6, 8], 8, line("ຄອກໃໝ່ມີ 2 ແຖວ. ລອງນັບແຖວລະເທື່ອ.", "คอกใหม่มี 2 แถว ลองนับทีละแถว"), line("4 ຕາກັບອີກ 4 ຕາ ລວມເປັນ 8 ຕາ.", "4 ช่องกับอีก 4 ช่อง รวมเป็น 8 ช่อง"))),
@@ -2034,6 +2138,55 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
 
   const CHAPTERS = CH.sort((a, b) => (a.review ? 99 : a.id) - (b.review ? 99 : b.id));
 
+  // One observable goal per chapter, in the order and page ranges of the Lao Grade 1 textbook.
+  const teachingGoals = {
+    1: line("ລູກຈັບຄູ່ທີລະອັນ ແລ້ວຊີ້ກຸ່ມທີ່ມີເຫຼືອໄດ້.", "ลูกจับคู่ทีละชิ้นแล้วชี้กลุ่มที่มีของเหลือได้ แม้จะวางของห่างกัน"),
+    2: line("ລູກແຕະຂອງແຕ່ລະອັນເທື່ອດຽວ ແລ້ວບອກວ່າມີທັງໝົດຈັກອັນ.", "ลูกแตะของแต่ละชิ้นครั้งเดียว แล้วใช้เลขตัวสุดท้ายบอกว่ามีทั้งหมดเท่าไร"),
+    3: line("ລູກຊີ້ດ້ານທີ່ຈະເລີ່ມນັບ ແລ້ວບອກວ່າຢູ່ລຳດັບທີເທົ່າໃດ.", "ลูกชี้ด้านที่จะเริ่มนับ แล้วบอกลำดับของสิ่งของได้"),
+    4: line("ລູກຊີ້ຈຳນວນທັງໝົດ ແລະ ສອງສ່ວນ ແລ້ວຫາສ່ວນທີ່ຂາດໄດ້.", "ลูกชี้จำนวนทั้งหมดกับสองส่วนในผังได้ แล้วหาว่าส่วนที่หายไปมีเท่าไร"),
+    5: line("ລູກລວມຂອງສອງກຸ່ມ ແລ້ວຊີ້ວ່າເລກໃດບອກຈຳນວນທັງໝົດ.", "ลูกรวมของสองกลุ่มแล้วชี้ได้ว่าเลขไหนบอกจำนวนทั้งหมด"),
+    6: line("ລູກຊີ້ຂອງທີ່ເອົາອອກ ແລະ ບອກຈຳນວນທີ່ຍັງເຫຼືອໄດ້.", "ลูกชี้ของที่เอาออกได้ แล้วบอกว่าของที่เหลือมีเท่าไร"),
+    7: line("ລູກຈັດຂອງເປັນກຸ່ມ 10 ແລ້ວນັບສ່ວນທີ່ເຫຼືອຕໍ່.", "ลูกจัดของเป็นกลุ่มละ 10 แล้วนับต่อเฉพาะชิ้นที่อยู่นอกกลุ่ม"),
+    8: line("ລູກຊີ້ເຂັມສັ້ນ ແລະ ເຂັມຍາວ ແລ້ວອ່ານເວລາເຕັມໂມງ ຫຼື ເຄິ່ງໂມງ.", "ลูกแยกเข็มสั้นกับเข็มยาวได้ แล้วอ่านเวลาเต็มชั่วโมงและครึ่งชั่วโมง"),
+    9: line("ລູກລອງກິ້ງ ຫຼື ວາງຊ້ອນຂອງ ແລ້ວຈັດກຸ່ມຕາມຮູບຮ່າງ.", "ลูกลองกลิ้งหรือวางซ้อนของ แล้วจัดกลุ่มตามรูปทรงได้"),
+    10: line("ລູກເຮັດເທື່ອລະຂັ້ນ ແລ້ວຊີ້ຈຳນວນທີ່ໄດ້ຫຼັງແຕ່ລະຂັ້ນ.", "ลูกขยับของทีละขั้น แล้วบอกจำนวนที่ได้ก่อนเริ่มคำนวณขั้นต่อไป"),
+    11: line("ລູກວາງປາຍຂອງສອງອັນໃຫ້ສະເໝີກັນ ແລ້ວຊີ້ປາຍທີ່ຍື່ນອອກ.", "ลูกวางปลายของสองชิ้นให้เริ่มเท่ากัน แล้วชี้ได้ว่าชิ้นไหนยื่นออกไปไกลกว่า"),
+    12: line("ລູກແບ່ງຈຳນວນທີ່ຈະເພີ່ມ ເອົາບາງສ່ວນມາຕື່ມໃຫ້ຄົບ 10 ກ່ອນ.", "ลูกแบ่งของที่จะเพิ่ม เอาส่วนหนึ่งมาเติมให้ครบ 10 ก่อน แล้วนับส่วนที่เหลือต่อ"),
+    13: line("ລູກໃຊ້ຈອກໃບດຽວຕວງນ້ຳຈາກສອງພາຊະນະ ແລ້ວປຽບທຽບຈຳນວນຈອກ.", "ลูกใช้แก้วใบเดียวตวงน้ำจากสองภาชนะ แล้วเปรียบเทียบจากจำนวนแก้ว"),
+    14: line("ລູກແຍກ 13 ເປັນ 10 ກັບ 3. ເອົາອອກຈາກກຸ່ມ 10 ແລ້ວນັບທີ່ເຫຼືອທັງສອງກຸ່ມ.", "ลูกแยก 13 เป็น 10 กับ 3 หยิบออกจากกลุ่มสิบ แล้วรวมของที่เหลือจากทั้งสองกลุ่มได้"),
+    15: line("ລູກປູແຜ່ນຂະໜາດດຽວກັນໃຫ້ເຕັມ ແລ້ວປຽບທຽບຈຳນວນແຜ່ນ.", "ลูกใช้แผ่นขนาดเดียวกันปูให้เต็ม แล้วเทียบพื้นที่จากจำนวนแผ่น"),
+    16: line("ລູກໝູນແຜ່ນສາມແຈ ແລ້ວຕໍ່ເປັນຮູບອື່ນໄດ້.", "ลูกหมุนชิ้นสามเหลี่ยมแล้วต่อเป็นรูปใหม่ได้"),
+    17: line("ລູກຊີ້ກຸ່ມລະ 10 ແລະ ສ່ວນທີ່ເຫຼືອ ແລ້ວຂຽນເລກສອງຫຼັກ.", "ลูกชี้ได้ว่าเลขหลักสิบแทนกี่กลุ่มของ 10 และเลขหลักหน่วยแทนของเดี่ยวกี่ชิ้น"),
+    18: line("ລູກຈັບຄູ່ເລກລາວກັບຈຳນວນຂອງໄດ້.", "ลูกจับคู่เลขลาวกับจำนวนสิ่งของได้ เช่น ໓ กับไข่สามฟอง"),
+    r: line("ລູກເລືອກໂຈດໜຶ່ງຂໍ້ ແລ້ວໃຊ້ຂອງ ຫຼື ຮູບແຕ້ມອະທິບາຍວິທີຄິດ.", "ลูกเลือกหนึ่งข้อแล้วใช้ของจริงหรือภาพวาดเล่าวิธีคิดได้")
+  };
+  const foundation = [
+    [2, line("ເລີ່ມນັບທີລະອັນ", "เริ่มนับทีละชิ้น")],
+    [1, line("ຈັບຄູ່ແລ້ວທຽບຈຳນວນ", "จับคู่แล้วเปรียบเทียบ")],
+    [4, line("ແບ່ງຈຳນວນເປັນສອງສ່ວນ", "แยกจำนวนเป็นสองส่วน")],
+    [5, line("ເອົາສອງກຸ່ມມາລວມກັນ", "เอาของสองกลุ่มมารวมกัน")],
+    [6, line("ເອົາອອກແລ້ວນັບທີ່ເຫຼືອ", "เอาออกแล้วนับที่เหลือ")],
+    [7, line("ຈັດຂອງເປັນກຸ່ມລະ 10", "จัดของเป็นกลุ่มละ 10")],
+    [12, line("ຝຶກບວກດ້ວຍການຕື່ມໃຫ້ຄົບ 10", "ฝึกบวกด้วยการเติมให้ครบ 10")],
+    [14, line("ຝຶກລົບຜ່ານ 10", "ฝึกลบผ่าน 10")]
+  ];
+  const coachingLabels = {
+    show: line("ລອງກັບຂອງຈິງ", "ลองกับของจริง"),
+    ask: line("ລອງຖາມລູກ", "ลองถามลูก"),
+    look: line("ສັງເກດວ່າລູກເຮັດໄດ້ບໍ", "สังเกตว่าลูกทำได้ไหม"),
+    prompt: line("ລູກສະແດງວິທີຄິດໄດ້", "ลูกแสดงวิธีคิดได้"),
+    confirmed: line("ບັນທຶກແລ້ວວ່າລູກສະແດງວິທີຄິດໄດ້", "บันทึกว่าลูกแสดงวิธีคิดได้แล้ว"),
+    helped: line("ຂໍ້ນີ້ເຮົາໃຊ້ຄຳໃບ້ຊ່ວຍກັນຄິດ. ເທື່ອໜ້າລອງໃຊ້ຂອງຈິງອີກເທື່ອ.", "ข้อนี้ใช้คำใบ้ช่วยคิด ครั้งหน้าลองใช้ของจริงทบทวนอีกครั้ง"),
+    alone: line("ລູກຕອບຂໍ້ໃໝ່ຖືກເທື່ອທຳອິດ. ຊວນລູກຊີ້ ຫຼື ແຕ້ມຮູບເລົ່າວິທີຄິດ.", "ลูกตอบข้อใหม่ถูกครั้งแรก ลองชวนให้ชี้หรือวาดรูปเล่าวิธีคิด"),
+    review: line("ກັບໄປທວນພື້ນຖານ", "กลับไปทบทวนพื้นฐาน")
+  };
+  [
+    ["ເລືອກບົດທີ່ຮຽນຢູ່ໂຮງຮຽນ ↓", "เลือกบทที่เรียนที่โรงเรียน ↓"],
+    ["ວິທີສອນສຳລັບພໍ່ແມ່", "วิธีสอนสำหรับพ่อแม่"],
+    ["ລອງເຮັດເອງ 1 ຂໍ້", "ลองทำเอง 1 ข้อ"],
+    ["ເລືອກບົດຮຽນຕາມປຶ້ມ", "เลือกบทเรียนตามหนังสือ"]
+  ].forEach(([lo, th]) => line(lo, th));
+
   CHAPTERS.forEach(c => {
     line(c.lo, c.th);
     if (c.parent.idea) line(c.parent.idea.lo, c.parent.idea.th);
@@ -2044,15 +2197,27 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   const guide = {
     1: { mode: "pair", moves: 3, title: line("ມາຊ່ວຍກົບຫາໃບບົວ ໃຫ້ໄດ້ໂຕລະ 1 ໃບ.", "ช่วยกบหาใบบัว ตัวละ 1 ใบ"), action: line("ຈັບຄູ່ 1 ຄູ່", "จับคู่ 1 คู่") },
     2: { mode: "count", moves: 4, start: 0, icon: "🐢", title: line("ແຕະເຕົ່າທີລະໂຕ ແລ້ວນັບນຳກັນ.", "แตะเต่าทีละตัวแล้วนับไปด้วยกัน"), action: line("ນັບເຕົ່າອີກ 1 ໂຕ", "นับเต่าอีก 1 ตัว") },
-    4: { mode: "add", moves: 5, start: 2, icon: "🥚", title: line("ໃນຮັງມີໄຂ່ໄດໂນເສົາ 2 ໜ່ວຍ. ລອງເພີ່ມໃຫ້ຄົບ 7 ໜ່ວຍ.", "มีไข่ไดโนเสาร์อยู่ 2 ฟอง เติมให้ครบ 7 ฟอง"), action: line("ເພີ່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง"), equation: [2, "+", "?", "=", 7] },
+    4: { mode: "add", moves: 5, start: 2, icon: "🥚", title: line("ໃນຮັງມີໄຂ່ໄດໂນເສົາ 2 ໜ່ວຍ. ລອງເພີ່ມໃຫ້ຄົບ 7 ໜ່ວຍ.", "มีไข่ไดโนเสาร์อยู่ 2 ฟอง เติมให้ครบ 7 ฟอง"), action: line("ເພີ່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง"), whole: 7 },
     5: { mode: "add", moves: 2, start: 3, icon: "🦕", title: line("ມີໄດໂນເສົາ 3 ໂຕ. ພາໝູ່ເຂົ້າມາອີກ 2 ໂຕ.", "มีไดโนเสาร์ 3 ตัว พาเพื่อนมาอีก 2 ตัว"), action: line("ເພີ່ມໄດໂນເສົາ 1 ໂຕ", "เพิ่มไดโนเสาร์ 1 ตัว"), equation: [3, "+", 2, "=", "?"] },
-    6: { mode: "take", moves: 3, start: 5, icon: "🐢", title: line("ມີເຕົ່າ 5 ໂຕ. ພາເຕົ່າ 3 ໂຕລົງນ້ຳ.", "มีเต่า 5 ตัว พาเต่า 3 ตัวลงน้ำ"), action: line("ພາເຕົ່າລົງນ້ຳ 1 ໂຕ", "พาเต่าลงน้ำ 1 ตัว"), equation: [5, "−", 3, "=", "?"] }
+    6: { mode: "take", moves: 3, start: 5, icon: "🐢", title: line("ມີເຕົ່າ 5 ໂຕ. ພາເຕົ່າ 3 ໂຕລົງນ້ຳ.", "มีเต่า 5 ตัว พาเต่า 3 ตัวลงน้ำ"), action: line("ພາເຕົ່າລົງນ້ຳ 1 ໂຕ", "พาเต่าลงน้ำ 1 ตัว"), equation: [5, "−", 3, "=", "?"] },
+    7: { mode: "stages", moves: 1, steps: [
+      { title: line("ມາຈັດໄຂ່ເຂົ້າຖາດ. ຖາດໜຶ່ງໃສ່ໄຂ່ໄດ້ 10 ໜ່ວຍ.", "มาจัดไข่ลงถาด ถาดหนึ่งใส่ได้ 10 ฟอง"), action: line("ຈັດໄຂ່ 10 ໜ່ວຍໃສ່ຖາດ", "จัดไข่ 10 ฟองลงถาด"), picture: eggPicture(13) }
+    ] },
+    12: { mode: "stages", moves: 2, steps: [
+      { title: line("ໃນຖາດມີ 8 ໜ່ວຍ. ເອົາໄຂ່ຈາກກອງ 5 ໜ່ວຍມາຕື່ມຖາດ.", "ในถาดมี 8 ฟอง หยิบจากกอง 5 ฟองมาเติมถาด"), action: line("ຕື່ມ 1 ໜ່ວຍ", "เติม 1 ฟอง"), picture: P.col(P.frame([[8,"c1"]]), P.items("🥚", 5)) },
+      { title: line("ຍັງຫວ່າງ 1 ຕາ. ຕື່ມອີກໜ່ວຍໃຫ້ຄົບ 10.", "ยังว่างอีก 1 ช่อง เติมอีกฟองให้ครบ 10"), action: line("ຕື່ມໃຫ້ຄົບ 10", "เติมให้ครบ 10"), picture: P.col(P.frame([[8,"c1"],[1,"c2"]]), P.items("🥚", 4)) }
+    ] },
+    14: { mode: "stages", moves: 1, steps: [
+      { title: line("ໄຂ່ 13 ໜ່ວຍ ມີໃນຖາດ 10 ແລະ ຢູ່ນອກຖາດ 3. ເອົາ 8 ອອກຈາກຖາດ.", "ไข่ 13 ฟอง อยู่ในถาด 10 ฟอง นอกถาด 3 ฟอง หยิบออกจากถาด 8 ฟอง"), action: line("ເອົາອອກ 8 ໜ່ວຍ", "หยิบออก 8 ฟอง"), picture: P.frame([[10,"c1"],[3,"c2"]]) }
+    ] }
   };
   const transferHintPictures = {
-    1: P.match("🐸", 2, "🍃", 3, { lines: true }),
+    1: P.match("🐸", 4, "🍃", 5, { spreadA: true, lines: true }),
     4: P.frame([[5, "c1"]], 8),
     5: P.frame([[4, "c1"], [2, "c2"]], 6),
-    6: P.frame([[4, "c1"], [3, "gone"]], 7)
+    6: P.frame([[4, "c1"], [3, "gone"]], 7),
+    12: P.frame([[9, "c1"], [3, "c2"]]),
+    14: P.frame([[4, "c1"], [6, "gone"], [2, "c2"]])
   };
   function pairPicture(n, g) {
     const top = range(4).map((i) => i === n && n < g.moves
@@ -2061,34 +2226,53 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const lines = range(4).map((i) => i < n ? '<i class="pair-line"></i>' : "<i></i>").join("");
     return `<div class="act-pairs" style="grid-template-columns:auto repeat(4,auto)"><span class="lbl">ກົບ</span>${top}<span></span>${lines}<span class="lbl">ໃບບົວ</span>${'<span class="pair-token">🍃</span>'.repeat(3)}<span></span></div><span class="act-counts">ຈັບຄູ່ແລ້ວ <b>${n}</b> ຄູ່</span>`;
   }
-  function counterPicture(n, g) {
+  function counterPicture(n, g, counted) {
     const take = g.mode === "take", count = g.mode === "count";
     const current = take ? g.start - n : g.start + n;
     const next = take ? current - 1 : current;
     const spots = take ? g.start : g.start + g.moves;
     const tokens = range(spots).map((i) => {
-      const added = !take && i >= g.start && i < current;
+      const countIndex = count ? counted.indexOf(i) : -1;
+      const added = count ? countIndex >= 0 : !take && i >= g.start && i < current;
       const empty = !take && !count && i >= current;
       const gone = take && i >= current;
       const state = added ? "new" : empty ? "empty" : gone ? "gone" : "";
-      const contents = (empty ? "" : `<span>${g.icon}</span>`) + (added ? `<b>${i - g.start + 1}</b>` : "");
-      return i === next && n < g.moves
-        ? `<button type="button" class="act-token ${state}" data-move aria-label="${g.action}">${contents}</button>`
+      const contents = (empty ? "" : `<span>${g.icon}</span>`) + (added ? `<b>${count ? countIndex + 1 : i - g.start + 1}</b>` : "");
+      const enabled = count ? !added : i === next && n < g.moves;
+      return enabled
+        ? `<button type="button" class="act-token ${state}" data-move ${count ? 'data-count-token="' + i + '"' : ""} aria-label="${g.action}">${contents}</button>`
         : `<span class="act-token ${state}" aria-hidden="true">${contents}</span>`;
     }).join("");
     const totalLabel = count ? "ນັບແລ້ວ" : take ? "ຍັງເຫຼືອ" : "ຕອນນີ້ມີ";
     const change = count ? "" : `<span>${take ? "ລົງນ້ຳແລ້ວ" : "ເພີ່ມແລ້ວ"} <b>${n}</b></span>`;
-    return (g.equation ? P.eq(g.equation) : "") + `<div class="act-counters">${tokens}</div><div class="act-counts"><span>${totalLabel} <b>${current}</b></span>${change}</div>`;
+    const counters = `<div class="act-counters">${tokens}</div><div class="act-counts"><span>${totalLabel} <b>${current}</b></span>${change}</div>`;
+    if (g.whole) return `<div class="count-on-board">${P.split(g.whole, g.start, "?", "b")}${counters}</div>`;
+    return (g.equation ? P.eq(g.equation) : "") + counters;
   }
   let activityState;
+  function renderReflection() {
+    const {phase, solved, hinted} = activityState;
+    const reflection = $("#actReflection"), review = $("#actReview");
+    reflection.hidden = phase !== "transfer" || !solved;
+    if (reflection.hidden) return;
+    $("#actResult").textContent = hinted ? coachingLabels.helped : coachingLabels.alone;
+    const previous = {1: 2, 3: 2, 4: 2, 5: 4, 6: 4, 7: 4, 10: 5, 12: 4, 14: 7, 17: 7, 18: 2, r: 4}[cur.id];
+    review.hidden = !hinted || !previous;
+    if (!review.hidden) {
+      review.href = "#bot-" + previous;
+      const chapter = CHAPTERS.find(c => c.id === previous);
+      review.textContent = line(coachingLabels.review + " · " + chapter.lo, thaiText(coachingLabels.review) + " · " + chapter.th);
+    }
+  }
   function resetActivity(phase = "guided") {
-    activityState = { phase, moved: 0, solved: false, wrong: new Set() };
+    activityState = { phase, moved: 0, counted: [], solved: false, hinted: false, wrong: new Set() };
     renderActivity();
   }
   function activityHint(choice) {
     const task = activities[cur.id][activityState.phase];
     const feedback = $("#actFeedback");
     const guided = activityState.phase === "guided";
+    activityState.hinted = true;
     let cue = "";
     if (cur.id === 4 && guided && choice === 7) cue = "7 ແມ່ນໄຂ່ທັງໝົດ. ";
     if (cur.id === 4 && guided && choice === 2) cue = "2 ແມ່ນໄຂ່ທີ່ມີຢູ່ກ່ອນ. ";
@@ -2099,22 +2283,30 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     speak(cue + task.hint);
   }
   function renderActivity() {
-    const { phase, moved, solved, wrong } = activityState;
+    const { phase, moved, counted, solved, wrong } = activityState;
     const task = activities[cur.id][phase], g = phase === "guided" && guide[cur.id];
     const moving = g && moved < g.moves;
+    const step = moving && g.steps?.[moved];
     $("#actPhase").textContent = phase === "guided" ? "ລອງນຳກັນ" : "ລອງເອງ";
     if (cur.id === 4 && phase === "guided") $("#actPhase").insertAdjacentHTML("afterbegin", '<span class="lesson-dino" aria-hidden="true"></span>');
-    $("#actQuestion").textContent = solved ? task.why : moving ? g.title : task.prompt;
-    const model = g ? (g.mode === "pair" ? pairPicture(moved, g) : counterPicture(moved, g)) : task.picture;
+    $("#actQuestion").textContent = solved ? task.why : moving ? (step?.title || g.title) : task.prompt;
+    let model = task.picture;
+    if (g?.mode === "pair") model = pairPicture(moved, g);
+    else if (g?.mode === "stages") {
+      model = step ? `<button class="stage-move bridge-picture" type="button" data-move aria-label="${esc(step.action)}">${step.picture}</button>` : `<div class="bridge-picture">${task.picture}</div>`;
+    } else if (g) model = counterPicture(moved, g, counted);
     $("#actPicture").innerHTML = solved && task.solvedPicture ? task.solvedPicture : model;
     $("#actHint").hidden = Boolean(moving || solved);
     $("#actFeedback").textContent = "";
     $("#actFeedback").className = "feedback";
     const controls = $("#actControls");
+    renderReflection();
     if (solved) {
-      controls.innerHTML = phase === "guided" ? '<button class="go" type="button" data-transfer>ລອງເອງ →</button>' : '<button class="go" type="button" data-practise>ໄປຝຶກ 3 ຂໍ້ →</button><a class="secondary finish-link" href="#">ພໍແລ້ວມື້ນີ້</a>';
+      controls.innerHTML = phase === "guided"
+        ? '<button class="go" type="button" data-transfer>ລອງເຮັດເອງ 1 ຂໍ້</button><a class="secondary finish-link" href="#">ພໍແລ້ວມື້ນີ້</a>'
+        : '<a class="go finish-link" href="#">ພໍແລ້ວມື້ນີ້</a><button class="secondary" type="button" data-practise>ໄປຝຶກ 3 ຂໍ້ →</button>';
     } else if (moving) {
-      controls.innerHTML = `<button class="go" type="button" data-move>${g.action}</button>`;
+      controls.innerHTML = `<button class="go" type="button" data-move>${step?.action || g.action}</button>`;
     } else {
       controls.innerHTML = `<div class="choices">${task.choices.map((v, i) => `<button class="choice ${typeof v === "string" ? "word" : "num"}" type="button" data-option="${i}" aria-disabled="${wrong.has(i)}">${esc(v)}</button>`).join("")}</div>`;
     }
@@ -2135,9 +2327,20 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const state = activityState, g = guide[cur.id], task = activities[cur.id][state.phase];
     if (button.hasAttribute("data-move") && g && state.phase === "guided" && !state.solved && state.moved < g.moves) {
       const movedPicture = !!button.closest("#actPicture");
+      if (g.mode === "count") {
+        const i = movedPicture ? Number(button.dataset.countToken) : range(g.moves).find(i => !state.counted.includes(i));
+        if (state.counted.includes(i)) return;
+        state.counted.push(i);
+      }
       state.moved++;
       const now = g.mode === "take" ? g.start - state.moved : (g.start || 0) + state.moved;
       renderActivity();
+      if (g.mode === "stages") {
+        const next = $(movedPicture ? "#actPicture [data-move]" : "#actControls [data-move]");
+        (next || $("#actQuestion")).focus({preventScroll: Boolean(next)});
+        speak($("#actQuestion").textContent);
+        return;
+      }
       if (state.moved === g.moves) {
         $("#actQuestion").focus();
         speak(wlo(now) + ". " + task.prompt);
@@ -2198,18 +2401,19 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       : [[24, 18], [23, 15], [27, 18], [32, 15], [26, 19], [31, 16], [34, 18]];
     return pick(tasks.filter(([a, b]) => !previous || a !== previous[0] || b !== previous[1]));
   }
-  function startNest(kind, level, problem = nextNestProblem(kind, level), useModel = level === 0 || level === 2) {
-    const [a, b] = problem, adding = kind === "add", answer = adding ? a + b : a - b;
-    const alternatives = adding ? [Math.floor(answer / 10), a, answer - 10] : [b, a - 10, answer + 1];
+  function startNest(kind, level, problem = nextNestProblem(kind, level), useModel = level === 0 || level === 2, blank = "") {
+    const [a, b] = problem, adding = kind === "add", answer = blank ? b : adding ? a + b : a - b;
+    let alternatives = adding ? [Math.floor(answer / 10), a, answer - 10] : [b, a - 10, answer + 1];
+    if (homework) alternatives = [...(blank ? [a + b, a] : [b, a]), ...nums(answer, 0, 100).map(option => option.value)];
     const choices = [...new Set([answer, ...alternatives])].slice(0, 3).sort((x, y) => x - y);
-    nest = { kind, level, a, b, answer, adding, choices, model: useModel, usedHelp: false,
+    nest = { kind, level, a, b, answer, adding, blank, choices, model: useModel, usedHelp: false, wrong: new Set(),
       moved: 0, counted: level === 0 && adding ? 0 : 2, pieces: [], solved: false, notice: "" };
     for (const zone of ["#nestHome", "#nestSide"]) {
       $(zone + " .nest-trays").replaceChildren();
       $(zone + " .nest-loose").replaceChildren();
     }
     stockNest(a, "home");
-    if (adding) stockNest(b, "side");
+    if (adding) stockNest(b, blank ? "reserve" : "side");
     renderNest();
   }
   function stockNest(n, zone) {
@@ -2229,11 +2433,13 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   }
   function placeNestPiece(p, zone) {
     p.zone = zone;
+    if (zone === "reserve") return;
     const root = zone === "home" ? "#nestHome" : "#nestSide";
     $(root + (p.value === 10 ? " .nest-trays" : " .nest-loose")).append(p.el);
   }
   function nestAction() {
     if (nest.solved) return "solved";
+    if (homework && nest.model && nest.adding && !nest.blank && $("#nestHome .nest-loose").childElementCount >= 10) return "pack";
     if (!nest.model || nest.moved === nest.b) return "answer";
     if (nest.counted < 2) return "count";
     const due = nest.b - nest.moved;
@@ -2244,13 +2450,28 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   function canUseNestPiece(p, action) {
     if (action === "count") return p.zone === "home" && p.value === 10;
     if (action === "exchange") return p.zone === "home" && p.value === 10;
-    return p.zone === (nest.adding ? "side" : "home") &&
+    if (action === "pack") return p.zone === "home" && p.value === 1;
+    const from = nest.blank ? "reserve" : nest.adding ? "side" : "home";
+    return p.zone === from &&
       ((action === "ten" && p.value === 10) || (action === "one" && p.value === 1));
   }
   function nestInstructions(action) {
-    const {a, b, moved, adding, counted, answer} = nest;
+    const {a, b, moved, adding, blank, counted, answer} = nest;
     const now = adding ? a + moved : a - moved, left = b - moved;
+    if (blank) {
+      if (action === "ten" || action === "one") return [
+        line(`ເລີ່ມຈາກ ${a}. ລອງຕື່ມໄຂ່ໃຫ້ຄົບ ${a + b} ໜ່ວຍ.`, `เริ่มที่ ${a} ลองเติมไข่ให้ครบ ${a + b} ฟอง`),
+        action === "ten" ? line("ຕື່ມ 1 ຖາດ (10 ໜ່ວຍ)", "เติม 1 ถาด (10 ฟอง)") : line("ເພີ່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง")
+      ];
+      return [action === "solved"
+        ? line(`ໄຂ່ທີ່ເພີ່ມມີ ${b} ໜ່ວຍ.`, `ไข่ที่เติมมี ${b} ฟอง`)
+        : line(`ມີ ${a} ໜ່ວຍ. ໃຫ້ຄົບ ${a + b} ຕ້ອງເພີ່ມຈັກໜ່ວຍ?`, `มี ${a} ฟอง ต้องเติมกี่ฟองถึงจะครบ ${a + b}?`)];
+    }
     switch (action) {
+      case "pack": return [
+        line("ມີໄຂ່ຢູ່ນອກຖາດພໍ 10 ໜ່ວຍແລ້ວ. ຈັດເຂົ້າ 1 ຖາດໄດ້.", "ไข่ที่อยู่นอกถาดครบ 10 ฟองแล้ว จัดลงถาดได้อีก 1 ถาด"),
+        line("ຈັດໄຂ່ 10 ໜ່ວຍໃສ່ຖາດ", "จัดไข่ 10 ฟองลงถาด")
+      ];
       case "count": return counted === 0
         ? [line("ມານັບໄຂ່ນຳກັນ. ເລີ່ມຈາກແຖວເທິງກ່ອນ.", "มานับไข่ด้วยกัน เริ่มที่แถวบนก่อน"), line("ນັບແຖວເທິງ", "นับแถวบน")]
         : [line("ແຖວເທິງມີ 5 ໜ່ວຍ. ລອງນັບແຖວລຸ່ມຕໍ່.", "แถวบนมี 5 ฟอง ลองนับแถวล่างต่อ"), line("ນັບແຖວລຸ່ມ", "นับแถวล่าง")];
@@ -2259,7 +2480,11 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           : line(`ໃນຮັງມີໄຂ່ ${a} ໜ່ວຍ. ລອງເພີ່ມອີກ ${b} ໜ່ວຍ ເທື່ອລະຖາດ.`, `ในรังมีไข่ ${a} ฟอง เติมอีก ${b} ฟองทีละถาด`), line("ຍ້າຍເຂົ້າຮັງ 1 ຖາດ", "ย้ายเข้ารัง 1 ถาด")]
         : [line(`ເຮົາມີໄຂ່ ${a} ໜ່ວຍ. ແບ່ງໃຫ້ໄດໂນເສົາ ${b} ໜ່ວຍ. ເອົາໃຫ້ກ່ອນ 1 ຖາດ.`, `เรามีไข่ ${a} ฟอง จะแบ่งให้ไดโนเสาร์ ${b} ฟอง ลองให้ไปก่อน 1 ถาด`), line("ເອົາໃຫ້ 1 ຖາດ (10 ໜ່ວຍ)", "ให้ 1 ถาด (10 ฟอง)")];
       case "exchange": return [line(`ຍັງຕ້ອງໃຫ້ອີກ ${left} ໜ່ວຍ. ເອົາໄຂ່ 10 ໜ່ວຍອອກຈາກຖາດ ຈຶ່ງຈະຫຍິບໄດ້ທີລະໜ່ວຍ.`, `ยังต้องให้อีก ${left} ฟอง ยกไข่ 10 ฟองออกจากถาด จะได้หยิบทีละฟอง`), line("ເອົາໄຂ່ອອກຈາກຖາດ", "หยิบไข่ออกจากถาด")];
-      case "one": return [nest.lastExchange === moved
+      case "one": if (adding) return [
+        line(`ໃນຮັງມີ ${now} ໜ່ວຍ. ແຕະໄຂ່ເພີ່ມເທື່ອລະໜ່ວຍ.`, `ในรังมี ${now} ฟอง แตะเติมไข่ทีละฟอง`),
+        line("ເພີ່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง")
+      ];
+        return [nest.lastExchange === moved
         ? line(`ໄຂ່ຍັງຢູ່ໃນຮັງ ${now} ໜ່ວຍເທົ່າເດີມ. ເອົາໃຫ້ໄດໂນເສົາອີກ ${left} ໜ່ວຍ.`, `ในรังยังมีไข่ ${now} ฟองเท่าเดิม แบ่งให้ไดโนเสาร์อีก ${left} ฟอง`)
         : line(`ຍັງຕ້ອງໃຫ້ອີກ ${left} ໜ່ວຍ. ແຕະໄຂ່ທີລະໜ່ວຍ.`, `ต้องให้อีก ${left} ฟอง แตะไข่ทีละฟอง`), line("ເອົາໄຂ່ໃຫ້ 1 ໜ່ວຍ", "ให้ไข่ 1 ฟอง")];
       case "solved": return [adding ? line(`ລວມແລ້ວມີໄຂ່ ${answer} ໜ່ວຍ!`, `รวมแล้วมีไข่ ${answer} ฟอง!`) : line(`ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ!`, `ในรังเหลือไข่ ${answer} ฟอง!`)];
@@ -2268,17 +2493,19 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     }
   }
   function renderNest() {
-    const { a, b, level, adding, moved, counted, model, solved, answer, choices } = nest;
+    const { a, b, level, adding, blank, moved, counted, model, solved, answer, choices, wrong } = nest;
     const action = nestAction(), [prompt, button] = nestInstructions(action);
     if (cur) $("#kicker").textContent = level >= 2 ? "ຂໍ້ທ້າລອງຕໍ່ຈາກບົດທີ " + cur.id : "ບົດທີ " + cur.id + " · ໜ້າ " + cur.pages;
     $("#nestGame").dataset.solved = solved;
-    $("#nestLevel").textContent = ["ນັບເປັນຖາດ", "ລອງເອງ", adding ? "ເພີ່ມສອງຖາດ" : "ເອົາໄຂ່ອອກຈາກຖາດ", "ທ້າລອງຂໍ້ໃໝ່"][level];
+    $("#nestLevel").textContent = homework ? (homework.trial ? "ລອງເອງ" : "ລອງນຳກັນ") :
+      ["ນັບເປັນຖາດ", "ລອງເອງ", adding ? "ເພີ່ມສອງຖາດ" : "ເອົາໄຂ່ອອກຈາກຖາດ", "ທ້າລອງຂໍ້ໃໝ່"][level];
     $("#nestPrompt").textContent = prompt;
-    const expression = `${a} ${adding ? "+" : "−"} ${b} = `;
-    $("#nestEq").innerHTML = expression + `<b>${solved ? answer : ""}</b>`;
-    $("#nestEq").setAttribute("aria-label", expression + (solved ? answer : "ຫ້ອງວ່າງ"));
-    $("#nestSideLabel").textContent = adding ? "ລໍຖ້າເຂົ້າຮັງ" : "ສົ່ງໃຫ້ໄດໂນເສົາແລ້ວ";
-    $("#nestBoard").hidden = level === 3 && !model && !solved;
+    const equation = blank ? workEquation(blank, a, a + b) : [a, adding ? "+" : "−", b, "=", "?"];
+    $("#nestEq").innerHTML = equation.map(part => part === "?" ? `<b>${solved ? answer : ""}</b>` : part).join(" ");
+    $("#nestEq").setAttribute("aria-label", equation.map(part => part === "?" ? (solved ? answer : "ຫ້ອງວ່າງ") : part).join(" "));
+    $("#nestHomeLabel").textContent = blank ? line("ໄຂ່ທີ່ມີຢູ່ກ່ອນ", "ไข่ที่มีอยู่ก่อน") : "ໃນຮັງ";
+    $("#nestSideLabel").textContent = blank ? line("ໄຂ່ທີ່ເພີ່ມ", "ไข่ที่เติม") : adding ? "ລໍຖ້າເຂົ້າຮັງ" : "ສົ່ງໃຫ້ໄດໂນເສົາແລ້ວ";
+    $("#nestBoard").hidden = Boolean((homework || level === 3) && !model && !solved);
     nest.pieces.forEach(p => { p.el.disabled = !canUseNestPiece(p, action); });
     const firstTray = nest.pieces[0];
     if (adding && level === 0 && firstTray) {
@@ -2287,23 +2514,24 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const now = adding ? a + moved : a - moved;
     let stats = "";
     if (model && !solved) {
-      if (adding && level === 0 && !moved) stats = ["", "5", "5 + 5 = 10"][counted];
+      if (blank) stats = line(`ຕອນນີ້ມີໄຂ່ລວມ ${now} ໜ່ວຍ`, `ตอนนี้มีไข่รวม ${now} ฟอง`);
+      else if (adding && level === 0 && !moved) stats = ["", "5", "5 + 5 = 10"][counted];
       else if (moved) stats = `${adding ? "ເພີ່ມແລ້ວ" : "ສົ່ງແລ້ວ"} ${moved} / ${b}` + (moved < b ? ` · ໃນຮັງ ${now}` : "");
     }
     $("#nestStats").textContent = stats;
     $("#nestControls").innerHTML = action === "answer"
-      ? `<div class="choices">${choices.map(n => `<button type="button" class="choice num" data-nest-answer="${n}">${n}</button>`).join("")}</div>`
-      : `<button type="button" class="go" ${solved ? "data-nest-next" : "data-nest-step"}>${solved ? "ລອງຂໍ້ໃໝ່ →" : button}</button>`;
+      ? `<div class="choices">${choices.map(n => `<button type="button" class="choice num ${wrong.has(n) ? "wrong" : ""}" data-nest-answer="${n}" aria-disabled="${wrong.has(n)}">${n}</button>`).join("")}</div>`
+      : solved && homework ? "" : `<button type="button" class="go" ${solved ? "data-nest-next" : "data-nest-step"}>${solved ? "ລອງຂໍ້ໃໝ່ →" : button}</button>`;
     $("#nestFeedback").textContent = nest.notice;
     $("#nestHelp").hidden = action !== "answer" || model;
-    $("#nestReplay").hidden = !solved && !moved && !nest.notice && !(adding && level === 0 && counted > 0);
+    $("#nestReplay").hidden = Boolean(homework) || (!solved && !moved && !nest.notice && !(adding && level === 0 && counted > 0));
     $("#nestFinish").hidden = !solved;
   }
 
   function moveNestPiece(action, selected, animate) {
     const p = selected || nest.pieces.find(piece => canUseNestPiece(piece, action));
     const motion = animate && typeof p.el.animate === "function" && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    const before = motion && p.el.getBoundingClientRect();
+    const before = motion && (p.zone === "reserve" ? $("#nestControls [data-nest-step]") : p.el).getBoundingClientRect();
     let moving = [];
     if (action === "count") {
       nest.counted++;
@@ -2317,8 +2545,15 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       moving = range(10).map(() => addNestPiece(1, "home"));
       nest.lastExchange = nest.moved;
       nest.notice = line(`ໄຂ່ 10 ໜ່ວຍອອກຈາກຖາດແລ້ວ. ໄຂ່ໃນຮັງຍັງມີ ${nest.a - nest.moved} ໜ່ວຍເທົ່າເດີມ.`, `หยิบไข่ 10 ฟองออกจากถาดแล้ว ในรังยังมีไข่ ${nest.a - nest.moved} ฟองเท่าเดิม`);
+    } else if (action === "pack") {
+      const loose = nest.pieces.filter(piece => piece.zone === "home" && piece.value === 1).slice(0, 10);
+      loose.forEach(piece => piece.el.remove());
+      nest.pieces = nest.pieces.filter(piece => !loose.includes(piece));
+      moving = [addNestPiece(10, "home")];
+      const total = nest.a + nest.moved;
+      nest.notice = line(`ຈັດໄຂ່ເຂົ້າຖາດແລ້ວ. ຍັງມີໄຂ່ ${total} ໜ່ວຍເທົ່າເດີມ.`, `จัดไข่ลงถาดแล้ว ไข่ยังมี ${total} ฟองเท่าเดิม`);
     } else {
-      placeNestPiece(p, nest.adding ? "home" : "side");
+      placeNestPiece(p, nest.adding && !nest.blank ? "home" : "side");
       nest.moved += p.value;
       moving = [p];
     }
@@ -2333,20 +2568,31 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     }
   }
   function explainNest() {
-    const { a, b, answer, adding } = nest;
+    const { a, b, answer, adding, blank } = nest;
+    if (blank) return line(`ທັງໝົດ ${a + b} ແມ່ນ ${a} ທີ່ມີຢູ່ກ່ອນ ກັບ ${b} ທີ່ເພີ່ມ.`, `ทั้งหมด ${a + b} ฟอง แบ่งเป็น ${a} ฟองที่มีอยู่ก่อน กับ ${b} ฟองที่เติม`);
+    if (homework && !adding) return line(
+      `ໃຫ້ໄດໂນເສົາ ${b} ໜ່ວຍ ເຫຼືອ ${answer}. ກວດຄືນ ${answer} + ${b} = ${a}.`,
+      `ให้ไดโนเสาร์ ${b} ฟอง เหลือ ${answer} ฟอง ลองตรวจด้วย ${answer} + ${b} = ${a}`
+    );
     if (adding) {
       const tens = Math.floor(answer / 10), ones = answer % 10;
-      const jumps = range(b / 10 + 1).map(i => a + 10 * i).join(" → ");
+      const stops = range(Math.floor(b / 10) + 1).map(i => a + 10 * i);
+      if (b % 10) stops.push(answer);
+      const jumps = stops.join(" → ");
       return line(`${jumps}. ມີ ${tens} ຖາດ ຖາດລະ 10 ໜ່ວຍ${ones ? ` ກັບໄຂ່ຂ້າງນອກອີກ ${ones} ໜ່ວຍ` : ""}. ${a} + ${b} = ${answer}.`, `${jumps} มี ${tens} ถาด ถาดละ 10 ฟอง${ones ? ` กับไข่นอกถาดอีก ${ones} ฟอง` : ""} รวม ${a} + ${b} = ${answer}`);
     }
     return `${a} − 10 = ${a - 10}. ${a - 10} − ${b - 10} = ${answer}. ກວດຄືນ ${b} + ${answer} = ${a}.`;
   }
   function helpNest(wrong) {
-    const { adding, a, b } = nest;
+    const { adding, a, b, blank } = nest;
     nest.usedHelp = true;
     nest.model = true;
     let cue = adding ? line("ໃນ 1 ຖາດມີໄຂ່ 10 ໜ່ວຍ.", "หนึ่งถาดมีไข่ 10 ฟอง") : line(`ເຮົາໃຫ້ໄດໂນເສົາໄປ ${b} ໜ່ວຍ. ລອງນັບໄຂ່ທີ່ຍັງຢູ່ໃນຮັງ.`, `เราให้ไดโนเสาร์ไป ${b} ฟอง ลองนับเฉพาะไข่ที่ยังอยู่ในรัง`);
-    if (!adding && wrong === a - 10) cue = line(`ຖ້າໃຫ້ໄປ 10 ໜ່ວຍ ຍັງຕ້ອງໃຫ້ອີກ ${b - 10} ໜ່ວຍ.`, `ถ้าให้ไป 10 ฟอง ยังต้องให้อีก ${b - 10} ฟอง`);
+    if (!adding && b > 10 && wrong === a - 10) cue = line(`ຖ້າໃຫ້ໄປ 10 ໜ່ວຍ ຍັງຕ້ອງໃຫ້ອີກ ${b - 10} ໜ່ວຍ.`, `ถ้าให้ไป 10 ฟอง ยังต้องให้อีก ${b - 10} ฟอง`);
+    if (homework && adding && !blank) cue = line("ນັບໄຂ່ໃນຮັງທັງໝົດ. ຖາດໜຶ່ງມີ 10 ໜ່ວຍ.", "นับไข่ทั้งหมดในรัง ถ้ามีถาดให้นับถาดละ 10");
+    if (blank) cue = wrong === a + b
+      ? line(`${a + b} ແມ່ນໄຂ່ທັງໝົດ. ລອງນັບແຕ່ໄຂ່ທີ່ເພີ່ມ.`, `${a + b} คือไข่ทั้งหมด ลองนับเฉพาะไข่ที่เติม`)
+      : line("ຊີ້ກຸ່ມໄຂ່ທີ່ເພີ່ມ ແລ້ວນັບກຸ່ມນັ້ນ.", "ชี้กลุ่มไข่ที่เติม แล้วนับเฉพาะกลุ่มนั้น");
     nest.notice = cue;
     renderNest();
     speak(cue);
@@ -2409,14 +2655,21 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     }
     if (btn.hasAttribute("data-nest-answer") && action === "answer") {
       const guess = Number(btn.dataset.nestAnswer);
-      if (guess !== nest.answer) { helpNest(guess); $("#nestPrompt").focus(); return; }
-      recordNest();
+      if (nest.wrong.has(guess)) return;
+      if (guess !== nest.answer) {
+        if (homework) nest.wrong.add(guess);
+        helpNest(guess);
+        $("#nestPrompt").focus();
+        return;
+      }
+      if (!homework) recordNest();
       nest.model = true;
       while (nestAction() !== "answer") moveNestPiece(nestAction(), null, false);
       $("#nestBoard").getAnimations?.({ subtree: true }).forEach(animation => animation.cancel());
       nest.solved = true;
       nest.notice = explainNest();
       renderNest();
+      if (homework) finishHomework(nest.usedHelp);
       $("#nestPrompt").focus();
       speak(nest.notice);
       return;
@@ -2431,8 +2684,257 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     }
   });
 
+  /* ---------- turn a problem from the notebook into a hands-on example ---------- */
+  const workTypes = {
+    fill: { example: [2, 7], fields: [line("ຈຳນວນທີ່ມີ", "จำนวนที่มี"), line("ຈຳນວນທັງໝົດ", "จำนวนทั้งหมด")] },
+    first: { example: [2, 7], fields: [line("ຈຳນວນທີ່ມີ", "จำนวนที่มี"), line("ຈຳນວນທັງໝົດ", "จำนวนทั้งหมด")] },
+    add: { example: [15, 20], fields: [line("ຈຳນວນທີ່ມີ", "จำนวนที่มี"), line("ຈຳນວນທີ່ເພີ່ມ", "จำนวนที่เพิ่ม")] },
+    take: { example: [25, 16], fields: [line("ຈຳນວນທີ່ມີ", "จำนวนที่มี"), line("ຈຳນວນທີ່ເອົາອອກ", "จำนวนที่เอาออก")] },
+    compare: { example: [6, 2], fields: [line("ຂ້າງຊ້າຍ", "ฝั่งซ้าย"), line("ຂ້າງຂວາ", "ฝั่งขวา")] }
+  };
+  const workText = {
+    title: line("ເຮັດວຽກບ້ານດ້ວຍຮູບ", "ทำโจทย์การบ้านด้วยภาพ"),
+    range: line("ໃສ່ໂຕເລກແຕ່ 0 ຫາ 100.", "ใส่จำนวนเต็มตั้งแต่ 0 ถึง 100"),
+    add: line("ສອງຈຳນວນບວກກັນບໍ່ເກີນ 100.", "เลือกสองจำนวนที่บวกกันได้ไม่เกิน 100"),
+    take: line("ຈຳນວນທີ່ເອົາອອກຕ້ອງບໍ່ເກີນຈຳນວນທີ່ມີ.", "จำนวนที่เอาออกต้องไม่เกินจำนวนที่มี"),
+    fill: line("ຈຳນວນທັງໝົດຕ້ອງບໍ່ໜ້ອຍກວ່າຈຳນວນທີ່ມີ.", "จำนวนทั้งหมดต้องไม่น้อยกว่าจำนวนที่มี"),
+    hint: line("ໃຊ້ຮູບຊ່ວຍຄິດ", "ใช้ภาพช่วยคิด"),
+    match: line("ຈັບຄູ່ໃຫ້ເບິ່ງ", "จับคู่ให้ดู"),
+    groups: line("ເບິ່ງກຸ່ມລະ 10", "ดูกลุ่มละ 10"),
+    prompt: line("ຕື່ມເຄື່ອງໝາຍໃດ?", "เติมเครื่องหมายไหนดี?"),
+    success: line("ລູກຕອບຂໍ້ໃໝ່ຖືກເທື່ອທຳອິດ. ໃຫ້ລູກຊີ້ ຫຼື ແຕ້ມຮູບເລົ່າວິທີຄິດ.", "ลูกตอบข้อใหม่ถูกครั้งแรก ลองให้ชี้หรือวาดรูปเล่าวิธีคิด"),
+    helped: line("ລູກເຮັດຂໍ້ໃໝ່ໄດ້ໂດຍໃຊ້ຮູບຊ່ວຍຄິດ.", "ลูกทำข้อใหม่ได้โดยใช้ภาพช่วยคิด"),
+    review: line("ກັບໄປທວນໃນປຶ້ມ", "กลับไปทบทวนในหนังสือ")
+  };
+  [
+    ["ປະເພດໂຈດ", "ชนิดของโจทย์"],
+    ["ຕື່ມໂຕເລກ (2 + □ = 7)", "เติมช่องว่าง (2 + □ = 7)"],
+    ["ຕື່ມໂຕເລກ (□ + 2 = 7)", "เติมช่องว่าง (□ + 2 = 7)"],
+    ["ບວກ (+)", "บวก (+)"], ["ລົບ (−)", "ลบ (−)"], ["ປຽບທຽບ (< = >)", "เปรียบเทียบ (< = >)"],
+    ["ໃສ່ໂຕເລກຈາກໂຈດ 0–100.", "ใส่ตัวเลขจากโจทย์ 0–100"],
+    ["ເລີ່ມເຮັດໂຈດ", "เริ่มทำโจทย์"],
+    ["ລອງເຮັດເອງອີກ 1 ຂໍ້", "ลองทำเองอีก 1 ข้อ"],
+    ["ປ່ຽນໂຈດ", "เปลี่ยนโจทย์"]
+  ].forEach(([lo, th]) => line(lo, th));
+
+  const workKey = "ph1-homework.v1";
+  const workInputs = [$("#workA"), $("#workB")];
+  const workOp = $("#workOp");
+  let homework = null;
+  let lastHomework = {op: "fill", a: 2, b: 7};
+  const fillOperation = op => op === "fill" || op === "first";
+  function workIssue({op, a, b}) {
+    if (![a, b].every(n => Number.isInteger(n) && n >= 0 && n <= 100)) return "range";
+    if (op === "add" && a + b > 100) return "add";
+    if (op === "take" && b > a) return "take";
+    if (fillOperation(op) && a > b) return "fill";
+    return "";
+  }
+  try {
+    const last = JSON.parse(localStorage.getItem(workKey));
+    if (last && Object.hasOwn(workTypes, last.op) && !workIssue(last)) lastHomework = last;
+  } catch (e) { /* storage unavailable */ }
+  function workNumber(raw) {
+    const digits = raw.trim().replace(/[๐-๙໐-໙]/gu, digit => {
+      const code = digit.charCodeAt(0);
+      return String(code - (code >= 0x0ed0 ? 0x0ed0 : 0x0e50));
+    });
+    return /^\d{1,3}$/.test(digits) ? Number(digits) : NaN;
+  }
+  const readHomework = () => ({op: workOp.value, a: workNumber(workInputs[0].value), b: workNumber(workInputs[1].value)});
+  function workEquation(op, a, b) {
+    if (op === "fill") return [a, "+", "?", "=", b];
+    if (op === "first") return ["?", "+", a, "=", b];
+    if (op === "compare") return [a, "?", b];
+    return [a, op === "add" ? "+" : "−", b, "=", "?"];
+  }
+  function renderWorkForm() {
+    const item = readHomework();
+    const [a, b] = workTypes[item.op].fields;
+    $("#workLabelA").textContent = a;
+    $("#workLabelB").textContent = b;
+    $("#workError").hidden = true;
+    workInputs.forEach(input => input.removeAttribute("aria-invalid"));
+    $("#workPreview").innerHTML = !workIssue(item) ? P.eq(workEquation(item.op, item.a, item.b)) : "";
+  }
+  function startHomework(item, trial) {
+    homework = {...item, trial, hint: false, solved: false, wrong: new Set()};
+    const {op, a, b} = item;
+    $("#workForm").hidden = true;
+    $("#workProblem").hidden = false;
+    $("#workCompare").hidden = op !== "compare";
+    $("#workNest").hidden = op === "compare";
+    for (const id of ["#workResult", "#workTry", "#workBond"]) $(id).hidden = true;
+    if (op === "compare") renderWorkCompare();
+    else startNest(op === "take" ? "take" : "add", 2, [a, fillOperation(op) ? b - a : b], !trial, fillOperation(op) ? op : "");
+    $("#workCoach").open = false;
+    const c = workChapter(item), chapter = CHAPTERS.find(entry => entry.id === c);
+    $("#workParent").textContent = workCoachText(item);
+    $("#workBook").href = "#bot-" + c;
+    $("#workBook").textContent = line(
+      `${workText.review} · ${chapter.lo} · ໜ້າ ${chapter.pages}`,
+      `${thaiText(workText.review)} · ${chapter.th} · หน้า ${chapter.pages}`
+    );
+    const prompt = $(op === "compare" ? "#workComparePrompt" : "#nestPrompt");
+    window.scrollTo(0, 0);
+    prompt.focus({preventScroll: true});
+    if (op === "compare") speak(`${a} · ${b}. ${workText.prompt}`);
+    else speak(prompt.textContent);
+  }
+  function workChapter({op, a, b}) {
+    if (op === "compare") return Math.max(a, b) <= 10 ? 2 : Math.max(a, b) <= 20 ? 7 : 17;
+    if (fillOperation(op)) return b <= 10 ? 4 : b <= 20 ? 7 : 17;
+    if (op === "take") return a <= 10 ? 6 : a <= 20 ? 14 : 17;
+    return a + b <= 10 ? 5 : a + b <= 20 ? 12 : 17;
+  }
+  function workCoachText({op, a, b}) {
+    if (fillOperation(op)) return line(
+      `ວາງຝາຂວດ ${a} ຝາ. ໃຫ້ລູກເພີ່ມເປັນອີກກອງຈົນຄົບ ${b}. ຖາມລູກວ່າ ຝາທີ່ເພີ່ມຢູ່ກອງໃດ?`,
+      `วางฝาขวด ${a} ฝา ให้ลูกวางฝาที่เติมแยกเป็นอีกกองจนรวมครบ ${b} แล้วถามว่า กองไหนคือฝาที่ลูกเติม?`
+    );
+    if (op === "compare") return line(
+      "ໃຫ້ລູກຊີ້ກຸ່ມຊ້າຍ ແລະ ກຸ່ມຂວາ. ຖາມລູກວ່າ ຮູ້ໄດ້ແນວໃດວ່າກຸ່ມໃດຫຼາຍກວ່າ ຫຼື ເທົ່າກັນ?",
+      "ให้ลูกชี้กลุ่มซ้ายกับกลุ่มขวา แล้วถามว่า หนูรู้ได้ยังไงว่ากลุ่มไหนมีมากกว่า หรือทั้งสองกลุ่มเท่ากัน?"
+    );
+    if (op === "take") return line(
+      "ໃຫ້ລູກຊີ້ຂອງທີ່ເອົາອອກ ແລ້ວຊີ້ຂອງທີ່ຍັງເຫຼືອ. ຖ້າເອົາໄຂ່ອອກຈາກຖາດແຕ່ຍັງຢູ່ໃນຮັງ ຈຳນວນໄຂ່ໃນຮັງປ່ຽນບໍ?",
+      "ให้ลูกชี้ไข่ที่เอาออกกับไข่ที่ยังเหลือ ถ้าได้หยิบไข่ออกจากถาด ลองถามว่า พอไข่ออกจากถาดแต่ยังอยู่ในรัง จำนวนในรังเปลี่ยนไหม?"
+    );
+    return line("ໃຫ້ລູກແຕ້ມວົງກົມແທນໄຂ່ສອງກຸ່ມ. ແລ້ວຖາມວ່າ ເຮົາເລີ່ມທີ່ຈັກໜ່ວຍ ແລະ ເພີ່ມອີກຈັກໜ່ວຍ?",
+      "ให้ลูกวาดวงกลมแทนไข่สองกลุ่ม แล้วถามว่า เราเริ่มที่กี่ฟอง และเติมอีกกี่ฟอง?");
+  }
+  function similarHomework({op, a, b}) {
+    if (op === "compare") return {op, a: b, b: a === b ? (a === 100 ? 99 : a + 1) : a};
+    // Keep the same make-a-ten or exchange step when there is room to vary the numbers.
+    const shape = (x, y) => op === "take" ? (x % 10 < y % 10) : op === "add" ? (x % 10 + y % 10 >= 10) : false;
+    const offsets = op === "add" && b % 10 === 0 ? [10, -10, 1, -1] : [1, -1, 10, -10];
+    const possible = offsets.flatMap(n => [{op, a, b: b + n}, {op, a: a + n, b}]).filter(p => !workIssue(p));
+    return possible.find(p => shape(p.a, p.b) === shape(a, b)) || possible[0];
+  }
+  function finishHomework(usedHelp) {
+    homework.solved = true;
+    $("#workTry").hidden = homework.trial;
+    $("#workResult").hidden = !homework.trial;
+    $("#workResult").textContent = usedHelp ? workText.helped : workText.success;
+    if (fillOperation(homework.op)) {
+      const {op, a, b} = homework, missing = b - a;
+      $("#workBond").innerHTML = op === "first" ? P.split(b, missing, a) : P.split(b, a, missing);
+      $("#workBond").hidden = false;
+    }
+  }
+  const workSign = (a, b) => a === b ? "=" : a > b ? ">" : "<";
+  const signWords = {"<": line("ໜ້ອຍກວ່າ", "น้อยกว่า"), "=": line("ເທົ່າກັນ", "เท่ากัน"), ">": line("ຫຼາຍກວ່າ", "มากกว่า")};
+  function renderWorkCompare() {
+    const {a, b, trial, hint, solved, wrong} = homework;
+    const s = workSign(a, b), pairs = Math.min(a, b), max = Math.max(a, b);
+    const board = $("#workCompareBoard");
+    $("#workComparePhase").textContent = trial ? "ລອງເອງ" : "ລອງນຳກັນ";
+    const result = `${a} ${signWords[s]} ${b}`;
+    $("#workComparePrompt").textContent = solved ? result : workText.prompt;
+    $("#workCompareEq").innerHTML = P.eq([a, solved ? s : "?", b]);
+    board.hidden = trial && !hint && !solved;
+    board.innerHTML = [a, b].map((n, i) => {
+      const label = workTypes.compare.fields[i];
+      const picture = max > 20 ? blocks(Math.floor(n / 10), n % 10) :
+        P.frame([[hint || solved ? pairs : n, "c1"], [hint || solved ? n - pairs : 0, "c2"], [max > 10 ? 20 - n : 10 - n, ""]]);
+      return `<div><h3>${label} <b class="num">${n}</b></h3>${picture}</div>`;
+    }).join("");
+    $("#workCompareChoices").innerHTML = solved ? "" : choiceSigns.map(sign =>
+      `<button type="button" class="choice ${wrong.has(sign) ? "wrong" : ""}" data-work-sign="${esc(sign)}" aria-label="${signWords[sign]}" aria-disabled="${wrong.has(sign)}">${esc(sign)}</button>`
+    ).join("");
+    $("#workCompareHelp").hidden = hint || solved;
+    $("#workCompareHelp").textContent = board.hidden ? workText.hint : max > 20 ? workText.groups : workText.match;
+    const note = $("#workCompareFeedback");
+    note.className = "feedback " + (solved ? "good" : "help");
+    note.textContent = solved ? workCompareReason(a, b) :
+      hint ? (max > 20
+        ? line("ປຽບທຽບກຸ່ມລະ 10 ກ່ອນ. ຖ້າເທົ່າກັນ ໃຫ້ເບິ່ງອັນທີ່ເຫຼືອ.", "เทียบจำนวนกลุ่มละ 10 ก่อน ถ้าเท่ากันค่อยเทียบชิ้นที่เหลือ")
+        : line("ຈຸດມົນຈັບຄູ່ໄດ້. ເບິ່ງວ່າຂ້າງໃດຍັງມີຈຸດສີ່ແຈເຫຼືອ.", "จุดกลมจับคู่กันได้ ลองดูว่าฝั่งไหนมีช่องสี่เหลี่ยมเหลือ")) : "";
+  }
+  function workCompareReason(a, b) {
+    if (a === b) return line("ສອງກຸ່ມມີຈຳນວນເທົ່າກັນ.", "ทั้งสองกลุ่มมีจำนวนเท่ากัน");
+    if (Math.max(a, b) <= 20) return line(
+      `ຈັບຄູ່ແລ້ວ ກຸ່ມ ${Math.max(a, b)} ຍັງເຫຼືອ ${Math.abs(a - b)} ອັນ.`,
+      `จับคู่แล้ว กลุ่ม ${Math.max(a, b)} มีเหลืออีก ${Math.abs(a - b)} ชิ้น`
+    );
+    const moreTens = Math.floor(a / 10) !== Math.floor(b / 10);
+    return moreTens
+      ? line(`ກຸ່ມ ${Math.max(a, b)} ມີກຸ່ມລະ 10 ຫຼາຍກວ່າ.`, `กลุ่ม ${Math.max(a, b)} มีกลุ่มสิบมากกว่า`)
+      : line(`ກຸ່ມລະ 10 ມີເທົ່າກັນ. ກຸ່ມ ${Math.max(a, b)} ມີອັນດ່ຽວຫຼາຍກວ່າ.`, `ทั้งสองฝั่งมีกลุ่มสิบเท่ากัน กลุ่ม ${Math.max(a, b)} มีชิ้นที่อยู่นอกกลุ่มมากกว่า`);
+  }
+  $("#workCompareChoices").addEventListener("click", e => {
+    const button = e.target.closest("[data-work-sign]");
+    if (!button || homework.solved) return;
+    const sign = button.dataset.workSign;
+    if (homework.wrong.has(sign)) return;
+    if (sign === workSign(homework.a, homework.b)) finishHomework(homework.hint);
+    else { homework.wrong.add(sign); homework.hint = true; }
+    renderWorkCompare();
+    $("#workComparePrompt").focus({preventScroll: true});
+    speak($("#workCompareFeedback").textContent);
+  });
+  $("#workCompareHelp").addEventListener("click", () => {
+    homework.hint = true;
+    renderWorkCompare();
+    $("#workComparePrompt").focus({preventScroll: true});
+    speak($("#workCompareFeedback").textContent);
+  });
+  $("#workCompareListen").addEventListener("click", () => {
+    const {a, b} = homework;
+    speak(`${a} · ${b}. ${workText.prompt}`);
+  });
+  workOp.addEventListener("change", () => {
+    workTypes[workOp.value].example.forEach((n, i) => { workInputs[i].value = n; });
+    renderWorkForm();
+  });
+  workInputs.forEach(input => input.addEventListener("input", renderWorkForm));
+  $("#workForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const item = readHomework(), issue = workIssue(item);
+    if (issue) {
+      $("#workError").textContent = workText[issue];
+      $("#workError").hidden = false;
+      const invalid = issue === "range" && (!Number.isInteger(item.a) || item.a > 100) ? workInputs[0] : workInputs[1];
+      invalid.setAttribute("aria-invalid", "true");
+      invalid.focus();
+      return;
+    }
+    lastHomework = item;
+    try { localStorage.setItem(workKey, JSON.stringify(item)); } catch (e) { /* optional storage */ }
+    startHomework(item, false);
+  });
+  $("#workTry").addEventListener("click", () => {
+    if (homework?.solved && !homework.trial) startHomework(similarHomework(homework), true);
+  });
+  $("#workEdit").addEventListener("click", () => showWorkForm(true));
+  function showWorkForm(focus = false) {
+    stopLessonSpeech();
+    cur = null;
+    homework = null;
+    nest = null;
+    $("#home").hidden = $("#chapter").hidden = true;
+    $("#backBtn").hidden = $("#homework").hidden = $("#workForm").hidden = false;
+    $("#topTitle").textContent = workText.title;
+    $("#kicker").textContent = "ຄະນິດສາດ ປ.1";
+    $("#workProblem").hidden = true;
+    $("#workNest").append($("#nestPanel"));
+    $("#nestPanel").hidden = false;
+    workOp.value = lastHomework.op;
+    workInputs[0].value = lastHomework.a;
+    workInputs[1].value = lastHomework.b;
+    renderWorkForm();
+    window.scrollTo(0, 0);
+    if (focus) workOp.focus({preventScroll: true});
+  }
+
   /* ---------- contents ---------- */
   function renderToc() {
+    const next = foundation.find(([id]) => !saved.explained[id]);
+    const start = $("#foundationLink");
+    start.href = next ? "#bot-" + next[0] : "#toc";
+    $("#foundationTitle").textContent = next ? next[1] : "ເລືອກບົດຮຽນຕາມປຶ້ມ";
+    const chapter = next && CHAPTERS.find(c => c.id === next[0]);
+    $("#foundationTopic").textContent = chapter ? line(`ບົດທີ ${chapter.id} · ${chapter.lo}`, `บทที่ ${chapter.id} · ${chapter.th}`) : "";
     const kind = nestReport.lastKind, continuation = $("#nestContinue");
     continuation.hidden = !kind;
     if (kind) {
@@ -2450,15 +2952,35 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   let cur = null, stepI = 0, quiz = null;
   const TABS = { learn: ["#tabLearn", "#viewLearn"], practice: ["#tabPractice", "#viewPractice"], parent: ["#tabParent", "#viewParent"] };
   function showTab(name) {
-    speechRequest++;
+    stopLessonSpeech();
     Object.entries(TABS).forEach(([k, [tab, view]]) => { $(tab).setAttribute("aria-selected", String(k === name)); $(view).hidden = k !== name; });
-    if (synth) try { synth.cancel(); } catch (e) { /* ignore */ }
     if (name === "practice" && quiz && quiz.i < quiz.qs.length) { const q = quiz.qs[quiz.i]; speak(q.say || q.text, q.th); }
     window.scrollTo(0, 0);
   }
   $("#tabLearn").addEventListener("click", () => showTab("learn"));
   $("#tabPractice").addEventListener("click", () => showTab("practice"));
   $("#tabParent").addEventListener("click", () => showTab("parent"));
+  function renderCoach(c) {
+    const a = activities[c.id], confirmed = Boolean(saved.explained[c.id]);
+    const items = [[coachingLabels.show, a.home], [coachingLabels.ask, a.ask], [coachingLabels.look, teachingGoals[c.id]]];
+    $("#coachText").innerHTML = items.map(([label, description]) =>
+      `<p><strong>${esc(label)}</strong>${esc(description)}</p>`
+    ).join("");
+    const confirm = $("#coachConfirm");
+    confirm.textContent = confirmed ? coachingLabels.confirmed : coachingLabels.prompt;
+    confirm.setAttribute("aria-pressed", String(confirmed));
+  }
+  $("#coachConfirm").addEventListener("click", () => {
+    saved.explained[cur.id] = saved.explained[cur.id] ? 0 : 1;
+    store();
+    renderCoach(cur);
+  });
+  [$("#schoolLink"), $("#foundationLink")].forEach(link => link.addEventListener("click", event => {
+    if (link.hash !== "#toc") return;
+    event.preventDefault();
+    $("#toc").scrollIntoView({block: "start"});
+    $("#toc").focus({preventScroll: true});
+  }));
   function openChapter(c, expedition) {
     cur = c;
     $("#home").hidden = true;
@@ -2472,7 +2994,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       const {kind, level} = nestRoutes[routeKey];
       const [a, b] = nestLessons[kind][level];
       launch.href = "#bot-" + routeKey;
-      launch.textContent = "🥚 ລອງຍ້າຍຖາດໄຂ່  " + a + (kind === "add" ? " + " : " − ") + b + " →";
+      launch.textContent = "🥚 " + line("ໂຈດຝຶກເພີ່ມ", "โจทย์ฝึกเพิ่มเติม") + " · " + a + (kind === "add" ? " + " : " − ") + b + " →";
     }
     $("#nestPanel").hidden = !expedition;
     $("#starter").hidden = !!expedition;
@@ -2484,6 +3006,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#bookSteps").hidden = true;
     $("#parentBody").innerHTML = renderParent(c);
     resetActivity();
+    $("#quickCoach").open = false;
+    renderCoach(c);
     stepI = 0;
     showStep(false);
     startQuiz(false);
@@ -2603,7 +3127,15 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   }
 
   /* ---------- pages ---------- */
+  function stopLessonSpeech() {
+    speechRequest++;
+    if (synth) try { synth.cancel(); } catch (e) { /* ignore */ }
+  }
   function route() {
+    if (location.hash === "#homework") { showWorkForm(); return; }
+    if (!$("#homework").hidden) $("#starter").before($("#nestPanel"));
+    $("#homework").hidden = true;
+    homework = null;
     const m = /^#bot-(\w+)(?:-(nest|exchange|more))?$/.exec(location.hash);
     const c = m && CHAPTERS.find((x) => String(x.id) === m[1]);
     if (c) {
@@ -2613,13 +3145,12 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     }
     nest = null;
     cur = null;
-    speechRequest++;
+    stopLessonSpeech();
     $("#home").hidden = false;
     $("#chapter").hidden = true;
     $("#backBtn").hidden = true;
     $("#kicker").textContent = "ຄະນິດສາດ ປ.1";
     $("#topTitle").textContent = "ຫ້ອງຮຽນໝີນ້ອຍ";
-    if (synth) try { synth.cancel(); } catch (e) { /* ignore */ }
     renderToc();
     window.scrollTo(0, 0);
   }

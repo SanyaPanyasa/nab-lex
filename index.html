@@ -692,6 +692,7 @@ button.obj:active { transform: scale(0.9); }
         <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
       </button>
       <a class="btn small" href="lessons.html" id="textbookLink">📖 ບົດຮຽນຕາມປຶ້ມ ປ.1</a>
+      <a class="btn small" href="lessons.html#homework" id="homeworkLink">ເຮັດວຽກບ້ານດ້ວຍຮູບ</a>
     </div>
     <div class="practice-panel" id="practiceQuestion" hidden>
       <div class="practice-progress"><h2 id="practiceLessonTitle" tabindex="-1"></h2><span id="practiceProgress"></span></div>
@@ -4190,6 +4191,7 @@ button.obj:active { transform: scale(0.9); }
       button.setAttribute("aria-label", S.lang === "lo" ? "เปลี่ยนเป็นภาษาไทย" : "ປ່ຽນເປັນພາສາລາວ");
     });
     $("#textbookLink").textContent = S.lang === "th" ? "📖 บทเรียนตามหนังสือ ป.1" : "📖 ບົດຮຽນຕາມປຶ້ມ ປ.1";
+    $("#homeworkLink").textContent = S.lang === "th" ? "ทำโจทย์การบ้านด้วยภาพ" : "ເຮັດວຽກບ້ານດ້ວຍຮູບ";
     $("#appTitle").textContent = D.appName;
     $("#tagline").textContent = D.tagline;
     $("#no3dText").textContent = D.no3d;
