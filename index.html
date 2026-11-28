@@ -13,10 +13,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ນັບເລກ">
 <title>ນັບເລກກັບໝີນ້ອຍ</title>
+<link rel="stylesheet" href="fonts/languages.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mali:wght@400;600;700&display=swap">
-<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700&display=swap">
 <style>
 :root {
   --sky-bg: #BFE8FF;
@@ -33,7 +33,7 @@
   --punch: #E64F3A; --punch-deep: #A8301F;
   --badge: #1D2742; --on-badge: #FFFFFF; --focus: #2B85DA;
   --font-text: "Noto Sans Lao", "Phetsarath OT", "Saysettha OT", "Lao UI", system-ui, sans-serif;
-  --font-num: "Fredoka", "Noto Sans Lao", "Mali", system-ui, sans-serif;
+  --font-num: "Fredoka", "Noto Sans Lao", "Mali", "Noto Sans Thai", system-ui, sans-serif;
   --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   --cell: clamp(22px, 6.6vw, 34px);
 }
@@ -100,7 +100,7 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 }
 .language-actions { display: flex; align-items: center; gap: 8px; }
 .language-actions .cta { flex: 1; }
-.quick-language { min-width: 44px; min-height: 44px; font: inherit; font-weight: 700; }
+.quick-language { min-width: 44px; min-height: 44px; font: 700 17px/1.3 "Noto Sans Thai", "Noto Sans Lao", system-ui, sans-serif; }
 .round-btn.off { opacity: 0.5; }
 .coin-chip {
   display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
@@ -182,14 +182,20 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-links .btn { flex: 1 1 auto; }
 .practice a.btn { display: inline-flex; align-items: center; justify-content: center; text-align: center; color: var(--ink); text-decoration: none; }
 .practice[data-thinking] #practiceMenu { gap: 10px; }
+.practice[data-thinking] .practice-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .practice[data-thinking] .practice-links .btn { padding-inline: 9px; font-size: 14px; }
+#practiceAdventureLink { grid-column: 1 / -1; background: var(--sky-soft); }
 .practice[data-thinking] .lesson-level, .practice[data-thinking] #practiceGrowth,
 .practice[data-thinking] #practiceSummaryCompanion, .practice[data-thinking] #practiceAnswerExtras { display: none; }
-.practice[data-thinking] .practice-lesson { min-height: 76px; }
+.practice[data-thinking] .practice-lesson { min-height: 76px; padding: 8px 11px; }
+.practice[data-thinking] .practice-lesson::after { content: ""; width: 8px; height: 8px; flex: none; margin-inline-start: auto; border: solid var(--ink-soft); border-width: 2px 2px 0 0; transform: rotate(45deg); }
 .practice[data-thinking] .practice-lesson strong { font-size: 19px; }
 .practice[data-thinking] .practice-lesson small { font-size: 14px; }
 .practice[data-thinking] #practiceMore { padding: 0 4px; color: var(--ink-soft); }
-.practice[data-thinking] #practiceMore summary { min-height: 44px; padding: 9px 0; cursor: pointer; }
+.practice[data-thinking] #practiceMore summary { display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 9px 0; list-style: none; cursor: pointer; }
+#practiceMore summary::-webkit-details-marker { display: none; }
+#practiceMore summary::before { content: ""; width: 7px; height: 7px; margin-inline-start: 2px; border: solid currentColor; border-width: 2px 2px 0 0; transform: rotate(45deg); }
+#practiceMore[open] summary::before { transform: rotate(135deg); }
 .practice[data-thinking] #practiceMore .practice-options { padding-bottom: 4px; }
 .practice-chapter { display: inline-flex; align-items: center; justify-self: center; min-height: 44px; padding-inline: 5px; color: var(--ink-soft); text-align: center; font-size: 14px; text-underline-offset: 3px; }
 @media (min-width: 680px) {
@@ -727,12 +733,12 @@ button.obj:active { transform: scale(0.9); }
         <a class="btn small" href="lessons.html" id="textbookLink"></a>
         <a class="btn small" href="lessons.html#homework" id="homeworkLink"></a>
         <a class="btn small" href="./" id="practiceGameLink"></a>
+        <a class="btn small" href="?mode=adventure" id="practiceAdventureLink" hidden></a>
       </div>
       <details id="practiceMore" hidden>
         <summary id="practiceMoreTitle"></summary>
         <div class="practice-options">
           <a class="btn small" href="?mode=practice" id="practiceParentLink"></a>
-          <a class="btn small" href="?mode=adventure" id="practiceAdventureLink"></a>
           <button class="btn small" id="practiceSettings" type="button"></button>
         </div>
       </details>
@@ -877,8 +883,8 @@ button.obj:active { transform: scale(0.9); }
     <div class="lang-row">
       <span>ພາສາ · ภาษา</span>
       <div class="seg" role="radiogroup" aria-label="ພາສາ · ภาษา">
-        <button type="button" role="radio" data-lang="lo">ລາວ</button>
-        <button type="button" role="radio" data-lang="th">ไทย</button>
+        <button type="button" role="radio" data-lang="lo" lang="lo">ລາວ</button>
+        <button type="button" role="radio" data-lang="th" lang="th">ไทย</button>
       </div>
     </div>
     <div class="field">
@@ -1024,11 +1030,11 @@ button.obj:active { transform: scale(0.9); }
       retry: "ລອງໃໝ່", prevMonster: "ໂຕກ່ອນ", nextMonster: "ໂຕຕໍ່ໄປ",
       back: "ກັບໜ້າຫຼັກ", replay: "ຟັງຄຳຖາມອີກເທື່ອ", musicBtn: "ເປີດ ຫຼື ປິດດົນຕີ",
       thinking: {
-        title: "ຫຼິ້ນຄິດເລກ ປ.1", intro: "ເລືອກບົດຝຶກ · ຮອບລະ 3 ຂໍ້",
+        title: "ຫຼິ້ນຄິດເລກ ປ.1", intro: "ແຕະຫົວຂໍ້ເພື່ອເລີ່ມຫຼິ້ນ · ຮອບລະ 3 ຂໍ້",
         topics: {
           compare: ["ຈັບຄູ່ກົບ", "ເບິ່ງວ່າກຸ່ມໃດມີກົບຫຼາຍກວ່າ"],
-          add: ["ລວມໄດໂນ", "ເລີ່ມຈາກຈຳນວນທີ່ມີ ແລ້ວນັບຕໍ່"],
-          sub: ["ພາເຕົ່າລົງນ້ຳ", "ເອົາອອກ ແລ້ວນັບໂຕທີ່ຍັງເຫຼືອ"],
+          add: ["ລວມໄດໂນ", "ນັບຕໍ່ຈາກຈຳນວນທີ່ມີ"],
+          sub: ["ພາເຕົ່າລົງນ້ຳ", "ເອົາອອກ ແລ້ວນັບທີ່ເຫຼືອ"],
           fill: ["ຕື່ມຊ່ອງຫວ່າງ", "ຫາວ່າຂາດອີກຈັກໂຕຈຶ່ງຄົບ"],
         },
         pair: "ຈັບຄູ່ກົບ 1 ຄູ່", pairPrompt: "ຈັບຄູ່ກົບຈາກສອງກຸ່ມ ເທື່ອລະຄູ່",
@@ -1253,10 +1259,10 @@ button.obj:active { transform: scale(0.9); }
       retry: "ลองใหม่", prevMonster: "ตัวก่อนหน้า", nextMonster: "ตัวถัดไป",
       back: "กลับหน้าแรก", replay: "ฟังคำถามอีกครั้ง", musicBtn: "เปิดหรือปิดดนตรี",
       thinking: {
-        title: "เล่นคิดเลข ป.1", intro: "เลือกเรื่องที่อยากฝึก · รอบละ 3 ข้อ",
+        title: "เล่นคิดเลข ป.1", intro: "แตะเรื่องที่อยากเล่น · รอบละ 3 ข้อ",
         topics: {
           compare: ["จับคู่กบ", "ดูว่ากลุ่มไหนมีกบมากกว่า"],
-          add: ["รวมไดโนเสาร์", "เริ่มจากจำนวนที่มี แล้วนับต่อ"],
+          add: ["รวมไดโนเสาร์", "นับต่อจากจำนวนที่มี"],
           sub: ["พาเต่าลงน้ำ", "เอาออก แล้วนับตัวที่เหลือ"],
           fill: ["เติมช่องว่าง", "หาว่าขาดอีกเท่าไรจึงจะครบ"],
         },
@@ -2247,7 +2253,7 @@ button.obj:active { transform: scale(0.9); }
       roundRect(g, 18, 18, 220, 220, 56);
       g.fillStyle = fill; g.fill(); g.lineWidth = 20; g.strokeStyle = ring; g.stroke();
       g.fillStyle = state === "no" ? "#8A93A6" : "#1D2742";
-      g.font = `700 ${text.length > 1 ? 120 : 150}px Fredoka, "Noto Sans Lao", Mali, sans-serif`;
+      g.font = `700 ${text.length > 1 ? 120 : 150}px Fredoka, "Noto Sans Lao", Mali, "Noto Sans Thai", sans-serif`;
       g.textAlign = "center"; g.textBaseline = "middle";
       g.fillText(text, 128, 138);
       if (state === "no") { g.strokeStyle = "#7C8597"; g.lineWidth = 14; g.beginPath(); g.moveTo(58, 58); g.lineTo(198, 198); g.stroke(); }
@@ -3984,7 +3990,10 @@ button.obj:active { transform: scale(0.9); }
   async function fontsReady() {
     if (!document.fonts || !document.fonts.load) return;
     try {
-      await Promise.race([Promise.all([document.fonts.load('700 120px "Fredoka"'), document.fonts.load('700 60px "Noto Sans Lao"')]), sleep(1500)]);
+      const languageFont = S.lang === "th" ? "Noto Sans Thai" : "Noto Sans Lao";
+      const numbers = document.fonts.load('700 120px "Fredoka"', "0123456789");
+      const nativeNumbers = document.fonts.load(`700 60px "${languageFont}"`, DIGITS[S.lang]);
+      await Promise.race([Promise.all([numbers, nativeNumbers]), sleep(1500)]);
     } catch (e) { /* fall back to system fonts */ }
   }
   async function startCity(ci) {
@@ -4269,7 +4278,7 @@ button.obj:active { transform: scale(0.9); }
       button.lang = S.lang === "lo" ? "th" : "lo";
       button.setAttribute("aria-label", S.lang === "lo" ? "เปลี่ยนเป็นภาษาไทย" : "ປ່ຽນເປັນພາສາລາວ");
     });
-    $("#textbookLink").textContent = S.lang === "th" ? "📖 บทเรียนตามหนังสือ ป.1" : "📖 ບົດຮຽນຕາມປຶ້ມ ປ.1";
+    $("#textbookLink").textContent = S.lang === "th" ? "บทเรียนตามหนังสือ ป.1" : "ບົດຮຽນຕາມປຶ້ມ ປ.1";
     $("#homeLessons").textContent = S.lang === "th" ? "บทเรียน ป.1" : "ບົດຮຽນ ປ.1";
     $("#homeworkLink").textContent = S.lang === "th" ? "ทำโจทย์การบ้านด้วยภาพ" : "ເຮັດວຽກບ້ານດ້ວຍຮູບ";
     $("#appTitle").textContent = D.appName;
@@ -4607,7 +4616,7 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceBack").innerHTML = ICON.back;
     $("#practiceIntro").textContent = practiceThinking ? digitsIn(thinking.intro) : P.intro;
     $("#practiceRounds").hidden = $("#practiceExample").hidden = $("#homeworkLink").hidden = $("#practiceGameLink").hidden = practiceThinking;
-    $("#practiceTenLink").hidden = $("#practiceMore").hidden = !practiceThinking;
+    $("#practiceTenLink").hidden = $("#practiceAdventureLink").hidden = $("#practiceMore").hidden = !practiceThinking;
     $("#textbookLink").href = practiceThinking ? "lessons.html#toc" : "lessons.html";
     $("#practiceTenLink").textContent = digitsIn(thinking.ten);
     $("#practiceGameLink").textContent = digitsIn(thinking.title);

@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Noto Sans Lao";
+  src: url("noto-sans-lao.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0E81-0EDF, U+200C-200D, U+25CC;
+}
+
+@font-face {
+  font-family: "Noto Sans Thai";
+  src: url("noto-sans-thai.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+02D7, U+0303, U+0331, U+0E01-0E5B, U+200C-200D, U+25CC;
+}
