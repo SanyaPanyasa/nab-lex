@@ -1178,11 +1178,12 @@ button.obj:active { transform: scale(0.9); }
       resetYes: "ລຶບເລີຍ", resetNo: "ຍົກເລີກ", resetDone: "ລຶບຂໍ້ມູນແລ້ວ",
       homeVoice: "ເຄື່ອງນີ້ຍັງບໍ່ມີສຽງເວົ້າພາສາລາວ ຜູ້ປົກຄອງເບິ່ງວິທີແກ້ໄດ້ໃນມຸມຜູ້ປົກຄອງ",
       voiceNote: {
-        nosynth: "ບຣາວເຊີນີ້ເວົ້າບໍ່ໄດ້ ລອງເປີດດ້ວຍ Microsoft Edge ຫຼື Chrome",
-        unknown: "ກົດທົດສອບສຽງ ເພື່ອກວດວ່າໄດ້ຍິນບໍ່",
-        ok: (v) => `ມີສຽງພາສາລາວໃນເຄື່ອງແລ້ວ (${v})`,
-        fallback: "ເຄື່ອງນີ້ບໍ່ມີສຽງລາວ ຈຶ່ງໃຊ້ສຽງໄທອ່ານແທນ · ຢາກໄດ້ສຽງລາວ ໃຫ້ເປີດລິ້ງນີ້ດ້ວຍ Microsoft Edge ໃນຄອມພິວເຕີ (ຕ້ອງຕໍ່ອິນເຕີເນັດ)",
-        missing: "ເຄື່ອງນີ້ບໍ່ມີສຽງລາວ · ເປີດລິ້ງນີ້ດ້ວຍ Microsoft Edge ໃນຄອມພິວເຕີ ຈະມີສຽງລາວ (ຕ້ອງຕໍ່ອິນເຕີເນັດ) ຫຼື ເປີດ \"ໃຊ້ສຽງໄທອ່ານແທນ\" ດ້ານເທິງ",
+        off: "ປິດສຽງອ່ານໄວ້. ເປີດສຽງອ່ານແລ້ວກົດທົດສອບໄດ້.",
+        nosynth: "ບຣາວເຊີນີ້ບໍ່ຮອງຮັບສຽງອ່ານ.",
+        unknown: "ກຳລັງຊອກຫາສຽງອ່ານໃນເຄື່ອງ.",
+        ok: (v) => `ພົບສຽງອ່ານພາສາລາວ (${v})`,
+        fallback: "ກຳລັງໃຊ້ສຽງໄທອ່ານແທນສຽງລາວ.",
+        missing: "ບຣາວເຊີນີ້ບໍ່ພົບສຽງອ່ານພາສາລາວ. ຖ້າເຄື່ອງມີສຽງໄທ ໃຫ້ເປີດໃຊ້ສຽງໄທອ່ານແທນໄດ້.",
       },
     },
     th: {
@@ -1391,11 +1392,12 @@ button.obj:active { transform: scale(0.9); }
       resetYes: "ล้างเลย", resetNo: "ยกเลิก", resetDone: "ล้างข้อมูลแล้ว",
       homeVoice: "เครื่องนี้ยังไม่มีเสียงพูดภาษาไทย ผู้ปกครองดูวิธีเปิดได้ในมุมผู้ปกครอง",
       voiceNote: {
-        nosynth: "เบราว์เซอร์นี้พูดไม่ได้ ลองเปิดด้วย Chrome หรือ Safari แทน",
-        unknown: "กดปุ่มทดสอบเสียงเพื่อเช็กว่าได้ยินภาษาไทย",
-        ok: (v) => `มีเสียงภาษาไทยในเครื่องแล้ว (${v})`,
+        off: "ปิดเสียงอ่านอยู่ เปิดเสียงพูดแล้วกดทดสอบได้",
+        nosynth: "เบราว์เซอร์นี้ไม่รองรับเสียงอ่าน",
+        unknown: "กำลังค้นหาเสียงอ่านในเครื่อง",
+        ok: (v) => `พบเสียงอ่านภาษาไทย (${v})`,
         fallback: "",
-        missing: "เครื่องนี้ยังไม่มีเสียงภาษาไทย · Android: ตั้งค่า → ค้นหา \"ข้อความเป็นเสียงพูด\" → Google → ติดตั้งเสียงภาษาไทย · Windows: Settings → Time & language → Speech → Add voices → Thai · iPhone/iPad มีเสียงไทยอยู่แล้ว",
+        missing: "เบราว์เซอร์นี้ไม่พบเสียงอ่านภาษาไทย ลองเช็กการตั้งค่าเสียงอ่านในเครื่องแล้วกลับมากดทดสอบเสียง",
       },
     },
   };
@@ -1514,10 +1516,10 @@ button.obj:active { transform: scale(0.9); }
   let voices = [], voicesKnown = false;
   const PREFIX = { lo: /^lo([-_]|$)/i, th: /^th([-_]|$)/i };
   const TAG = { lo: "lo-LA", th: "th-TH" };
-  function findVoices() {
+  function findVoices(settled = false) {
     if (synth) {
       try { voices = synth.getVoices() || []; } catch (e) { voices = []; }
-      if (voices.length) voicesKnown = true;
+      if (settled || voices.length) voicesKnown = true;
     }
     renderVoiceNote();
   }
@@ -1529,12 +1531,13 @@ button.obj:active { transform: scale(0.9); }
   }
   function voiceLang() {
     if (!synth || !S.voice) return null;
-    if (!voicesKnown) return S.lang;
+    if (!voicesKnown) findVoices();
     if (voiceFor(S.lang)) return S.lang;
     if (S.lang === "lo" && S.fallback && voiceFor("th")) return "th";
     return null;
   }
   function voiceStatus() {
+    if (!S.voice) return "off";
     if (!synth) return "nosynth";
     if (!voicesKnown) return "unknown";
     if (voiceFor(S.lang)) return "ok";
@@ -1589,7 +1592,7 @@ button.obj:active { transform: scale(0.9); }
     if (!audio) {
       try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
     }
-    if (audio.state === "suspended") audio.resume();
+    if (audio.state === "suspended" || audio.state === "interrupted") audio.resume().catch(() => {});
     return audio;
   }
   function tone(freq, dur = 0.12, type = "sine", vol = 0.15, when = 0, dest) {
@@ -4431,6 +4434,7 @@ button.obj:active { transform: scale(0.9); }
   $("#pDigits").addEventListener("change", (e) => { S.nativeDigits = e.target.checked; save(); applyLang(); renderParent(); });
   $("#pTest").addEventListener("click", () => {
     ctx();
+    findVoices(true);
     primeVoice();
     findVoices();
     say((D) => D.testSay).then(findVoices);
@@ -5227,13 +5231,20 @@ button.obj:active { transform: scale(0.9); }
   applyLang();
   if (synth) {
     findVoices();
-    try { synth.addEventListener("voiceschanged", findVoices); } catch (e) { synth.onvoiceschanged = findVoices; }
-    setTimeout(findVoices, 900);
+    const refreshVoices = () => findVoices(true);
+    try { synth.addEventListener("voiceschanged", refreshVoices); } catch (e) { synth.onvoiceschanged = refreshVoices; }
+    setTimeout(refreshVoices, 1500);
   }
   if (new URLSearchParams(location.search).get("mode") === "practice") openPractice();
   else loadGame3D();
-  // browsers only allow sound after the first tap, so the home song starts then
-  window.addEventListener("pointerdown", () => { ctx(); if (current === "home" && S.music && !music.name) musicPlay("home"); }, true);
+  // A completed tap can unlock Web Audio on touch screens.
+  function unlockAudio(event) {
+    if (!event.isTrusted) return;
+    ctx();
+    if (current === "home" && S.music && !music.name) musicPlay("home");
+  }
+  window.addEventListener("pointerup", unlockAudio, true);
+  window.addEventListener("keydown", unlockAudio, true);
 })();
 </script>
 

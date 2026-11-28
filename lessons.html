@@ -77,6 +77,15 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .icon-btn { min-width: 44px; height: 44px; padding: 0 12px; border-radius: 999px; border: 0; background: var(--card); display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
 .icon-btn small { font: 600 13px/1 var(--font-lo); color: var(--soft); }
 .voice-symbol { filter: grayscale(1); }
+.voice-panel { max-width: 540px; padding: 12px 16px; margin: 0 0 12px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); font-size: 16px; }
+.voice-panel h2 { font-size: 19px; }
+.voice-panel p { margin: 4px 0; }
+.voice-panel-head, .voice-panel-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.voice-panel-actions { justify-content: flex-start; flex-wrap: wrap; }
+.voice-panel .secondary { margin: 0; padding-inline: 6px; }
+.voice-option { display: flex; align-items: center; gap: 10px; min-height: 44px; padding-block: 5px; }
+.voice-option input { width: 20px; height: 20px; flex: none; accent-color: var(--accent); }
+#voiceFeedback { padding: 8px 10px; border-radius: 10px; background: var(--sky-soft); }
 
 /* contents */
 .catalog-search { display: grid; gap: 6px; margin: 0 0 14px; font-weight: 600; }
@@ -404,8 +413,24 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     <button class="icon-btn" id="backBtn" type="button" aria-label="ສາລະບານ" hidden>←</button>
     <div class="ttl"><div class="kicker" id="kicker">ຄະນິດສາດ ປ.1</div><h1 id="topTitle" tabindex="-1">ຫ້ອງຮຽນໝີນ້ອຍ</h1></div>
     <button class="icon-btn language-btn" type="button" id="languageBtn" data-original lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
-    <button class="icon-btn" id="voiceBtn" type="button" aria-pressed="true">🔊</button>
+    <button class="icon-btn" id="voiceBtn" type="button" aria-expanded="false" aria-controls="voicePanel" aria-label="ຕັ້ງຄ່າສຽງ">🔊</button>
   </header>
+
+  <section id="voicePanel" class="voice-panel" aria-labelledby="voiceTitle" hidden>
+    <div class="voice-panel-head">
+      <h2 id="voiceTitle" tabindex="-1">ຕັ້ງຄ່າສຽງ</h2>
+      <button type="button" class="secondary" id="voiceClose">ປິດ</button>
+    </div>
+    <p id="voiceAvailability" role="status"></p>
+    <label class="voice-option"><input type="checkbox" id="voiceEnabled"> ເປີດສຽງອ່ານໂຈດ</label>
+    <label class="voice-option" id="thaiVoiceSetting" hidden><input type="checkbox" id="thaiVoice"> ໃຊ້ສຽງໄທເມື່ອຫາສຽງລາວບໍ່ພົບ</label>
+    <label id="chooseVoiceLabel" hidden>ເລືອກສຽງອ່ານ <select id="voiceChoice"></select></label>
+    <div class="voice-panel-actions">
+      <button type="button" class="secondary" id="voiceSample">ລອງສຽງອ່ານ</button>
+      <button type="button" class="secondary" id="audioSample">ລອງສຽງກະດິ່ງ</button>
+    </div>
+    <p id="voiceFeedback" role="status" hidden></p>
+  </section>
 
   <main id="home">
     <a class="foundation-link" id="foundationLink" href="#bot-2">
@@ -544,10 +569,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
 
     <section id="viewParent" class="parent" role="tabpanel" aria-labelledby="tabParent" hidden>
       <div id="parentBody"></div>
-      <details><summary>ສຽງອ່ານ</summary><p id="noVoice" hidden>ເຄື່ອງນີ້ຍັງບໍ່ມີສຽງອ່ານລາວ. ພໍ່ແມ່ອ່ານຄຳຖາມໃຫ້ລູກຟັງໄດ້.</p>
-      <label id="chooseVoiceLabel" hidden>ເລືອກສຽງອ່ານ <select id="voiceChoice"></select></label>
-      <button type="button" class="secondary" id="voiceSample" hidden>ລອງຟັງສຽງ</button>
-      <label class="only-lo"><input type="checkbox" id="thaiVoice"> ໃຊ້ສຽງໄທໃນບົດທີ່ມີຄຳແປ ຖ້າເຄື່ອງບໍ່ມີສຽງລາວ</label></details>
+      <button type="button" class="secondary" id="parentVoiceSettings">ຕັ້ງຄ່າສຽງ</button>
     </section>
   </main>
   <footer class="share-footer">
@@ -643,8 +665,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   function setLanguage(next) {
     if (language === next) return;
     language = next;
-    speechRequest++;
-    if (synth) synth.cancel();
+    stopLessonSpeech();
+    voiceFeedback();
     displayLanguage();
   }
   $("#languageBtn").addEventListener("click", () => {
@@ -854,6 +876,33 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   const findVoices = () => { try { voices = synth ? synth.getVoices() || [] : []; } catch (e) { voices = []; } };
   if (synth) { findVoices(); try { synth.addEventListener("voiceschanged", findVoices); } catch (e) { synth.onvoiceschanged = findVoices; } }
   const matchingVoices = lang => voices.filter(v => v.lang.toLowerCase().split(/[-_]/)[0] === lang);
+  const soundText = {
+    title: line("ຕັ້ງຄ່າສຽງ", "ตั้งค่าเสียง"),
+    loading: line("ກຳລັງຊອກຫາສຽງອ່ານໃນເຄື່ອງ.", "กำลังค้นหาเสียงอ่านในเครื่อง"),
+    unavailable: line("ບຣາວເຊີນີ້ບໍ່ຮອງຮັບສຽງອ່ານ.", "เบราว์เซอร์นี้ไม่รองรับเสียงอ่าน"),
+    noLao: line("ບຣາວເຊີນີ້ບໍ່ພົບສຽງອ່ານພາສາລາວ.", "เบราว์เซอร์นี้ไม่พบเสียงอ่านภาษาลาว"),
+    noThai: line("ບຣາວເຊີນີ້ບໍ່ພົບສຽງອ່ານພາສາໄທ.", "เบราว์เซอร์นี้ไม่พบเสียงอ่านภาษาไทย"),
+    hasLao: line("ພົບສຽງອ່ານພາສາລາວ. ກົດລອງຟັງໄດ້ເລີຍ.", "พบเสียงอ่านภาษาลาว กดลองฟังได้เลย"),
+    hasThai: line("ພົບສຽງອ່ານພາສາໄທ. ກົດລອງຟັງໄດ້ເລີຍ.", "พบเสียงอ่านภาษาไทย กดลองฟังได้เลย"),
+    usingThai: line("ໃຊ້ສຽງອ່ານພາສາໄທແທນສຽງລາວ.", "ใช้เสียงไทยอ่านโจทย์แทนเสียงลาว"),
+    read: line("ລອງສຽງອ່ານ", "ลองเสียงอ่าน"),
+    retry: line("ກວດຫາສຽງອີກຄັ້ງ", "ค้นหาเสียงอีกครั้ง"),
+    tap: line("ແຕະປຸ່ມລອງສຽງອ່ານເພື່ອເລີ່ມຟັງ.", "แตะลองเสียงอ่านเพื่อเริ่มเล่นเสียง"),
+    failed: line("ເປີດສຽງອ່ານນີ້ບໍ່ໄດ້. ລອງເລືອກສຽງອື່ນ ຫຼື ກວດການຕັ້ງຄ່າສຽງໃນເຄື່ອງ.", "เล่นเสียงอ่านนี้ไม่ได้ ลองเลือกเสียงอื่นหรือเช็กการตั้งค่าเสียงของเครื่อง"),
+    played: line("ຫາກບໍ່ໄດ້ຍິນສຽງກະດິ່ງ ໃຫ້ກວດລະດັບສຽງຂອງເຄື່ອງ.", "ถ้าไม่ได้ยินเสียงติ๊ง ให้เช็กระดับเสียงสื่อของเครื่องและเสียงของเว็บ"),
+    beepFailed: line("ເລີ່ມຫຼິ້ນສຽງບໍ່ໄດ້. ກວດລະດັບສຽງແລ້ວລອງອີກ.", "เริ่มเล่นเสียงไม่ได้ เช็กระดับเสียงแล้วลองใหม่")
+  };
+  [
+    ["ປິດ", "ปิด"],
+    ["ເປີດສຽງອ່ານໂຈດ", "เปิดเสียงอ่านโจทย์"],
+    ["ໃຊ້ສຽງໄທເມື່ອຫາສຽງລາວບໍ່ພົບ", "ใช้เสียงไทยสำรองเมื่อไม่มีเสียงลาว"],
+    ["ລອງສຽງກະດິ່ງ", "ลองเสียงติ๊ง"]
+  ].forEach(([lo, th]) => line(lo, th));
+  function voiceFeedback(message = "") {
+    const note = $("#voiceFeedback");
+    note.hidden = !message;
+    note.textContent = message;
+  }
   const voicePreference = {};
   const voiceFor = lang => {
     const matches = matchingVoices(lang);
@@ -864,7 +913,6 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   function voiceMenu(p) {
     const select = $("#voiceChoice"), options = matchingVoices(p?.lang || language);
     $("#chooseVoiceLabel").hidden = options.length < 2;
-    $("#voiceSample").hidden = !p || !saved.voice;
     if (select.options.length !== options.length || options.some((v,i) => select.options[i]?.value !== v.voiceURI)) {
       select.replaceChildren(...options.map(v => new Option(v.name, v.voiceURI)));
     }
@@ -892,9 +940,16 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   function renderVoice(p) {
     const label = !saved.voice ? "ປິດສຽງ" : p ? (p.lang === "lo" ? "ລາວ" : "ໄທ") : "ບໍ່ມີສຽງ";
     $("#voiceBtn").innerHTML = `<span aria-hidden="true" class="voice-symbol">${saved.voice && p ? "🔊" : "🔇"}</span> <small>${label}</small>`;
-    $("#voiceBtn").setAttribute("aria-label", label);
-    $("#noVoice").hidden = !!voiceFor(language) || (!!synth && !voicesChecked);
-    $("#noVoice").textContent = language === "th" ? "เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย คุณพ่อคุณแม่อ่านโจทย์ให้ลูกฟังได้" : "ເຄື່ອງນີ້ຍັງບໍ່ມີສຽງອ່ານພາສາລາວ. ພໍ່ແມ່ອ່ານໂຈດໃຫ້ລູກຟັງໄດ້.";
+    $("#voiceBtn").setAttribute("aria-label", soundText.title);
+    const thaiAlternative = language === "lo" && !voiceFor("lo") && voiceFor("th");
+    $("#thaiVoiceSetting").hidden = !thaiAlternative;
+    $("#voiceEnabled").checked = saved.voice;
+    $("#thaiVoice").checked = saved.thaiVoice;
+    $("#voiceSample").hidden = !synth;
+    $("#voiceSample").textContent = p ? soundText.read : soundText.retry;
+    $("#voiceAvailability").textContent = !synth ? soundText.unavailable : p
+      ? (p.lang === "lo" ? soundText.hasLao : language === "lo" ? soundText.usingThai : soundText.hasThai)
+      : !voicesChecked ? soundText.loading : language === "lo" ? soundText.noLao : soundText.noThai;
     voiceMenu(p);
     $("#nestListen").hidden = !(saved.voice && p);
     $("#actListen").hidden = !(saved.voice && p);
@@ -903,15 +958,16 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   }
   let voicesChecked = false;
   let speechRequest = 0;
-  async function speak(lo, th) {
+  async function speak(lo, th, preview = false) {
     const request = ++speechRequest;
-    if (!synth || !saved.voice) return;
+    if (!synth || (!saved.voice && !preview)) return;
     if (!voices.length && !voicesChecked) await waitVoices();
-    if (request !== speechRequest || !saved.voice) return;
+    if (request !== speechRequest || (!saved.voice && !preview)) return;
     voicesChecked = true;
     const p = pickVoice();
     renderVoice(p);
     if (!p) return;
+    voiceFeedback();
     let text = p.lang === "lo" ? lo : th || thaiText(lo || "");
     if (!text) return;
     text = String(text).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, "").replace(/<\/?(?:span|b|i|div|p)\b[^>]*>/gi, "");
@@ -929,17 +985,25 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       synth.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = p.tag; u.voice = p.v; u.rate = 0.9; u.pitch = 1;
+      u.onerror = ({error}) => {
+        if (request === speechRequest && error !== "canceled" && error !== "interrupted") {
+          voiceFeedback(error === "not-allowed" ? soundText.tap : soundText.failed);
+        }
+      };
       synth.speak(u);
-    } catch (e) { /* no voice */ }
+    } catch (e) { voiceFeedback(soundText.failed); }
     const say = $("#stepSay");
     say.classList.remove("talk"); void say.offsetWidth; say.classList.add("talk");
   }
 
   /* ---------- tiny sounds ---------- */
   let audio = null;
+  function audioContext() {
+    return audio ||= new (window.AudioContext || window.webkitAudioContext)();
+  }
   function tone(f, d, type = "sine", vol = 0.12, when = 0) {
     try {
-      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      audioContext();
       const t = audio.currentTime + when, o = audio.createOscillator(), g = audio.createGain();
       o.type = type; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + d);
       o.connect(g).connect(audio.destination); o.start(t); o.stop(t + d);
@@ -3447,6 +3511,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   let chapterBack = "";
   function route() {
     const fromCatalog = !$("#catalog").hidden;
+    showVoicePanel(false);
+    voiceFeedback();
     $("#catalog").hidden = $("#shareUrl").hidden = true;
     $("#shareStatus").textContent = "";
     if (location.hash === "#homework") {
@@ -3484,7 +3550,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#topTitle").textContent = catalog ? navigationText.catalog : "ຫ້ອງຮຽນໝີນ້ອຍ";
     renderToc();
     window.scrollTo(0, 0);
-    $("#topTitle").focus({preventScroll: true});
+    if (hash === "#sound") showVoicePanel(true);
+    else $("#topTitle").focus({preventScroll: true});
   }
   $("#backBtn").addEventListener("click", () => { location.hash = $("#chapter").hidden ? "" : chapterBack; });
   if (synth) synth.addEventListener?.("voiceschanged", () => { findVoices(); voicesChecked = true; renderVoice(pickVoice()); });
@@ -3495,19 +3562,55 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     try { localStorage.setItem("nab-lex.voice." + p.lang, event.target.value); } catch (e) { /* session only */ }
     renderVoice(pickVoice());
   });
-  $("#voiceSample").addEventListener("click", () => speak("ມີໄຂ່ຢູ່ 2 ໜ່ວຍ. ເພີ່ມອີກ 1 ໜ່ວຍ ເປັນຈັກໜ່ວຍ?", "มีไข่อยู่ 2 ฟอง เพิ่มอีก 1 ฟอง เป็นกี่ฟอง?"));
-  $("#thaiVoice").checked = saved.thaiVoice;
-  $("#thaiVoice").addEventListener("change", (event) => {
-    saved.thaiVoice = event.target.checked;
-    store(); renderVoice(pickVoice());
+  function showVoicePanel(open) {
+    $("#voicePanel").hidden = !open;
+    $("#voiceBtn").setAttribute("aria-expanded", String(open));
+    if (open) {
+      findVoices();
+      renderVoice(pickVoice());
+      $("#voiceTitle").focus({preventScroll: true});
+      window.scrollTo(0, 0);
+    }
+  }
+  function closeVoicePanel() {
+    showVoicePanel(false);
+    $("#voiceBtn").focus();
+  }
+  $("#voiceBtn").addEventListener("click", () => showVoicePanel($("#voicePanel").hidden));
+  $("#voiceClose").addEventListener("click", closeVoicePanel);
+  $("#voicePanel").addEventListener("keydown", event => {
+    if (event.key === "Escape") closeVoicePanel();
   });
-  $("#voiceBtn").addEventListener("click", () => {
-    saved.voice = !saved.voice; store();
-    $("#voiceBtn").setAttribute("aria-pressed", String(saved.voice));
-    if (!saved.voice && synth) try { synth.cancel(); } catch (e) { /* ignore */ }
+  $("#parentVoiceSettings").addEventListener("click", () => showVoicePanel(true));
+  $("#voiceSample").addEventListener("click", () => {
+    findVoices();
+    voicesChecked = true;
+    voiceFeedback();
+    renderVoice(pickVoice());
+    speak("ມີໄຂ່ຢູ່ 2 ໜ່ວຍ. ເພີ່ມອີກ 1 ໜ່ວຍ ເປັນຈັກໜ່ວຍ?", "มีไข่อยู่ 2 ฟอง เพิ่มอีก 1 ฟอง เป็นกี่ฟอง?", true);
+  });
+  $("#audioSample").addEventListener("click", async () => {
+    try {
+      const context = audioContext();
+      if (context.state !== "running") await context.resume();
+      ding();
+      voiceFeedback(soundText.played);
+    } catch (e) { voiceFeedback(soundText.beepFailed); }
+  });
+  $("#thaiVoice").addEventListener("change", event => {
+    saved.thaiVoice = event.target.checked;
+    stopLessonSpeech();
+    voiceFeedback();
+    store();
     renderVoice(pickVoice());
   });
-  $("#voiceBtn").setAttribute("aria-pressed", String(saved.voice));
+  $("#voiceEnabled").addEventListener("change", event => {
+    saved.voice = event.target.checked;
+    if (!saved.voice) stopLessonSpeech();
+    voiceFeedback();
+    store();
+    renderVoice(pickVoice());
+  });
   if (synth) waitVoices().then(() => { voicesChecked = true; renderVoice(pickVoice()); });
   else renderVoice(null);
   window.addEventListener("hashchange", route);
