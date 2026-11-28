@@ -303,9 +303,13 @@ svg text { font-family: var(--font-num); }
 .act-token { position: relative; display: grid; place-items: center; min-height: 54px; min-width: 0; padding: 0; border-radius: 12px; background: var(--bg); border: 2px solid var(--line); font: clamp(27px, 8vw, 36px)/1 var(--font-emoji); }
 .act-token.new, .act-token.counted { background: var(--good-soft); border-color: var(--good); }
 .act-token.empty { background: transparent; border: 2px dashed var(--soft); }
-.act-token.gone { color: var(--soft); background: var(--bg); }
-.act-token.gone span { opacity: .4; }
-.act-token.gone::after { content: "×"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 35px/1 var(--font-num); color: var(--ink); }
+.turtle-board { display: grid; gap: 8px; width: min(100%, 380px); text-align: start; }
+.turtle-zone { min-width: 0; padding: 8px; border-radius: 14px; background: var(--sun-soft); }
+.turtle-zone + .turtle-zone { background: var(--sky-soft); }
+.turtle-zone h3 { margin: 0 0 6px; font-size: 16px; }
+.turtle-zone .act-counters { --columns: 5; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; min-height: 54px; }
+.turtle-zone .act-token { border-color: transparent; }
+.turtle-zone .act-token[data-move] { border-color: var(--sky); }
 .act-token b { position: absolute; right: -2px; bottom: -2px; min-width: 21px; border-radius: 8px; background: var(--good); color: var(--on-good); font: 700 15px/21px var(--font-num); }
 .act-token[data-move], .pair-token[data-move] { border: 2px dashed var(--sky); }
 .act-counts { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 16px; font-size: 16px; }
@@ -343,6 +347,10 @@ svg text { font-family: var(--font-num); }
 .nest-eq b { display: inline-grid; place-items: center; min-width: 1.2em; min-height: 1.15em; border: 2px dashed var(--accent); border-radius: 8px; vertical-align: bottom; }
 .nest-eq b:not(:empty) { border-color: var(--good); color: var(--good); }
 .nest-board { display: grid; gap: 7px; }
+.nest-take-plan, .nest-take-steps { display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 10px 0; text-align: center; }
+.nest-take-plan { font-size: 16px; }
+.nest-take-plan .num, .nest-take-steps .num { font-size: 23px; }
+.nest-take-steps .num { padding: 4px 10px; border-radius: 9px; background: var(--good-soft); }
 .nest-zone { padding: 5px 10px 9px; min-width: 0; border-radius: 15px; background: var(--sun-soft); border: 1px solid var(--line); }
 .nest-zone + .nest-zone { background: var(--sky-soft); }
 .nest-zone h3 { font-size: 15px; margin: 0 0 4px; }
@@ -361,6 +369,8 @@ svg text { font-family: var(--font-num); }
 .nest-piece:disabled { opacity: 1; cursor: default; }
 .nest-speckle { display: block; width: 100%; aspect-ratio: .75; border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%; border: 1px solid #806235; background: radial-gradient(circle at 61% 63%, #82642c 0 9%, transparent 10%), radial-gradient(circle at 36% 43%, #ab8241 0 10%, transparent 11%), #ffe6ad; }
 .nest-egg .nest-speckle { width: 22px; }
+.nest-game[data-action="check"] #nestHome .nest-egg { width: 44px; height: 46px; }
+.nest-game[data-action="check"] .nest-opened .nest-speckle { outline: 2px dashed var(--sky); outline-offset: 2px; }
 .nest-tray .lit { background-color: #95e1b0; outline: 1px solid #388455; }
 .nest-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin: 6px 0; color: var(--ink); font-size: 15px; }
 .nest-stats:empty, .nest-feedback:empty { display: none; }
@@ -368,6 +378,7 @@ svg text { font-family: var(--font-num); }
 .nest-controls .go { min-height: 46px; }
 .nest-controls .choices { margin: 0; gap: 7px; }
 .nest-controls .choice { min-width: 60px; min-height: 48px; font-size: 24px; background: var(--bg); }
+.nest-controls .choice.word { font-size: 17px; }
 .nest-feedback { margin: 10px 0; padding: 9px 12px; border-radius: 12px; background: var(--sky-soft); text-align: center; }
 .nest-game[data-solved="true"] .nest-feedback { background: var(--good-soft); }
 .nest-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
@@ -515,6 +526,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           <div class="nest-level"><span class="lesson-dino" aria-hidden="true"></span><span id="nestLevel"></span><button class="act-listen" id="nestListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
           <h2 id="nestPrompt" tabindex="-1"></h2>
           <div class="nest-eq" id="nestEq" role="img"></div>
+          <div class="nest-take-plan" id="nestTakePlan" hidden></div>
           <div class="nest-board" id="nestBoard">
             <div class="nest-zone"><h3 id="nestHomeLabel">ໃນຮັງ</h3><div class="nest-cargo" id="nestHome"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
             <div class="nest-zone"><h3 id="nestSideLabel"></h3><div class="nest-cargo" id="nestSide"><div class="nest-trays"></div><div class="nest-loose"></div></div></div>
@@ -522,7 +534,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           <div class="nest-stats" id="nestStats" aria-live="polite"></div>
           <div class="nest-controls" id="nestControls"></div>
           <div class="nest-feedback" id="nestFeedback" role="status"></div>
-          <div class="nest-footer"><button type="button" class="secondary" id="nestHelp">ໃຊ້ໄຂ່ຊ່ວຍຄິດ</button><button type="button" class="secondary" id="nestReplay">ເຮັດຂໍ້ນີ້ຄືນ</button><a class="secondary" href="#" id="nestFinish" hidden>ພໍແລ້ວມື້ນີ້</a></div>
+          <div class="nest-take-steps" id="nestTakeSteps" hidden></div>
+          <div class="nest-footer"><button type="button" class="secondary" id="nestHelp">ໃຊ້ໄຂ່ຊ່ວຍຄິດ</button><button type="button" class="secondary" id="nestJoin" hidden>ເອົາໄຂ່ກັບມາກວດຄືນ</button><button type="button" class="secondary" id="nestReplay">ເຮັດຂໍ້ນີ້ຄືນ</button><a class="secondary" href="#" id="nestFinish" hidden>ພໍແລ້ວມື້ນີ້</a></div>
         </div>
         <a class="secondary" id="nestBook" href="#bot-7">ກັບໄປບົດຮຽນ</a>
       </div>
@@ -2365,25 +2378,57 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const lines = range(4).map((i) => i < n ? '<i class="pair-line"></i>' : "<i></i>").join("");
     return `<div class="act-pairs" style="grid-template-columns:auto repeat(4,auto)"><span class="lbl">ກົບ</span>${top}<span></span>${lines}<span class="lbl">ໃບບົວ</span>${'<span class="pair-token">🍃</span>'.repeat(3)}<span></span></div><span class="act-counts">ຈັບຄູ່ແລ້ວ <b>${n}</b> ຄູ່</span>`;
   }
+  const takeLanguage = {
+    land: line("ຢູ່ເທິງຝັ່ງ", "อยู่บนฝั่ง"),
+    water: line("ລົງນ້ຳແລ້ວ", "ลงน้ำแล้ว"),
+    nest: line("ຍັງຢູ່ໃນຮັງ", "ยังอยู่ในรัง"),
+    given: line("ໃຫ້ໄດໂນເສົາແລ້ວ", "ให้ไดโนเสาร์ไปแล้ว"),
+    same: line("ມີເທົ່າເດີມ", "มีเท่าเดิม"),
+    less: line("ໜ້ອຍລົງ", "น้อยลง"),
+    check: line("ເອົາໄຂ່ອອກຈາກຖາດແລ້ວ. ໄຂ່ໃນຮັງຍັງມີເທົ່າເດີມບໍ?", "เอาไข่ออกจากถาดแล้ว ไข่ในรังยังมีเท่าเดิมไหม?"),
+    checkHint: line("ເບິ່ງໄຂ່ 10 ໜ່ວຍທີ່ມີຂອບ. ທຸກໜ່ວຍຍັງຢູ່ໃນຮັງ.", "ดูไข่ 10 ฟองที่มีขอบรอบ ๆ ทุกฟองยังอยู่ในรัง"),
+    join: line("ເອົາໄຂ່ກັບມາກວດຄືນ", "เอาไข่กลับมาทั้งหมด"),
+    separate: line("ເບິ່ງໄຂ່ທີ່ເຫຼືອອີກເທື່ອ", "ดูไข่ที่เหลืออีกครั้ง")
+  };
+  function canAnimatePieces() {
+    return typeof Element.prototype.animate === "function" && !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  }
+  function flyPiece(el, start, delay = 0) {
+    el.getAnimations?.().forEach(animation => animation.cancel());
+    const end = el.getBoundingClientRect();
+    if (!end.width || !start.width) return;
+    const x = start.x + start.width / 2 - end.x - end.width / 2;
+    const y = start.y + start.height / 2 - end.y - end.height / 2;
+    el.animate([
+      { transform: `translate(${x}px, ${y}px) scale(${start.width / end.width})` },
+      { transform: "translate(0, 0) scale(1)" }
+    ], { duration: 380, delay, fill: "backwards", easing: "ease-out" });
+  }
+  function turtleTakePicture(moved, g, solved) {
+    const left = g.start - moved;
+    const bank = range(left).map(i => i === left - 1 && moved < g.moves
+      ? `<button type="button" class="act-token" data-move aria-label="${g.action}">${g.icon}</button>`
+      : `<span class="act-token" aria-hidden="true">${g.icon}</span>`).join("");
+    const water = range(moved).map(i => `<span class="act-token" data-turtle="${i}" aria-hidden="true">${g.icon}</span>`).join("");
+    return P.eq(solved ? [g.start, "−", g.moves, "=", {v: left}] : g.equation) +
+      `<div class="turtle-board"><div class="turtle-zone"><h3>${takeLanguage.land}</h3><div class="act-counters">${bank}</div></div>
+      <div class="turtle-zone"><h3>${takeLanguage.water} <b class="num">${moved}</b></h3><div class="act-counters">${water}</div></div></div>`;
+  }
   function counterPicture(n, g, counted) {
-    const take = g.mode === "take", count = g.mode === "count";
-    const current = take ? g.start - n : g.start + n;
-    const next = take ? current - 1 : current;
-    const spots = take ? g.start : g.start + g.moves;
-    const tokens = range(spots).map((i) => {
+    const count = g.mode === "count", current = g.start + n, spots = g.start + g.moves;
+    const tokens = range(spots).map(i => {
       const countIndex = count ? counted.indexOf(i) : -1;
-      const added = count ? countIndex >= 0 : !take && i >= g.start && i < current;
-      const empty = !take && !count && i >= current;
-      const gone = take && i >= current;
-      const state = added ? "new" : empty ? "empty" : gone ? "gone" : "";
+      const added = count ? countIndex >= 0 : i >= g.start && i < current;
+      const empty = !count && i >= current;
+      const state = added ? "new" : empty ? "empty" : "";
       const contents = (empty ? "" : `<span>${g.icon}</span>`) + (added ? `<b>${count ? countIndex + 1 : i - g.start + 1}</b>` : "");
-      const enabled = count ? !added : i === next && n < g.moves;
+      const enabled = count ? !added : i === current && n < g.moves;
       return enabled
         ? `<button type="button" class="act-token ${state}" data-move ${count ? 'data-count-token="' + i + '"' : ""} aria-label="${g.action}">${contents}</button>`
         : `<span class="act-token ${state}" aria-hidden="true">${contents}</span>`;
     }).join("");
-    const totalLabel = count ? "ນັບແລ້ວ" : take ? "ຍັງເຫຼືອ" : "ຕອນນີ້ມີ";
-    const change = count ? "" : `<span>${take ? "ລົງນ້ຳແລ້ວ" : "ເພີ່ມແລ້ວ"} <b>${n}</b></span>`;
+    const totalLabel = count ? "ນັບແລ້ວ" : "ຕອນນີ້ມີ";
+    const change = count ? "" : `<span>ເພີ່ມແລ້ວ <b>${n}</b></span>`;
     const counters = `<div class="act-counters" style="--columns:${Math.min(spots, 5)}">${tokens}</div><div class="act-counts"><span>${totalLabel} <b>${current}</b></span>${change}</div>`;
     if (g.whole) return `<div class="count-on-board">${P.split(g.whole, g.start, "?", "b")}${counters}</div>`;
     return (g.equation ? P.eq(g.equation) : "") + counters;
@@ -2433,8 +2478,9 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (g?.mode === "pair") model = pairPicture(moved, g);
     else if (g?.mode === "stages") {
       model = step ? `<button class="stage-move bridge-picture" type="button" data-move aria-label="${esc(step.action)}">${step.picture}</button>` : `<div class="bridge-picture">${task.picture}</div>`;
-    } else if (g) model = counterPicture(moved, g, counted);
-    $("#actPicture").innerHTML = solved && task.solvedPicture ? task.solvedPicture : model;
+    } else if (g?.mode === "take") model = turtleTakePicture(moved, g, solved);
+    else if (g) model = counterPicture(moved, g, counted);
+    $("#actPicture").innerHTML = solved && task.solvedPicture && g?.mode !== "take" ? task.solvedPicture : model;
     $("#actHint").hidden = Boolean(moving || solved);
     $("#actFeedback").textContent = "";
     $("#actFeedback").className = "feedback";
@@ -2466,6 +2512,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const state = activityState, g = guide[cur.id], task = activities[cur.id][state.phase];
     if (button.hasAttribute("data-move") && g && state.phase === "guided" && !state.solved && state.moved < g.moves) {
       const movedPicture = !!button.closest("#actPicture");
+      const turtleStart = g.mode === "take" && canAnimatePieces() && $("#actPicture [data-move]").getBoundingClientRect();
       if (g.mode === "count") {
         const i = movedPicture ? Number(button.dataset.countToken) : range(g.moves).find(i => !state.counted.includes(i));
         if (state.counted.includes(i)) return;
@@ -2473,8 +2520,16 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       }
       state.moved++;
       checkpointLesson("activity");
-      const now = g.mode === "take" ? g.start - state.moved : (g.start || 0) + state.moved;
+      const now = (g.start || 0) + state.moved;
       renderActivity();
+      if (turtleStart) flyPiece($("#actPicture [data-turtle]:last-child"), turtleStart);
+      if (g.mode === "take") {
+        const next = $(movedPicture ? "#actPicture [data-move]" : "#actControls [data-move]");
+        (next || $("#actQuestion")).focus({preventScroll: Boolean(next)});
+        const moved = line(`ລົງນ້ຳແລ້ວ ${state.moved} ໂຕ.`, `ลงน้ำแล้ว ${state.moved} ตัว`);
+        speak(state.moved === g.moves ? task.prompt : moved);
+        return;
+      }
       if (g.mode === "stages") {
         const next = $(movedPicture ? "#actPicture [data-move]" : "#actControls [data-move]");
         (next || $("#actQuestion")).focus({preventScroll: Boolean(next)});
@@ -2550,7 +2605,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (homework) alternatives = [...(blank ? [a + b, a] : [b, a]), ...nums(answer, 0, 100).map(option => option.value)];
     const choices = [...new Set([answer, ...alternatives])].slice(0, 3).sort((x, y) => x - y);
     nest = { kind, level, a, b, answer, adding, blank, choices, model: useModel, usedHelp: false, wrong: new Set(),
-      moved: 0, counted: level === 0 && adding ? 0 : 2, pieces: [], solved: false, notice: "" };
+      moved: 0, counted: level === 0 && adding ? 0 : 2, pieces: [], solved: false, notice: "",
+      checkingExchange: false, exchangeHint: false, joinedPieces: null };
     for (const zone of ["#nestHome", "#nestSide"]) {
       $(zone + " .nest-trays").replaceChildren();
       $(zone + " .nest-loose").replaceChildren();
@@ -2582,6 +2638,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   }
   function nestAction() {
     if (nest.solved) return "solved";
+    if (nest.checkingExchange) return "check";
     if (homework && nest.model && nest.adding && !nest.blank && $("#nestHome .nest-loose").childElementCount >= 10) return "pack";
     if (!nest.model || nest.moved === nest.b) return "answer";
     if (nest.counted < 2) return "count";
@@ -2621,8 +2678,15 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       case "ten": return adding
         ? [moved ? line(`ຕອນນີ້ມີ ${now} ໜ່ວຍແລ້ວ. ຍ້າຍເຂົ້າຮັງອີກ 1 ຖາດ.`, `ตอนนี้มี ${now} ฟองแล้ว ย้ายเข้ารังอีก 1 ถาด`)
           : line(`ໃນຮັງມີໄຂ່ ${a} ໜ່ວຍ. ລອງເພີ່ມອີກ ${b} ໜ່ວຍ ເທື່ອລະຖາດ.`, `ในรังมีไข่ ${a} ฟอง เติมอีก ${b} ฟองทีละถาด`), line("ຍ້າຍເຂົ້າຮັງ 1 ຖາດ", "ย้ายเข้ารัง 1 ถาด")]
-        : [line(`ເຮົາມີໄຂ່ ${a} ໜ່ວຍ. ແບ່ງໃຫ້ໄດໂນເສົາ ${b} ໜ່ວຍ. ເອົາໃຫ້ກ່ອນ 1 ຖາດ.`, `เรามีไข่ ${a} ฟอง จะแบ่งให้ไดโนเสาร์ ${b} ฟอง ลองให้ไปก่อน 1 ถาด`), line("ເອົາໃຫ້ 1 ຖາດ (10 ໜ່ວຍ)", "ให้ 1 ถาด (10 ฟอง)")];
-      case "exchange": return [line(`ຍັງຕ້ອງໃຫ້ອີກ ${left} ໜ່ວຍ. ເອົາໄຂ່ 10 ໜ່ວຍອອກຈາກຖາດ ຈຶ່ງຈະຫຍິບໄດ້ທີລະໜ່ວຍ.`, `ยังต้องให้อีก ${left} ฟอง ยกไข่ 10 ฟองออกจากถาด จะได้หยิบทีละฟอง`), line("ເອົາໄຂ່ອອກຈາກຖາດ", "หยิบไข่ออกจากถาด")];
+        : [moved
+          ? line(`ຍັງຕ້ອງໃຫ້ ${left} ໜ່ວຍ. ເອົາໃຫ້ອີກ 1 ຖາດ.`, `ต้องให้อีก ${left} ฟอง ย้ายไปอีก 1 ถาด`)
+          : line(`ມີໄຂ່ ${a} ໜ່ວຍ. ຈະໃຫ້ໄດໂນເສົາ ${b} ໜ່ວຍ. ເອົາໃຫ້ກ່ອນ 1 ຖາດ.`, `มีไข่ ${a} ฟอง จะแบ่งให้ไดโนเสาร์ ${b} ฟอง ลองให้ไปก่อน 1 ถาด`),
+        line("ເອົາໃຫ້ 1 ຖາດ (10 ໜ່ວຍ)", "ให้ 1 ถาด (10 ฟอง)")];
+      case "exchange": return [
+        line(`ນອກຖາດມີໄຂ່ ${now % 10} ໜ່ວຍ. ຍັງຕ້ອງໃຫ້ ${left} ໜ່ວຍ. ລອງເອົາໄຂ່ອອກຈາກຖາດ.`, `นอกถาดมี ${now % 10} ฟอง ต้องให้อีก ${left} ฟอง ลองหยิบไข่ออกจากถาด`),
+        line("ເອົາໄຂ່ອອກຈາກຖາດ", "หยิบไข่ออกจากถาด")
+      ];
+      case "check": return [takeLanguage.check];
       case "one": if (adding) return [
         line(`ໃນຮັງມີ ${now} ໜ່ວຍ. ແຕະໄຂ່ເພີ່ມເທື່ອລະໜ່ວຍ.`, `ในรังมี ${now} ฟอง แตะเติมไข่ทีละฟอง`),
         line("ເພີ່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง")
@@ -2630,9 +2694,13 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
         return [nest.lastExchange === moved
         ? line(`ໄຂ່ຍັງຢູ່ໃນຮັງ ${now} ໜ່ວຍເທົ່າເດີມ. ເອົາໃຫ້ໄດໂນເສົາອີກ ${left} ໜ່ວຍ.`, `ในรังยังมีไข่ ${now} ฟองเท่าเดิม แบ่งให้ไดโนเสาร์อีก ${left} ฟอง`)
         : line(`ຍັງຕ້ອງໃຫ້ອີກ ${left} ໜ່ວຍ. ແຕະໄຂ່ທີລະໜ່ວຍ.`, `ต้องให้อีก ${left} ฟอง แตะไข่ทีละฟอง`), line("ເອົາໄຂ່ໃຫ້ 1 ໜ່ວຍ", "ให้ไข่ 1 ฟอง")];
-      case "solved": return [adding ? line(`ລວມແລ້ວມີໄຂ່ ${answer} ໜ່ວຍ!`, `รวมแล้วมีไข่ ${answer} ฟอง!`) : line(`ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ!`, `ในรังเหลือไข่ ${answer} ฟอง!`)];
+      case "solved":
+        if (nest.joinedPieces) return [line(`ເອົາໄຂ່ ${b} ໜ່ວຍກັບມາ. ໃນຮັງມີ ${a} ໜ່ວຍຄືເກົ່າ.`, `เอาไข่ ${b} ฟองกลับมา ในรังมี ${a} ฟองเหมือนตอนแรก`)];
+        return [adding ? line(`ລວມແລ້ວມີໄຂ່ ${answer} ໜ່ວຍ!`, `รวมแล้วมีไข่ ${answer} ฟอง!`) : line(`ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ!`, `ในรังเหลือไข่ ${answer} ฟอง!`)];
       default: return [adding ? line(`ມີໄຂ່ ${a} ໜ່ວຍ. ໄດ້ມາອີກ ${b} ໜ່ວຍ. ລວມແລ້ວມີຈັກໜ່ວຍ?`, `มีไข่ ${a} ฟอง ได้มาอีก ${b} ฟอง รวมแล้วมีกี่ฟอง?`)
-        : line(`ມີໄຂ່ ${a} ໜ່ວຍ. ໃຫ້ໄດໂນເສົາໄປ ${b} ໜ່ວຍ. ເຫຼືອຈັກໜ່ວຍ?`, `มีไข่ ${a} ฟอง ให้ไดโนเสาร์ไป ${b} ฟอง เหลือกี่ฟอง?`)];
+        : nest.model
+          ? line(`ໃຫ້ຄົບ ${b} ໜ່ວຍແລ້ວ. ນັບແຕ່ໄຂ່ໃນຮັງ. ເຫຼືອຈັກໜ່ວຍ?`, `ให้ครบ ${b} ฟองแล้ว นับเฉพาะไข่ในรัง เหลือกี่ฟอง?`)
+          : line(`ມີໄຂ່ ${a} ໜ່ວຍ. ໃຫ້ໄດໂນເສົາໄປ ${b} ໜ່ວຍ. ເຫຼືອຈັກໜ່ວຍ?`, `มีไข่ ${a} ฟอง ให้ไดโนเสาร์ไป ${b} ฟอง เหลือกี่ฟอง?`)];
     }
   }
   function renderNest() {
@@ -2640,14 +2708,16 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const action = nestAction(), [prompt, button] = nestInstructions(action);
     if (cur) $("#kicker").textContent = level >= 2 ? "ຂໍ້ທ້າລອງຕໍ່ຈາກບົດທີ " + cur.id : "ບົດທີ " + cur.id + " · ໜ້າ " + cur.pages;
     $("#nestGame").dataset.solved = solved;
+    $("#nestGame").dataset.action = action;
     $("#nestLevel").textContent = homework ? (homework.trial ? "ລອງເອງ" : "ລອງນຳກັນ") :
       ["ນັບເປັນຖາດ", "ລອງເອງ", adding ? "ເພີ່ມສອງຖາດ" : "ເອົາໄຂ່ອອກຈາກຖາດ", "ທ້າລອງຂໍ້ໃໝ່"][level];
     $("#nestPrompt").textContent = prompt;
-    const equation = blank ? workEquation(blank, a, a + b) : [a, adding ? "+" : "−", b, "=", "?"];
+    const equation = nest.joinedPieces ? [answer, "+", b, "=", a] : blank
+      ? workEquation(blank, a, a + b) : [a, adding ? "+" : "−", b, "=", "?"];
     $("#nestEq").innerHTML = equation.map(part => part === "?" ? `<b>${solved ? answer : ""}</b>` : part).join(" ");
     $("#nestEq").setAttribute("aria-label", equation.map(part => part === "?" ? (solved ? answer : "ຫ້ອງວ່າງ") : part).join(" "));
-    $("#nestHomeLabel").textContent = blank ? line("ໄຂ່ທີ່ມີຢູ່ກ່ອນ", "ไข่ที่มีอยู่ก่อน") : "ໃນຮັງ";
-    $("#nestSideLabel").textContent = blank ? line("ໄຂ່ທີ່ເພີ່ມ", "ไข่ที่เติม") : adding ? "ລໍຖ້າເຂົ້າຮັງ" : "ສົ່ງໃຫ້ໄດໂນເສົາແລ້ວ";
+    $("#nestHomeLabel").textContent = blank ? line("ໄຂ່ທີ່ມີຢູ່ກ່ອນ", "ไข่ที่มีอยู่ก่อน") : adding ? "ໃນຮັງ" : takeLanguage.nest;
+    $("#nestSideLabel").textContent = blank ? line("ໄຂ່ທີ່ເພີ່ມ", "ไข่ที่เติม") : adding ? "ລໍຖ້າເຂົ້າຮັງ" : takeLanguage.given;
     $("#nestBoard").hidden = Boolean((homework || level === 3) && !model && !solved);
     nest.pieces.forEach(p => { p.el.disabled = !canUseNestPiece(p, action); });
     const firstTray = nest.pieces[0];
@@ -2659,22 +2729,59 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (model && !solved) {
       if (blank) stats = line(`ຕອນນີ້ມີໄຂ່ລວມ ${now} ໜ່ວຍ`, `ตอนนี้มีไข่รวม ${now} ฟอง`);
       else if (adding && level === 0 && !moved) stats = ["", "5", "5 + 5 = 10"][counted];
-      else if (moved) stats = `${adding ? "ເພີ່ມແລ້ວ" : "ສົ່ງແລ້ວ"} ${moved} / ${b}` + (moved < b ? ` · ໃນຮັງ ${now}` : "");
+      else if (adding && moved) stats = `ເພີ່ມແລ້ວ ${moved} / ${b}` + (moved < b ? ` · ໃນຮັງ ${now}` : "");
+      else if (!adding) {
+        const showAmount = action !== "check" && action !== "answer";
+        const lo = `ໃຫ້ແລ້ວ ${moved} ໜ່ວຍ ຈາກ ${b} ໜ່ວຍ`;
+        const th = `ให้ไปแล้ว ${moved} จาก ${b} ฟอง`;
+        stats = showAmount ? line(`${lo} · ໃນຮັງມີ ${now} ໜ່ວຍ`, `${th} · ในรังมี ${now} ฟอง`) : line(lo, th);
+      }
     }
     $("#nestStats").textContent = stats;
-    $("#nestControls").innerHTML = action === "answer"
-      ? `<div class="choices">${choices.map(n => `<button type="button" class="choice num ${wrong.has(n) ? "wrong" : ""}" data-nest-answer="${n}" aria-disabled="${wrong.has(n)}">${n}</button>`).join("")}</div>`
-      : solved && homework ? "" : `<button type="button" class="go" ${solved ? "data-nest-next" : "data-nest-step"}>${solved ? "ລອງຂໍ້ໃໝ່ →" : button}</button>`;
-    $("#nestFeedback").textContent = nest.notice;
+    const controls = $("#nestControls");
+    // Keep the check and its choices together after the picture, even on short screens.
+    const heading = $("#nestPrompt"), equationBox = $("#nestEq"), plan = $("#nestTakePlan");
+    if (nest.joinedPieces) controls.before(heading, equationBox);
+    else if (!adding && model && (action === "check" || action === "answer")) {
+      plan.before(equationBox);
+      controls.before(heading);
+    } else plan.before(heading, equationBox);
+    if (action === "answer") {
+      controls.innerHTML = `<div class="choices">${choices.map(n => `<button type="button" class="choice num ${wrong.has(n) ? "wrong" : ""}" data-nest-answer="${n}" aria-disabled="${wrong.has(n)}">${n}</button>`).join("")}</div>`;
+    } else if (action === "check") {
+      controls.innerHTML = `<div class="choices"><button type="button" class="choice word" data-nest-check="same">${takeLanguage.same}</button>
+        <button type="button" class="choice word ${nest.exchangeHint ? "wrong" : ""}" data-nest-check="less" aria-disabled="${nest.exchangeHint}">${takeLanguage.less}</button></div>`;
+    } else {
+      controls.innerHTML = solved && homework ? "" : `<button type="button" class="go" ${solved ? "data-nest-next" : "data-nest-step"}>${solved ? "ລອງຂໍ້ໃໝ່ →" : button}</button>`;
+    }
+    $("#nestFeedback").textContent = nest.joinedPieces ? "" : nest.notice;
+    renderTakePlan();
     $("#nestHelp").hidden = action !== "answer" || model;
+    $("#nestJoin").hidden = !solved || adding || b === 0;
+    $("#nestJoin").textContent = nest.joinedPieces ? takeLanguage.separate : takeLanguage.join;
     $("#nestReplay").hidden = Boolean(homework) || (!solved && !moved && !nest.notice && !(adding && level === 0 && counted > 0));
     $("#nestFinish").hidden = !solved;
   }
 
+  function renderTakePlan() {
+    const { a, b, answer, adding, model, solved, joinedPieces } = nest;
+    const tens = b - b % 10, ones = b % 10;
+    const split = !adding && model && tens > 0 && ones > 0;
+    const plan = $("#nestTakePlan"), steps = $("#nestTakeSteps");
+    plan.hidden = !split || solved;
+    steps.hidden = !split || !solved || Boolean(joinedPieces);
+    if (!plan.hidden) {
+      const label = line("ໄຂ່ທີ່ຈະໃຫ້", "ไข่ที่ต้องให้");
+      plan.innerHTML = `<span>${label}</span><b class="num">${b} = ${tens} + ${ones}</b>`;
+    }
+    if (!steps.hidden) steps.innerHTML = `<b class="num">${a} − ${tens} = ${a - tens}</b><b class="num">${a - tens} − ${ones} = ${answer}</b>`;
+  }
+
   function moveNestPiece(action, selected, animate) {
     const p = selected || nest.pieces.find(piece => canUseNestPiece(piece, action));
-    const motion = animate && typeof p.el.animate === "function" && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const motion = animate && canAnimatePieces();
     const before = motion && (p.zone === "reserve" ? $("#nestControls [data-nest-step]") : p.el).getBoundingClientRect();
+    const trayEggs = motion && action === "exchange" && [...p.el.children].map(egg => egg.getBoundingClientRect());
     let moving = [];
     if (action === "count") {
       nest.counted++;
@@ -2686,8 +2793,9 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       nest.pieces.splice(i, 1);
       p.el.remove();
       moving = range(10).map(() => addNestPiece(1, "home"));
+      moving.forEach(piece => piece.el.classList.add("nest-opened"));
       nest.lastExchange = nest.moved;
-      nest.notice = line(`ໄຂ່ 10 ໜ່ວຍອອກຈາກຖາດແລ້ວ. ໄຂ່ໃນຮັງຍັງມີ ${nest.a - nest.moved} ໜ່ວຍເທົ່າເດີມ.`, `หยิบไข่ 10 ฟองออกจากถาดแล้ว ในรังยังมีไข่ ${nest.a - nest.moved} ฟองเท่าเดิม`);
+      nest.checkingExchange = animate;
     } else if (action === "pack") {
       const loose = nest.pieces.filter(piece => piece.zone === "home" && piece.value === 1).slice(0, 10);
       loose.forEach(piece => piece.el.remove());
@@ -2703,20 +2811,13 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (animate) {
       renderNest();
       if (motion) moving.forEach(({ el }, i) => {
-        const end = el.getBoundingClientRect();
-        const dx = before.x + before.width / 2 - end.x - end.width / 2;
-        const dy = before.y + before.height / 2 - end.y - end.height / 2;
-        el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: "translate(0, 0)" }], { duration: 380, delay: i * 22, fill: "backwards", easing: "ease-out" });
+        flyPiece(trayEggs ? el.firstElementChild : el, trayEggs ? trayEggs[i] : before, i * 22);
       });
     }
   }
   function explainNest() {
     const { a, b, answer, adding, blank } = nest;
     if (blank) return line(`ທັງໝົດ ${a + b} ແມ່ນ ${a} ທີ່ມີຢູ່ກ່ອນ ກັບ ${b} ທີ່ເພີ່ມ.`, `ทั้งหมด ${a + b} ฟอง แบ่งเป็น ${a} ฟองที่มีอยู่ก่อน กับ ${b} ฟองที่เติม`);
-    if (homework && !adding) return line(
-      `ໃຫ້ໄດໂນເສົາ ${b} ໜ່ວຍ ເຫຼືອ ${answer}. ກວດຄືນ ${answer} + ${b} = ${a}.`,
-      `ให้ไดโนเสาร์ ${b} ฟอง เหลือ ${answer} ฟอง ลองตรวจด้วย ${answer} + ${b} = ${a}`
-    );
     if (adding) {
       const tens = Math.floor(answer / 10), ones = answer % 10;
       const stops = range(Math.floor(b / 10) + 1).map(i => a + 10 * i);
@@ -2724,14 +2825,19 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       const jumps = stops.join(" → ");
       return line(`${jumps}. ມີ ${tens} ຖາດ ຖາດລະ 10 ໜ່ວຍ${ones ? ` ກັບໄຂ່ຂ້າງນອກອີກ ${ones} ໜ່ວຍ` : ""}. ${a} + ${b} = ${answer}.`, `${jumps} มี ${tens} ถาด ถาดละ 10 ฟอง${ones ? ` กับไข่นอกถาดอีก ${ones} ฟอง` : ""} รวม ${a} + ${b} = ${answer}`);
     }
-    return `${a} − 10 = ${a - 10}. ${a - 10} − ${b - 10} = ${answer}. ກວດຄືນ ${b} + ${answer} = ${a}.`;
+    return line(`ໄຂ່ທີ່ໃຫ້ໄປ ${b} ໜ່ວຍ ກັບໄຂ່ທີ່ເຫຼືອ ${answer} ໜ່ວຍ ລວມເປັນ ${a} ໜ່ວຍ.`, `ไข่ที่ให้ไป ${b} ฟอง กับไข่ที่เหลือ ${answer} ฟอง รวมเป็น ${a} ฟอง`);
   }
   function helpNest(wrong) {
-    const { adding, a, b, blank } = nest;
+    const { adding, a, b, blank, moved } = nest;
     nest.usedHelp = true;
     nest.model = true;
     let cue = adding ? line("ໃນ 1 ຖາດມີໄຂ່ 10 ໜ່ວຍ.", "หนึ่งถาดมีไข่ 10 ฟอง") : line(`ເຮົາໃຫ້ໄດໂນເສົາໄປ ${b} ໜ່ວຍ. ລອງນັບໄຂ່ທີ່ຍັງຢູ່ໃນຮັງ.`, `เราให้ไดโนเสาร์ไป ${b} ฟอง ลองนับเฉพาะไข่ที่ยังอยู่ในรัง`);
-    if (!adding && b > 10 && wrong === a - 10) cue = line(`ຖ້າໃຫ້ໄປ 10 ໜ່ວຍ ຍັງຕ້ອງໃຫ້ອີກ ${b - 10} ໜ່ວຍ.`, `ถ้าให้ไป 10 ฟอง ยังต้องให้อีก ${b - 10} ฟอง`);
+    if (!adding && moved < b) cue = line(`ເລີ່ມທີ່ ${a} ໜ່ວຍ. ຍ້າຍໄຂ່ໃຫ້ໄດໂນເສົາໃຫ້ຄົບ ${b} ໜ່ວຍ.`, `เริ่มที่ ${a} ฟอง ย้ายไข่ให้ไดโนเสาร์ให้ครบ ${b} ฟอง`);
+    if (!adding && moved === b && a - b >= 10) cue = line(
+      "ນັບໄຂ່ໃນຮັງ. ນັບຖາດລະ 10 ກ່ອນ ແລ້ວນັບໄຂ່ນອກຖາດຕໍ່.",
+      "นับไข่ที่ยังอยู่ในรัง เริ่มนับถาดละ 10 แล้วนับฟองนอกถาดต่อ"
+    );
+    if (!adding && moved === b && wrong === b) cue = line(`${b} ແມ່ນໄຂ່ທີ່ໃຫ້ໄປ. ລອງຊີ້ໄຂ່ໃນຮັງແລ້ວນັບ.`, `${b} คือไข่ที่ให้ไป ลองชี้ไข่ในรังแล้วนับ`);
     if (homework && adding && !blank) cue = line("ນັບໄຂ່ໃນຮັງທັງໝົດ. ຖາດໜຶ່ງມີ 10 ໜ່ວຍ.", "นับไข่ทั้งหมดในรัง ถ้ามีถาดให้นับถาดละ 10");
     if (blank) cue = wrong === a + b
       ? line(`${a + b} ແມ່ນໄຂ່ທັງໝົດ. ລອງນັບແຕ່ໄຂ່ທີ່ເພີ່ມ.`, `${a + b} คือไข่ทั้งหมด ลองนับเฉพาะไข่ที่เติม`)
@@ -2783,6 +2889,35 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     try { localStorage.setItem(nestProgressKey, JSON.stringify(nestReport)); } catch (e) { /* optional storage */ }
     $("#parentBody").innerHTML = renderParent(cur);
   }
+  function checkTrayAnswer(same) {
+    if (!same) {
+      if (nest.exchangeHint) return;
+      nest.exchangeHint = nest.usedHelp = true;
+      nest.notice = takeLanguage.checkHint;
+      renderNest();
+      $("#nestControls [data-nest-check='same']").focus({preventScroll: true});
+      speak(nest.notice);
+      return;
+    }
+    nest.checkingExchange = false;
+    nest.notice = "";
+    renderNest();
+    $("#nestControls [data-nest-step]").focus({preventScroll: true});
+    speak($("#nestPrompt").textContent);
+  }
+  function toggleNestProof() {
+    const undo = Boolean(nest.joinedPieces);
+    const pieces = nest.joinedPieces || nest.pieces.filter(piece => piece.zone === "side");
+    const positions = canAnimatePieces() ? pieces.map(piece => piece.el.getBoundingClientRect()) : null;
+    pieces.forEach(piece => placeNestPiece(piece, undo ? "side" : "home"));
+    nest.moved = undo ? nest.b : 0;
+    nest.joinedPieces = undo ? null : pieces;
+    renderNest();
+    if (positions) pieces.forEach((piece, i) => flyPiece(piece.el, positions[i], Math.min(i * 18, 144)));
+    $("#nestPrompt").focus({preventScroll: true});
+    if (!undo) $("#nestEq").scrollIntoView?.({block: "nearest"});
+    speak($("#nestPrompt").textContent + ". " + $("#nestEq").getAttribute("aria-label"));
+  }
   $("#nestPanel").addEventListener("click", e => {
     const btn = e.target.closest("button");
     if (!btn || !nest) return;
@@ -2790,6 +2925,14 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (btn.id === "nestListen") { speak($("#nestPrompt").textContent); return; }
     if (btn.id === "nestReplay") { startNest(kind, level, [a, b], true); $("#nestPrompt").focus(); return; }
     if (btn.id === "nestHelp") { helpNest(); $("#nestPrompt").focus(); return; }
+    if (action === "check" && btn.hasAttribute("data-nest-check")) {
+      checkTrayAnswer(btn.dataset.nestCheck === "same");
+      return;
+    }
+    if (btn.id === "nestJoin" && nest.solved && !nest.adding && b > 0) {
+      toggleNestProof();
+      return;
+    }
     if (btn.hasAttribute("data-nest-next") && nest.solved) {
       resumeNest(kind);
       $("#nestPrompt").focus();
@@ -2823,7 +2966,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       moveNestPiece(action, selected, true);
       const next = $("#nestControls [data-nest-step]");
       (next || $("#nestPrompt")).focus({ preventScroll: true });
-      speak(nest.notice || ($("#nestStats").textContent + ". " + $("#nestPrompt").textContent));
+      if (nest.checkingExchange) $("#nestControls").scrollIntoView?.({block: "nearest"});
+      speak(nest.notice || [$("#nestStats").textContent, $("#nestPrompt").textContent].filter(Boolean).join(". "));
     }
   });
 
