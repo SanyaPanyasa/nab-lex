@@ -3674,7 +3674,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (make) return solved ? `<p>${tenText.pair}</p><b class="num">10 − ${a} = ${b}</b>` : "";
     if (solved && b > 10) return `<b class="num">${a} − 10 = ${a - 10}</b><b class="num">${a - 10} − ${b - 10} = ${answer}</b>`;
     if (solved || !model) return "";
-    if (moved) return `<b class="num">${a} − 10 = ${a - 10}</b>`;
+    if (moved) return b > 10 ? `<b class="num">${a} − 10 = ${a - 10}</b>` : "";
     const losing = b > 10 ? `<b class="num">${b} = 10 + ${b - 10}</b>` : "";
     return `<b class="num">${a} = 10 + ${a - 10}</b>${losing}`;
   }
