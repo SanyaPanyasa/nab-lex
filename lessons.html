@@ -230,6 +230,10 @@ svg text { font-family: var(--font-num); }
 .school-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .school-links a { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-height: 82px; padding: 12px; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; line-height: 1.45; }
 .school-links small { color: var(--soft); font-size: 14px; }
+.change-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 64px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid var(--hero-edge); border-radius: 16px; background: var(--card); color: var(--ink); text-decoration: none; }
+.change-link-label { display: grid; gap: 2px; flex: 1; }
+.change-link small { color: var(--soft); font-size: 14px; }
+.change-mascot { font: 28px/1 var(--font-emoji); }
 .home-restart { display: inline-flex; align-items: center; margin: 0 0 8px; }
 .share-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--line); color: var(--soft); font-size: 15px; }
 .share-footer .secondary { display: inline-flex; align-items: center; margin: 0; }
@@ -310,6 +314,26 @@ svg text { font-family: var(--font-num); }
 .turtle-zone .act-counters { --columns: 5; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; min-height: 54px; }
 .turtle-zone .act-token { border-color: transparent; }
 .turtle-zone .act-token[data-move] { border-color: var(--sky); }
+.change-card { display: grid; gap: 10px; }
+.change-card p { margin: 0; }
+.change-card .phase-row { margin: 0; }
+.change-card .choices { margin: 0; }
+.change-board { display: grid; gap: 7px; width: min(100%, 520px); margin: 0 auto; text-align: start; }
+.change-board .act-token[data-change-step] { border: 2px dashed var(--sky); }
+.change-board .act-counters { min-height: 48px; width: min(100%, 270px); }
+.change-board .act-token { min-height: 46px; }
+.change-count { padding: 8px; border-radius: 12px; background: var(--accent-soft); }
+.change-count p + p { margin-top: 3px; }
+.change-track { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 6px; margin: 5px 0; }
+.change-track b { display: grid; place-items: center; min-width: 34px; padding: 1px 5px; border-radius: 7px; background: var(--card); font-size: 23px; }
+.change-track b:last-child { color: var(--accent); }
+.change-pause { display: grid; place-items: center; }
+#changeControls .secondary { display: inline-flex; align-items: center; margin-inline: 6px; }
+#changeFeedback { margin-top: 0; }
+@media (min-width: 680px) {
+  .change-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .change-board .act-token { min-height: 52px; }
+}
 .act-token b { position: absolute; right: -2px; bottom: -2px; min-width: 21px; border-radius: 8px; background: var(--good); color: var(--on-good); font: 700 15px/21px var(--font-num); }
 .act-token[data-move], .pair-token[data-move] { border: 2px dashed var(--sky); }
 .act-counts { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 16px; font-size: 16px; }
@@ -453,6 +477,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       <span class="lesson-dino" aria-hidden="true"></span>
     </a>
     <a class="secondary home-restart" id="foundationNext" href="#bot-2" hidden>ໄປບົດທີ່ແນະນຳ</a>
+    <a class="change-link" href="#change"><span class="change-mascot" aria-hidden="true">🐢</span><span class="change-link-label"><strong>ບວກ ຫຼື ລົບ?</strong><small>ນັບຕໍ່ ແລະ ນັບຖອຍດ້ວຍນິ້ວມື</small></span><span aria-hidden="true">→</span></a>
     <div class="school-links">
       <a href="#toc" id="schoolLink"><strong>ບົດຮຽນຕາມປຶ້ມ</strong><small>ຄົ້ນຕາມບົດ ຫຼື ເລກໜ້າ</small></a>
       <a href="#homework"><strong>ວຽກບ້ານດ້ວຍຮູບ</strong><small>ໃສ່ໂຈດຈາກສະໝຸດ</small></a>
@@ -461,6 +486,28 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       <a href="#bot-7-nest">10 + 10</a><a href="#bot-14-nest">14 − 13</a>
       <a href="#bot-17-nest">15 + 20</a><a href="#bot-14-exchange">25 − 16</a>
     </div><a id="nestContinue" class="secondary" hidden></a></details>
+  </main>
+
+  <main id="changeLesson" hidden>
+    <section class="activity change-card" aria-labelledby="changePrompt">
+      <div class="phase-row"><p class="phase" id="changePhase"></p><button class="act-listen" id="changeListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
+      <h2 id="changePrompt" tabindex="-1"></h2>
+      <div id="changeFeedback" class="feedback help" role="status"></div>
+      <div id="changeEquation" hidden></div>
+      <div id="changeBoard" class="change-board" hidden></div>
+      <div id="changeCount" class="change-count" hidden>
+        <p id="changeCountLabel">ຈຳນວນເຕົ່າເທິງຝັ່ງ</p>
+        <div class="change-track" id="changeTrack" role="img"></div>
+        <p id="changeFingers"></p>
+      </div>
+      <div id="changeControls"></div>
+    </section>
+    <a class="secondary change-pause" href="#">ພັກກ່ອນ</a>
+    <details class="quick-coach" id="changeCoach">
+      <summary>ວິທີສອນສຳລັບພໍ່ແມ່</summary>
+      <p>ໃຊ້ຝາຂວດແທນເຕົ່າ. ວາງ 5 ຝາ ແລ້ວຖາມລູກວ່າ ຖ້າເລື່ອນເຂົ້າມາ 2 ຝາ ຈຳນວນຈະເພີ່ມ ຫຼື ຫຼຸດລົງ?</p>
+      <p>ເລີ່ມທີ່ 5. ທຸກເທື່ອທີ່ເລື່ອນເຂົ້າມາ 1 ຝາ ໃຫ້ຊູ 1 ນິ້ວ ແລະ ເວົ້າຈຳນວນໃໝ່ 6, 7. ແລ້ວລອງໃໝ່ຈາກ 5 ໂດຍເລື່ອນອອກ 2 ຝາ. ໃຫ້ລູກຊີ້ຝາທີ່ຍັງເຫຼືອ.</p>
+    </details>
   </main>
 
   <main id="catalog" hidden>
@@ -558,6 +605,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           <button class="secondary" id="coachConfirm" type="button" aria-pressed="false">ລູກສະແດງວິທີຄິດໄດ້</button>
         </details>
         <button class="secondary" id="toBook" type="button">ເບິ່ງບົດຮຽນຕາມປຶ້ມ →</button>
+        <a class="nest-launch" id="changeLaunch" href="#change" hidden>🐢 ບວກ ຫຼື ລົບ?</a>
       </div>
       <div id="bookSteps" hidden>
       <div class="stage" id="stepVis"></div>
@@ -966,6 +1014,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     voiceMenu(p);
     $("#nestListen").hidden = !(saved.voice && p);
     $("#actListen").hidden = !(saved.voice && p);
+    $("#changeListen").hidden = !(saved.voice && p);
     if ($("#quizListen")) $("#quizListen").hidden = !(saved.voice && p);
     $("#workCompareListen").hidden = !(saved.voice && p);
   }
@@ -3214,6 +3263,251 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (focus) workOp.focus({preventScroll: true});
   }
 
+  /* ---------- choose the operation before working out the number ---------- */
+  const changeText = {
+    title: line("ບວກ ຫຼື ລົບ?", "บวกหรือลบ?"),
+    increase: line("ເພີ່ມຂຶ້ນ", "เพิ่มขึ้น"),
+    decrease: line("ໜ້ອຍລົງ", "น้อยลง"),
+    chooseAmount: line("ເຕົ່າເທິງຝັ່ງຈະເພີ່ມ ຫຼື ຫຼຸດລົງ?", "เต่าบนฝั่งจะเพิ่มขึ้นหรือน้อยลง?"),
+    model: line("ໃຊ້ຮູບຊ່ວຍຄິດ", "ใช้ภาพช่วยคิด"),
+    askShore: line("ຕອນນີ້ເທິງຝັ່ງມີຈັກໂຕ?", "ตอนนี้บนฝั่งมีกี่ตัว?"),
+    countShore: line("ຈຳນວນເຕົ່າເທິງຝັ່ງ", "จำนวนเต่าบนฝั่ง"),
+    countTogether: line("ລວມແລ້ວຈັກໂຕ", "จำนวนที่รวมแล้ว"),
+    countUnpaired: line("ກຸ່ມທຳອິດຍັງເຫຼືອຈັກໂຕທີ່ບໍ່ມີຄູ່", "เต่ากลุ่มแรกที่ยังไม่มีคู่"),
+    fingerMove: line("ເລີ່ມທີ່ເລກທຳອິດ. ຊູ 1 ນິ້ວ ທຸກເທື່ອທີ່ຍ້າຍເຕົ່າ.", "เริ่มที่เลขตัวแรก ชู 1 นิ้วทุกครั้งที่ย้ายเต่า"),
+    fingerPair: line("ຊູ 1 ນິ້ວ ທຸກເທື່ອທີ່ຈັບຄູ່.", "ชู 1 นิ้วทุกครั้งที่จับคู่"),
+    tryAgain: line("ລອງເຮັດເອງ 3 ຂໍ້", "ลองทำเอง 3 ข้อ"),
+    bookRound: line("ຝຶກລວມກຸ່ມ ແລະ ຫາຜົນຕ່າງ", "ฝึกรวมกลุ่มและหาผลต่าง"),
+    otherAdd: line("ເບິ່ງຕອນເຕົ່າຂຶ້ນຝັ່ງ", "ดูตอนเต่าขึ้นฝั่ง"),
+    otherTake: line("ເບິ່ງຕອນເຕົ່າລົງນ້ຳ", "ดูตอนเต่าลงน้ำ"),
+    thinkShore: line("ຊີ້ກຸ່ມເຕົ່າເທິງຝັ່ງ. ເຕົ່າຈະເຂົ້າມາໃນກຸ່ມ ຫຼື ອອກຈາກກຸ່ມ?", "ชี้กลุ่มเต่าบนฝั่ง เต่าจะเข้ามาในกลุ่มหรือออกจากกลุ่ม?"),
+    thinkTogether: line("ໂຈດຖາມຈຳນວນລວມ. ລອງເອົາສອງກຸ່ມມາລວມກັນ.", "โจทย์ถามจำนวนทั้งหมด ลองเอาเต่าสองกลุ่มมารวมกัน"),
+    thinkCompare: line("ໂຈດຖາມວ່າຫຼາຍກວ່າຈັກໂຕ. ຈັບຄູ່ແລ້ວເບິ່ງກຸ່ມທຳອິດວ່າເຫຼືອຈັກໂຕ.", "โจทย์ถามว่ามากกว่ากี่ตัว ลองจับคู่แล้วดูว่ากลุ่มแรกเหลือกี่ตัว"),
+    numberHint: line("ລອງໃຊ້ຮູບ ແລ້ວນັບທີລະໂຕ.", "ลองใช้ภาพแล้วนับทีละตัว")
+  };
+  [
+    ["🐢 ບວກ ຫຼື ລົບ?", "🐢 บวกหรือลบ?"],
+    ["ນັບຕໍ່ ແລະ ນັບຖອຍດ້ວຍນິ້ວມື", "นับต่อและนับถอยด้วยนิ้ว"],
+    ["ໃຊ້ຝາຂວດແທນເຕົ່າ. ວາງ 5 ຝາ ແລ້ວຖາມລູກວ່າ ຖ້າເລື່ອນເຂົ້າມາ 2 ຝາ ຈຳນວນຈະເພີ່ມ ຫຼື ຫຼຸດລົງ?",
+      "ใช้ฝาขวดแทนเต่า วาง 5 ฝา แล้วถามลูกว่า ถ้าเลื่อนเข้ามาอีก 2 ฝา จำนวนจะเพิ่มขึ้นหรือน้อยลง?"],
+    ["ເລີ່ມທີ່ 5. ທຸກເທື່ອທີ່ເລື່ອນເຂົ້າມາ 1 ຝາ ໃຫ້ຊູ 1 ນິ້ວ ແລະ ເວົ້າຈຳນວນໃໝ່ 6, 7. ແລ້ວລອງໃໝ່ຈາກ 5 ໂດຍເລື່ອນອອກ 2 ຝາ. ໃຫ້ລູກຊີ້ຝາທີ່ຍັງເຫຼືອ.",
+      "เริ่มที่ 5 เลื่อนเข้ามาทีละฝา ชูทีละนิ้ว แล้วพูด 6, 7 จากนั้นเริ่มใหม่ที่ 5 เลื่อนออก 2 ฝา ให้ลูกชี้และนับฝาที่เหลือ"],
+  ].forEach(([lo, th]) => line(lo, th));
+  const shoreLabel = takeLanguage.land;
+  const pondLabel = line("ຢູ່ໃນນ້ຳ", "อยู่ในน้ำ");
+  const groupOne = line("ກຸ່ມທຳອິດ", "กลุ่มแรก");
+  const groupTwo = line("ກຸ່ມທີສອງ", "กลุ่มที่สอง");
+  const groupCombined = line("ກຸ່ມທີ່ລວມແລ້ວ", "กลุ่มที่รวมแล้ว");
+  const changeCases = {
+    add: { sign: "+", groups: [shoreLabel, pondLabel], count: changeText.countShore, ask: changeText.askShore, hint: changeText.thinkShore,
+      move: line("ພາເຕົ່າ 1 ໂຕຂຶ້ນຝັ່ງ", "พาเต่า 1 ตัวขึ้นฝั่ง"),
+      story: (a, b) => line(`ເທິງຝັ່ງມີເຕົ່າ ${a} ໂຕ. ອີກ ${b} ໂຕກຳລັງຂຶ້ນຝັ່ງ.`, `บนฝั่งมีเต่า ${a} ตัว อีก ${b} ตัวกำลังขึ้นฝั่ง`) },
+    take: { sign: "−", groups: [shoreLabel, pondLabel], count: changeText.countShore, ask: changeText.askShore, hint: changeText.thinkShore,
+      move: line("ພາເຕົ່າ 1 ໂຕລົງນ້ຳ", "พาเต่า 1 ตัวลงน้ำ"),
+      story: (a, b) => line(`ເທິງຝັ່ງມີເຕົ່າ ${a} ໂຕ. ມີ ${b} ໂຕກຳລັງລົງນ້ຳ.`, `บนฝั่งมีเต่า ${a} ตัว มี ${b} ตัวกำลังลงน้ำ`) },
+    combine: { sign: "+", groups: [groupOne, groupTwo], count: changeText.countTogether,
+      ask: line("ສອງກຸ່ມລວມກັນຈັກໂຕ?", "สองกลุ่มรวมกันกี่ตัว?"), hint: changeText.thinkTogether,
+      move: line("ຍ້າຍເຕົ່າມາລວມ 1 ໂຕ", "ย้ายเต่ามารวม 1 ตัว"),
+      story: (a, b) => line(`ເຕົ່າກຸ່ມທຳອິດມີ ${a} ໂຕ. ກຸ່ມທີສອງມີ ${b} ໂຕ. ລວມກັນຈັກໂຕ?`, `เต่ากลุ่มแรกมี ${a} ตัว กลุ่มที่สองมี ${b} ตัว รวมกันกี่ตัว?`) },
+    compare: { sign: "−", groups: [groupOne, groupTwo], count: changeText.countUnpaired,
+      ask: line("ກຸ່ມທຳອິດຫຼາຍກວ່າຈັກໂຕ?", "กลุ่มแรกมีมากกว่ากี่ตัว?"), hint: changeText.thinkCompare,
+      move: line("ຈັບຄູ່ເຕົ່າ 1 ຄູ່", "จับคู่เต่า 1 คู่"),
+      story: (a, b) => line(`ເຕົ່າກຸ່ມທຳອິດມີ ${a} ໂຕ. ກຸ່ມທີສອງມີ ${b} ໂຕ. ກຸ່ມທຳອິດຫຼາຍກວ່າຈັກໂຕ?`, `เต่ากลุ่มแรกมี ${a} ตัว กลุ่มที่สองมี ${b} ตัว กลุ่มแรกมากกว่ากี่ตัว?`) },
+  };
+  const changeRoutes = ["#change", "#change-take", "#change-book"];
+  const changeNumberSets = range(7).flatMap(i => range(3).map(j => [i + 2, j + 1]));
+  let changeTask, changeRound;
+  function otherChange(kind) { return kind === "add" ? "take" : "add"; }
+  function startChangeTask(kind, a, b) {
+    const spec = changeCases[kind], delta = spec.sign === "+" ? 1 : -1;
+    const answer = a + delta * b;
+    const choices = [...new Set([answer, a, b, ...nums(answer, 0, 10).map(o => o.value)])].slice(0, 3).sort((x, y) => x - y);
+    changeTask = {kind, spec, a, b, delta, answer, choices, phase: "predict", moved: 0, model: !changeRound, error: ""};
+    renderChange();
+  }
+  function changeRoundQuestion() {
+    const kind = changeRound.kinds[changeRound.i], plus = changeCases[kind].sign === "+";
+    const available = changeNumberSets.filter(([a, b]) => (plus ? a + b <= 10 : a >= b) &&
+      (kind !== "compare" || a > b) && !changeRound.used.has(a + ":" + b));
+    const [a, b] = pick(available);
+    changeRound.used.add(a + ":" + b);
+    startChangeTask(kind, a, b);
+  }
+  function startChangeRound(book) {
+    const first = otherChange(changeTask?.kind || "take");
+    const kinds = shuffle(book ? ["combine", "compare", pick(["add", "take"])] : [first, otherChange(first), first]);
+    changeRound = {kinds, i: 0, used: new Set(["5:2"])};
+    changeRoundQuestion();
+  }
+  function changeMoveId() {
+    const {kind, a, moved, delta} = changeTask;
+    if (kind === "compare") return moved;
+    return delta > 0 ? a + moved : a - moved - 1;
+  }
+  function changeBoard() {
+    const {kind, spec, a, b, moved, phase, delta} = changeTask;
+    const compare = kind === "compare", total = delta > 0 ? a + b : a, onLeft = a + delta * moved;
+    const groups = compare ? [range(a), range(b).map(i => a + i)] :
+      [range(onLeft), range(total - onLeft).map(i => onLeft + i)];
+    return groups.map((ids, side) => {
+      const label = kind === "combine" && side === 0 && moved ? groupCombined : spec.groups[side];
+      const toys = ids.map((id, i) => {
+        const paired = compare && i < moved;
+        const canMove = phase === "move" && id === changeMoveId();
+        if (canMove) return `<button type="button" class="act-token" data-change-id="${id}" data-change-step aria-label="${spec.move}">🐢</button>`;
+        return `<span class="act-token${paired ? " counted" : ""}" data-change-id="${id}" aria-hidden="true">🐢${paired ? `<b>${i + 1}</b>` : ""}</span>`;
+      }).join("");
+      return `<div class="turtle-zone"><h3>${label} <b class="num">${ids.length}</b></h3><div class="act-counters">${toys}</div></div>`;
+    }).join("");
+  }
+  function changePrompt() {
+    const {kind, spec, phase, a, b, answer} = changeTask;
+    if (phase === "predict") return spec.story(a, b);
+    if (phase === "move") return kind === "compare"
+      ? line("ຈັບຄູ່ທີລະຄູ່. ເບິ່ງໂຕທີ່ຍັງບໍ່ມີຄູ່.", "จับคู่ทีละคู่ แล้วมองตัวที่ยังไม่มีคู่")
+      : line(`ເລີ່ມທີ່ ${a}. ແຕະໃຫ້ເຕົ່າຍ້າຍທີລະໂຕ.`, `เริ่มที่ ${a} แตะให้เต่าย้ายทีละตัว`);
+    if (phase === "answer") return spec.ask;
+    if (kind === "compare") return line(`ກຸ່ມທຳອິດຫຼາຍກວ່າ ${answer} ໂຕ.`, `กลุ่มแรกมากกว่า ${answer} ตัว`);
+    if (kind === "combine") return line(`ສອງກຸ່ມລວມກັນ ${answer} ໂຕ.`, `สองกลุ่มรวมกัน ${answer} ตัว`);
+    return line(`ຕອນນີ້ເທິງຝັ່ງມີ ${answer} ໂຕ.`, `ตอนนี้บนฝั่งมี ${answer} ตัว`);
+  }
+  function renderChange() {
+    const {kind, spec, phase, a, b, moved, delta, answer, choices, model, error} = changeTask;
+    const done = phase === "done", shore = kind === "add" || kind === "take";
+    $("#changePhase").textContent = changeRound
+      ? line(`ຂໍ້ ${changeRound.i + 1} / 3`, `ข้อ ${changeRound.i + 1} / 3`) : "ລອງນຳກັນ";
+    $("#changePrompt").textContent = changePrompt();
+    const eq = $("#changeEquation");
+    eq.hidden = phase === "predict";
+    eq.innerHTML = eq.hidden ? "" : P.eq([a, spec.sign, b, "=", done ? {v: answer} : "?"]);
+    const board = $("#changeBoard");
+    board.hidden = !model && !done;
+    board.innerHTML = board.hidden ? "" : changeBoard();
+    $("#changeCount").hidden = !model || !(phase === "move" || moved === b);
+    $("#changeCountLabel").textContent = spec.count;
+    const track = range(moved + 1).map(i => a + i * delta);
+    $("#changeTrack").innerHTML = track.map(n => `<b class="num">${n}</b>`).join('<span aria-hidden="true">→</span>');
+    $("#changeTrack").setAttribute("aria-label", track.join(" → "));
+    $("#changeFingers").textContent = moved
+      ? line(`ເຮັດໄປ ${moved} ເທື່ອ. ຊູໄວ້ ${moved} ນິ້ວ.`, `ทำไปแล้ว ${moved} ครั้ง ชูไว้ ${moved} นิ้ว`)
+      : kind === "compare" ? changeText.fingerPair : changeText.fingerMove;
+    const controls = $("#changeControls");
+    const hintButton = model ? "" : `<button class="secondary" type="button" data-change-help>${changeText.model}</button>`;
+    if (phase === "predict") {
+      controls.innerHTML = `<p>${shore ? changeText.chooseAmount : changeText.title}</p>
+        <div class="choices"><button class="choice word" type="button" data-change-sign="+">${shore ? changeText.increase : 'ບວກ (+)'}</button>
+        <button class="choice word" type="button" data-change-sign="−">${shore ? changeText.decrease : 'ລົບ (−)'}</button></div>${hintButton}`;
+    } else if (phase === "move") {
+      controls.innerHTML = `<button class="go" type="button" data-change-step>${spec.move}</button>`;
+    } else if (phase === "answer") {
+      controls.innerHTML = `<div class="choices">${choices.map(n => `<button class="choice num" type="button" data-change-value="${n}">${n}</button>`).join("")}</div>${hintButton}`;
+    } else if (!changeRound) {
+      controls.innerHTML = `<button class="go" type="button" data-change-round>${changeText.tryAgain}</button>
+        <a class="secondary" href="${kind === "add" ? "#change-take" : "#change"}">${kind === "add" ? changeText.otherTake : changeText.otherAdd}</a>`;
+    } else if (changeRound.i < 2) {
+      controls.innerHTML = '<button class="go" type="button" data-change-next>ຂໍ້ຕໍ່ໄປ →</button>';
+    } else {
+      const book = location.hash === "#change-book";
+      const label = book ? line("ເບິ່ງບົດລົບ", "ดูบทเรียนการลบ") : changeText.bookRound;
+      controls.innerHTML = `<p>ຝຶກຈົບແລ້ວ</p><button class="secondary" type="button" data-change-round>${changeText.tryAgain}</button>
+        <a class="secondary" href="${book ? "#bot-6" : "#change-book"}">${label}</a>`;
+    }
+    $("#changeFeedback").textContent = error;
+  }
+  function showChangeStage() {
+    renderChange();
+    $("#changePrompt").focus({preventScroll: true});
+    speak(changeTask.error || changePrompt());
+  }
+  function moveChangeTurtle() {
+    const {kind, a, b} = changeTask;
+    const id = changeMoveId(), animate = canAnimatePieces();
+    const from = animate && $(`#changeBoard [data-change-id="${id}"]`).getBoundingClientRect();
+    changeTask.moved++;
+    changeTask.error = "";
+    if (changeTask.moved === b) changeTask.phase = changeRound ? "answer" : "done";
+    renderChange();
+    if (animate && kind === "compare") {
+      for (const paired of [id, a + id]) {
+        $(`#changeBoard [data-change-id="${paired}"]`).animate([{transform: "scale(.88)"}, {transform: "scale(1)"}], {duration: 260});
+      }
+    } else if (from) flyPiece($(`#changeBoard [data-change-id="${id}"]`), from);
+    if (changeTask.phase !== "move") {
+      $("#changePrompt").focus({preventScroll: true});
+      speak(changePrompt());
+    } else {
+      $("#changeControls [data-change-step]").focus({preventScroll: true});
+      speak(wlo(changeTask.a + changeTask.moved * changeTask.delta));
+    }
+  }
+  function openChange(hash) {
+    stopLessonSpeech();
+    cur = nest = null;
+    $("#home").hidden = $("#chapter").hidden = true;
+    $("#backBtn").hidden = $("#changeLesson").hidden = false;
+    $("#backBtn").setAttribute("aria-label", "ກັບໜ້າຫຼັກ");
+    $("#topTitle").textContent = changeText.title;
+    $("#kicker").textContent = hash === "#change-book" ? line("ແບບຝຶກຕາມໜ້າ 71", "ฝึกตามแนวหน้า 71") :
+      line("ບົດທີ 5–6 · ໜ້າ 42–71", "บทที่ 5–6 · หน้า 42–71");
+    if (hash === "#change-book") startChangeRound(true);
+    else {
+      changeRound = null;
+      startChangeTask(hash === "#change-take" ? "take" : "add", 5, 2);
+    }
+    $("#changeCoach").open = false;
+    window.scrollTo(0, 0);
+    $("#changePrompt").focus({preventScroll: true});
+  }
+  $("#changeListen").addEventListener("click", () => {
+    if (!changeTask) return;
+    const {kind, phase} = changeTask;
+    const askDirection = phase === "predict" && (kind === "add" || kind === "take");
+    speak(askDirection ? changePrompt() + ". " + changeText.chooseAmount : changePrompt());
+  });
+  $("#changeLesson").addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (!button || !changeTask) return;
+    const {phase, spec, answer, b} = changeTask;
+    if (phase === "predict" && button.hasAttribute("data-change-help")) {
+      changeTask.model = true;
+      showChangeStage();
+    } else if (phase === "predict" && button.hasAttribute("data-change-sign")) {
+      if (button.dataset.changeSign !== spec.sign) {
+        changeTask.error = spec.hint;
+        changeTask.model = true;
+        showChangeStage();
+        return;
+      }
+      changeTask.error = "";
+      changeTask.phase = changeTask.model ? "move" : "answer";
+      showChangeStage();
+    } else if (phase === "move" && button.hasAttribute("data-change-step")) {
+      moveChangeTurtle();
+    } else if (phase === "answer" && (button.hasAttribute("data-change-value") || button.hasAttribute("data-change-help"))) {
+      if (Number(button.dataset.changeValue) === answer) {
+        changeTask.phase = "done";
+        changeTask.moved = b;
+        changeTask.error = "";
+      } else {
+        if (changeTask.moved < b) changeTask.phase = "move";
+        changeTask.model = true;
+        changeTask.error = Number(button.dataset.changeValue) === b
+          ? line(`${b} ແມ່ນຈຳນວນທີ່ຍ້າຍ ຫຼື ຈັບຄູ່. ລອງໃຊ້ຮູບຊ່ວຍນັບ.`, `${b} คือจำนวนที่ย้ายหรือจับคู่ ลองใช้ภาพช่วยนับ`)
+          : changeText.numberHint;
+      }
+      showChangeStage();
+    } else if (phase === "done" && button.hasAttribute("data-change-next") && changeRound.i < 2) {
+      changeRound.i++;
+      changeRoundQuestion();
+      $("#changePrompt").focus({preventScroll: true});
+      speak(changePrompt());
+    } else if (phase === "done" && button.hasAttribute("data-change-round")) {
+      startChangeRound(location.hash === "#change-book");
+      $("#changePrompt").focus({preventScroll: true});
+      speak(changePrompt());
+    }
+  });
+
   /* ---------- contents and shareable lesson links ---------- */
   const navigationText = {
     catalog: line("ບົດຮຽນຕາມປຶ້ມ", "บทเรียนตามหนังสือ"),
@@ -3384,7 +3678,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const url = new URL(location.href);
     url.search = "";
     if (cur) url.hash = /^#bot-/.test(location.hash) ? location.hash : "#bot-" + cur.id;
-    else if (!["#toc", "#homework"].includes(location.hash)) url.hash = "";
+    else if (!["#toc", "#homework", ...changeRoutes].includes(location.hash)) url.hash = "";
     const view = location.href;
     const status = $("#shareStatus"), field = $("#shareUrl");
     try {
@@ -3410,6 +3704,9 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#backBtn").hidden = false;
     $("#kicker").textContent = lessonCaption(c);
     $("#topTitle").textContent = c.lo;
+    const changeLaunch = $("#changeLaunch");
+    changeLaunch.hidden = !!expedition || ![5, 6].includes(c.id);
+    changeLaunch.href = c.id === 6 ? "#change-take" : "#change";
     const routeKey = nestChapters[c.id], launch = $("#nestLaunch");
     launch.hidden = !routeKey || !!expedition;
     if (routeKey) {
@@ -3657,7 +3954,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const fromCatalog = !$("#catalog").hidden;
     showVoicePanel(false);
     voiceFeedback();
-    $("#catalog").hidden = $("#shareUrl").hidden = true;
+    $("#catalog").hidden = $("#shareUrl").hidden = $("#changeLesson").hidden = true;
+    changeTask = null;
     $("#shareStatus").textContent = "";
     if (location.hash === "#homework") {
       showWorkForm();
@@ -3670,6 +3968,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     homework = null;
     const restoring = location.hash === "#resume" ? resumePoint : null;
     const hash = restoring ? "#bot-" + restoring.chapter : location.hash;
+    if (changeRoutes.includes(hash)) { openChange(hash); return; }
     const match = /^#bot-(\w+)(?:-(nest|exchange|more))?$/.exec(hash);
     const chapter = match && CHAPTERS.find(c => String(c.id) === match[1]);
     if (chapter) {
