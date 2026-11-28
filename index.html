@@ -359,10 +359,8 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .practice-choices .btn { min-height: 52px; padding: 0; font-size: 28px; }
 .practice-choices small { display: block; font: 600 14px/1.4 var(--font-text); }
-.practice-choices[data-groups] { grid-template-columns: 1fr; }
-.practice-choices[data-groups] button:not([value="="]) { display: none; }
-.practice-choices[data-groups] button[value="="] { display: flex; gap: 8px; align-items: center; justify-content: center; }
 .practice-choices [data-wrong] { border-color: var(--sun); background: var(--sun-soft); }
+.practice-choices :is([value="<"], [value="="], [value=">"])[data-wrong] { border-color: var(--ink-soft); border-style: dashed; background: var(--dim); box-shadow: none; }
 .practice-model { display: grid; gap: 10px; padding: 12px; border: 2px solid var(--line); border-radius: 16px; }
 .practice-model h3 { margin: 0; font-size: 17px; }
 .practice-model-stars {
@@ -1038,7 +1036,7 @@ button.obj:active { transform: scale(0.9); }
           fill: ["ຕື່ມຊ່ອງຫວ່າງ", "ຫາວ່າຂາດອີກຈັກໂຕຈຶ່ງຄົບ"],
         },
         pair: "ຈັບຄູ່ກົບ 1 ຄູ່", pairPrompt: "ຈັບຄູ່ກົບຈາກສອງກຸ່ມ ເທື່ອລະຄູ່",
-        group: (i, n) => `ກຸ່ມ ${i} · ${n} ໂຕ`, pickGroup: "ແຕະກຸ່ມທີ່ມີກົບເຫຼືອ ຫຼື ເລືອກ «ເທົ່າກັນ»",
+        group: (i, n) => `ກຸ່ມ ${i} · ${n} ໂຕ`,
         equal: "ກົບມີຄູ່ຄົບທັງສອງກຸ່ມ. ສອງກຸ່ມມີເທົ່າກັນ.",
         more: (total, extra) => `ກຸ່ມທີ່ມີ ${total} ໂຕ ຍັງມີກົບ ${extra} ໂຕທີ່ບໍ່ມີຄູ່. ກຸ່ມນັ້ນມີຫຼາຍກວ່າ.`,
         ten: "ຝຶກໃຫ້ຄົບ 10", parent: "ສຳລັບພໍ່ແມ່", settings: "ຕັ້ງຄ່າ", adventure: "ເກມຜະຈົນໄພ 3D",
@@ -1107,10 +1105,10 @@ button.obj:active { transform: scale(0.9); }
         compare: {
           title: "ປຽບທຽບ", intro: "ຝັ່ງໃດມີກົບຫຼາຍກວ່າ?", animal: "ກົບນ້ອຍ",
           left: (n) => `ຊ້າຍ ${n} ໂຕ`, right: (n) => `ຂວາ ${n} ໂຕ`,
-          ask: "ແຕະຝັ່ງທີ່ມີກົບຫຼາຍກວ່າ ຫຼື ແຕະ «ເທົ່າກັນ»",
           same: "ເທົ່າກັນ", signQuestion: "ໃສ່ເຄື່ອງໝາຍໃດ?",
           imagine: (a, b) => `ລອງຄິດເບິ່ງ ລະຫວ່າງ ${a} ກັບ ${b} ຄວນໃຊ້ເຄື່ອງໝາຍໃດ?`,
           again: "ລອງຈັບຄູ່ອີກເທື່ອ ແລ້ວເບິ່ງວ່າຝັ່ງໃດມີກົບເຫຼືອ",
+          unpaired: (n) => `ຍັງມີກົບ ${n} ໂຕທີ່ບໍ່ມີຄູ່. ລອງເລືອກເຄື່ອງໝາຍອີກເທື່ອ.`,
           during: "ໃຫ້ລູກຊີ້ທຽບກົບຈາກຊ່ອງດຽວກັນ. ປາກຂອງເຄື່ອງໝາຍອ້າຫາຈຳນວນທີ່ຫຼາຍກວ່າ.",
           think: "ໃຫ້ລູກບອກວ່າຈຳນວນໃດຫຼາຍກວ່າ ຫຼື ເທົ່າກັນ ກ່ອນເລືອກເຄື່ອງໝາຍ",
           after: "ຖາມລູກວ່າ ຖ້າສະຫຼັບຂ້າງຈະໃຊ້ເຄື່ອງໝາຍໃດ ແລ້ວກົດປຸ່ມສະຫຼັບເບິ່ງ",
@@ -1267,7 +1265,7 @@ button.obj:active { transform: scale(0.9); }
           fill: ["เติมช่องว่าง", "หาว่าขาดอีกเท่าไรจึงจะครบ"],
         },
         pair: "จับคู่กบ 1 คู่", pairPrompt: "จับกบจากสองกลุ่มมาคู่กันทีละคู่",
-        group: (i, n) => `กลุ่ม ${i} · ${n} ตัว`, pickGroup: "แตะกลุ่มที่มีกบเหลือ หรือเลือก ‘เท่ากัน’",
+        group: (i, n) => `กลุ่ม ${i} · ${n} ตัว`,
         equal: "กบมีคู่ครบทั้งสองกลุ่ม ทั้งสองกลุ่มมีเท่ากัน",
         more: (total, extra) => `กลุ่มที่มี ${total} ตัว ยังมีกบไม่มีคู่อีก ${extra} ตัว กลุ่มนั้นจึงมีมากกว่า`,
         ten: "ฝึกให้ครบ 10", parent: "สำหรับพ่อแม่", settings: "ตั้งค่า", adventure: "เกมผจญภัย 3D",
@@ -1336,10 +1334,10 @@ button.obj:active { transform: scale(0.9); }
         compare: {
           title: "เปรียบเทียบ", intro: "ฝั่งไหนมีกบมากกว่า?", animal: "กบน้อย",
           left: (n) => `ซ้าย ${n} ตัว`, right: (n) => `ขวา ${n} ตัว`,
-          ask: "แตะฝั่งที่มีกบมากกว่า หรือแตะ “เท่ากัน”",
           same: "เท่ากัน", signQuestion: "ใส่เครื่องหมายไหน?",
           imagine: (a, b) => `ลองคิดดู ระหว่าง ${a} กับ ${b} ควรใช้เครื่องหมายอะไร?`,
           again: "ลองจับคู่ใหม่ แล้วดูว่าฝั่งไหนมีกบเหลือนะ",
+          unpaired: (n) => `มีกบ ${n} ตัวที่ยังไม่มีคู่ ลองเลือกเครื่องหมายอีกครั้ง`,
           during: "ให้ลูกชี้เทียบกบช่องเดียวกัน ปากของเครื่องหมายอ้าหาจำนวนที่มากกว่า",
           think: "ให้ลูกบอกว่าจำนวนไหนมากกว่าหรือเท่ากัน ก่อนเลือกเครื่องหมาย",
           after: "ถามลูกว่าถ้าสลับข้างจะใช้เครื่องหมายอะไร แล้วกดปุ่มสลับเพื่อดูคำตอบ",
@@ -4698,9 +4696,10 @@ button.obj:active { transform: scale(0.9); }
       }
       return lesson.done(N(part), N(whole), N(other));
     }
-    if (practiceThinking && kind === "compare" && picture) {
+    if (kind === "compare" && picture) {
       if (practicePairing()) return D.thinking.pairPrompt;
-      return wrong === null ? D.thinking.pickGroup : lesson.again;
+      if (wrong === null) return lesson.signQuestion;
+      return wrong === "=" ? lesson.unpaired(N(Math.abs(part - whole))) : lesson.again;
     }
     if (practiceThinking && picture && moved.size < moves) {
       return lesson.step(N(practicePosition()), N(activity === "fill" ? whole : moves - moved.size));
@@ -4824,7 +4823,6 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceCompare").hidden = !compare || !(picture && (practiceThinking || !done) || showMethod);
     $("#practicePair").hidden = !pairing;
     const choosingGroup = compare && picture && ready && !done;
-    $("#practiceChoices").toggleAttribute("data-groups", choosingGroup);
     if (compare) {
       $$("#practiceCompare button").forEach((group) => {
         group.disabled = !choosingGroup;
