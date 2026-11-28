@@ -230,10 +230,11 @@ svg text { font-family: var(--font-num); }
 .school-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .school-links a { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-height: 82px; padding: 12px; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; line-height: 1.45; }
 .school-links small { color: var(--soft); font-size: 14px; }
-.change-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 64px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid var(--hero-edge); border-radius: 16px; background: var(--card); color: var(--ink); text-decoration: none; }
-.change-link-label { display: grid; gap: 2px; flex: 1; }
-.change-link small { color: var(--soft); font-size: 14px; }
-.change-mascot { font: 28px/1 var(--font-emoji); }
+.practice-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 64px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid var(--hero-edge); border-radius: 16px; background: var(--card); color: var(--ink); text-decoration: none; }
+.practice-link-label { display: grid; gap: 2px; flex: 1; }
+.practice-link small { color: var(--soft); font-size: 14px; }
+.practice-link-icon { font: 28px/1 var(--font-emoji); }
+#shortResume { background: var(--accent-soft); }
 .home-restart { display: inline-flex; align-items: center; margin: 0 0 8px; }
 .share-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--line); color: var(--soft); font-size: 15px; }
 .share-footer .secondary { display: inline-flex; align-items: center; margin: 0; }
@@ -314,10 +315,11 @@ svg text { font-family: var(--font-num); }
 .turtle-zone .act-counters { --columns: 5; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; min-height: 54px; }
 .turtle-zone .act-token { border-color: transparent; }
 .turtle-zone .act-token[data-move] { border-color: var(--sky); }
-.change-card { display: grid; gap: 10px; }
-.change-card p { margin: 0; }
-.change-card .phase-row { margin: 0; }
-.change-card .choices { margin: 0; }
+.short-card { display: grid; gap: 10px; }
+.short-card p, .short-card .phase-row, .short-card .choices { margin: 0; }
+.short-card .go { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.short-card .secondary { display: inline-flex; align-items: center; margin: 4px 6px 0; }
+.short-card .feedback { margin-top: 0; }
 .change-board { display: grid; gap: 7px; width: min(100%, 520px); margin: 0 auto; text-align: start; }
 .change-board .act-token[data-change-step] { border: 2px dashed var(--sky); }
 .change-board .act-counters { min-height: 48px; width: min(100%, 270px); }
@@ -327,9 +329,6 @@ svg text { font-family: var(--font-num); }
 .change-track { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 6px; margin: 5px 0; }
 .change-track b { display: grid; place-items: center; min-width: 34px; padding: 1px 5px; border-radius: 7px; background: var(--card); font-size: 23px; }
 .change-track b:last-child { color: var(--accent); }
-.change-pause { display: grid; place-items: center; }
-#changeControls .secondary { display: inline-flex; align-items: center; margin-inline: 6px; }
-#changeFeedback { margin-top: 0; }
 @media (min-width: 680px) {
   .change-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .change-board .act-token { min-height: 52px; }
@@ -408,6 +407,41 @@ svg text { font-family: var(--font-num); }
 .nest-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
 .nest-footer .secondary { margin: 2px 0 0; }
 
+.ten-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 0 12px; }
+.ten-tabs a { display: grid; place-items: center; min-height: 44px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 11px; color: var(--ink); background: var(--card); text-decoration: none; font-size: 15px; font-weight: 700; }
+.ten-tabs a[aria-current="page"] { background: var(--accent-soft); border-color: var(--hero-edge); }
+@media (max-width: 380px) {
+  .ten-tabs { gap: 4px; }
+  .ten-tabs a { padding-inline: 8px; font-size: 14px; }
+}
+.ten-board { display: grid; gap: 7px; width: min(100%, 590px); margin: 0 auto; }
+.ten-board.take .nest-zone { text-align: start; }
+.ten-frame { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; width: min(100%, 298px); padding: 7px; margin: 0 auto; background: var(--sun-soft); border: 2px solid var(--hero-edge); border-radius: 14px; }
+.ten-frame .ten-cell { display: grid; place-items: center; min-width: 0; min-height: 44px; padding: 0; background: var(--card); border: 1px dashed var(--soft); border-radius: 7px; }
+.ten-frame .ten-cell.filled { border-style: solid; border-color: var(--line); }
+.ten-frame .ten-cell.added { background: var(--accent-soft); }
+.ten-frame .ten-cell[data-ten-step] { border: 2px dashed var(--sky); }
+.ten-cell .nest-speckle, #tenControls .nest-speckle { width: min(68%, 25px); }
+.ten-cell.added .nest-speckle { background-color: #95e1b0; border-color: #388455; }
+#tenControls .go > .nest-speckle { flex: 0 0 18px; }
+.ten-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 15px; font-size: 15px; }
+.ten-legend span + span { color: var(--accent); font-weight: 700; }
+.ten-cargo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 48px; }
+.ten-cargo.empty { min-height: 0; }
+.ten-bundle-group { display: flex; align-items: center; gap: 6px; }
+.ten-cargo .ten-bundle { width: 91px; }
+.ten-loose { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: min(100%, 240px); gap: 3px; }
+.ten-loose:empty { display: none; }
+.ten-loose .nest-egg { width: 100%; height: 44px; }
+.ten-loose .nest-egg:enabled { outline: 2px dashed var(--sky); }
+.ten-proof { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px 12px; font-size: 16px; }
+.ten-proof p { flex-basis: 100%; }
+.ten-proof .num { padding: 3px 9px; border-radius: 8px; background: var(--accent-soft); font-size: 20px; }
+@media (min-width: 680px) {
+  .ten-board.take { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ten-frame .ten-cell { min-height: 54px; }
+}
+
 @media (min-width: 680px) {
   .act-token { min-height: 66px; font-size: 40px; }
   .quiz-card .choice, .activity .choice { min-height: 64px; }
@@ -468,6 +502,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   </section>
 
   <main id="home">
+    <a class="practice-link" id="shortResume" href="#short-resume" hidden><span class="practice-link-label"><strong>ຫຼິ້ນຕໍ່</strong><small id="shortResumeLabel"></small></span><span aria-hidden="true">→</span></a>
     <a class="foundation-link" id="foundationLink" href="#bot-2">
       <div>
         <p id="foundationTopic"></p>
@@ -477,7 +512,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       <span class="lesson-dino" aria-hidden="true"></span>
     </a>
     <a class="secondary home-restart" id="foundationNext" href="#bot-2" hidden>ໄປບົດທີ່ແນະນຳ</a>
-    <a class="change-link" href="#change"><span class="change-mascot" aria-hidden="true">🐢</span><span class="change-link-label"><strong>ບວກ ຫຼື ລົບ?</strong><small>ນັບຕໍ່ ແລະ ນັບຖອຍດ້ວຍນິ້ວມື</small></span><span aria-hidden="true">→</span></a>
+    <a class="change-link practice-link" href="#change"><span class="practice-link-icon" aria-hidden="true">🐢</span><span class="practice-link-label"><strong>ບວກ ຫຼື ລົບ?</strong><small>ນັບຕໍ່ ແລະ ນັບຖອຍດ້ວຍນິ້ວມື</small></span><span aria-hidden="true">→</span></a>
+    <a class="practice-link" id="tenShortcut" href="#make-ten"><span class="practice-link-icon" aria-hidden="true">🥚</span><span class="practice-link-label"><strong>ຝຶກຄິດດ້ວຍເລກ 10</strong><small>ຕື່ມໃຫ້ຄົບ 10 ແລະ ລົບເປັນກຸ່ມ</small></span><span aria-hidden="true">→</span></a>
     <div class="school-links">
       <a href="#toc" id="schoolLink"><strong>ບົດຮຽນຕາມປຶ້ມ</strong><small>ຄົ້ນຕາມບົດ ຫຼື ເລກໜ້າ</small></a>
       <a href="#homework"><strong>ວຽກບ້ານດ້ວຍຮູບ</strong><small>ໃສ່ໂຈດຈາກສະໝຸດ</small></a>
@@ -489,7 +525,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   </main>
 
   <main id="changeLesson" hidden>
-    <section class="activity change-card" aria-labelledby="changePrompt">
+    <section class="activity short-card" aria-labelledby="changePrompt">
       <div class="phase-row"><p class="phase" id="changePhase"></p><button class="act-listen" id="changeListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
       <h2 id="changePrompt" tabindex="-1"></h2>
       <div id="changeFeedback" class="feedback help" role="status"></div>
@@ -502,11 +538,30 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       </div>
       <div id="changeControls"></div>
     </section>
-    <a class="secondary change-pause" href="#">ພັກກ່ອນ</a>
+    <button class="secondary change-pause" data-short-pause type="button">ພັກກ່ອນ</button>
     <details class="quick-coach" id="changeCoach">
       <summary>ວິທີສອນສຳລັບພໍ່ແມ່</summary>
       <p>ໃຊ້ຝາຂວດແທນເຕົ່າ. ວາງ 5 ຝາ ແລ້ວຖາມລູກວ່າ ຖ້າເລື່ອນເຂົ້າມາ 2 ຝາ ຈຳນວນຈະເພີ່ມ ຫຼື ຫຼຸດລົງ?</p>
       <p>ເລີ່ມທີ່ 5. ທຸກເທື່ອທີ່ເລື່ອນເຂົ້າມາ 1 ຝາ ໃຫ້ຊູ 1 ນິ້ວ ແລະ ເວົ້າຈຳນວນໃໝ່ 6, 7. ແລ້ວລອງໃໝ່ຈາກ 5 ໂດຍເລື່ອນອອກ 2 ຝາ. ໃຫ້ລູກຊີ້ຝາທີ່ຍັງເຫຼືອ.</p>
+    </details>
+  </main>
+
+  <main id="tenLesson" hidden>
+    <nav class="ten-tabs" id="tenTabs" aria-label="ເລືອກບົດຝຶກເລກ 10"></nav>
+    <section class="activity short-card" aria-labelledby="tenPrompt">
+      <div class="phase-row"><p class="phase" id="tenPhase"></p><button class="act-listen" id="tenListen" type="button" aria-label="ຟັງຄຳຖາມ" hidden>🔊</button></div>
+      <h2 id="tenPrompt" tabindex="-1"></h2>
+      <div id="tenEquation"></div>
+      <div class="ten-proof" id="tenProof" hidden></div>
+      <div class="feedback help" id="tenFeedback" role="status"></div>
+      <div class="ten-board" id="tenBoard" hidden></div>
+      <div id="tenControls"></div>
+    </section>
+    <button class="secondary" data-short-pause type="button">ພັກກ່ອນ</button>
+    <details class="quick-coach" id="tenCoach">
+      <summary>ວິທີສອນສຳລັບພໍ່ແມ່</summary>
+      <p id="tenCoachText"></p>
+      <a class="secondary" id="tenBook"></a>
     </details>
   </main>
 
@@ -606,6 +661,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
         </details>
         <button class="secondary" id="toBook" type="button">ເບິ່ງບົດຮຽນຕາມປຶ້ມ →</button>
         <a class="nest-launch" id="changeLaunch" href="#change" hidden>🐢 ບວກ ຫຼື ລົບ?</a>
+        <a class="nest-launch" id="tenLaunch" href="#make-ten" hidden><span aria-hidden="true">🥚 </span><span>ຝຶກຄິດດ້ວຍເລກ 10</span></a>
       </div>
       <div id="bookSteps" hidden>
       <div class="stage" id="stepVis"></div>
@@ -1015,6 +1071,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#nestListen").hidden = !(saved.voice && p);
     $("#actListen").hidden = !(saved.voice && p);
     $("#changeListen").hidden = !(saved.voice && p);
+    $("#tenListen").hidden = !(saved.voice && p);
     if ($("#quizListen")) $("#quizListen").hidden = !(saved.voice && p);
     $("#workCompareListen").hidden = !(saved.voice && p);
   }
@@ -3317,7 +3374,12 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   const changeRoutes = ["#change", "#change-take", "#change-book"];
   const changeNumberSets = range(7).flatMap(i => range(3).map(j => [i + 2, j + 1]));
   let changeTask, changeRound;
+  const roundPosition = i => line(`ຂໍ້ ${i + 1} / 3`, `ข้อ ${i + 1} / 3`);
   function otherChange(kind) { return kind === "add" ? "take" : "add"; }
+  function validChangeProblem(kind, a, b) {
+    if (!Object.hasOwn(changeCases, kind) || !changeNumberSets.some(([x, y]) => a === x && b === y)) return false;
+    return changeCases[kind].sign === "+" ? a + b <= 10 : kind === "compare" ? a > b : a >= b;
+  }
   function startChangeTask(kind, a, b) {
     const spec = changeCases[kind], delta = spec.sign === "+" ? 1 : -1;
     const answer = a + delta * b;
@@ -3326,9 +3388,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     renderChange();
   }
   function changeRoundQuestion() {
-    const kind = changeRound.kinds[changeRound.i], plus = changeCases[kind].sign === "+";
-    const available = changeNumberSets.filter(([a, b]) => (plus ? a + b <= 10 : a >= b) &&
-      (kind !== "compare" || a > b) && !changeRound.used.has(a + ":" + b));
+    const kind = changeRound.kinds[changeRound.i];
+    const available = changeNumberSets.filter(([a, b]) => validChangeProblem(kind, a, b) && !changeRound.used.has(a + ":" + b));
     const [a, b] = pick(available);
     changeRound.used.add(a + ":" + b);
     startChangeTask(kind, a, b);
@@ -3374,8 +3435,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   function renderChange() {
     const {kind, spec, phase, a, b, moved, delta, answer, choices, model, error} = changeTask;
     const done = phase === "done", shore = kind === "add" || kind === "take";
-    $("#changePhase").textContent = changeRound
-      ? line(`ຂໍ້ ${changeRound.i + 1} / 3`, `ข้อ ${changeRound.i + 1} / 3`) : "ລອງນຳກັນ";
+    $("#changePhase").textContent = changeRound ? roundPosition(changeRound.i) : "ລອງນຳກັນ";
     $("#changePrompt").textContent = changePrompt();
     const eq = $("#changeEquation");
     eq.hidden = phase === "predict";
@@ -3401,9 +3461,12 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       controls.innerHTML = `<button class="go" type="button" data-change-step>${spec.move}</button>`;
     } else if (phase === "answer") {
       controls.innerHTML = `<div class="choices">${choices.map(n => `<button class="choice num" type="button" data-change-value="${n}">${n}</button>`).join("")}</div>${hintButton}`;
+    } else if (!changeRound && kind === "add") {
+      controls.innerHTML = `<a class="go" href="#change-take">${changeText.otherTake} →</a>
+        <button class="secondary" type="button" data-change-round>${changeText.tryAgain}</button>`;
     } else if (!changeRound) {
       controls.innerHTML = `<button class="go" type="button" data-change-round>${changeText.tryAgain}</button>
-        <a class="secondary" href="${kind === "add" ? "#change-take" : "#change"}">${kind === "add" ? changeText.otherTake : changeText.otherAdd}</a>`;
+        <a class="secondary" href="#change">${changeText.otherAdd}</a>`;
     } else if (changeRound.i < 2) {
       controls.innerHTML = '<button class="go" type="button" data-change-next>ຂໍ້ຕໍ່ໄປ →</button>';
     } else {
@@ -3440,16 +3503,15 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       speak(wlo(changeTask.a + changeTask.moved * changeTask.delta));
     }
   }
-  function openChange(hash) {
-    stopLessonSpeech();
-    cur = nest = null;
-    $("#home").hidden = $("#chapter").hidden = true;
-    $("#backBtn").hidden = $("#changeLesson").hidden = false;
-    $("#backBtn").setAttribute("aria-label", "ກັບໜ້າຫຼັກ");
-    $("#topTitle").textContent = changeText.title;
-    $("#kicker").textContent = hash === "#change-book" ? line("ແບບຝຶກຕາມໜ້າ 71", "ฝึกตามแนวหน้า 71") :
+  function openChange(hash, checkpoint) {
+    const caption = hash === "#change-book" ? line("ແບບຝຶກຕາມໜ້າ 71", "ฝึกตามแนวหน้า 71") :
       line("ບົດທີ 5–6 · ໜ້າ 42–71", "บทที่ 5–6 · หน้า 42–71");
-    if (hash === "#change-book") startChangeRound(true);
+    showShortLesson("#changeLesson", changeText.title, caption);
+    if (checkpoint) {
+      changeRound = checkpoint.round;
+      changeTask = checkpoint.task;
+      renderChange();
+    } else if (hash === "#change-book") startChangeRound(true);
     else {
       changeRound = null;
       startChangeTask(hash === "#change-take" ? "take" : "add", 5, 2);
@@ -3468,7 +3530,11 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const button = event.target.closest("button");
     if (!button || !changeTask) return;
     const {phase, spec, answer, b} = changeTask;
-    if (phase === "predict" && button.hasAttribute("data-change-help")) {
+    if (button.hasAttribute("data-short-pause")) {
+      const {kind, a, b, phase, moved, model, choices} = changeTask;
+      const round = changeRound && {...changeRound, used: [...changeRound.used]};
+      pauseShortLesson({hash: location.hash, task: {kind, a, b, phase, moved, model, choices}, round});
+    } else if (phase === "predict" && button.hasAttribute("data-change-help")) {
       changeTask.model = true;
       showChangeStage();
     } else if (phase === "predict" && button.hasAttribute("data-change-sign")) {
@@ -3507,6 +3573,279 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       speak(changePrompt());
     }
   });
+
+  /* ---------- fill a tray of ten and use it as one group ---------- */
+  const tenText = {
+    title: line("ຝຶກຄິດດ້ວຍເລກ 10", "ฝึกคิดด้วยเลข 10"),
+    fill: line("ຕື່ມໄຂ່ 1 ໜ່ວຍ", "เติมไข่ 1 ฟอง"),
+    tray: line("ເອົາອອກ 1 ຖາດ (10 ໜ່ວຍ)", "เอาออก 1 ถาด (10 ฟอง)"),
+    egg: line("ເອົາໄຂ່ອອກ 1 ໜ່ວຍ", "เอาไข่ออก 1 ฟอง"),
+    askFill: line("ຕ້ອງຕື່ມຈັກໜ່ວຍຈຶ່ງຄົບ 10?", "ต้องเติมกี่ฟองจึงจะครบ 10?"),
+    askLeft: line("ໃນຮັງເຫຼືອໄຂ່ຈັກໜ່ວຍ?", "ในรังเหลือไข่กี่ฟอง?"),
+    removed: line("ເອົາອອກແລ້ວ", "เอาออกแล้ว"),
+    pair: line("ຈາກໄຂ່ຖາດດຽວກັນ", "จากไข่ถาดเดียวกัน"),
+    together: line("ລອງນຳກັນ", "ลองทำด้วยกัน"),
+    nextExample: line("ລອງອີກ 1 ຕົວຢ່າງ →", "ลองอีก 1 ตัวอย่าง →"),
+    anotherRound: line("ຝຶກຊຸດໃໝ່ 3 ຂໍ້", "ฝึกชุดใหม่ 3 ข้อ")
+  };
+  line("ຫຼິ້ນຕໍ່", "เล่นต่อ");
+  line("ເລືອກບົດຝຶກເລກ 10", "เลือกแบบฝึกเลข 10");
+  line("ຕື່ມໃຫ້ຄົບ 10 ແລະ ລົບເປັນກຸ່ມ", "เติมให้ครบ 10 แล้วลบเป็นกลุ่ม");
+  const tenTracks = {
+    "#make-ten": {
+      title: line("ຕື່ມໃຫ້ຄົບ 10", "เติมให้ครบ 10"),
+      caption: line("ບົດທີ 4 · ໜ້າ 36–41", "บทที่ 4 · หน้า 36–41"),
+      examples: [[5, 5], [6, 4]], bank: range(9).map(i => [i + 1, 9 - i]), next: "#take-ten",
+      coach: line("ແຕ້ມ 2 ແຖວ ແຖວລະ 5 ຕາ. ວາງຝາຂວດ 5 ຝາກ່ອນ ແລ້ວໃຫ້ລູກຊີ້ຕາທີ່ຍັງຫວ່າງ. ມື້ຕໍ່ມາລອງວາງ 6 ຝາ ແລ້ວຖາມວ່າ ອີກຈັກຝາຈຶ່ງຄົບ 10?",
+        "วาดสองแถว แถวละ 5 ช่อง วางฝาขวด 5 ฝา ให้ลูกชี้ช่องว่าง อีกวันลองวาง 6 ฝา แล้วถามว่าต้องเติมอีกเท่าไรเพื่อให้ครบ 10"),
+      book: ["#bot-12", line("ລອງໃຊ້ວິທີຕື່ມໃຫ້ຄົບ 10 ກັບ 8 + 5", "ลองใช้วิธีเติมให้ครบ 10 กับ 8 + 5")]
+    },
+    "#take-ten": {
+      title: line("ລົບອອກ 10", "ลบออก 10"),
+      tab: line("ລົບ 10", "ลบ 10"),
+      caption: line("ບົດທີ 7 · ໜ້າ 80–81", "บทที่ 7 · หน้า 80–81"),
+      examples: [[17, 10]], bank: range(10).map(i => [10 + i, 10]), next: "#take-parts",
+      coach: line("ຈັດຝາຂວດ 17 ຝາ ເປັນ 10 ຝາໃນຖາດ ກັບ 7 ຝາຂ້າງນອກ. ໃຫ້ລູກເລື່ອນຖາດອອກ ແລ້ວບອກວ່າເອົາອອກຈັກຝາ ແລະ ເຫຼືອຈັກຝາ.",
+        "จัดฝาขวด 17 ฝาเป็น 10 ฝาในถาดกับ 7 ฝาข้างนอก ให้ลูกเลื่อนถาดออก แล้วบอกว่าเอาออกกี่ฝาและเหลือกี่ฝา"),
+      book: ["#bot-7", line("ເບິ່ງບົດຈຳນວນ 11–20", "ดูบทจำนวน 11–20")]
+    },
+    "#take-parts": {
+      title: line("ລົບຫົວສິບ ແລະ ຫົວໜ່ວຍ", "ลบสิบและหน่วย"),
+      tab: line("ລົບສິບກັບໜ່ວຍ", "ลบสิบกับหน่วย"),
+      caption: line("ຝຶກຕໍ່ຈາກບົດທີ 7", "ฝึกต่อจากบทที่ 7"),
+      examples: [[15, 12]], bank: range(9).flatMap(i => range(i + 1).map(j => [11 + i, 11 + j])),
+      coach: line("ຈັດ 15 ເປັນ 10 ກັບ 5. ເອົາຖາດ 10 ອອກ ແລ້ວເອົາອີກ 2 ອອກຈາກ 5. ຖາມລູກວ່າ ເລກ 2 ບອກຫຍັງ ແລະ ເລກ 3 ບອກຫຍັງ? ຈະຄິດຕໍ່ແຕ່ຫົວໜ່ວຍໄດ້ ເມື່ອຫົວສິບເທົ່າກັນ ແລະ ໄຂ່ນອກຖາດພໍໃຫ້ເອົາອອກ.",
+        "จัด 15 เป็น 10 กับ 5 เอาถาดสิบออก แล้วเอาอีก 2 ออกจาก 5 ถามลูกว่าเลข 2 บอกอะไร และเลข 3 บอกอะไร คิดเฉพาะหน่วยต่อได้เมื่อหลักสิบเท่ากันและไข่นอกถาดพอให้หยิบออก"),
+      book: ["#bot-14-exchange", line("ລອງແກະຖາດສິບໃນໂຈດ 25 − 16", "ลองแลกสิบในโจทย์ 25 − 16")]
+    }
+  };
+  let tenRun = null;
+  function tenProblem() {
+    const [a, b] = tenRun.problems[tenRun.i];
+    const make = tenRun.hash === "#make-ten";
+    return {a, b, make, answer: make ? b : a - b};
+  }
+  function startTenQuestion() {
+    const {a, b, make, answer} = tenProblem();
+    const nearby = nums(answer, 0, 10).map(option => option.value);
+    const alternatives = make ? [a, ...nearby] : [a - 10, b - 10, ...nearby];
+    const choices = [...new Set([answer, ...alternatives])].slice(0, 3).sort((x, y) => x - y);
+    Object.assign(tenRun, {moved: 0, model: tenRun.guided, solved: false, needsHint: false, choices});
+  }
+  function tenAction() {
+    const {b, make} = tenProblem(), {model, moved, solved} = tenRun;
+    if (solved || !model || moved === b) return "";
+    return make ? "fill" : moved === 0 ? "tray" : "egg";
+  }
+  const tenEgg = '<i class="nest-speckle" aria-hidden="true"></i>';
+  function tenFrame(a, moved, action) {
+    const cells = range(10).map(i => {
+      if (i < a + moved) return `<span class="ten-cell filled${i < a ? "" : " added"}" aria-hidden="true">${tenEgg}</span>`;
+      if (action && i === a + moved) return `<button type="button" class="ten-cell" data-ten-step="fill" aria-label="${tenText.fill}"></button>`;
+      return '<span class="ten-cell" aria-hidden="true"></span>';
+    }).join("");
+    const start = line(`ມີຢູ່ກ່ອນ ${a} ໜ່ວຍ`, `มีอยู่ก่อน ${a} ฟอง`);
+    const added = line("ໄຂ່ສີຂຽວແມ່ນໄຂ່ທີ່ຕື່ມ", "ไข่สีเขียวคือไข่ที่เติม");
+    return `<div class="ten-frame">${cells}</div><div class="ten-legend"><span>${start}</span><span>${added}</span></div>`;
+  }
+  function tenCargo(label, id, tray, eggs, action) {
+    const bundle = tray ? `<div class="ten-bundle-group">${action === "tray"
+      ? `<button type="button" class="nest-piece nest-tray ten-bundle" data-ten-step="tray" aria-label="${tenText.tray}">${tenEgg.repeat(10)}</button>`
+      : `<span class="nest-tray ten-bundle" aria-hidden="true">${tenEgg.repeat(10)}</span>`}<b class="num">10</b></div>` : "";
+    const loose = range(eggs).map(i => i === eggs - 1 && action === "egg"
+      ? `<button type="button" class="nest-piece nest-egg" data-ten-step="egg" aria-label="${tenText.egg}">${tenEgg}</button>`
+      : `<span class="nest-egg" aria-hidden="true">${tenEgg}</span>`).join("");
+    const description = tray ? line(`${eggs} ໜ່ວຍຢູ່ນອກຖາດ`, `ไข่นอกถาด ${eggs} ฟอง`) : line(`${eggs} ໜ່ວຍ`, `${eggs} ฟอง`);
+    return `<div class="nest-zone" id="${id}"><h3>${label}</h3><div class="ten-cargo${tray || eggs ? "" : " empty"}" aria-label="${description}">${bundle}<div class="ten-loose">${loose}</div></div></div>`;
+  }
+  function tenPrompt(action) {
+    const {a, b, make, answer} = tenProblem(), {model, moved, solved} = tenRun;
+    if (solved) return make
+      ? line(`${a} ກັບ ${b} ລວມກັນໄດ້ 10.`, `${a} กับ ${b} รวมกันได้ 10`)
+      : line(`ໃນຮັງເຫຼືອໄຂ່ ${answer} ໜ່ວຍ.`, `ในรังเหลือไข่ ${answer} ฟอง`);
+    if (action === "fill") return line("ແຕະຕາທີ່ຫວ່າງ ແລ້ວຕື່ມໃຫ້ເຕັມ.", "แตะช่องว่าง เติมไข่ให้เต็มถาด");
+    if (action === "tray") return line("ຍ້າຍໄຂ່ອອກທັງຖາດ. ໜຶ່ງຖາດມີ 10 ໜ່ວຍ.", "ย้ายไข่ออกทั้งถาด หนึ่งถาดมี 10 ฟอง");
+    if (action === "egg") return line(`ເອົາອອກອີກ ${b - moved} ໜ່ວຍຈາກໄຂ່ນອກຖາດ.`, `เอาไข่นอกถาดออกอีก ${b - moved} ฟอง`);
+    if (!make) return tenText.askLeft;
+    return model ? line("ເຕັມຖາດແລ້ວ. ເຮົາຕື່ມໄຂ່ໄປຈັກໜ່ວຍ?", "เต็มถาดแล้ว เราเติมไข่ไปกี่ฟอง?") : tenText.askFill;
+  }
+  function tenProof(a, b, make, answer) {
+    const {moved, solved, model} = tenRun;
+    if (make) return solved ? `<p>${tenText.pair}</p><b class="num">10 − ${a} = ${b}</b>` : "";
+    if (solved && b > 10) return `<b class="num">${a} − 10 = ${a - 10}</b><b class="num">${a - 10} − ${b - 10} = ${answer}</b>`;
+    if (solved || !model) return "";
+    if (moved) return `<b class="num">${a} − 10 = ${a - 10}</b>`;
+    const losing = b > 10 ? `<b class="num">${b} = 10 + ${b - 10}</b>` : "";
+    return `<b class="num">${a} = 10 + ${a - 10}</b>${losing}`;
+  }
+  function tenHint(action, make) {
+    if (action === "fill") return line("ນັບຕາທີ່ຫວ່າງ ແລ້ວລອງຕື່ມໄຂ່.", "ลองนับช่องว่าง แล้วเติมไข่ทีละฟอง");
+    if (action === "tray") return line("ເອົາໄຂ່ອອກທັງຖາດກ່ອນ ແລ້ວຈຶ່ງເບິ່ງໄຂ່ທີ່ເຫຼືອ.", "เอาไข่ออกทั้งถาดก่อน แล้วค่อยดูไข่ที่เหลือ");
+    return make ? line("ຊີ້ ແລະ ນັບແຕ່ໄຂ່ທີ່ຕື່ມ.", "ชี้และนับเฉพาะไข่ที่เติม")
+      : line("ຊີ້ ແລະ ນັບແຕ່ໄຂ່ທີ່ຍັງຢູ່ໃນຮັງ.", "ชี้และนับเฉพาะไข่ที่ยังอยู่ในรัง");
+  }
+  function renderTen() {
+    const {a, b, make, answer} = tenProblem(), {hash, i, problems, guided, moved, model, solved, needsHint, choices} = tenRun;
+    const action = tenAction(), track = tenTracks[hash], box = solved ? {v: answer} : "?";
+    const guidePosition = problems.length === 1 ? "" : ` · ${i + 1} / ${problems.length}`;
+    $("#tenPhase").textContent = guided ? tenText.together + guidePosition : roundPosition(i);
+    $("#tenPrompt").textContent = tenPrompt(action);
+    const unitsOnly = !make && b > 10 && moved >= 10 && !solved;
+    const equation = make ? [a, "+", box, "=", 10] : unitsOnly ? [a - 10, "−", b - 10, "=", box] : [a, "−", b, "=", box];
+    $("#tenEquation").innerHTML = P.eq(equation);
+    const proof = tenProof(a, b, make, answer);
+    $("#tenProof").hidden = !proof;
+    $("#tenProof").innerHTML = proof;
+    $("#tenFeedback").textContent = needsHint ? tenHint(action, make) : "";
+    const board = $("#tenBoard");
+    board.hidden = !(model || solved);
+    board.classList.toggle("take", !make);
+    const removed = Math.max(0, moved - 10);
+    board.innerHTML = board.hidden ? "" : make ? tenFrame(a, moved, action) :
+      tenCargo(takeLanguage.nest, "tenNest", moved < 10, a - 10 - removed, action) +
+      tenCargo(tenText.removed, "tenRemoved", moved >= 10, removed);
+    const controls = $("#tenControls");
+    if (action) {
+      controls.innerHTML = `<button type="button" class="go" data-ten-step="${action}">${action === "fill" ? tenEgg : ""}${tenText[action]}</button>`;
+    } else if (!solved) {
+      controls.innerHTML = `<div class="choices">${choices.map(n => `<button type="button" class="choice num" data-ten-answer="${n}">${n}</button>`).join("")}</div>${model ? "" : `<button type="button" class="secondary" data-ten-help>${changeText.model}</button>`}`;
+    } else if (i + 1 < problems.length) {
+      controls.innerHTML = `<button type="button" class="go" data-ten-next>${guided ? tenText.nextExample : "ຂໍ້ຕໍ່ໄປ →"}</button>`;
+    } else {
+      const follow = track.next ? `<a class="secondary" href="${track.next}"><span>${tenTracks[track.next].title}</span><span aria-hidden="true"> →</span></a>` : "";
+      const bridge = make && !guided ? `<a class="secondary" href="${track.book[0]}">${track.book[1]}</a>` : "";
+      controls.innerHTML = `${guided ? "" : "<p>ຝຶກຈົບແລ້ວ</p>"}<button type="button" class="go" data-ten-practice>${guided ? changeText.tryAgain : tenText.anotherRound}</button>${follow}${bridge}`;
+    }
+  }
+  function openTen(hash, checkpoint) {
+    showShortLesson("#tenLesson", tenText.title, tenTracks[hash].caption);
+    tenRun = checkpoint?.run || {hash, guided: true, problems: tenTracks[hash].examples, i: 0};
+    if (!checkpoint) startTenQuestion();
+    for (const link of $("#tenTabs").children) {
+      if (link.hash === hash) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    }
+    const {coach, book: [href, title]} = tenTracks[hash];
+    $("#tenCoach").open = false;
+    $("#tenCoachText").textContent = coach;
+    $("#tenBook").href = href;
+    $("#tenBook").textContent = title;
+    renderTen();
+    window.scrollTo(0, 0);
+    $("#tenPrompt").focus({preventScroll: true});
+  }
+  function moveTen(action) {
+    const motion = canAnimatePieces();
+    const start = motion && $(action === "fill" ? "#tenControls .nest-speckle" : `#tenBoard [data-ten-step="${action}"]`).getBoundingClientRect();
+    tenRun.moved += action === "tray" ? 10 : 1;
+    tenRun.needsHint = false;
+    renderTen();
+    if (start) {
+      const target = action === "fill" ? [...document.querySelectorAll("#tenBoard .added .nest-speckle")].at(-1)
+        : $(action === "tray" ? "#tenRemoved .ten-bundle" : "#tenRemoved .nest-egg:last-child");
+      flyPiece(target, start);
+    }
+    const next = $("#tenControls [data-ten-step]");
+    (next || $("#tenPrompt")).focus({preventScroll: true});
+    speak(tenPrompt(tenAction()));
+  }
+  $("#tenTabs").innerHTML = Object.entries(tenTracks).map(([hash, track]) => `<a href="${hash}">${track.tab || track.title}</a>`).join("");
+  $("#tenListen").addEventListener("click", () => speak(tenPrompt(tenAction())));
+  $("#tenLesson").addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (!button || !tenRun || button.id === "tenListen") return;
+    const {b, answer} = tenProblem(), action = tenAction();
+    if (button.hasAttribute("data-short-pause")) {
+      pauseShortLesson({hash: tenRun.hash, run: tenRun});
+      return;
+    }
+    if (action && button.dataset.tenStep === action) { moveTen(action); return; }
+    if (button.hasAttribute("data-ten-next") || button.hasAttribute("data-ten-practice")) {
+      if (button.hasAttribute("data-ten-next")) tenRun.i++;
+      else {
+        const {bank} = tenTracks[tenRun.hash];
+        const fresh = bank.filter(([x, y]) => !tenRun.problems.some(([oldA, oldB]) => oldA === x && oldB === y));
+        const problems = tenRun.guided && tenRun.hash === "#make-ten"
+          ? [[4, 6], [5, 5], pick(fresh.filter(([x]) => x !== 4))] : shuffle(fresh).slice(0, 3);
+        Object.assign(tenRun, {guided: false, i: 0, problems});
+      }
+      startTenQuestion();
+      window.scrollTo(0, 0);
+    } else if (!action && !tenRun.solved && button.hasAttribute("data-ten-answer")) {
+      const correct = Number(button.dataset.tenAnswer) === answer;
+      Object.assign(tenRun, {model: true, solved: correct, needsHint: !correct});
+      if (correct) tenRun.moved = b;
+    } else if (button.hasAttribute("data-ten-help")) tenRun.model = true;
+    else return;
+    renderTen();
+    $("#tenPrompt").focus();
+    speak($("#tenFeedback").textContent || tenPrompt(tenAction()));
+  });
+
+  /* ---------- pause one short lesson and return to the same question ---------- */
+  const shortPauseKey = "ph1-short-lesson-pause.v1";
+  function validShortChoices(choices, answer) {
+    return Array.isArray(choices) && choices.length === 3 && new Set(choices).size === 3 && choices.includes(answer) &&
+      choices.every(n => Number.isInteger(n) && n >= 0 && n <= 10);
+  }
+  function restoreChangePause(hash, task, round) {
+    if (!task) return null;
+    const {kind, a, b, phase, moved, model, choices} = task;
+    if (!validChangeProblem(kind, a, b) || !["predict", "move", "answer", "done"].includes(phase) ||
+        !Number.isInteger(moved) || moved < 0 || moved > b || typeof model !== "boolean") return null;
+    const spec = changeCases[kind], delta = spec.sign === "+" ? 1 : -1, answer = a + delta * b;
+    if (!validShortChoices(choices, answer) || (phase === "move" && (!model || moved === b))) return null;
+    if (round) {
+      const {i, kinds, used} = round;
+      if (!Number.isInteger(i) || i < 0 || i > 2 || !Array.isArray(kinds) || kinds.length !== 3 || kinds[i] !== kind ||
+          !kinds.every(k => Object.hasOwn(changeCases, k)) || !Array.isArray(used) || used.length > 4) return null;
+      round = {i, kinds, used: new Set(used)};
+    } else if (hash === "#change-book" || kind !== (hash === "#change-take" ? "take" : "add") || a !== 5 || b !== 2) return null;
+    return {hash, task: {kind, a, b, phase, moved, model, choices, spec, delta, answer, error: ""}, round};
+  }
+  function restoreTenPause(hash, run) {
+    if (!run || run.hash !== hash) return null;
+    const {guided, problems, i, moved, choices, model, solved, needsHint} = run;
+    const {bank, examples} = tenTracks[hash], available = guided ? examples : bank;
+    if (typeof guided !== "boolean" || typeof model !== "boolean" || typeof solved !== "boolean" || typeof needsHint !== "boolean" ||
+        !Array.isArray(problems) || problems.length !== (guided ? examples.length : 3) ||
+        !Number.isInteger(i) || i < 0 || i >= problems.length ||
+        !problems.every(pair => Array.isArray(pair) && pair.length === 2 && available.some(([a, b]) => pair[0] === a && pair[1] === b))) return null;
+    const [a, b] = problems[i], make = hash === "#make-ten";
+    if (!validShortChoices(choices, make ? b : a - b) || !Number.isInteger(moved) || moved < 0 || moved > b ||
+        (!make && moved > 0 && moved < 10)) return null;
+    return {hash, run: {hash, guided, problems, i, moved, choices, model, solved, needsHint}};
+  }
+  function readShortPause(point) {
+    const hash = point?.hash;
+    if (changeRoutes.includes(hash)) return restoreChangePause(hash, point.task, point.round);
+    if (Object.hasOwn(tenTracks, hash)) return restoreTenPause(hash, point.run);
+    return null;
+  }
+  let shortPause = null;
+  try { shortPause = readShortPause(JSON.parse(localStorage.getItem(shortPauseKey))); } catch (e) { /* use the current tab */ }
+  function pauseShortLesson(point) {
+    shortPause = readShortPause(point);
+    try { localStorage.setItem(shortPauseKey, JSON.stringify(point)); } catch (e) { /* the current tab can still resume */ }
+    location.hash = "";
+  }
+  function takeShortPause() {
+    if (location.hash !== "#short-resume" || !shortPause) return null;
+    const point = shortPause;
+    history.replaceState(history.state, "", point.hash);
+    shortPause = null;
+    try { localStorage.removeItem(shortPauseKey); } catch (e) { /* storage optional */ }
+    return point;
+  }
+  function showShortLesson(panel, title, caption) {
+    stopLessonSpeech();
+    cur = nest = null;
+    $("#home").hidden = $("#chapter").hidden = true;
+    $("#backBtn").hidden = $(panel).hidden = false;
+    $("#backBtn").setAttribute("aria-label", "ກັບໜ້າຫຼັກ");
+    $("#topTitle").textContent = title;
+    $("#kicker").textContent = caption;
+  }
 
   /* ---------- contents and shareable lesson links ---------- */
   const navigationText = {
@@ -3554,6 +3893,14 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       line(`ບົດທີ ${chapter.id} · ໜ້າ ${chapter.pages}`, `บทที่ ${chapter.id} · หน้า ${chapter.pages}`);
   }
   function renderToc() {
+    $("#shortResume").hidden = !shortPause;
+    if (shortPause) {
+      const track = tenTracks[shortPause.hash], round = track ? !shortPause.run.guided && shortPause.run : shortPause.round;
+      const title = track?.title || changeText.title;
+      const label = $("#shortResumeLabel");
+      if (round) label.replaceChildren(title, " · ", roundPosition(round.i));
+      else label.textContent = title;
+    }
     const next = foundation.find(([id]) => !saved.explained[id]);
     const nextHref = next ? "#bot-" + next[0] : "#toc";
     const nextChapter = next && CHAPTERS.find(c => c.id === next[0]);
@@ -3678,7 +4025,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const url = new URL(location.href);
     url.search = "";
     if (cur) url.hash = /^#bot-/.test(location.hash) ? location.hash : "#bot-" + cur.id;
-    else if (!["#toc", "#homework", ...changeRoutes].includes(location.hash)) url.hash = "";
+    else if (!["#toc", "#homework", ...changeRoutes].includes(location.hash) && !Object.hasOwn(tenTracks, location.hash)) url.hash = "";
     const view = location.href;
     const status = $("#shareStatus"), field = $("#shareUrl");
     try {
@@ -3707,6 +4054,9 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const changeLaunch = $("#changeLaunch");
     changeLaunch.hidden = !!expedition || ![5, 6].includes(c.id);
     changeLaunch.href = c.id === 6 ? "#change-take" : "#change";
+    const tenLaunch = $("#tenLaunch");
+    tenLaunch.hidden = !!expedition || ![4, 7].includes(c.id);
+    tenLaunch.href = c.id === 7 ? "#take-ten" : "#make-ten";
     const routeKey = nestChapters[c.id], launch = $("#nestLaunch");
     launch.hidden = !routeKey || !!expedition;
     if (routeKey) {
@@ -3954,8 +4304,8 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     const fromCatalog = !$("#catalog").hidden;
     showVoicePanel(false);
     voiceFeedback();
-    $("#catalog").hidden = $("#shareUrl").hidden = $("#changeLesson").hidden = true;
-    changeTask = null;
+    $("#catalog").hidden = $("#shareUrl").hidden = $("#changeLesson").hidden = $("#tenLesson").hidden = true;
+    changeTask = changeRound = tenRun = null;
     $("#shareStatus").textContent = "";
     if (location.hash === "#homework") {
       showWorkForm();
@@ -3966,9 +4316,11 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (!$("#homework").hidden) $("#starter").before($("#nestPanel"));
     $("#homework").hidden = true;
     homework = null;
+    const shortCheckpoint = takeShortPause();
     const restoring = location.hash === "#resume" ? resumePoint : null;
     const hash = restoring ? "#bot-" + restoring.chapter : location.hash;
-    if (changeRoutes.includes(hash)) { openChange(hash); return; }
+    if (changeRoutes.includes(hash)) { openChange(hash, shortCheckpoint); return; }
+    if (Object.hasOwn(tenTracks, hash)) { openTen(hash, shortCheckpoint); return; }
     const match = /^#bot-(\w+)(?:-(nest|exchange|more))?$/.exec(hash);
     const chapter = match && CHAPTERS.find(c => String(c.id) === match[1]);
     if (chapter) {
