@@ -1,7 +1,7 @@
 /* Offline support: the game's files stay on the phone. Each launch is answered from the phone at once,
    while a fresh copy is fetched in the background, so a new version arrives on the following launch. */
 const CACHE_PREFIX = "nab-lek-";
-const CACHE = CACHE_PREFIX + "v19";
+const CACHE = CACHE_PREFIX + "v20";
 const GAME = "three.min.js";
 const CORE = [
   "./", "index.html", "lessons.html", "manifest.webmanifest",
@@ -10,19 +10,9 @@ const CORE = [
   "icons/practice-creatures.webp",
 ];
 
-async function cacheGame(cache) {
+async function keepCachedAdventure(cache) {
   const saved = await caches.match(GAME);
-  if (saved) {
-    await cache.put(GAME, saved);
-    return;
-  }
-  const download = new AbortController();
-  const timer = setTimeout(() => download.abort(), 5000);
-  try {
-    await cache.add(new Request(GAME, { cache: "reload", signal: download.signal }));
-  } finally {
-    clearTimeout(timer);
-  }
+  if (saved) await cache.put(GAME, saved);
 }
 
 self.addEventListener("install", (event) => {
@@ -31,7 +21,7 @@ self.addEventListener("install", (event) => {
     const cache = await caches.open(CACHE);
     await Promise.all([
       cache.addAll(requests),
-      cacheGame(cache).catch(() => {}), // Practice updates even when 3D cannot be downloaded.
+      keepCachedAdventure(cache).catch(() => {}), // Fetch the 3D library on the first adventure visit.
     ]);
     await self.skipWaiting();
   })());

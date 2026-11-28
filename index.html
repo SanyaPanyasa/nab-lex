@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2F8BE0">
-<meta name="description" content="ເກມເລກ 3D ສຳລັບເດັກນ້ອຍ · เกมเลข 3D สำหรับเด็ก">
+<meta name="description" content="ເກມຝຶກຄິດເລກ ປ.1 · เกมฝึกคิดเลข ป.1 จับคู่ บวก ลบ และเติมช่องว่าง">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -18,9 +18,6 @@
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mali:wght@400;600;700&display=swap">
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700&display=swap">
 <style>
-/* Layout: a full-screen 3D city (WebGL canvas) under thin HUD layers. Home shows the chosen monster on a
-   stage with toy buttons below; play keeps the question card on top and the joystick and punch buttons
-   at the bottom, so the fight happens in the band between them. */
 :root {
   --sky-bg: #BFE8FF;
   --card: #FFFFFF; --ink: #1D2742; --ink-soft: #56617B; --line: #D2DCEA; --dim: #E6ECF5; --star-off: #D8DFEA;
@@ -176,9 +173,29 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .practice-shell { max-width: 560px; margin: 0 auto; display: grid; gap: 12px; }
 .practice-header { display: flex; align-items: center; gap: 10px; }
 .practice-header h1 { font-size: clamp(20px, 5.2vw, 27px); margin: 0; }
+.practice-header .quick-language { margin-inline-start: auto; }
 .practice-panel { display: grid; gap: 12px; padding: clamp(12px, 4vw, 24px); border: 2px solid var(--line); border-radius: 22px; background: var(--card); }
 .practice-panel h2, .practice-panel p { margin: 0; }
 .practice-panel h2 { font-size: 20px; }
+.practice-topics, .practice-options { display: grid; gap: 8px; }
+.practice-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.practice-links .btn { flex: 1 1 auto; }
+.practice a.btn { display: inline-flex; align-items: center; justify-content: center; text-align: center; color: var(--ink); text-decoration: none; }
+.practice[data-thinking] #practiceMenu { gap: 10px; }
+.practice[data-thinking] .practice-links .btn { padding-inline: 9px; font-size: 14px; }
+.practice[data-thinking] .lesson-level, .practice[data-thinking] #practiceGrowth,
+.practice[data-thinking] #practiceSummaryCompanion, .practice[data-thinking] #practiceAnswerExtras { display: none; }
+.practice[data-thinking] .practice-lesson { min-height: 76px; }
+.practice[data-thinking] .practice-lesson strong { font-size: 19px; }
+.practice[data-thinking] .practice-lesson small { font-size: 14px; }
+.practice[data-thinking] #practiceMore { padding: 0 4px; color: var(--ink-soft); }
+.practice[data-thinking] #practiceMore summary { min-height: 44px; padding: 9px 0; cursor: pointer; }
+.practice[data-thinking] #practiceMore .practice-options { padding-bottom: 4px; }
+.practice-chapter { display: inline-flex; align-items: center; justify-self: center; min-height: 44px; padding-inline: 5px; color: var(--ink-soft); text-align: center; font-size: 14px; text-underline-offset: 3px; }
+@media (min-width: 680px) {
+  .practice[data-thinking] .practice-shell { max-width: 720px; }
+  .practice[data-thinking] .practice-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 .practice-rounds, .practice-answer-actions { display: flex; gap: 8px; }
 .practice-rounds .btn, .practice-answer-actions .btn { flex: 1; min-width: 0; padding-inline: 8px; }
 .practice-rounds [aria-pressed="true"] { background: var(--sky-soft); border-color: var(--sky); }
@@ -260,6 +277,13 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 }
 .practice-compare-stars .extra { border: 1px dashed var(--ink-soft); background: var(--card); }
 .practice-compare-stars .empty { border: 1px dotted var(--ink-soft); opacity: 0.55; }
+.practice[data-thinking] .practice-compare { grid-template-columns: 1fr; }
+.practice[data-thinking] .practice-compare-row { min-height: 74px; padding: 7px 9px; }
+.practice[data-thinking] .practice-compare-stars { grid-template-columns: repeat(var(--pair-slots, 5), minmax(0, 1fr)); gap: 4px; max-width: 500px; }
+.practice[data-thinking] .practice-compare-stars > span { position: relative; min-height: 39px; }
+.practice-compare-stars .paired { background: var(--leaf-soft); border: 1px solid var(--leaf); }
+.practice-compare-stars .paired::after { content: attr(data-pair); position: absolute; right: 1px; bottom: 1px; padding: 0 3px; border-radius: 5px; background: var(--leaf); color: var(--on-good); font: 700 12px/15px var(--font-num); }
+.practice-compare-stars .paired[data-latest] { animation: pop .26s ease-out; }
 .practice-creature {
   display: inline-block; flex: none; width: var(--creature-size, 36px); max-width: 100%; aspect-ratio: 1;
   background: url("icons/practice-creatures.webp") var(--species, 0%) var(--stage, 0%) / 400% 300% no-repeat;
@@ -624,9 +648,9 @@ button.obj:active { transform: scale(0.9); }
 </head>
 <body>
 
-<canvas id="stage" aria-hidden="true"></canvas>
+<canvas id="stage" aria-hidden="true" hidden></canvas>
 
-<section class="screen" id="home">
+<section class="screen" id="home" hidden>
   <div class="home-top">
     <div class="title-card"><h1 id="appTitle"></h1><p id="tagline"></p></div>
     <div class="top-tools">
@@ -671,35 +695,47 @@ button.obj:active { transform: scale(0.9); }
     <header class="practice-header">
       <button class="round-btn" id="practiceBack" type="button"></button>
       <h1 id="practiceTitle"></h1>
+      <button class="round-btn quick-language" type="button" lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
     </header>
     <div class="practice-panel" id="practiceMenu">
-      <div class="language-actions">
-        <button class="btn small cta" id="practiceExample" type="button"></button>
-        <button class="round-btn quick-language" type="button" lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
-      </div>
+      <button class="btn small cta" id="practiceExample" type="button"></button>
       <p id="practiceIntro"></p>
       <div class="practice-rounds" id="practiceRounds" role="group">
         <button class="btn small" id="practiceShortRound" data-round="short" aria-pressed="true" type="button"></button>
         <button class="btn small" id="practiceFullRound" data-round="full" aria-pressed="false" type="button"></button>
       </div>
-      <button class="practice-lesson" id="practiceAdd" data-lesson="add" type="button">
-        <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
-        <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
-      </button>
-      <button class="practice-lesson" id="practiceSub" data-lesson="sub" type="button">
-        <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
-        <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
-      </button>
-      <button class="practice-lesson" id="practiceCompareLesson" data-lesson="compare" type="button">
-        <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
-        <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
-      </button>
-      <button class="practice-lesson" id="practiceFill" data-lesson="fill" type="button">
-        <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
-        <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
-      </button>
-      <a class="btn small" href="lessons.html" id="textbookLink">📖 ບົດຮຽນຕາມປຶ້ມ ປ.1</a>
-      <a class="btn small" href="lessons.html#homework" id="homeworkLink">ເຮັດວຽກບ້ານດ້ວຍຮູບ</a>
+      <div class="practice-topics">
+        <button class="practice-lesson" id="practiceCompareLesson" data-lesson="compare" type="button">
+          <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
+          <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
+        </button>
+        <button class="practice-lesson" id="practiceAdd" data-lesson="add" type="button">
+          <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
+          <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
+        </button>
+        <button class="practice-lesson" id="practiceSub" data-lesson="sub" type="button">
+          <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
+          <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
+        </button>
+        <button class="practice-lesson" id="practiceFill" data-lesson="fill" type="button">
+          <span class="practice-sign" aria-hidden="true"><span class="practice-creature"></span></span>
+          <span><strong class="lesson-name"></strong><small class="lesson-intro"></small><small class="lesson-level"></small></span>
+        </button>
+      </div>
+      <div class="practice-links">
+        <a class="btn small" href="lessons.html#make-ten" id="practiceTenLink" hidden></a>
+        <a class="btn small" href="lessons.html" id="textbookLink"></a>
+        <a class="btn small" href="lessons.html#homework" id="homeworkLink"></a>
+        <a class="btn small" href="./" id="practiceGameLink"></a>
+      </div>
+      <details id="practiceMore" hidden>
+        <summary id="practiceMoreTitle"></summary>
+        <div class="practice-options">
+          <a class="btn small" href="?mode=practice" id="practiceParentLink"></a>
+          <a class="btn small" href="?mode=adventure" id="practiceAdventureLink"></a>
+          <button class="btn small" id="practiceSettings" type="button"></button>
+        </div>
+      </details>
     </div>
     <div class="practice-panel" id="practiceQuestion" hidden>
       <div class="practice-progress"><h2 id="practiceLessonTitle" tabindex="-1"></h2><span id="practiceProgress"></span></div>
@@ -715,16 +751,6 @@ button.obj:active { transform: scale(0.9); }
       <div class="practice-instruction">
         <p id="practicePrompt" aria-live="polite"></p>
         <button class="round-btn" id="practiceSpeak" type="button">🐻</button>
-      </div>
-      <div class="practice-outcome" id="practiceOutcome" hidden>
-        <div class="practice-answer-actions">
-          <button class="btn small cta" id="practiceNext" type="button"></button>
-          <button class="btn small" id="practiceStop" type="button"></button>
-        </div>
-        <div class="practice-answer-actions">
-          <button class="btn small" id="practiceExplain" type="button" aria-expanded="false" aria-controls="practiceCompare practiceModel practiceGuideBox"></button>
-          <button class="btn small" id="practiceSwap" type="button" aria-controls="practiceEquation practiceCompare" hidden></button>
-        </div>
       </div>
       <div class="practice-companion" id="practiceGrowth" role="status" tabindex="-1" hidden>
         <span class="practice-creature" aria-hidden="true"></span><div><strong></strong><small></small></div>
@@ -756,9 +782,20 @@ button.obj:active { transform: scale(0.9); }
         <button class="practice-compare-row" id="practiceCompareLeft" type="button" value="&gt;"><strong></strong><span class="practice-compare-stars" aria-hidden="true"></span></button>
         <button class="practice-compare-row" id="practiceCompareRight" type="button" value="&lt;" data-second><strong></strong><span class="practice-compare-stars" aria-hidden="true"></span></button>
       </div>
+      <button class="btn small cta" id="practicePair" type="button" hidden></button>
       <div class="practice-choices" id="practiceChoices" hidden></div>
       <button class="btn small" id="practiceRecount" type="button" aria-controls="practiceTray practiceCounting" hidden></button>
       <button class="btn small" id="practicePicture" type="button" aria-controls="practiceTray practiceCounting practiceCompare" hidden></button>
+      <div class="practice-outcome" id="practiceOutcome" hidden>
+        <div class="practice-answer-actions">
+          <button class="btn small cta" id="practiceNext" type="button"></button>
+          <button class="btn small" id="practiceStop" type="button"></button>
+        </div>
+        <div class="practice-answer-actions" id="practiceAnswerExtras">
+          <button class="btn small" id="practiceExplain" type="button" aria-expanded="false" aria-controls="practiceCompare practiceModel practiceGuideBox"></button>
+          <button class="btn small" id="practiceSwap" type="button" aria-controls="practiceEquation practiceCompare" hidden></button>
+        </div>
+      </div>
       <section class="practice-model" id="practiceModel" aria-labelledby="practiceModelTitle" hidden>
         <h3 id="practiceModelTitle" tabindex="-1"></h3>
         <div class="practice-model-stars" id="practiceModelStars" aria-hidden="true">
@@ -770,6 +807,7 @@ button.obj:active { transform: scale(0.9); }
         <button class="btn small" id="practiceModelToggle" type="button"></button>
       </section>
       <details class="practice-guide" id="practiceGuideBox"><summary id="practiceGuideTitle"></summary><span id="practiceGuide"></span></details>
+      <a class="practice-chapter" id="practiceChapter" hidden></a>
     </div>
     <div class="practice-panel" id="practiceSummary" hidden>
       <h2 id="practiceSummaryTitle" tabindex="-1"></h2>
@@ -985,6 +1023,21 @@ button.obj:active { transform: scale(0.9); }
       no3d: "ເປີດເກມ 3D ບໍ່ສຳເລັດ ກົດ «ຝຶກກັບຜູ້ປົກຄອງ» ເພື່ອຝຶກເລກໄດ້ເລີຍ",
       retry: "ລອງໃໝ່", prevMonster: "ໂຕກ່ອນ", nextMonster: "ໂຕຕໍ່ໄປ",
       back: "ກັບໜ້າຫຼັກ", replay: "ຟັງຄຳຖາມອີກເທື່ອ", musicBtn: "ເປີດ ຫຼື ປິດດົນຕີ",
+      thinking: {
+        title: "ຫຼິ້ນຄິດເລກ ປ.1", intro: "ເລືອກບົດຝຶກ · ຮອບລະ 3 ຂໍ້",
+        topics: {
+          compare: ["ຈັບຄູ່ກົບ", "ເບິ່ງວ່າກຸ່ມໃດມີກົບຫຼາຍກວ່າ"],
+          add: ["ລວມໄດໂນ", "ເລີ່ມຈາກຈຳນວນທີ່ມີ ແລ້ວນັບຕໍ່"],
+          sub: ["ພາເຕົ່າລົງນ້ຳ", "ເອົາອອກ ແລ້ວນັບໂຕທີ່ຍັງເຫຼືອ"],
+          fill: ["ຕື່ມຊ່ອງຫວ່າງ", "ຫາວ່າຂາດອີກຈັກໂຕຈຶ່ງຄົບ"],
+        },
+        pair: "ຈັບຄູ່ກົບ 1 ຄູ່", pairPrompt: "ຈັບຄູ່ກົບຈາກສອງກຸ່ມ ເທື່ອລະຄູ່",
+        group: (i, n) => `ກຸ່ມ ${i} · ${n} ໂຕ`, pickGroup: "ແຕະກຸ່ມທີ່ມີກົບເຫຼືອ ຫຼື ເລືອກ «ເທົ່າກັນ»",
+        equal: "ກົບມີຄູ່ຄົບທັງສອງກຸ່ມ. ສອງກຸ່ມມີເທົ່າກັນ.",
+        more: (total, extra) => `ກຸ່ມທີ່ມີ ${total} ໂຕ ຍັງມີກົບ ${extra} ໂຕທີ່ບໍ່ມີຄູ່. ກຸ່ມນັ້ນມີຫຼາຍກວ່າ.`,
+        ten: "ຝຶກໃຫ້ຄົບ 10", parent: "ສຳລັບພໍ່ແມ່", settings: "ຕັ້ງຄ່າ", adventure: "ເກມຜະຈົນໄພ 3D",
+        chapter: (n) => `ບົດຮຽນຕາມປຶ້ມ · ບົດທີ ${n}`,
+      },
       practice: {
         title: "ຝຶກກັບຜູ້ປົກຄອງ", intro: "ເລືອກຮອບ ແລະ ບົດຝຶກ",
         round: "ຈຳນວນຂໍ້", short: (n) => `ຮອບສັ້ນ ${n} ຂໍ້`, full: (n) => `ຮອບເຕັມ ${n} ຂໍ້`,
@@ -1199,6 +1252,21 @@ button.obj:active { transform: scale(0.9); }
       no3d: "เปิดเกม 3D ไม่สำเร็จ กด «ฝึกกับผู้ปกครอง» เพื่อฝึกเลขได้เลย",
       retry: "ลองใหม่", prevMonster: "ตัวก่อนหน้า", nextMonster: "ตัวถัดไป",
       back: "กลับหน้าแรก", replay: "ฟังคำถามอีกครั้ง", musicBtn: "เปิดหรือปิดดนตรี",
+      thinking: {
+        title: "เล่นคิดเลข ป.1", intro: "เลือกเรื่องที่อยากฝึก · รอบละ 3 ข้อ",
+        topics: {
+          compare: ["จับคู่กบ", "ดูว่ากลุ่มไหนมีกบมากกว่า"],
+          add: ["รวมไดโนเสาร์", "เริ่มจากจำนวนที่มี แล้วนับต่อ"],
+          sub: ["พาเต่าลงน้ำ", "เอาออก แล้วนับตัวที่เหลือ"],
+          fill: ["เติมช่องว่าง", "หาว่าขาดอีกเท่าไรจึงจะครบ"],
+        },
+        pair: "จับคู่กบ 1 คู่", pairPrompt: "จับกบจากสองกลุ่มมาคู่กันทีละคู่",
+        group: (i, n) => `กลุ่ม ${i} · ${n} ตัว`, pickGroup: "แตะกลุ่มที่มีกบเหลือ หรือเลือก ‘เท่ากัน’",
+        equal: "กบมีคู่ครบทั้งสองกลุ่ม ทั้งสองกลุ่มมีเท่ากัน",
+        more: (total, extra) => `กลุ่มที่มี ${total} ตัว ยังมีกบไม่มีคู่อีก ${extra} ตัว กลุ่มนั้นจึงมีมากกว่า`,
+        ten: "ฝึกให้ครบ 10", parent: "สำหรับพ่อแม่", settings: "ตั้งค่า", adventure: "เกมผจญภัย 3D",
+        chapter: (n) => `บทเรียนตามหนังสือ · บทที่ ${n}`,
+      },
       practice: {
         title: "ฝึกกับผู้ปกครอง", intro: "เลือกรอบและบทฝึก",
         round: "จำนวนข้อ", short: (n) => `รอบสั้น ${n} ข้อ`, full: (n) => `รอบเต็ม ${n} ข้อ`,
@@ -3061,6 +3129,7 @@ button.obj:active { transform: scale(0.9); }
     $("#home").hidden = name !== "home";
     $("#game").hidden = name !== "game";
     $("#practice").hidden = name !== "practice";
+    $("#stage").hidden = name === "practice";
     if (name !== "game") { $("#controls").hidden = true; $("#cut").hidden = true; $("#cutSkip").hidden = true; $("#joy").hidden = true; }
     cam.snap = true;
     cam.mode = "follow";
@@ -4251,6 +4320,10 @@ button.obj:active { transform: scale(0.9); }
     $$(".seg button").forEach((b) => b.setAttribute("aria-checked", String(b.dataset.lang === S.lang)));
     $("#pFallbackRow").hidden = S.lang !== "lo";
     renderPracticeLabels();
+    if (current === "practice" && practice) {
+      if (!$("#practiceQuestion").hidden) renderPracticeContent();
+      else if (!$("#practiceSummary").hidden) renderPracticeSummary();
+    }
     renderHome();
   }
   let stepFocus = "";
@@ -4491,6 +4564,8 @@ button.obj:active { transform: scale(0.9); }
   };
   const SHORT_PRACTICE = [0, 1, 3];
   const GUIDED_QUESTIONS = 3;
+  const THINKING_CHAPTER = {compare: 1, add: 5, sub: 6, fill: 4};
+  let practiceThinking = false;
   let practiceRound = "short";
   let practice = null;
 
@@ -4505,11 +4580,12 @@ button.obj:active { transform: scale(0.9); }
   }
 
   function renderPracticeLessons() {
-    const P = T().practice;
+    const D = T(), P = D.practice;
     $$("#practiceMenu [data-lesson]").forEach((b) => {
       const kind = b.dataset.lesson, lesson = P[kind], stage = practiceStage(kind);
-      $(".lesson-name", b).textContent = lesson.title;
-      $(".lesson-intro", b).textContent = lesson.intro;
+      const [title, intro] = practiceThinking ? D.thinking.topics[kind] : [lesson.title, lesson.intro];
+      $(".lesson-name", b).textContent = title;
+      $(".lesson-intro", b).textContent = intro;
       $(".lesson-level", b).textContent = `${lesson.animal} · ${P.stage(fmt(stage + 1))}`;
       practiceArt(kind, stage, $(".practice-creature", b));
     });
@@ -4525,11 +4601,21 @@ button.obj:active { transform: scale(0.9); }
   }
 
   function renderPracticeLabels() {
-    const D = T(), P = D.practice, drawing = P.drawing;
+    const D = T(), P = D.practice, drawing = P.drawing, thinking = D.thinking;
     $("#practiceBtn").textContent = S.lang === "th" ? "ฝึกกับพ่อแม่" : "ຝຶກກັບພໍ່ແມ່";
-    $("#practiceTitle").textContent = P.title;
+    $("#practiceTitle").textContent = practiceThinking ? thinking.title : P.title;
     $("#practiceBack").innerHTML = ICON.back;
-    $("#practiceIntro").textContent = P.intro;
+    $("#practiceIntro").textContent = practiceThinking ? digitsIn(thinking.intro) : P.intro;
+    $("#practiceRounds").hidden = $("#practiceExample").hidden = $("#homeworkLink").hidden = $("#practiceGameLink").hidden = practiceThinking;
+    $("#practiceTenLink").hidden = $("#practiceMore").hidden = !practiceThinking;
+    $("#textbookLink").href = practiceThinking ? "lessons.html#toc" : "lessons.html";
+    $("#practiceTenLink").textContent = digitsIn(thinking.ten);
+    $("#practiceGameLink").textContent = digitsIn(thinking.title);
+    $("#practiceMoreTitle").textContent = thinking.parent;
+    $("#practiceParentLink").textContent = P.title;
+    $("#practiceAdventureLink").textContent = digitsIn(thinking.adventure);
+    $("#practiceSettings").textContent = thinking.settings;
+    $("#practicePair").textContent = digitsIn(thinking.pair);
     label("#practiceRounds", P.round);
     $("#practiceShortRound").textContent = P.short(fmt(SHORT_PRACTICE.length));
     $("#practiceFullRound").textContent = P.full(fmt(PRACTICE_FACTS.length));
@@ -4556,6 +4642,7 @@ button.obj:active { transform: scale(0.9); }
   }
 
   function showPracticeMenu() {
+    const previous = practice?.kind;
     practice = null;
     hush();
     const url = new URL(location.href);
@@ -4567,22 +4654,28 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceMenu").hidden = false;
     $("#practiceQuestion").hidden = true;
     $("#practiceSummary").hidden = true;
+    $("#practiceBack").hidden = practiceThinking;
     label("#practiceBack", T().back);
     $("#practice").scrollTop = 0;
-    $("#practiceExample").focus({ preventScroll: true });
+    const focus = practiceThinking ? previous && $(`#practiceMenu [data-lesson="${previous}"]`) : $("#practiceExample");
+    focus?.focus({ preventScroll: true });
   }
 
   function practiceBack() {
     if ($("#practiceMenu").hidden) { showPracticeMenu(); return; }
+    if (practiceThinking) return;
     const url = new URL(location.href);
+    if (url.searchParams.get("mode") === "adventure") {
+      setScreen("home");
+      $("#practiceBtn").focus();
+      musicPlay("home");
+      return;
+    }
     if (url.searchParams.get("mode") === "practice") {
       url.searchParams.delete("mode");
       history.replaceState(history.state, "", url);
     }
-    setScreen("home");
-    $("#practiceBtn").focus();
-    musicPlay("home");
-    loadGame3D();
+    openPractice(true);
   }
 
   function practicePrompt(D, N) {
@@ -4591,9 +4684,17 @@ button.obj:active { transform: scale(0.9); }
     if (done) {
       if (kind === "compare") {
         const { left, right, sign } = practiceComparison();
+        if (practiceThinking) return left === right ? D.thinking.equal : D.thinking.more(N(Math.max(left, right)), N(Math.abs(left - right)));
         return `${N(left)} ${D.symWord[sign]} ${N(right)}`;
       }
       return lesson.done(N(part), N(whole), N(other));
+    }
+    if (practiceThinking && kind === "compare" && picture) {
+      if (practicePairing()) return D.thinking.pairPrompt;
+      return wrong === null ? D.thinking.pickGroup : lesson.again;
+    }
+    if (practiceThinking && picture && moved.size < moves) {
+      return lesson.step(N(practicePosition()), N(activity === "fill" ? whole : moves - moved.size));
     }
     if (wrong !== null) {
       let hint;
@@ -4696,13 +4797,14 @@ button.obj:active { transform: scale(0.9); }
   function renderPracticeQuestion() {
     const { kind, activity, moved, moves, wrong, done, picture, sketch, showMethod } = practice;
     const P = T().practice, lesson = P[activity];
-    const compare = kind === "compare", ready = picture ? moved.size === moves : !sketch || sketch.ready;
+    const compare = kind === "compare", pairing = practicePairing();
+    const ready = picture ? moved.size === moves && !pairing : !sketch || sketch.ready;
     const prompt = practicePrompt(T(), fmt);
     if ($("#practicePrompt").textContent !== prompt) $("#practicePrompt").textContent = prompt;
-    const counting = picture && !compare && !done;
+    const counting = picture && !compare && (!done || practiceThinking);
     $("#practiceTray").hidden = !counting;
-    $("#practiceCounting").hidden = !counting;
-    $("#practiceRecount").hidden = !counting || wrong === null;
+    $("#practiceCounting").hidden = !counting || done;
+    $("#practiceRecount").hidden = !counting || done || wrong === null;
     $("#practiceDrawing").hidden = !sketch || picture || done;
     if (!$("#practiceDrawing").hidden) {
       $("#practiceCanvas").hidden = sketch.paper;
@@ -4710,8 +4812,9 @@ button.obj:active { transform: scale(0.9); }
       $("#practiceDrawPaper").textContent = sketch.paper ? P.drawing.screen : P.drawing.paper;
       $("#practiceDrawContinue").hidden = sketch.ready;
     }
-    $("#practiceCompare").hidden = !compare || !(done ? showMethod : picture);
-    const choosingGroup = compare && picture && !done;
+    $("#practiceCompare").hidden = !compare || !(picture && (practiceThinking || !done) || showMethod);
+    $("#practicePair").hidden = !pairing;
+    const choosingGroup = compare && picture && ready && !done;
     $("#practiceChoices").toggleAttribute("data-groups", choosingGroup);
     if (compare) {
       $$("#practiceCompare button").forEach((group) => {
@@ -4729,8 +4832,8 @@ button.obj:active { transform: scale(0.9); }
     $("#practiceSwap").hidden = !compare;
     $("#practiceExplain").textContent = showMethod ? P.hideExplain : P.explain;
     $("#practiceExplain").setAttribute("aria-expanded", String(showMethod));
-    $("#practiceGuideBox").hidden = done && !showMethod;
-    $("#practiceModel").hidden = !done || compare || !showMethod;
+    $("#practiceGuideBox").hidden = practiceThinking || done && !showMethod;
+    $("#practiceModel").hidden = practiceThinking || !done || compare || !showMethod;
     $$("#practiceChoices button").forEach((b) => b.toggleAttribute("data-wrong", b.value === String(wrong)));
   }
 
@@ -4757,19 +4860,36 @@ button.obj:active { transform: scale(0.9); }
     return { left, right, sign: comparisonSign(left, right), swapped };
   }
 
+  function practicePairing() {
+    const {kind, picture, done, pairs, part, whole} = practice;
+    return practiceThinking && kind === "compare" && picture && !done && pairs < Math.min(part, whole);
+  }
+
+  function focusPracticePicture() {
+    const target = practice.kind !== "compare" ? "#practiceTray [data-next]" : practicePairing() ? "#practicePair" : "#practiceCompareLeft";
+    $(target)?.focus();
+  }
+
   function renderPracticeComparison() {
     const { left, right, swapped } = practiceComparison();
-    const lesson = T().practice.compare;
+    const D = T(), lesson = D.practice.compare;
     const paired = Math.min(left, right), slots = Math.max(left, right);
     const leftGroup = $("#practiceCompareLeft"), rightGroup = $("#practiceCompareRight");
     leftGroup.toggleAttribute("data-second", swapped);
     rightGroup.toggleAttribute("data-second", !swapped);
-    $("strong", leftGroup).textContent = lesson.left(fmt(left));
-    $("strong", rightGroup).textContent = lesson.right(fmt(right));
+    $("strong", leftGroup).textContent = practiceThinking ? D.thinking.group(fmt(1), fmt(left)) : lesson.left(fmt(left));
+    $("strong", rightGroup).textContent = practiceThinking ? D.thinking.group(fmt(2), fmt(right)) : lesson.right(fmt(right));
+    $("#practiceCompare").style.setProperty("--pair-slots", slots);
     [[leftGroup, left], [rightGroup, right]].forEach(([group, count]) => {
       $(".practice-compare-stars", group).replaceChildren(...range(slots).map((i) => {
         const empty = i >= count;
-        const slot = el("span", empty ? "empty" : i >= paired ? "extra" : "");
+        const matched = practiceThinking && i < practice.pairs;
+        const extra = i >= paired && (!practiceThinking || practice.pairs === paired);
+        const slot = el("span", empty ? "empty" : matched ? "paired" : extra ? "extra" : "");
+        if (matched) {
+          slot.dataset.pair = fmt(i + 1);
+          slot.toggleAttribute("data-latest", i === practice.pairs - 1 && !practice.done);
+        }
         if (!empty) slot.append(practiceArt("compare"));
         return slot;
       }));
@@ -4822,13 +4942,19 @@ button.obj:active { transform: scale(0.9); }
   }
 
   function answerPractice(value, fromKeyboard) {
-    if (practice.done) return;
+    if (practice.done || practicePairing()) return;
     const { kind, answer, picture, wrong, step } = practice;
     practice.done = value === answer;
     practice.wrong = practice.done ? null : value;
     if (practice.done && kind === "compare" && picture) practice.showMethod = true;
+    const showHelp = practiceThinking && !practice.done && !picture;
+    if (showHelp) practice.picture = true;
     renderPracticeQuestion();
-    if (!practice.done) return;
+    if (!practice.done) {
+      if (showHelp && fromKeyboard) focusPracticePicture();
+      if (practiceThinking) say(practicePrompt);
+      return;
+    }
     hush();
     renderPracticeNotation();
     if (kind !== "compare") renderPracticeModel();
@@ -4838,7 +4964,23 @@ button.obj:active { transform: scale(0.9); }
     else $("#practiceOutcome").scrollIntoView({ block: "nearest" });
   }
 
+  function thinkingQuestions(kind) {
+    let pairs;
+    if (kind === "compare") {
+      const [first, second] = pick([[2, 4], [4, 2], [3, 5], [5, 3]]);
+      const equal = pick([3, 4, 5]);
+      pairs = [[first, second], [equal, equal], [second + 1, first + 1]];
+    } else {
+      const guide = kind === "fill" ? COUNT_ON_EXAMPLE.questions[0] : {part: 2, whole: 5};
+      const pool = PRACTICE_ROUNDS[kind].slice(3).flat().filter(([a, b]) => a !== guide.part || b !== guide.whole);
+      pairs = [[guide.part, guide.whole], ...shuffle(pool).slice(0, 2)];
+    }
+    return pairs.map(([part, whole], index) => ({part, whole, diagram: kind === "fill" && index === 1 ? "part" : null,
+      step: index === 0 ? "objects" : "think"}));
+  }
+
   function startPractice(kind) {
+    if (practiceThinking) { showPracticeQuestion({kind, questions: thinkingQuestions(kind)}, 0); return; }
     const rounds = PRACTICE_ROUNDS[kind], short = practiceRound === "short";
     const questions = (short ? SHORT_PRACTICE : range(rounds.length)).map((source, index) => {
       const [part, whole] = pick(rounds[source]);
@@ -4859,17 +5001,14 @@ button.obj:active { transform: scale(0.9); }
     const picture = step === "objects";
     if (step === "draw" && sketchContext === undefined) sketchContext = sketchCanvas.getContext("2d");
     const sketch = step === "draw" ? { strokes: [], paper: !sketchContext, ready: false } : null;
+    const expectedParts = picture && activity !== "add" && part !== other;
+    const values = compare ? ["<", "=", ">"] : expectedParts ? [part, other, whole].sort((a, b) => a - b) : choicesFor(answer, 0, 10);
     practice = {
-      kind, activity, diagram, questions, index, step, part, whole, other, answer, moves, picture, sketch,
+      kind, activity, diagram, questions, index, step, part, whole, other, answer, values, moves, picture, sketch, pairs: 0,
       moved: new Set(), wrong: null, done: false, showMethod: false, split: activity === "sub", swapped: false,
     };
-    const D = T(), P = D.practice;
-    $("#practiceLessonTitle").textContent = P[kind].title;
-    $("#practiceProgress").textContent = P.progress(fmt(index + 1), fmt(questions.length));
-    $("#practiceNext").textContent = index + 1 === questions.length ? P.finish : P.next;
-    $("#practiceSpeak").hidden = !S.voice || !voiceLang();
     $("#practiceGrowth").hidden = true;
-    label("#practiceBack", P.choose);
+    $("#practiceBack").hidden = false;
     sketchStroke = null;
     if (sketch) {
       practiceArt(kind, practiceStage(kind), $("#practiceDrawArt"));
@@ -4878,10 +5017,30 @@ button.obj:active { transform: scale(0.9); }
       selectPracticeInk($("#practiceInkBlue"));
       $("#practiceDrawUndo").disabled = true;
     }
+    renderPracticeContent();
+    $("#practiceMenu").hidden = true;
+    $("#practiceSummary").hidden = true;
+    $("#practiceQuestion").hidden = false;
+    $("#practice").scrollTop = 0;
+    $("#practiceLessonTitle").focus({ preventScroll: true });
+    if (sketch) resizePracticeSketch();
+  }
+
+  function renderPracticeContent() {
+    const {kind, index, questions, values, done} = practice;
+    const D = T(), P = D.practice;
+    const compare = kind === "compare";
+    $("#practiceLessonTitle").textContent = practiceThinking ? D.thinking.topics[kind][0] : P[kind].title;
+    $("#practiceProgress").textContent = P.progress(fmt(index + 1), fmt(questions.length));
+    $("#practiceNext").textContent = index + 1 === questions.length ? P.finish : P.next;
+    $("#practiceSpeak").hidden = !S.voice || !voiceLang();
+    label("#practiceBack", P.choose);
+    const chapter = $("#practiceChapter");
+    chapter.hidden = !practiceThinking;
+    chapter.href = "lessons.html#bot-" + THINKING_CHAPTER[kind];
+    chapter.textContent = D.thinking.chapter(fmt(THINKING_CHAPTER[kind]));
     renderPracticeNotation();
     buildPracticePicture();
-    const expectedParts = picture && activity !== "add" && part !== other;
-    const values = compare ? ["<", "=", ">"] : expectedParts ? [part, other, whole].sort((a, b) => a - b) : choicesFor(answer, 0, 10);
     $("#practiceChoices").replaceChildren(...values.map((value) => {
       const b = el("button", "btn num");
       b.type = "button";
@@ -4895,22 +5054,23 @@ button.obj:active { transform: scale(0.9); }
       b.addEventListener("click", (e) => answerPractice(value, e.detail === 0));
       return b;
     }));
+    if (done && !compare) renderPracticeModel();
+    if (!$("#practiceGrowth").hidden) renderPracticeCompanion($("#practiceGrowth"), kind, true);
     renderPracticeQuestion();
-    $("#practiceMenu").hidden = true;
-    $("#practiceSummary").hidden = true;
-    $("#practiceQuestion").hidden = false;
-    $("#practice").scrollTop = 0;
-    $("#practiceLessonTitle").focus({ preventScroll: true });
-    if (sketch) resizePracticeSketch();
   }
 
-  function showPracticeSummary() {
+  function renderPracticeSummary() {
     const { kind, index, questions } = practice;
     const P = T().practice, completed = fmt(index + 1);
-    hush();
     $("#practiceSummaryTitle").textContent = index + 1 === questions.length ? P.summary(completed) : P.stopped(completed);
     $("#practiceSummaryNote").textContent = digitsIn(questions === COUNT_ON_EXAMPLE.questions ? P.exampleHome : P[kind].home);
     renderPracticeCompanion($("#practiceSummaryCompanion"), kind, false);
+    label("#practiceBack", P.choose);
+  }
+
+  function showPracticeSummary() {
+    hush();
+    renderPracticeSummary();
     $("#practiceQuestion").hidden = true;
     $("#practiceSummary").hidden = false;
     $("#practice").scrollTop = 0;
@@ -5004,14 +5164,18 @@ button.obj:active { transform: scale(0.9); }
     }, { passive: false });
   }
 
-  function openPractice() {
+  function openPractice(thinking = false) {
     token++;  // a tap can switch modes while the city is waiting for fonts
     musicStop();
+    practiceThinking = thinking;
+    $("#practice").toggleAttribute("data-thinking", thinking);
+    renderPracticeLabels();
     setScreen("practice");
-    if (new URLSearchParams(location.search).get("example") === COUNT_ON_EXAMPLE.id) showPracticeQuestion(COUNT_ON_EXAMPLE, 0);
+    if (!thinking && new URLSearchParams(location.search).get("example") === COUNT_ON_EXAMPLE.id) showPracticeQuestion(COUNT_ON_EXAMPLE, 0);
     else showPracticeMenu();
   }
-  $("#practiceBtn").addEventListener("click", openPractice);
+  $("#practiceBtn").addEventListener("click", () => openPractice());
+  $("#practiceSettings").addEventListener("click", openParent);
   $$("#practiceRounds [data-round]").forEach((button) => button.addEventListener("click", () => {
     practiceRound = button.dataset.round;
     $$("#practiceRounds [data-round]").forEach((node) => node.setAttribute("aria-pressed", String(node === button)));
@@ -5034,6 +5198,13 @@ button.obj:active { transform: scale(0.9); }
   $$("#practiceCompare button").forEach((group) => group.addEventListener("click", (e) => {
     answerPractice(group.value, e.detail === 0);
   }));
+  $("#practicePair").addEventListener("click", (e) => {
+    if (!practicePairing()) return;
+    practice.pairs++;
+    renderPracticeComparison();
+    renderPracticeQuestion();
+    if (!practicePairing() && e.detail === 0) $("#practiceCompareLeft").focus();
+  });
   $$("#practiceSketchTools [data-ink]").forEach((button) => onPracticeSketchAction(button, () => selectPracticeInk(button)));
   onPracticeSketchAction($("#practiceDrawUndo"), () => {
     const { strokes } = practice.sketch;
@@ -5062,7 +5233,7 @@ button.obj:active { transform: scale(0.9); }
     practice.picture = true;
     practice.wrong = null;
     renderPracticeQuestion();
-    if (e.detail === 0) $(practice.kind === "compare" ? "#practiceCompareLeft" : "#practiceTray [data-next]").focus();
+    if (e.detail === 0) focusPracticePicture();
   });
   $("#practiceRecount").addEventListener("click", (e) => {
     hush();
@@ -5235,8 +5406,11 @@ button.obj:active { transform: scale(0.9); }
     try { synth.addEventListener("voiceschanged", refreshVoices); } catch (e) { synth.onvoiceschanged = refreshVoices; }
     setTimeout(refreshVoices, 1500);
   }
-  if (new URLSearchParams(location.search).get("mode") === "practice") openPractice();
-  else loadGame3D();
+  const entryMode = new URLSearchParams(location.search).get("mode");
+  if (entryMode === "adventure") {
+    setScreen("home");
+    loadGame3D();
+  } else openPractice(entryMode !== "practice");
   // A completed tap can unlock Web Audio on touch screens.
   function unlockAudio(event) {
     if (!event.isTrusted) return;
