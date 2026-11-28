@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F6F7F9">
 <meta name="description" content="ບົດຮຽນຄະນິດສາດ ປ.1 ຕາມແບບຮຽນລາວ ທີລະບົດ · บทเรียนคณิตศาสตร์ ป.1 ตามแบบเรียนลาว">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ຫ້ອງຮຽນໝີນ້ອຍ ປ.1 · ห้องเรียนหมีน้อย ป.1">
+<meta property="og:description" content="ບົດຮຽນຄະນິດສາດຕາມປຶ້ມ ປ.1 ແລະ ໂຈດທີ່ແຕະລອງໄດ້ · บทเรียนตามแบบเรียนลาวและโจทย์ที่แตะลองได้">
+<meta property="og:image" content="https://sanyapanyasa.github.io/nab-lex/icons/icon-512.png">
 <link rel="icon" href="icons/favicon-48.png" sizes="48x48" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>ຫ້ອງຮຽນໝີນ້ອຍ ປ.1</title>
@@ -16,8 +20,9 @@
    through three tabs (learn, practise, grown-ups), so the child only ever sees one picture, one
    sentence and one row of big buttons. */
 :root {
-  --bg: #F6F7F9; --card: #FFFFFF; --ink: #1E2638; --soft: #697285; --line: #E3E6EB;
-  --accent: #D94A64; --accent-soft: #FCE9ED; --on-accent: #FFFFFF;
+  --bg: #F3F6F4; --card: #FFFFFF; --ink: #162E27; --soft: #4D645B; --line: #D9E5DE;
+  --accent: #206850; --accent-soft: #DDF1E7; --on-accent: #FFFFFF;
+  --hero: #DFF2E8; --hero-edge: #AED3C0;
   --good: #178A52; --good-soft: #E2F4EA; --on-good: #FFFFFF;
   --sun: #F2B200; --sun-soft: #FFF5D6; --on-sun: #2A2108;
   --sky: #2A78CF; --sky-soft: #E3EEFB; --tomato: #D9482F; --tomato-soft: #FDE6E0; --leaf: #17905A; --grape: #7452DB;
@@ -32,7 +37,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #12161F; --card: #1B212D; --ink: #EDF0F6; --soft: #A3ABBC; --line: #2B3343;
-    --accent: #FF7A92; --accent-soft: #3A1F28; --on-accent: #2A0A12;
+    --accent: #89DDBD; --accent-soft: #223F36; --on-accent: #10291F;
+    --hero: #223C34; --hero-edge: #466E61;
     --good: #3DCB86; --good-soft: #143426; --on-good: #06200F;
     --sun: #FFC93D; --sun-soft: #352C12; --on-sun: #231A04;
     --sky: #6AB0F7; --sky-soft: #172C46; --tomato: #FF7E66; --tomato-soft: #3B2019; --leaf: #3DCB86; --grape: #A98CFF;
@@ -41,7 +47,8 @@
 }
 :root[data-theme="dark"] {
   --bg: #12161F; --card: #1B212D; --ink: #EDF0F6; --soft: #A3ABBC; --line: #2B3343;
-  --accent: #FF7A92; --accent-soft: #3A1F28; --on-accent: #2A0A12;
+  --accent: #89DDBD; --accent-soft: #223F36; --on-accent: #10291F;
+  --hero: #223C34; --hero-edge: #466E61;
   --good: #3DCB86; --good-soft: #143426; --on-good: #06200F;
   --sun: #FFC93D; --sun-soft: #352C12; --on-sun: #231A04;
   --sky: #6AB0F7; --sky-soft: #172C46; --tomato: #FF7E66; --tomato-soft: #3B2019; --leaf: #3DCB86; --grape: #A98CFF;
@@ -59,29 +66,32 @@ button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulat
 h1, h2, h3 { margin: 0; line-height: 1.35; text-wrap: balance; }
 .th { font-family: var(--font-th); }
 .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
-.wrap { max-width: 640px; margin: 0 auto; }
+.wrap { max-width: 720px; margin: 0 auto; }
 
 /* top bar */
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; gap: 12px; padding: 12px 0; background: var(--bg); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; gap: 10px; padding: 12px 0; margin-bottom: 8px; background: var(--bg); }
 .ttl { flex: 1; min-width: 0; }
 .kicker { font: 600 13px/1.3 var(--font-lo); color: var(--soft); }
 .top h1 { font-size: 21px; }
 .icon-btn { min-width: 44px; height: 44px; padding: 0 12px; border-radius: 999px; border: 0; background: var(--card); display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
 .icon-btn small { font: 600 13px/1 var(--font-lo); color: var(--soft); }
+.voice-symbol { filter: grayscale(1); }
 
 /* contents */
-.lead { margin: 4px 0 16px; color: var(--soft); }
-.lead .th { display: block; font-size: 14px; }
+.catalog-search { display: grid; gap: 6px; margin: 0 0 14px; font-weight: 600; }
+.catalog-search input, #shareUrl { min-height: 48px; padding: 8px 12px; width: 100%; border: 1px solid var(--hero-edge); border-radius: 12px; background: var(--card); color: var(--ink); font: inherit; }
+.catalog-search input:focus, #shareUrl:focus { outline: 2px solid var(--focus); outline-offset: 1px; }
 .toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.toc a { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 16px; background: var(--card); color: inherit; text-decoration: none; }
+.toc a { display: flex; align-items: center; min-height: 68px; gap: 12px; padding: 11px 14px; height: 100%; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: inherit; text-decoration: none; }
 .toc a:hover { background: var(--accent-soft); }
-.toc .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 700 16px/1 var(--font-num); }
+.toc .n { flex: none; width: 37px; height: 37px; border-radius: 10px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 700 18px/1 var(--font-num); }
 .toc .review .n { background: var(--good-soft); color: var(--good); }
 .toc .t { flex: 1; min-width: 0; font-weight: 600; line-height: 1.4; }
 .toc .t small { display: block; font: 13px/1.4 var(--font-lo); color: var(--soft); }
 .toc .done { flex: none; font: 600 14px/1.4 var(--font-num); color: var(--soft); text-align: right; }
 .toc .done span { display: block; }
+@media (min-width: 680px) { .toc { grid-template-columns: 1fr 1fr; } }
 
 /* tabs */
 .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; margin-bottom: 14px; border-radius: 14px; background: var(--card); }
@@ -109,7 +119,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .qdots i.now { background: var(--accent); }
 .qdots i.ok { background: var(--sun); }
 .qdots i.help { background: var(--sky); }
-.qtext { margin: 0 4px 14px; font-size: 22px; font-weight: 700; line-height: 1.5; text-align: center; }
+.qtext { margin: 0 0 14px; font-size: clamp(22px, 5vw, 28px); font-weight: 700; line-height: 1.5; text-align: center; }
 .vis { display: grid; place-items: center; min-height: 120px; padding: 16px 12px; border-radius: 20px; background: var(--card); overflow-x: auto; }
 .choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 18px; }
 .choice { min-width: 84px; min-height: 72px; padding: 6px 18px; border-radius: 20px; border: 0; background: var(--card); font: 700 32px/1.2 var(--font-num); box-shadow: 0 2px 0 var(--line); }
@@ -117,7 +127,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .choice.pic { font: 40px/1 var(--font-emoji); }
 .choice:active { transform: translateY(2px); box-shadow: none; }
 .choice.right { background: var(--good); color: var(--on-good); box-shadow: none; }
-.choice.wrong { opacity: .3; animation: shake .3s; box-shadow: none; }
+.choice.wrong { color: var(--soft); outline: 2px dashed var(--soft); outline-offset: -3px; box-shadow: none; text-decoration: line-through; animation: shake .25s; }
 .feedback { display: grid; gap: 12px; justify-items: center; margin-top: 18px; padding: 14px 16px; border-radius: 18px; text-align: center; }
 .feedback.good { background: var(--good-soft); }
 .feedback.help { background: var(--sky-soft); }
@@ -128,6 +138,23 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .result .big { font: 700 44px/1 var(--font-num); color: var(--sun); letter-spacing: 6px; }
 .result .row { gap: 10px; }
 .plain { min-height: 52px; padding: 0 22px; border-radius: 999px; border: 0; background: var(--card); font-weight: 700; font-size: 17px; text-decoration: none; color: inherit; display: inline-flex; align-items: center; }
+.quiz-tools { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.quiz-tools { margin: 0 0 8px; }
+.quiz-tools .qdots { margin: 0; }
+.quiz-tools .pause-btn { margin: 0; padding: 0 9px; }
+.quiz-card { padding: clamp(14px, 4vw, 24px); background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
+.quiz-card .vis, .quiz-card .choice, .quiz-card .plain { background: var(--bg); }
+.quiz-card .vis { min-height: 104px; }
+.quiz-card .choice.right { background: var(--good); }
+.quiz-card .choices { gap: 8px; margin: 14px 0 0; }
+.quiz-card .choice { min-height: 60px; min-width: min(30%, 77px); padding: 6px 13px; }
+.quiz-aids { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 12px; }
+.quiz-aids .secondary { margin-inline: 0; padding-inline: 12px; }
+.quiz-aids .secondary:focus-visible, .school-links a:focus-visible { background: var(--accent-soft); }
+.quiz-card .feedback:empty { display: none; }
+.quiz-card .result { padding: 8px 0; }
+.quiz-card .result p { margin: 0; }
+.quiz-card .result > .go { display: inline-flex; align-items: center; text-decoration: none; text-align: center; }
 
 /* grown-ups */
 .parent { font: 16px/1.65 var(--font-lo); }
@@ -186,13 +213,18 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .grid100 span.on { background: var(--sun); color: var(--on-sun); }
 svg text { font-family: var(--font-num); }
 .big-lao { font: 700 56px/1.2 var(--font-lo); letter-spacing: 6px; }
-.start-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; margin-bottom: 18px; border: 1px solid var(--sky); border-radius: 16px; background: var(--sky-soft); color: var(--ink); text-decoration: none; font-weight: 700; }
-.start-link .start-name { flex: 1; }
-.start-link strong, .start-link small { display: block; }
-.start-link small { color: var(--ink); font-size: 14px; font-weight: 600; margin-top: 2px; }
-.foundation-link { background: var(--good-soft); border-color: var(--good); }
-.school-links { display: flex; gap: 8px 18px; flex-wrap: wrap; margin-bottom: 10px; }
-.school-links .secondary { display: inline-flex; align-items: center; margin: 0; }
+.foundation-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: clamp(16px, 4vw, 30px); margin-bottom: 12px; color: var(--ink); background: var(--hero); border: 1px solid var(--hero-edge); border-radius: 24px; text-decoration: none; }
+.foundation-link h2 { font-size: clamp(23px, 5.5vw, 33px); text-wrap: wrap; }
+.foundation-link p { margin: 0 0 4px; color: var(--soft); font-size: 15px; font-weight: 600; }
+.foundation-link .go { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; font-size: 17px; padding-inline: 16px; }
+.foundation-link .lesson-dino { width: clamp(76px, 24vw, 144px); height: auto; aspect-ratio: 1; filter: drop-shadow(0 8px 6px #10291f24); }
+.school-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.school-links a { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-height: 82px; padding: 12px; background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; line-height: 1.45; }
+.school-links small { color: var(--soft); font-size: 14px; }
+.home-restart { display: inline-flex; align-items: center; margin: 0 0 8px; }
+.share-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--line); color: var(--soft); font-size: 15px; }
+.share-footer .secondary { display: inline-flex; align-items: center; margin: 0; }
+.share-footer p { margin: 0; }
 .quick-coach { padding: 4px 14px; margin-top: 10px; border-radius: 14px; background: var(--card); font-size: 15px; }
 .quick-coach summary { cursor: pointer; min-height: 44px; align-content: center; font-weight: 700; }
 .quick-coach[open] { padding-bottom: 10px; }
@@ -245,8 +277,8 @@ svg text { font-family: var(--font-num); }
 #toc { scroll-margin-top: 86px; }
 .activity { padding: clamp(14px, 4vw, 28px); border-radius: 20px; background: var(--card); text-align: center; }
 .activity .phase { margin: 0 0 8px; font-size: 14px; color: var(--soft); }
-.activity h2 { font-size: clamp(20px, 4vw, 26px); line-height: 1.55; }
-.activity-picture { display: grid; justify-items: center; align-content: center; gap: 12px; min-height: 110px; margin: 16px auto; }
+.activity h2 { font-size: clamp(22px, 5vw, 28px); line-height: 1.5; }
+.activity-picture { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: center; gap: 12px; width: 100%; min-height: 110px; margin: 16px auto; }
 .activity-picture:empty { display: none; }
 .activity .eq { font-size: clamp(28px, 7vw, 38px); gap: 8px; }
 .activity .eq .box { min-width: 42px; height: 46px; border-radius: 9px; }
@@ -255,17 +287,17 @@ svg text { font-family: var(--font-num); }
 .activity .choice.word { font-size: 17px; }
 .activity .choice[aria-disabled="true"] { color: var(--soft); text-decoration: line-through; }
 .activity .go { min-height: 48px; }
-.secondary { display: block; margin: 8px auto 0; min-height: 44px; border: 0; border-radius: 12px; background: transparent; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; font-size: 15px; }
+.secondary { display: block; margin: 8px auto 0; min-height: 44px; border: 0; border-radius: 12px; background: transparent; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; font-size: 16px; }
 .activity .feedback { margin: 12px 0 0; }
 .activity .feedback:empty { display: none; }
-.act-counters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); width: min(100%, 310px); gap: 5px; }
-.act-token { position: relative; display: grid; place-items: center; min-height: 45px; border-radius: 12px; background: var(--bg); border: 2px solid var(--line); font: 26px/1 var(--font-emoji); }
+.act-counters { display: grid; grid-template-columns: repeat(var(--columns, 5), minmax(0, 1fr)); width: min(100%, 350px); gap: 6px; }
+.act-token { position: relative; display: grid; place-items: center; min-height: 54px; min-width: 0; padding: 0; border-radius: 12px; background: var(--bg); border: 2px solid var(--line); font: clamp(27px, 8vw, 36px)/1 var(--font-emoji); }
 .act-token.new, .act-token.counted { background: var(--good-soft); border-color: var(--good); }
 .act-token.empty { background: transparent; border: 2px dashed var(--soft); }
 .act-token.gone { color: var(--soft); background: var(--bg); }
 .act-token.gone span { opacity: .4; }
 .act-token.gone::after { content: "×"; position: absolute; inset: 0; display: grid; place-items: center; font: 700 35px/1 var(--font-num); color: var(--ink); }
-.act-token b { position: absolute; right: -2px; bottom: -2px; min-width: 17px; border-radius: 8px; background: var(--good); color: var(--on-good); font: 700 12px/17px var(--font-num); }
+.act-token b { position: absolute; right: -2px; bottom: -2px; min-width: 21px; border-radius: 8px; background: var(--good); color: var(--on-good); font: 700 15px/21px var(--font-num); }
 .act-token[data-move], .pair-token[data-move] { border: 2px dashed var(--sky); }
 .act-counts { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 16px; font-size: 16px; }
 .act-counts b { font-size: 20px; }
@@ -286,14 +318,15 @@ svg text { font-family: var(--font-num); }
 .stage svg, .vis svg, .activity svg { max-width: 100%; height: auto; }
 .col, .row, .activity-picture > * { min-width: 0; max-width: 100%; }
 
-.nest-links { margin: 0 0 18px; padding: 12px 15px; border-radius: 16px; background: var(--card); }
-.nest-links h2 { font-size: 17px; }
+.nest-links { margin: 0; padding: 4px 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+.nest-links summary { min-height: 48px; align-content: center; cursor: pointer; font-weight: 700; }
+.nest-links[open] { padding-bottom: 12px; }
 .nest-links div { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px; margin-top: 8px; }
 .nest-links a, .nest-launch { display: grid; align-content: center; min-height: 44px; border-radius: 10px; background: var(--good-soft); color: var(--ink); text-decoration: none; text-align: center; font-weight: 700; }
 .nest-links #nestContinue { background: transparent; font-size: 15px; text-decoration: underline; }
 .nest-launch { padding: 7px 12px; margin: 10px 0 0; }
 .nest-game { padding: clamp(12px,3vw,22px); border-radius: 22px; background: var(--card); }
-.nest-game h2 { margin: 4px 0 10px; font: 700 clamp(20px,4vw,25px)/1.45 var(--font-lo); text-align: center; }
+.nest-game h2 { margin: 4px 0 10px; font: 700 clamp(22px,5vw,28px)/1.45 var(--font-lo); text-align: center; }
 .nest-level { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--soft); font-size: 14px; }
 .nest-level .lesson-dino { width: 38px; height: 38px; }
 .nest-game[data-solved="true"] .lesson-dino { background-position-y: 50%; animation: nod .42s ease-out; }
@@ -311,14 +344,14 @@ svg text { font-family: var(--font-num); }
 .nest-piece { position: relative; color: var(--ink); }
 .nest-tray { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width: 73px; min-height: 44px; padding: 4px; border: 2px solid var(--soft); border-radius: 9px; background: var(--card); }
 .nest-egg { display: grid; place-items: center; min-width: 0; width: 24px; height: 32px; padding: 0; border: 0; background: transparent; border-radius: 12px; }
-.nest-egg:enabled { width: 32px; height: 44px; }
+.nest-egg:enabled { width: 44px; height: 46px; }
 .nest-piece:enabled { cursor: pointer; outline: 2px dashed var(--sky); outline-offset: -2px; }
 .nest-egg:enabled { outline: 0; }
 .nest-egg:enabled:first-child { outline: 2px dashed var(--sky); }
 .nest-piece:enabled:focus-visible { outline: 3px solid var(--focus); }
 .nest-piece:disabled { opacity: 1; cursor: default; }
 .nest-speckle { display: block; width: 100%; aspect-ratio: .75; border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%; border: 1px solid #806235; background: radial-gradient(circle at 61% 63%, #82642c 0 9%, transparent 10%), radial-gradient(circle at 36% 43%, #ab8241 0 10%, transparent 11%), #ffe6ad; }
-.nest-egg .nest-speckle { width: 19px; }
+.nest-egg .nest-speckle { width: 22px; }
 .nest-tray .lit { background-color: #95e1b0; outline: 1px solid #388455; }
 .nest-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin: 6px 0; color: var(--ink); font-size: 15px; }
 .nest-stats:empty, .nest-feedback:empty { display: none; }
@@ -331,6 +364,24 @@ svg text { font-family: var(--font-num); }
 .nest-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; }
 .nest-footer .secondary { margin: 2px 0 0; }
 
+@media (min-width: 680px) {
+  .act-token { min-height: 66px; font-size: 40px; }
+  .quiz-card .choice, .activity .choice { min-height: 64px; }
+  .activity .go, .nest-controls .go { min-height: 56px; }
+  .nest-egg:enabled { height: 54px; width: 51px; }
+  .nest-egg .nest-speckle { width: 25px; }
+}
+@media (min-width: 900px) and (orientation: landscape) {
+  .wrap { max-width: 940px; }
+  #starter .activity:has(#actPicture:not(:empty)), .quiz-card:has(> .vis) {
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    column-gap: clamp(16px, 3vw, 34px); align-items: center;
+  }
+  #starter .activity:has(#actPicture:not(:empty)) > :not(#actPicture), .quiz-card:has(> .vis) > :not(.vis) { grid-column: 2; }
+  #starter .activity #actPicture, .quiz-card > .vis { grid-column: 1; grid-row: 1 / span 5; }
+  .nest-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 html[lang="th"] { --font-lo: "Noto Sans Thai", "Leelawadee UI", "Thonburi", system-ui, sans-serif; }
 .language-btn { font: 700 15px/1.3 "Noto Sans Thai", "Noto Sans Lao", system-ui, sans-serif; }
 html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
@@ -342,7 +393,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 @media (max-width: 480px) {
   :root { --u: 22px; }
-  .eq { font-size: 34px; gap: 8px; } .say p:first-child { font-size: 20px; } .qtext { font-size: 20px; }
+  .eq { font-size: 34px; gap: 8px; } .say p:first-child { font-size: 22px; }
   .frame { grid-template-columns: repeat(5, 28px); } .cell { width: 28px; height: 28px; }
   .icon-btn small { display: none; }
 }
@@ -351,22 +402,36 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
 <div class="wrap">
   <header class="top">
     <button class="icon-btn" id="backBtn" type="button" aria-label="ສາລະບານ" hidden>←</button>
-    <div class="ttl"><div class="kicker" id="kicker">ຄະນິດສາດ ປ.1</div><h1 id="topTitle">ຫ້ອງຮຽນໝີນ້ອຍ</h1></div>
+    <div class="ttl"><div class="kicker" id="kicker">ຄະນິດສາດ ປ.1</div><h1 id="topTitle" tabindex="-1">ຫ້ອງຮຽນໝີນ້ອຍ</h1></div>
     <button class="icon-btn language-btn" type="button" id="languageBtn" data-original lang="th" aria-label="เปลี่ยนเป็นภาษาไทย">ไทย</button>
     <button class="icon-btn" id="voiceBtn" type="button" aria-pressed="true">🔊</button>
   </header>
 
   <main id="home">
-    <a class="start-link foundation-link" id="foundationLink" href="#bot-2"><span class="lesson-dino" aria-hidden="true"></span><span class="start-name"><strong id="foundationTitle">ເລີ່ມນັບທີລະອັນ</strong><small id="foundationTopic"></small></span><span aria-hidden="true">→</span></a>
+    <a class="foundation-link" id="foundationLink" href="#bot-2">
+      <div>
+        <p id="foundationTopic"></p>
+        <h2 id="foundationTitle">ເລີ່ມນັບທີລະອັນ</h2>
+        <span class="go"><span id="foundationAction">ເລີ່ມຝຶກ</span><span aria-hidden="true">→</span></span>
+      </div>
+      <span class="lesson-dino" aria-hidden="true"></span>
+    </a>
+    <a class="secondary home-restart" id="foundationNext" href="#bot-2" hidden>ໄປບົດທີ່ແນະນຳ</a>
     <div class="school-links">
-      <a class="secondary" href="#toc" id="schoolLink">ເລືອກບົດທີ່ຮຽນຢູ່ໂຮງຮຽນ ↓</a>
-      <a class="secondary" href="#homework">ເຮັດວຽກບ້ານດ້ວຍຮູບ</a>
+      <a href="#toc" id="schoolLink"><strong>ບົດຮຽນຕາມປຶ້ມ</strong><small>ຄົ້ນຕາມບົດ ຫຼື ເລກໜ້າ</small></a>
+      <a href="#homework"><strong>ວຽກບ້ານດ້ວຍຮູບ</strong><small>ໃສ່ໂຈດຈາກສະໝຸດ</small></a>
     </div>
-    <section class="nest-links"><h2>ຮັງໄຂ່ໄດໂນເສົາ · ຖາດລະ 10</h2><div>
+    <details class="nest-links"><summary>ແບບຝຶກຮັງໄຂ່ໄດໂນເສົາ</summary><div>
       <a href="#bot-7-nest">10 + 10</a><a href="#bot-14-nest">14 − 13</a>
       <a href="#bot-17-nest">15 + 20</a><a href="#bot-14-exchange">25 − 16</a>
-    </div><a id="nestContinue" class="secondary" hidden></a></section>
-    <p class="lead">ເລືອກບົດທີ່ລູກກຳລັງຮຽນຢູ່ໂຮງຮຽນ</p>
+    </div><a id="nestContinue" class="secondary" hidden></a></details>
+  </main>
+
+  <main id="catalog" hidden>
+    <label class="catalog-search">ຄົ້ນຫາດ້ວຍເລກບົດ, ເລກໜ້າ ຫຼື ຊື່ບົດ
+      <input id="chapterSearch" type="search" placeholder="ໜ້າ 25" autocomplete="off" maxlength="72">
+    </label>
+    <p id="chapterEmpty" role="status" hidden>ບໍ່ພົບບົດຮຽນ. ລອງພິມເລກໜ້າຈາກປຶ້ມ.</p>
     <ol class="toc" id="toc" tabindex="-1"></ol>
   </main>
 
@@ -414,9 +479,9 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
 
   <main id="chapter" hidden>
     <nav class="tabs" role="tablist" aria-label="ບົດຮຽນ">
-      <button type="button" role="tab" id="tabLearn" aria-selected="true">ຮຽນ</button>
-      <button type="button" role="tab" id="tabPractice" aria-selected="false">ຝຶກ</button>
-      <button type="button" role="tab" id="tabParent" aria-selected="false">ພໍ່ແມ່</button>
+      <button type="button" role="tab" id="tabLearn" aria-controls="viewLearn" aria-selected="true">ຮຽນ</button>
+      <button type="button" role="tab" id="tabPractice" aria-controls="viewPractice" aria-selected="false" tabindex="-1">ຝຶກ</button>
+      <button type="button" role="tab" id="tabParent" aria-controls="viewParent" aria-selected="false" tabindex="-1">ພໍ່ແມ່</button>
     </nav>
 
     <section id="viewLearn" role="tabpanel" aria-labelledby="tabLearn">
@@ -470,8 +535,11 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     </section>
 
     <section id="viewPractice" role="tabpanel" aria-labelledby="tabPractice" hidden>
-      <div class="qdots" id="qStars"></div>
-      <div id="practice"></div>
+      <div class="quiz-tools">
+        <div class="qdots" id="qStars" aria-live="polite"></div>
+        <button type="button" class="secondary pause-btn" id="quizPause">ພັກກ່ອນ</button>
+      </div>
+      <div class="quiz-card" id="practice"></div>
     </section>
 
     <section id="viewParent" class="parent" role="tabpanel" aria-labelledby="tabParent" hidden>
@@ -482,15 +550,22 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       <label class="only-lo"><input type="checkbox" id="thaiVoice"> ໃຊ້ສຽງໄທໃນບົດທີ່ມີຄຳແປ ຖ້າເຄື່ອງບໍ່ມີສຽງລາວ</label></details>
     </section>
   </main>
+  <footer class="share-footer">
+    <button type="button" class="secondary" id="shareButton">ແຊຣ໌ບົດຮຽນ</button>
+    <a href="index.html" class="secondary" id="backToGame">ກັບໄປເກມ</a>
+    <p id="shareStatus" role="status"></p>
+    <input id="shareUrl" aria-label="ລິ້ງຂອງບົດຮຽນ" readonly hidden>
+  </footer>
 </div>
 
 <script>
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
-  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-  const pick = (list) => list[Math.floor(Math.random() * list.length)];
-  const shuffle = (list) => { for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; } return list; };
+  let random = Math.random;
+  const rnd = (a, b) => a + Math.floor(random() * (b - a + 1));
+  const pick = (list) => list[Math.floor(random() * list.length)];
+  const shuffle = (list) => { for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; } return list; };
   const range = (n) => Array.from({ length: n }, (_, i) => i);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
@@ -541,7 +616,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (!element || element.closest("[data-original]")) return;
     if (node.nodeType === 3) { localizeNode(node, ""); return; }
     if (node.nodeType !== 1) return;
-    for (const attr of ["aria-label", "title"]) if (node.hasAttribute(attr)) localizeNode(node, attr);
+    for (const attr of ["aria-label", "title", "placeholder"]) if (node.hasAttribute(attr)) localizeNode(node, attr);
     node.childNodes.forEach(paintLocale);
   }
   const languageArea = $(".wrap");
@@ -563,7 +638,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#languageBtn").setAttribute("aria-label", language === "lo" ? "เปลี่ยนเป็นภาษาไทย" : "ປ່ຽນເປັນພາສາລາວ");
     renderVoice(pickVoice());
     paintLocale(languageArea);
-    if (language === "th") localeObserver.observe(languageArea, {subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "title"]});
+    if (language === "th") localeObserver.observe(languageArea, {subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "title", "placeholder"]});
   }
   function setLanguage(next) {
     if (language === next) return;
@@ -816,13 +891,14 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
   }
   function renderVoice(p) {
     const label = !saved.voice ? "ປິດສຽງ" : p ? (p.lang === "lo" ? "ລາວ" : "ໄທ") : "ບໍ່ມີສຽງ";
-    $("#voiceBtn").innerHTML = `${saved.voice && p ? "🔊" : "🔇"} <small>${label}</small>`;
+    $("#voiceBtn").innerHTML = `<span aria-hidden="true" class="voice-symbol">${saved.voice && p ? "🔊" : "🔇"}</span> <small>${label}</small>`;
     $("#voiceBtn").setAttribute("aria-label", label);
     $("#noVoice").hidden = !!voiceFor(language) || (!!synth && !voicesChecked);
     $("#noVoice").textContent = language === "th" ? "เครื่องนี้ยังไม่มีเสียงอ่านภาษาไทย คุณพ่อคุณแม่อ่านโจทย์ให้ลูกฟังได้" : "ເຄື່ອງນີ້ຍັງບໍ່ມີສຽງອ່ານພາສາລາວ. ພໍ່ແມ່ອ່ານໂຈດໃຫ້ລູກຟັງໄດ້.";
     voiceMenu(p);
     $("#nestListen").hidden = !(saved.voice && p);
     $("#actListen").hidden = !(saved.voice && p);
+    if ($("#quizListen")) $("#quizListen").hidden = !(saved.voice && p);
     $("#workCompareListen").hidden = !(saved.voice && p);
   }
   let voicesChecked = false;
@@ -870,7 +946,6 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     } catch (e) { /* no audio */ }
   }
   const ding = () => { tone(880, 0.15); tone(1320, 0.25, "sine", 0.1, 0.1); };
-  const boing = () => { tone(220, 0.25, "triangle", 0.12); };
 
   /* ---------- pictures: plain HTML/SVG built from numbers ---------- */
   const P = {
@@ -1041,7 +1116,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     ],
     quiz() {
       const [eA, nA, eB, nB] = pick(PAIRS);
-      const a = rnd(3, 8), b = Math.random() < 0.25 ? a : rnd(3, 8), spread = a < b ? { spreadA: true } : a > b ? { spreadB: true } : { spreadB: true };
+      const a = rnd(3, 8), b = random() < 0.25 ? a : rnd(3, 8), spread = a < b ? { spreadA: true } : a > b ? { spreadB: true } : { spreadB: true };
       const ans = a > b ? "A" : b > a ? "B" : "=";
       return { sig: eA + a + b, kind: "word", text: `${nA} ກັບ ${nB} ອັນໃດຫຼາຍກວ່າ?`, th: thaiText(nA) + " กับ " + thaiText(nB) + " อะไรมีมากกว่า?", vis: P.match(eA, a, eB, b, spread),
         choices: opts([[`${eA} ${nA}`, "A", nA], [`${eB} ${nB}`, "B", nB], ["ພໍດີກັນ", "=", "ພໍດີກັນ"]]), answer: ans,
@@ -1100,7 +1175,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           why: `${a} ${ans} ${b}`, whyTh: `${a} ${ans === ">" ? "มากกว่า" : "น้อยกว่า"} ${b}`, hint: "ປາກອ້າໃສ່ເລກທີ່ຫຼາຍກວ່າ", hintTh: "ปากอ้าไปทางเลขที่มากกว่า", hintVis: P.row(P.frame([[a, "c1"]]), P.frame([[b, "c2"]])) };
       }
       if (k === "seq") {
-        const down = Math.random() < 0.3, start = down ? rnd(4, 10) : rnd(0, 6), seq = range(5).map((i) => (down ? start - i : start + i)).filter((v) => v >= 0 && v <= 10);
+        const down = random() < 0.3, start = down ? rnd(4, 10) : rnd(0, 6), seq = range(5).map((i) => (down ? start - i : start + i)).filter((v) => v >= 0 && v <= 10);
         const hole = rnd(1, seq.length - 2), ans = seq[hole];
         return { sig: "s" + start + down, text: "ເລກໃດຫາຍໄປ?", th: "เลขอะไรหายไป", vis: `<div class="eq">${seq.map((v, i) => (i === hole ? '<span class="box">?</span>' : `<span>${v}</span>`)).join("<span>–</span>")}</div>`,
           choices: nums(ans, 0, 10), answer: ans, why: down ? `ນັບລົງ: ${seq.join(", ")}` : `ນັບຂຶ້ນ: ${seq.join(", ")}`, whyTh: (down ? "นับถอยหลัง " : "นับขึ้น ") + seq.join(", "), hint: down ? "ນັບລົງເທື່ອລະ 1" : "ນັບຂຶ້ນເທື່ອລະ 1", hintTh: down ? "นับถอยหลังทีละ 1" : "นับขึ้นทีละ 1", hintVis: P.line(0, 10, { mark: ans }) };
@@ -1149,10 +1224,10 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       { vis: lineUp(["🍍", "🥭", "🍌", "🍎", "🍊", "🍈"], 2), lo: "ນັບຈາກເບື້ອງຊ້າຍ ໝາກກ້ວຍຢູ່ລຳດັບທີ 3 · ນັບຈາກເບື້ອງຂວາ ຢູ່ລຳດັບທີ 4", th: "นับจากซ้าย กล้วยอยู่ที่ 3 นับจากขวาอยู่ที่ 4" },
     ],
     quiz() {
-      const list = shuffle(ZOO.slice()).slice(0, rnd(5, 7)), i = rnd(0, list.length - 1), fromLeft = Math.random() < 0.6;
+      const list = shuffle(ZOO.slice()).slice(0, rnd(5, 7)), i = rnd(0, list.length - 1), fromLeft = random() < 0.6;
       const pos = fromLeft ? i + 1 : list.length - i;
       const side = fromLeft ? "ນັບຈາກເບື້ອງຊ້າຍ" : "ນັບຈາກເບື້ອງຂວາ", sideTh = fromLeft ? "นับจากซ้าย" : "นับจากขวา";
-      if (Math.random() < 0.5) {
+      if (random() < 0.5) {
         return { sig: list.join("") + i + fromLeft, text: `${side} ${ZOO_LO[list[i]]}ຢູ່ລຳດັບທີເທົ່າໃດ?`, th: `${sideTh} ${thaiText(ZOO_LO[list[i]])}อยู่ลำดับที่เท่าไร?`, vis: lineUp(list, i), choices: nums(pos, 1, list.length), answer: pos,
           why: `${side} ຢູ່ລຳດັບທີ ${pos}`, whyTh: `${sideTh} อยู่ลำดับที่ ${pos}`, hint: `ເລີ່ມນັບຈາກ${fromLeft ? "ຊ້າຍ" : "ຂວາ"} 1, 2, 3 … ຈົນຮອດໂຕທີ່ມີແສງ`, hintTh: `เริ่มนับจาก${fromLeft ? "ซ้าย" : "ขวา"} จนถึงตัวที่มีแสง` };
       }
@@ -1195,9 +1270,9 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     ],
     quiz() {
       const k = pick(["split", "split", "combine", "more", "hidden"]);
-      const X = Math.random() < 0.35 ? 10 : rnd(5, 9), a = rnd(1, X - 1), b = X - a;
+      const X = random() < 0.35 ? 10 : rnd(5, 9), a = rnd(1, X - 1), b = X - a;
       if (k === "split") {
-        const left = Math.random() < 0.5;
+        const left = random() < 0.5;
         return { sig: "s" + X + a + left, text: `${X} ແມ່ນ ${left ? `ເທົ່າໃດ ລວມກັບ ${b}` : `${a} ລວມກັບເທົ່າໃດ`}?`, th: `${X} คือ ${left ? `เท่าไรรวมกับ ${b}` : `${a} รวมกับเท่าไร`}`, vis: P.split(X, a, b, left ? "a" : "b"),
           choices: nums(left ? a : b, 0, 10), answer: left ? a : b, why: `${X} ແມ່ນ ${a} ລວມກັບ ${b}`, whyTh: `${X} คือ ${a} รวมกับ ${b}`,
           hint: `ມີ ${X} ເມັດ · ສ່ວນໜຶ່ງແມ່ນ ${left ? b : a} · ອີກສ່ວນໜຶ່ງມີຈັກເມັດ?`, hintTh: `มี ${X} ส่วนหนึ่งคือ ${left ? b : a} อีกส่วนมีเท่าไร`, hintVis: P.frame(left ? [[a, "hid"], [b, "c2"]] : [[a, "c1"], [b, "hid"]]) };
@@ -1256,7 +1331,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           hint: `ລວມເຂົ້າກັນ ແລ້ວນັບທັງໝົດເບິ່ງ`, hintTh: "รวมกันแล้วนับทั้งหมดดู", hintVis: P.frame([[a, "c1"], [b, "c2"]]) };
       }
       if (k === "zero") {
-        const a = rnd(1, 9), first = Math.random() < 0.5, x = first ? 0 : a, y = first ? a : 0;
+        const a = rnd(1, 9), first = random() < 0.5, x = first ? 0 : a, y = first ? a : 0;
         return { sig: "z" + x + y, text: `${x} + ${y} = ?`, th: `${x} + ${y} เท่ากับเท่าไร`, vis: P.eq([x, "+", y, "=", "?"]), choices: nums(a, 0, 10), answer: a,
           why: `ບວກກັບ 0 ໄດ້ເທົ່າເດີມ`, whyTh: "บวกกับ 0 ได้เท่าเดิม", hint: `0 ແມ່ນບໍ່ມີຈັກອັນ · ມີ ${a} ຢູ່ແລ້ວ ກໍຍັງແມ່ນ ${a}`, hintTh: `0 คือไม่มีเลย มี ${a} อยู่แล้วก็ยังเป็น ${a}`, hintVis: P.frame([[a, "c1"]]) };
       }
@@ -1328,13 +1403,13 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           hint: "ຈັບຄູ່ກັນເທື່ອລະອັນ ແລ້ວນັບອັນທີ່ບໍ່ມີຄູ່", hintTh: "จับคู่ทีละอัน แล้วนับอันที่ไม่มีคู่", hintVis: P.pairs(a, b) };
       }
       if (k === "zero") {
-        const n = rnd(1, 9), all = Math.random() < 0.5, r = all ? n : 0, left = n - r;
+        const n = rnd(1, 9), all = random() < 0.5, r = all ? n : 0, left = n - r;
         return { sig: "z" + n + r, text: `${n} − ${r} = ?`, th: `${n} − ${r} เท่ากับเท่าไร`, vis: P.eq([n, "−", r, "=", "?"]), choices: nums(left, 0, 10), answer: left,
           why: all ? "ເອົາອອກໝົດ ກໍບໍ່ເຫຼືອຈັກອັນ = 0" : "ບໍ່ເອົາອອກຈັກອັນ ກໍຍັງເທົ່າເດີມ", whyTh: all ? "เอาออกหมด ก็เหลือ 0" : "ไม่เอาออกเลย ก็ยังเท่าเดิม",
           hint: all ? `ມີ ${n} ເອົາອອກທັງ ${n} ຈະເຫຼືອຈັກອັນ?` : `ລົບ 0 ແມ່ນບໍ່ໄດ້ເອົາອອກຈັກອັນ`, hintTh: all ? "เอาออกหมดทุกอัน จะเหลือกี่อัน" : "ลบ 0 คือไม่ได้เอาอะไรออก", hintVis: P.frame(all ? [[n, "gone"]] : [[n, "c1"]]) };
       }
       if (k === "which") {
-        const add = Math.random() < 0.5, a = rnd(2, 6), b = rnd(1, 4);
+        const add = random() < 0.5, a = rnd(2, 6), b = rnd(1, 4);
         const text = add ? `ມີ${t.lo} ${a} ${t.c} ມາອີກ ${b} ${t.c} ລວມທັງໝົດມີຈັກ${t.c}? · ໃຊ້ການຄິດໄລ່ແບບໃດ?` : `ມີ${t.lo} ${a + b} ${t.c} ເອົາອອກໄປ ${b} ${t.c} ຍັງເຫຼືອຈັກ${t.c}? · ໃຊ້ການຄິດໄລ່ແບບໃດ?`;
         return { sig: "q" + add + a + b, kind: "word", text, th: add ? `มี${t.th} ${a} มาอีก ${b} รวมทั้งหมดเท่าไร ใช้บวกหรือลบ` : `มี${t.th} ${a + b} เอาออก ${b} เหลือเท่าไร ใช้บวกหรือลบ`,
           choices: opts([["ບວກ +", "+", "ບວກ"], ["ລົບ −", "−", "ລົບ"]]), answer: add ? "+" : "−",
@@ -1403,7 +1478,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           why: `${n} ແມ່ນ 10 ກັບ ${o}`, whyTh: `${n} คือ 10 กับ ${o}`, hint: "ນັບ 10 ອັນທຳອິດອອກ ແລ້ວນັບທີ່ເຫຼືອ", hintTh: "แยก 10 อันแรกออก แล้วนับที่เหลือ", hintVis: P.frame([[10, "c1"], [o, "c2"]]) };
       }
       if (k === "line") {
-        const from = pick([10, 12, 15]), up = Math.random() < 0.6, d = rnd(1, 5), to = up ? from + d : from - d;
+        const from = pick([10, 12, 15]), up = random() < 0.6, d = rnd(1, 5), to = up ? from + d : from - d;
         return { sig: "l" + from + up + d, text: up ? `ຈຳນວນທີ່ຫຼາຍກວ່າ ${from} ຢູ່ ${d} ຂີດໝາຍ ແມ່ນເທົ່າໃດ?` : `ຈຳນວນທີ່ໜ້ອຍກວ່າ ${from} ຢູ່ ${d} ຂີດໝາຍ ແມ່ນເທົ່າໃດ?`, th: up ? `จำนวนที่มากกว่า ${from} อยู่ ${d} ขีด` : `จำนวนที่น้อยกว่า ${from} อยู่ ${d} ขีด`,
           vis: P.line(5, 20, { mark: from }), choices: nums(to, 0, 20), answer: to, why: `${up ? "ໄປທາງຂວາ" : "ໄປທາງຊ້າຍ"} ${d} ຂີດ ຮອດ ${to}`, whyTh: `${up ? "ไปทางขวา" : "ไปทางซ้าย"} ${d} ขีด ถึง ${to}`,
           hint: up ? "ຫຼາຍກວ່າ ໃຫ້ຍ່າງໄປທາງຂວາ" : "ໜ້ອຍກວ່າ ໃຫ້ຍ່າງໄປທາງຊ້າຍ", hintTh: up ? "มากกว่าให้เดินไปทางขวา" : "น้อยกว่าให้เดินไปทางซ้าย", hintVis: P.line(5, 20, { hops: [{ from, to, label: (up ? "+" : "−") + d }], mark: from }) };
@@ -1462,7 +1537,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       { vis: P.row(P.clock(2, 30), P.clock(12, 30)), lo: "ຖ້າເຂັມສັ້ນຢູ່ລະຫວ່າງກາງ ໃຫ້ອ່ານເລກທີ່ເຂັມສັ້ນຫາກໍຜ່ານມາ ແລ້ວຕື່ມ ເຄິ່ງ · 2 ໂມງເຄິ່ງ · 12 ໂມງເຄິ່ງ", th: "ถ้าเข็มสั้นอยู่ตรงกลาง ให้อ่านเลขที่มาก่อน แล้วเติมคำว่าครึ่ง" },
     ],
     quiz() {
-      const h = rnd(1, 12), half = Math.random() < 0.5;
+      const h = rnd(1, 12), half = random() < 0.5;
       const opts = new Map([[timeLo(h, half), true]]);
       const others = shuffle([[h, !half], [h % 12 + 1, half], [(h + 10) % 12 + 1, half], [h % 12 + 1, false]]);
       for (const [hh, hf] of others) { if (opts.size >= 3) break; if (!opts.has(timeLo(hh, hf))) opts.set(timeLo(hh, hf), false); }
@@ -1679,7 +1754,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
         return { sig: "c" + a + b + r, text: "ໃສ່ເຄື່ອງໝາຍ > < ຫຼື =", th: "ใส่เครื่องหมาย", vis: `<div class="eq"><span>${a} + ${b}</span><span class="box">?</span><span>${r}</span></div>`,
           choices: opts([[">", ">", "ຫຼາຍກວ່າ"], ["=", "=", "ເທົ່າກັບ"], ["<", "<", "ໜ້ອຍກວ່າ"]]), answer: ans, why: `${a} + ${b} = ${s} · ${s} ${ans} ${r}`, whyTh: `${a} + ${b} = ${s}`, hint: `ຄິດໄລ່ ${a} + ${b} ກ່ອນ ແລ້ວຈຶ່ງປຽບທຽບ`, hintTh: `คิด ${a} + ${b} ก่อนแล้วค่อยเทียบ` };
       }
-      const swap = Math.random() < 0.25, x = swap ? b : a, y = swap ? a : b;
+      const swap = random() < 0.25, x = swap ? b : a, y = swap ? a : b;
       return { sig: "s" + x + y, text: `${x} + ${y} = ?`, th: `${x} + ${y} เท่ากับเท่าไร`, vis: P.eq([x, "+", y, "=", "?"]), choices: nums(s, 10, 18), answer: s,
         why: m.lo.join(" · "), whyTh: m.th.join(" "), hint: m.lo[0] + " · " + m.lo[1], hintTh: m.th[0] + " " + m.th[1], hintVis: P.col(P.split(b, m.need, m.rest), P.frame([[a, "c1"], [m.need, "c2"], [m.rest, "c2"]])) };
     },
@@ -1869,7 +1944,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     ],
     quiz() {
       const w = rnd(1, 3), h = rnd(1, 2), n = 2 * w * h;
-      if (Math.random() < 0.6) return { sig: "n" + w + h, text: "ຮູບນີ້ໃຊ້ແຜ່ນສາມແຈຈັກແຜ່ນ?", th: "รูปนี้ใช้สามเหลี่ยมกี่แผ่น", vis: P.tris(w, h), choices: nums(n, 1, 14), answer: n,
+      if (random() < 0.6) return { sig: "n" + w + h, text: "ຮູບນີ້ໃຊ້ແຜ່ນສາມແຈຈັກແຜ່ນ?", th: "รูปนี้ใช้สามเหลี่ยมกี่แผ่น", vis: P.tris(w, h), choices: nums(n, 1, 14), answer: n,
         why: `ໃຊ້ ${n} ແຜ່ນ`, whyTh: `ใช้ ${n} แผ่น`, hint: "ແຕ່ລະຫ້ອງສີ່ແຈ ມີສາມແຈ 2 ແຜ່ນ", hintTh: "แต่ละช่องสี่เหลี่ยมมีสามเหลี่ยม 2 แผ่น" };
       const options = shuffle([[w, h], [w + 1, h], [Math.max(1, w - 1) === w ? w + 2 : w - 1, h]].filter((v, i, arr) => arr.findIndex((x) => x[0] * x[1] === v[0] * v[1]) === i)).slice(0, 3);
       if (!options.some((o) => o[0] * o[1] === w * h)) options[0] = [h, w];
@@ -1930,12 +2005,12 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
           vis: P.hundred([n]), choices: nums(ans, 1, 100), answer: ans, why: `${dir > 0 ? "ເພີ່ມ" : "ຫຼຸດ"} ${Math.abs(dir)} ເປັນ ${ans}`, whyTh: `ได้ ${ans}`, hint: Math.abs(dir) === 10 ? "ຂຶ້ນລົງ ປ່ຽນ 10 · ຫຼັກຫົວໜ່ວຍຄືເກົ່າ" : "ຊ້າຍຂວາ ປ່ຽນ 1", hintTh: Math.abs(dir) === 10 ? "ขึ้นลงเปลี่ยนทีละ 10" : "ซ้ายขวาเปลี่ยนทีละ 1" };
       }
       if (k === "line") {
-        const n = rnd(25, 95), up = Math.random() < 0.5, d = rnd(1, 5), ans = up ? n + d : n - d;
+        const n = rnd(25, 95), up = random() < 0.5, d = rnd(1, 5), ans = up ? n + d : n - d;
         return { sig: "l" + n + up + d, text: `ຈຳນວນທີ່${up ? "ຫຼາຍກວ່າ" : "ໜ້ອຍກວ່າ"} ${n} ${wlo(d)}ຈຳນວນ ແມ່ນເທົ່າໃດ?`, th: `จำนวนที่${up ? "มากกว่า" : "น้อยกว่า"} ${n} อยู่ ${d} คือเท่าไร`, vis: P.line(n - 6, n + 6, { mark: n }), choices: nums(ans, 1, 100), answer: ans,
           why: `${n} ${up ? "+" : "−"} ${d} = ${ans}`, whyTh: `ได้ ${ans}`, hint: up ? "ຫຼາຍກວ່າ ໄປທາງຂວາ" : "ໜ້ອຍກວ່າ ໄປທາງຊ້າຍ", hintTh: up ? "มากกว่าไปทางขวา" : "น้อยกว่าไปทางซ้าย", hintVis: P.line(n - 6, n + 6, { mark: n, hops: [{ from: n, to: ans, label: (up ? "+" : "−") + d }] }) };
       }
       if (k === "tens") {
-        const a = rnd(1, 8), b = rnd(1, 10 - a), add = Math.random() < 0.6, x = add ? a * 10 : (a + b) * 10, y = b * 10, ans = add ? x + y : x - y;
+        const a = rnd(1, 8), b = rnd(1, 10 - a), add = random() < 0.6, x = add ? a * 10 : (a + b) * 10, y = b * 10, ans = add ? x + y : x - y;
         return { sig: "t" + x + add + y, text: `${x} ${add ? "+" : "−"} ${y} = ?`, th: `${x} ${add ? "+" : "−"} ${y} เท่ากับเท่าไร`, vis: P.eq([x, add ? "+" : "−", y, "=", "?"]), choices: nums(ans, 0, 100).map((c) => c), answer: ans,
           why: `${x / 10} ${add ? "+" : "−"} ${y / 10} = ${ans / 10} ກຸ່ມ · ${ans}`, whyTh: `${ans}`, hint: "ໃຫ້ຄິດເປັນກຸ່ມລະ 10", hintTh: "ให้คิดเป็นกลุ่มละ 10", hintVis: P.tens(x / 10, 0) };
       }
@@ -1993,7 +2068,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       { vis: `<div class="big-lao">໔ ໕ · ໒ ໖ · ໑ ໙</div>`, lo: "ລະວັງ ເລກທີ່ຄ້າຍກັນ: ໔ ກັບ ໕ · ໒ ກັບ ໖ · ໑ ກັບ ໙", th: "ระวังเลขที่หน้าตาคล้ายกัน" },
     ],
     quiz() {
-      const n = Math.random() < 0.5 ? rnd(0, 9) : rnd(10, 99), toArabic = Math.random() < 0.5;
+      const n = random() < 0.5 ? rnd(0, 9) : rnd(10, 99), toArabic = random() < 0.5;
       const pool = new Set([n]);
       const near = n < 10 ? shuffle(range(10).filter((d) => d !== n)) : shuffle([n % 10 * 10 + Math.floor(n / 10), n + 1, n - 1, n + 10].filter((v) => v !== n && v >= 0 && v <= 99));
       for (const v of near) { if (pool.size >= 3) break; pool.add(v); }
@@ -2245,7 +2320,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     }).join("");
     const totalLabel = count ? "ນັບແລ້ວ" : take ? "ຍັງເຫຼືອ" : "ຕອນນີ້ມີ";
     const change = count ? "" : `<span>${take ? "ລົງນ້ຳແລ້ວ" : "ເພີ່ມແລ້ວ"} <b>${n}</b></span>`;
-    const counters = `<div class="act-counters">${tokens}</div><div class="act-counts"><span>${totalLabel} <b>${current}</b></span>${change}</div>`;
+    const counters = `<div class="act-counters" style="--columns:${Math.min(spots, 5)}">${tokens}</div><div class="act-counts"><span>${totalLabel} <b>${current}</b></span>${change}</div>`;
     if (g.whole) return `<div class="count-on-board">${P.split(g.whole, g.start, "?", "b")}${counters}</div>`;
     return (g.equation ? P.eq(g.equation) : "") + counters;
   }
@@ -2268,7 +2343,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     activityState = { phase, moved: 0, counted: [], solved: false, hinted: false, wrong: new Set() };
     renderActivity();
   }
-  function activityHint(choice) {
+  function activityHint(choice, talk = true) {
     const task = activities[cur.id][activityState.phase];
     const feedback = $("#actFeedback");
     const guided = activityState.phase === "guided";
@@ -2280,7 +2355,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     feedback.className = "feedback help";
     feedback.textContent = line(cue + task.hint, (cue ? thaiText(cue).trim() + " " : "") + thaiText(task.hint));
     if (activityState.phase === "transfer" && transferHintPictures[cur.id]) feedback.insertAdjacentHTML("beforeend", transferHintPictures[cur.id]);
-    speak(cue + task.hint);
+    if (talk) { speak(cue + task.hint); checkpointLesson("activity"); }
   }
   function renderActivity() {
     const { phase, moved, counted, solved, wrong } = activityState;
@@ -2315,7 +2390,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#starter").hidden = book;
     $("#bookSteps").hidden = !book;
     if (book) { showStep(); $("#stepNext").focus(); }
-    else $("#actQuestion").focus();
+    else { $("#actQuestion").focus(); checkpointLesson("activity"); }
   }
   $("#toBook").addEventListener("click", () => showBook(true));
   $("#toStarter").addEventListener("click", () => showBook(false));
@@ -2333,6 +2408,7 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
         state.counted.push(i);
       }
       state.moved++;
+      checkpointLesson("activity");
       const now = g.mode === "take" ? g.start - state.moved : (g.start || 0) + state.moved;
       renderActivity();
       if (g.mode === "stages") {
@@ -2359,11 +2435,14 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
         return;
       }
       state.solved = true;
+      if (state.phase === "guided") checkpointLesson("activity");
+      else clearChapterResume();
       renderActivity();
       $("#actQuestion").focus();
       speak(task.why);
     } else if (button.hasAttribute("data-transfer")) {
       resetActivity("transfer");
+      checkpointLesson("activity");
       $("#actQuestion").focus();
       speak(activities[cur.id].transfer.prompt);
     } else if (button.hasAttribute("data-practise")) {
@@ -2927,14 +3006,64 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     if (focus) workOp.focus({preventScroll: true});
   }
 
-  /* ---------- contents ---------- */
+  /* ---------- contents and shareable lesson links ---------- */
+  const navigationText = {
+    catalog: line("ບົດຮຽນຕາມປຶ້ມ", "บทเรียนตามหนังสือ"),
+    start: line("ເລີ່ມຝຶກ", "เริ่มฝึก"),
+    resume: line("ຮຽນຕໍ່", "เรียนต่อ"),
+    review: line("ທວນຄືນອີກ 2 ຂໍ້", "ทวนอีก 2 ข้อ"),
+    copied: line("ຄັດລອກລິ້ງແລ້ວ.", "คัดลอกลิงก์แล้ว"),
+    select: line("ເລືອກແລ້ວຄັດລອກລິ້ງນີ້.", "เลือกลิงก์นี้แล้วคัดลอก")
+  };
+  [
+    ["ຄົ້ນຕາມບົດ ຫຼື ເລກໜ້າ", "ค้นตามบทหรือเลขหน้า"],
+    ["ໄປບົດທີ່ແນະນຳ", "ไปบทที่แนะนำ"],
+    ["ວຽກບ້ານດ້ວຍຮູບ", "การบ้านด้วยภาพ"],
+    ["ໃສ່ໂຈດຈາກສະໝຸດ", "ใส่โจทย์จากสมุด"],
+    ["ແບບຝຶກຮັງໄຂ່ໄດໂນເສົາ", "แบบฝึกรังไข่ไดโนเสาร์"],
+    ["ຄົ້ນຫາດ້ວຍເລກບົດ, ເລກໜ້າ ຫຼື ຊື່ບົດ", "ค้นด้วยเลขบท เลขหน้า หรือชื่อบท"],
+    ["ໜ້າ 25", "หน้า 25"],
+    ["ບໍ່ພົບບົດຮຽນ. ລອງພິມເລກໜ້າຈາກປຶ້ມ.", "ไม่พบบทเรียน ลองค้นด้วยเลขหน้าในหนังสือ"],
+    ["ແຊຣ໌ບົດຮຽນ", "แชร์บทเรียน"], ["ກັບໄປເກມ", "กลับไปเกม"],
+    ["ລິ້ງຂອງບົດຮຽນ", "ลิงก์บทเรียน"], ["ພັກກ່ອນ", "พักก่อน"],
+    ["ກັບໜ້າຫຼັກ", "กลับหน้าแรก"], ["ກັບລາຍຊື່ບົດຮຽນ", "กลับรายชื่อบทเรียน"]
+  ].forEach(([lo, th]) => line(lo, th));
+  const catalogInput = $("#chapterSearch");
+  function filterCatalog() {
+    const query = catalogInput.value.trim().normalize("NFC").toLowerCase();
+    const hasPage = /^(?:ໜ້າ|ຫນ້າ|หน้า|page)\s*/.exec(query);
+    const hasChapter = /^(?:ບົດ(?:ທີ)?|บท(?:ที่)?|chapter)\s*/.exec(query);
+    const number = workNumber(query.slice((hasPage || hasChapter)?.[0].length ?? 0));
+    const rows = $("#toc").children;
+    let visible = 0;
+    CHAPTERS.forEach((c, i) => {
+      const [from, to] = c.pages.split("–").map(Number);
+      const matches = !query || (Number.isFinite(number)
+        ? (!hasPage && c.id === number) || (!hasChapter && number >= from && number <= to)
+        : [c.lo, c.th].some(title => title.normalize("NFC").toLowerCase().includes(query)));
+      rows[i].hidden = !matches;
+      if (matches) visible++;
+    });
+    $("#chapterEmpty").hidden = visible > 0;
+  }
+  catalogInput.addEventListener("input", filterCatalog);
+  function lessonCaption(chapter) {
+    return chapter.review ? line(`ໜ້າ ${chapter.pages}`, `หน้า ${chapter.pages}`) :
+      line(`ບົດທີ ${chapter.id} · ໜ້າ ${chapter.pages}`, `บทที่ ${chapter.id} · หน้า ${chapter.pages}`);
+  }
   function renderToc() {
     const next = foundation.find(([id]) => !saved.explained[id]);
-    const start = $("#foundationLink");
-    start.href = next ? "#bot-" + next[0] : "#toc";
-    $("#foundationTitle").textContent = next ? next[1] : "ເລືອກບົດຮຽນຕາມປຶ້ມ";
-    const chapter = next && CHAPTERS.find(c => c.id === next[0]);
-    $("#foundationTopic").textContent = chapter ? line(`ບົດທີ ${chapter.id} · ${chapter.lo}`, `บทที่ ${chapter.id} · ${chapter.th}`) : "";
+    const nextHref = next ? "#bot-" + next[0] : "#toc";
+    const nextChapter = next && CHAPTERS.find(c => c.id === next[0]);
+    const pending = resumePoint && CHAPTERS.find(c => String(c.id) === resumePoint.chapter);
+    const showNext = Boolean(pending && String(nextChapter?.id) !== String(pending.id));
+    $("#foundationLink").href = pending ? "#resume" : nextHref;
+    $("#foundationTitle").textContent = pending?.lo || next?.[1] || navigationText.catalog;
+    $("#foundationTopic").textContent = pending || nextChapter ? lessonCaption(pending || nextChapter) : "";
+    $("#foundationAction").textContent = pending ? (resumePoint.view === "review" ? navigationText.review : navigationText.resume) :
+      next ? navigationText.start : navigationText.catalog;
+    $("#foundationNext").href = nextHref;
+    $("#foundationNext").hidden = !showNext;
     const kind = nestReport.lastKind, continuation = $("#nestContinue");
     continuation.hidden = !kind;
     if (kind) {
@@ -2946,20 +3075,88 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
       const scores = best.map(([n, size]) => `<span aria-label="ຕອບເອງ ${n} ໃນ ${size} ຂໍ້">★ ${n}/${size}</span>`).join("");
       return `<li><a href="#bot-${c.id}" class="${c.review ? "review" : ""}"><span class="n">${c.review ? "★" : c.id}</span><span class="t">${c.lo}<small>ໜ້າ ${c.pages}</small></span>${scores ? `<span class="done">${scores}</span>` : ""}</a></li>`;
     }).join("");
+    filterCatalog();
+  }
+
+  /* A single bookmark for the current lesson. Rebuild quiz questions from a seed, not stored HTML. */
+  const resumeKey = "ph1-lesson-resume.v1";
+  const lessonViews = ["activity", "book", "practice", "review"];
+  let resumePoint = null;
+  try {
+    const record = JSON.parse(localStorage.getItem(resumeKey));
+    if (record && lessonViews.includes(record.view) && CHAPTERS.some(c => String(c.id) === record.chapter)) resumePoint = record;
+  } catch (e) { /* storage unavailable */ }
+  function saveResume(point) {
+    resumePoint = point;
+    try {
+      if (point) localStorage.setItem(resumeKey, JSON.stringify(point));
+      else localStorage.removeItem(resumeKey);
+    } catch (e) { /* session only */ }
+  }
+  function clearChapterResume() {
+    if (resumePoint?.chapter === String(cur.id)) saveResume(null);
+  }
+  function checkpointLesson(view, review) {
+    if (!cur || nest) return;
+    const {wrong, ...activity} = activityState;
+    const point = {chapter: String(cur.id), view, activity: {...activity, wrong: [...wrong]}, slide: stepI};
+    if (view === "review") point.review = review;
+    if (quiz?.seed !== undefined && quiz.i < quiz.qs.length) {
+      point.quiz = {seed: quiz.seed, size: quiz.qs.length, review: quiz.review,
+        signature: quiz.qs.map(questionKey).join("|"), i: quiz.i, marks: quiz.marks, hinted: quiz.hinted, wrong: [...quiz.wrong]};
+    }
+    saveResume(point);
+  }
+  function indexes(value, upper) {
+    return Array.isArray(value) ? [...new Set(value.filter(i => Number.isInteger(i) && i >= 0 && i < upper))] : [];
+  }
+  function restoreActivity(point) {
+    const a = point?.activity;
+    if (!a) return;
+    const phase = a.phase === "transfer" ? "transfer" : "guided";
+    const max = phase === "guided" ? guide[cur.id]?.moves || 0 : 0;
+    const counted = indexes(a.counted, max);
+    const moved = guide[cur.id]?.mode === "count" ? counted.length : Math.min(max, Number.isInteger(a.moved) ? Math.max(0, a.moved) : 0);
+    const task = activities[cur.id][phase];
+    activityState = {phase, moved, counted, solved: moved === max && a.solved === true, hinted: a.hinted === true,
+      wrong: new Set(indexes(a.wrong, task.choices.length).filter(i => task.choices[i] !== task.answer))};
+    renderActivity();
+    if (activityState.hinted && !activityState.solved && moved === max) {
+      activityHint(task.choices[[...activityState.wrong].at(-1)], false);
+    }
   }
 
   /* ---------- a chapter: three tabs ---------- */
   let cur = null, stepI = 0, quiz = null;
   const TABS = { learn: ["#tabLearn", "#viewLearn"], practice: ["#tabPractice", "#viewPractice"], parent: ["#tabParent", "#viewParent"] };
-  function showTab(name) {
+  function showTab(name, remember = true) {
     stopLessonSpeech();
-    Object.entries(TABS).forEach(([k, [tab, view]]) => { $(tab).setAttribute("aria-selected", String(k === name)); $(view).hidden = k !== name; });
-    if (name === "practice" && quiz && quiz.i < quiz.qs.length) { const q = quiz.qs[quiz.i]; speak(q.say || q.text, q.th); }
+    Object.entries(TABS).forEach(([k, [tab, view]]) => {
+      $(tab).setAttribute("aria-selected", String(k === name));
+      $(tab).tabIndex = k === name ? 0 : -1;
+      $(view).hidden = k !== name;
+    });
+    if (name === "practice" && quiz && quiz.i < quiz.qs.length) {
+      const q = quiz.qs[quiz.i];
+      if (remember) checkpointLesson("practice");
+      if (quiz.marks[quiz.i] === undefined) speak(q.say || q.text, q.th);
+    }
     window.scrollTo(0, 0);
   }
   $("#tabLearn").addEventListener("click", () => showTab("learn"));
   $("#tabPractice").addEventListener("click", () => showTab("practice"));
   $("#tabParent").addEventListener("click", () => showTab("parent"));
+  $(".tabs").addEventListener("keydown", event => {
+    const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    if (!keys.includes(event.key)) return;
+    const names = Object.keys(TABS);
+    const selected = names.findIndex(name => $(TABS[name][0]).getAttribute("aria-selected") === "true");
+    const index = event.key === "Home" ? 0 : event.key === "End" ? names.length - 1 :
+      (selected + (event.key === "ArrowLeft" ? -1 : 1) + names.length) % names.length;
+    event.preventDefault();
+    showTab(names[index]);
+    $(TABS[names[index]][0]).focus();
+  });
   function renderCoach(c) {
     const a = activities[c.id], confirmed = Boolean(saved.explained[c.id]);
     const items = [[coachingLabels.show, a.home], [coachingLabels.ask, a.ask], [coachingLabels.look, teachingGoals[c.id]]];
@@ -2975,18 +3172,35 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     store();
     renderCoach(cur);
   });
-  [$("#schoolLink"), $("#foundationLink")].forEach(link => link.addEventListener("click", event => {
-    if (link.hash !== "#toc") return;
-    event.preventDefault();
-    $("#toc").scrollIntoView({block: "start"});
-    $("#toc").focus({preventScroll: true});
-  }));
-  function openChapter(c, expedition) {
+  $("#shareButton").addEventListener("click", async () => {
+    const url = new URL(location.href);
+    url.search = "";
+    if (cur) url.hash = /^#bot-/.test(location.hash) ? location.hash : "#bot-" + cur.id;
+    else if (!["#toc", "#homework"].includes(location.hash)) url.hash = "";
+    const view = location.href;
+    const status = $("#shareStatus"), field = $("#shareUrl");
+    try {
+      if (navigator.share) {
+        await navigator.share({title: $("#topTitle").textContent, url: url.href});
+      } else {
+        await navigator.clipboard.writeText(url.href);
+        if (view === location.href) status.textContent = navigationText.copied;
+      }
+    } catch (e) {
+      if (e.name === "AbortError" || view !== location.href) return;
+      field.value = url.href;
+      field.hidden = false;
+      field.focus();
+      field.select();
+      status.textContent = navigationText.select;
+    }
+  });
+  function openChapter(c, expedition, point) {
     cur = c;
     $("#home").hidden = true;
     $("#chapter").hidden = false;
     $("#backBtn").hidden = false;
-    $("#kicker").textContent = c.review ? `ໜ້າ ${c.pages}` : `ບົດທີ ${c.id} · ໜ້າ ${c.pages}`;
+    $("#kicker").textContent = lessonCaption(c);
     $("#topTitle").textContent = c.lo;
     const routeKey = nestChapters[c.id], launch = $("#nestLaunch");
     launch.hidden = !routeKey || !!expedition;
@@ -3008,10 +3222,22 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     resetActivity();
     $("#quickCoach").open = false;
     renderCoach(c);
-    stepI = 0;
+    stepI = Number.isInteger(point?.slide) ? Math.min(Math.max(0, point.slide), c.learn.length - 1) : 0;
     showStep(false);
-    startQuiz(false);
-    showTab("learn");
+    if (point?.view === "book") {
+      $("#starter").hidden = true;
+      $("#bookSteps").hidden = false;
+    }
+    if (point) restoreActivity(point);
+    const bookmark = point?.quiz;
+    if (point?.view === "review") {
+      startQuiz(false, 2, reviewPatterns(point.review));
+      showTab("practice");
+    } else {
+      const size = [2, 3, 5].includes(bookmark?.size) ? bookmark.size : 3;
+      startQuiz(false, size, reviewPatterns(bookmark?.review), bookmark);
+      showTab(point?.view === "practice" ? "practice" : "learn", false);
+    }
   }
   function showStep(talk = true) {
     const st = cur.learn[stepI];
@@ -3021,89 +3247,176 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     $("#stepDots").innerHTML = cur.learn.map((_, i) => `<span class="${i <= stepI ? "on" : ""}"></span>`).join("");
     $("#stepPrev").disabled = stepI === 0;
     $("#stepNext").textContent = stepI === cur.learn.length - 1 ? "ໄປຝຶກ →" : "ຕໍ່ໄປ →";
-    if (talk) speak(st.lo, st.th);
+    if (talk) { speak(st.lo, st.th); checkpointLesson("book"); }
   }
   $("#stepPrev").addEventListener("click", () => { if (stepI > 0) { stepI--; showStep(); } });
   $("#stepNext").addEventListener("click", () => { if (stepI < cur.learn.length - 1) { stepI++; showStep(); } else showTab("practice"); });
   $("#stepVis").addEventListener("click", () => speak(cur.learn[stepI].lo, cur.learn[stepI].th));
   $("#stepSay").addEventListener("click", () => speak(cur.learn[stepI].lo, cur.learn[stepI].th));
 
-  /* ---------- practice: five questions, a hint after a miss, a star for each first-try answer ---------- */
-  const PRAISE = [["ເກັ່ງຫຼາຍ!", "เก่งมาก!"], ["ຖືກຕ້ອງ!", "ถูกต้อง!"], ["ສຸດຍອດ!", "สุดยอด!"], ["ແມ່ນແລ້ວ!", "ใช่แล้ว!"]];
-  PRAISE.forEach(([lo, th]) => line(lo, th));
-  function startQuiz(talk = true, size = 3) {
-    const seen = new Set(), qs = [];
-    for (let g = 0; qs.length < size && g < 60; g++) {
-      const q = cur.quiz();
-      const sig = q.sig || q.text + q.answer;
-      if (!seen.has(sig) || g > 40) { seen.add(sig); qs.push(q); }
-    }
+  /* ---------- short practice and a second look at the questions that needed help ---------- */
+  const quizText = {
+    good: line("ຖືກຕ້ອງ!", "ถูกต้อง!"),
+    done: line("ຝຶກຈົບແລ້ວ", "ฝึกจบแล้ว"),
+    explain: line("ເລືອກ 1 ຂໍ້ ແລ້ວຊີ້ ຫຼື ແຕ້ມໃຫ້ພໍ່ແມ່ເບິ່ງວ່າຄິດແນວໃດ.", "เลือก 1 ข้อ แล้วชี้หรือวาดให้พ่อแม่ดูว่าคิดอย่างไร"),
+    suggested: line("ລອງໂຈດໃໝ່ໃນບົດນີ້. ເປີດຄຳໃບ້ໄດ້ເມື່ອຕ້ອງການ.", "ลองโจทย์ใหม่ในบทนี้ เปิดคำใบ้ได้เมื่อต้องการ"),
+    hear: line("ຟັງຄຳຖາມອີກເທື່ອ", "ฟังโจทย์อีกครั้ง")
+  };
+  const questionKey = q => String(q.sig ?? q.text + q.answer);
+  const questionPattern = q => (q.kind || "num") + "|" + q.text.replace(/[0-9໐-໙]+/g, "#");
+  function reviewPatterns(value) {
+    return Array.isArray(value) ? value.slice(0, 5).filter(p => p && typeof p.pattern === "string" && p.pattern.length <= 300 &&
+      typeof p.key === "string" && p.key.length <= 180) : [];
+  }
+  function buildRound(size, seed, review) {
+    const seen = new Set(review.map(p => p.key));
+    const previousRandom = random;
+    let value = seed;
+    random = () => {
+      value = (Math.imul(1664525, value) + 1013904223) >>> 0;
+      return value / 4294967296;
+    };
+    try {
+      return range(size).map((_, i) => {
+        const target = review[i % review.length]?.pattern;
+        let fallback;
+        for (let attempt = 0; attempt < (target ? 90 : 35); attempt++) {
+          const q = cur.quiz(), key = questionKey(q);
+          if (seen.has(key)) continue;
+          fallback ??= q;
+          if (!target || questionPattern(q) === target) { fallback = q; break; }
+        }
+        const question = fallback || cur.quiz();
+        seen.add(questionKey(question));
+        return question;
+      });
+    } finally { random = previousRandom; }
+  }
+  function startQuiz(talk = true, size = 3, review = [], bookmark = null) {
+    const seed = Number.isInteger(bookmark?.seed) ? bookmark.seed >>> 0 : Math.floor(random() * 4294967296);
+    const qs = buildRound(size, seed, review);
     roundPhrases = new Map();
     qs.forEach(q => {
       for (const [lo, th] of [[q.text, q.th], [q.hint, q.hintTh], [q.why, q.whyTh]]) {
         if (lo && th && containsLao.test(lo)) roundPhrases.set(lo, th);
       }
     });
-    quiz = { qs, i: 0, marks: [], tries: 0 };
+    quiz = {qs, seed, review, i: 0, marks: [], hinted: false, wrong: new Set()};
+    if (bookmark?.signature === qs.map(questionKey).join("|") && Number.isInteger(bookmark.i) &&
+        bookmark.i >= 0 && bookmark.i < size && Array.isArray(bookmark.marks)) {
+      const q = qs[bookmark.i];
+      quiz.i = bookmark.i;
+      quiz.marks = bookmark.marks.slice(0, quiz.i + 1).map(n => n === 1 ? 1 : 0);
+      quiz.hinted = bookmark.hinted === true;
+      quiz.wrong = new Set(indexes(bookmark.wrong, q.choices.length).filter(i => q.choices[i].value !== q.answer));
+    }
     showQ(talk);
+    if (talk) checkpointLesson("practice");
   }
   function renderStars() {
     const size = quiz.qs.length, count = Math.min(quiz.i + 1, size);
-    $("#qStars").innerHTML = `<span>ຂໍ້ ${count} / ${size}</span>` + range(size).map((i) => `<i aria-hidden="true" class="${quiz.marks[i] === 1 ? "ok" : quiz.marks[i] === 0 ? "help" : i === quiz.i ? "now" : ""}"></i>`).join("");
+    const label = line(`ຂໍ້ ${count} / ${size}`, `ข้อ ${count} / ${size}`);
+    $("#qStars").innerHTML = `<span>${label}</span>` + range(size).map(i =>
+      `<i aria-hidden="true" class="${quiz.marks[i] === 1 ? "ok" : quiz.marks[i] === 0 ? "help" : i === quiz.i ? "now" : ""}"></i>`
+    ).join("");
+  }
+  function showQuizResult() {
+    const got = quiz.marks.filter(m => m === 1).length, size = quiz.qs.length;
+    const missed = quiz.qs.filter((_, i) => quiz.marks[i] === 0).map(q => ({pattern: questionPattern(q), key: questionKey(q)}));
+    if (size === 3 || size === 5) {
+      const record = size === 3 ? saved.shortBest : saved.best;
+      if (record[cur.id] === undefined || got > record[cur.id]) { record[cur.id] = got; store(); }
+    }
+    if (!nest) {
+      if (missed.length) checkpointLesson("review", missed);
+      else clearChapterResume();
+    }
+    const next = CHAPTERS[CHAPTERS.indexOf(cur) + 1];
+    const result = line(`ຕອບເອງ ${got} / ${size} ຂໍ້`, `ตอบเอง ${got} / ${size} ข้อ`);
+    $("#practice").innerHTML = `<div class="result"><h2 class="qtext" tabindex="-1">${quizText.done}</h2><p>${result}</p><p>${missed.length ? quizText.suggested : quizText.explain}</p>
+      ${missed.length ? `<button class="go" id="quizReview" type="button">${navigationText.review}</button><a class="secondary" href="#">ພໍແລ້ວມື້ນີ້</a>` : '<a class="go" href="#">ພໍແລ້ວມື້ນີ້</a>'}
+      <div class="row"><button class="plain" id="again" type="button">ຝຶກອີກ 3 ຂໍ້</button><button class="plain" id="fullRound" type="button">ຝຶກ 5 ຂໍ້</button></div>
+      ${next && !missed.length ? `<a class="secondary" href="#bot-${next.id}">ບົດຕໍ່ໄປ →</a>` : ""}</div>`;
+    $("#practice h2").focus();
+    speak(quizText.done + ". " + (missed.length ? quizText.suggested : quizText.explain));
+    $("#quizReview")?.addEventListener("click", () => startQuiz(true, 2, missed));
+    $("#again").addEventListener("click", () => startQuiz());
+    $("#fullRound").addEventListener("click", () => startQuiz(true, 5));
+    renderToc();
   }
   function showQ(talk = true) {
     renderStars();
-    const box = $("#practice");
-    if (quiz.i >= quiz.qs.length) {
-      const got = quiz.marks.filter((m) => m === 1).length;
-      const size = quiz.qs.length, record = size === 3 ? saved.shortBest : saved.best;
-      if (record[cur.id] === undefined || got > record[cur.id]) { record[cur.id] = got; store(); }
-      const i = CHAPTERS.indexOf(cur), next = CHAPTERS[i + 1];
-      const msg = ["ຝຶກຈົບແລ້ວ! ເລືອກໜຶ່ງຂໍ້ ແລ້ວລອງເລົ່າວິທີຄິດໃຫ້ພໍ່ແມ່ຟັງ.", "ฝึกจบแล้ว ลองเลือกหนึ่งข้อแล้วเล่าวิธีคิดให้พ่อแม่ฟัง"];
-      line(msg[0], msg[1]);
-      box.innerHTML = `<div class="result"><p class="qtext">${msg[0]}</p><p>ຕອບເອງໃນຄັ້ງທຳອິດ ${got} / ${size} ຂໍ້</p><a class="plain" href="#">ພໍແລ້ວມື້ນີ້</a><div class="row"><button class="plain" id="again" type="button">ຝຶກອີກ 3 ຂໍ້</button><button class="plain" id="fullRound" type="button">ຝຶກ 5 ຂໍ້</button></div>${next ? `<a class="secondary" href="#bot-${next.id}">ບົດຕໍ່ໄປ →</a>` : ""}</div>`;
-      speak(...msg);
-      $("#again").addEventListener("click", () => startQuiz());
-      $("#fullRound").addEventListener("click", () => startQuiz(true, 5));
-      renderToc();
-      return;
-    }
-    const q = quiz.qs[quiz.i];
-    quiz.tries = 0;
-    quiz.hinted = false;
-    const kind = q.kind || "num";
-    const words = /[\u0E80-\u0EFF]/.test(q.text) || !q.vis;
-    box.innerHTML = `<p class="${words ? "qtext" : "sr"}">${esc(q.text)}</p>${q.vis ? `<div class="vis">${q.vis}</div>` : ""}<div class="choices">${q.choices.map((c, i) => `<button class="choice ${kind}" type="button" data-i="${i}" aria-label="${esc(c.say || c.label)}">${c.label}</button>`).join("")}</div><button class="secondary" id="quizHint" type="button">ຂໍຄຳໃບ້</button><div id="fb" role="status"></div>`;
+    const finished = quiz.i >= quiz.qs.length;
+    $("#quizPause").hidden = finished;
+    if (finished) { showQuizResult(); return; }
+    const q = quiz.qs[quiz.i], box = $("#practice");
+    const kind = q.kind || "num", words = /[\u0E80-\u0EFF]/.test(q.text) || !q.vis;
+    quiz.wrong ??= new Set();
+    box.innerHTML = `<h2 id="quizPrompt" class="${words ? "qtext" : "sr"}" tabindex="-1">${esc(q.text)}</h2>
+      ${q.vis ? `<div class="vis">${q.vis}</div>` : ""}<div class="choices">${q.choices.map((c, i) =>
+        `<button class="choice ${kind}${quiz.wrong.has(i) ? " wrong" : ""}" type="button" data-i="${i}" aria-label="${esc(c.say || c.label)}" aria-disabled="${quiz.wrong.has(i)}">${c.label}</button>`
+      ).join("")}</div><div class="quiz-aids"><button class="secondary" id="quizHint" type="button">ຂໍຄຳໃບ້</button>
+      <button class="secondary" id="quizListen" type="button" ${saved.voice && pickVoice() ? "" : "hidden"}>${quizText.hear}</button></div><div id="fb" role="status"></div>`;
     $("#quizHint").addEventListener("click", () => showQuizHint(q));
-    if (talk) speak(q.say || q.text, q.th);
-    box.querySelectorAll(".choice").forEach((b) => b.addEventListener("click", () => answer(q, q.choices[+b.dataset.i], b)));
+    $("#quizListen").addEventListener("click", () => speak(q.say || q.text, q.th));
+    box.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => answer(q, q.choices[+b.dataset.i], b)));
+    if (quiz.marks[quiz.i] !== undefined) showCorrect(q, false);
+    else if (quiz.hinted) showQuizHint(q, false);
+    if (talk) {
+      $("#quizPrompt").focus({preventScroll: true});
+      window.scrollTo(0, 0);
+      speak(q.say || q.text, q.th);
+    }
   }
-  function showQuizHint(q) {
+  function showQuizHint(q, talk = true) {
     quiz.hinted = true;
     $("#fb").innerHTML = `<div class="feedback help"><p>${esc(q.hint)}</p>${q.hintVis ? `<div class="vis">${q.hintVis}</div>` : ""}</div>`;
-    speak(q.hint, q.hintTh);
-  }
-  function answer(q, c, btn) {
-    if (btn.classList.contains("wrong") || $("#practice .choice.right")) return;
-    const fb = $("#fb");
-    if (c.value === q.answer) {
-      btn.classList.add("right");
-      ding();
-      quiz.marks[quiz.i] = quiz.tries === 0 && !quiz.hinted ? 1 : 0;
-      $("#quizHint").hidden = true;
-      renderStars();
-      const [lo, th] = pick(PRAISE);
-      fb.innerHTML = `<div class="feedback good"><div>${[lo, q.why].filter(Boolean).map((l, i) => i ? `<p>${esc(l)}</p>` : `<p><b>${esc(l)}</b></p>`).join("")}</div><button class="go" id="nextQ" type="button">${quiz.i + 1 === quiz.qs.length ? "ຈົບຮອບ" : "ຂໍ້ຕໍ່ໄປ →"}</button></div>`;
-      speak(`${lo} ${q.why || ""}`, `${th} ${q.whyTh || ""}`);
-      $("#nextQ").addEventListener("click", () => { quiz.i++; showQ(); });
-      $("#nextQ").focus();
-    } else {
-      quiz.tries++;
-      btn.classList.add("wrong");
-      boing();
-      showQuizHint(q);
+    if (talk) {
+      speak(q.hint, q.hintTh);
+      checkpointLesson("practice");
+      $("#fb").scrollIntoView?.({block: "nearest"});
     }
   }
+  function showCorrect(q, talk) {
+    $("#practice").querySelectorAll("[data-i]").forEach(b => {
+      const right = q.choices[+b.dataset.i].value === q.answer;
+      b.classList.toggle("right", right);
+      b.setAttribute("aria-disabled", "true");
+    });
+    $("#quizHint").hidden = true;
+    renderStars();
+    $("#fb").innerHTML = `<div class="feedback good"><div><p><b>${quizText.good}</b></p>${q.why ? `<p>${esc(q.why)}</p>` : ""}</div>
+      <button class="go" id="nextQ" type="button">${quiz.i + 1 === quiz.qs.length ? "ຈົບຮອບ" : "ຂໍ້ຕໍ່ໄປ →"}</button></div>`;
+    $("#nextQ").addEventListener("click", () => {
+      quiz.i++;
+      quiz.wrong = new Set();
+      quiz.hinted = false;
+      showQ();
+      if (quiz.i < quiz.qs.length) checkpointLesson("practice");
+    });
+    if (talk) {
+      ding();
+      speak(`${quizText.good} ${q.why || ""}`, `${thaiText(quizText.good)} ${q.whyTh || ""}`);
+      $("#nextQ").focus();
+    }
+  }
+  function answer(q, c, btn) {
+    if (btn.getAttribute("aria-disabled") === "true") return;
+    if (c.value !== q.answer) {
+      quiz.wrong.add(+btn.dataset.i);
+      btn.classList.add("wrong");
+      btn.setAttribute("aria-disabled", "true");
+      showQuizHint(q);
+      return;
+    }
+    quiz.marks[quiz.i] = quiz.wrong.size || quiz.hinted ? 0 : 1;
+    showCorrect(q, true);
+    checkpointLesson("practice");
+  }
+  $("#quizPause").addEventListener("click", () => {
+    checkpointLesson("practice");
+    location.hash = "";
+  });
 
   /* ---------- grown-ups: the key idea and what to do at home first; the rest folds away ---------- */
   function renderParent(c) {
@@ -3131,30 +3444,49 @@ html[lang="th"] .only-lo, html[lang="lo"] .only-th { display: none !important; }
     speechRequest++;
     if (synth) try { synth.cancel(); } catch (e) { /* ignore */ }
   }
+  let chapterBack = "";
   function route() {
-    if (location.hash === "#homework") { showWorkForm(); return; }
+    const fromCatalog = !$("#catalog").hidden;
+    $("#catalog").hidden = $("#shareUrl").hidden = true;
+    $("#shareStatus").textContent = "";
+    if (location.hash === "#homework") {
+      showWorkForm();
+      $("#backBtn").setAttribute("aria-label", "ກັບໜ້າຫຼັກ");
+      $("#topTitle").focus({preventScroll: true});
+      return;
+    }
     if (!$("#homework").hidden) $("#starter").before($("#nestPanel"));
     $("#homework").hidden = true;
     homework = null;
-    const m = /^#bot-(\w+)(?:-(nest|exchange|more))?$/.exec(location.hash);
-    const c = m && CHAPTERS.find((x) => String(x.id) === m[1]);
-    if (c) {
-      const key = m[1] + "-" + m[2];
-      openChapter(c, nestRoutes[key]);
+    const restoring = location.hash === "#resume" ? resumePoint : null;
+    const hash = restoring ? "#bot-" + restoring.chapter : location.hash;
+    const match = /^#bot-(\w+)(?:-(nest|exchange|more))?$/.exec(hash);
+    const chapter = match && CHAPTERS.find(c => String(c.id) === match[1]);
+    if (chapter) {
+      if (fromCatalog) chapterBack = "#toc";
+      else if (!cur) chapterBack = "";
+      $("#backBtn").setAttribute("aria-label", chapterBack ? "ກັບລາຍຊື່ບົດຮຽນ" : "ກັບໜ້າຫຼັກ");
+      openChapter(chapter, nestRoutes[match[1] + "-" + match[2]], restoring);
+      $("#topTitle").focus({preventScroll: true});
       return;
     }
+    chapterBack = "";
     nest = null;
     cur = null;
     stopLessonSpeech();
-    $("#home").hidden = false;
+    const catalog = hash === "#toc";
+    $("#home").hidden = catalog;
+    $("#catalog").hidden = !catalog;
     $("#chapter").hidden = true;
-    $("#backBtn").hidden = true;
+    $("#backBtn").hidden = !catalog;
+    $("#backBtn").setAttribute("aria-label", "ກັບໜ້າຫຼັກ");
     $("#kicker").textContent = "ຄະນິດສາດ ປ.1";
-    $("#topTitle").textContent = "ຫ້ອງຮຽນໝີນ້ອຍ";
+    $("#topTitle").textContent = catalog ? navigationText.catalog : "ຫ້ອງຮຽນໝີນ້ອຍ";
     renderToc();
     window.scrollTo(0, 0);
+    $("#topTitle").focus({preventScroll: true});
   }
-  $("#backBtn").addEventListener("click", () => { location.hash = ""; });
+  $("#backBtn").addEventListener("click", () => { location.hash = $("#chapter").hidden ? "" : chapterBack; });
   if (synth) synth.addEventListener?.("voiceschanged", () => { findVoices(); voicesChecked = true; renderVoice(pickVoice()); });
   $("#voiceChoice").addEventListener("change", event => {
     const p = pickVoice();

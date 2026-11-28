@@ -155,6 +155,10 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .play-btn small { display: block; font-size: 15px; font-weight: 600; }
 .play-btn svg { width: 40px; height: 40px; fill: currentColor; }
 .home-actions { display: grid; gap: 12px; }
+.home-study { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.home-study .btn { padding-inline: 8px; text-align: center; }
+.home-study a { display: grid; place-items: center; color: var(--ink); text-decoration: none; background: var(--leaf-soft); }
+#home:has(.no3d:not([hidden])) #playBtn { display: none; }
 .home-actions .play-btn:disabled { opacity: 0.55; cursor: default; }
 .home-foot { display: flex; justify-content: center; }
 .gate { position: relative; overflow: hidden; min-height: 44px; padding: 0 18px; border-radius: 999px; background: var(--card); border: 2px dashed var(--line); color: var(--ink-soft); font-size: 14px; }
@@ -648,11 +652,14 @@ button.obj:active { transform: scale(0.9); }
   </div>
   <div class="cities" id="cities" hidden></div>
   <div class="home-actions">
+    <div class="home-study">
+      <a href="lessons.html" class="btn small" id="homeLessons">ບົດຮຽນ ປ.1</a>
+      <button class="btn small" id="practiceBtn" type="button"></button>
+    </div>
     <button class="play-btn" id="playBtn" type="button" disabled>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>
       <span><span id="playLabel"></span><small id="playCity"></small></span>
     </button>
-    <button class="btn small" id="practiceBtn" type="button"></button>
   </div>
   <div class="home-foot">
     <button class="gate" id="parentBtn" type="button"><span class="gate-fill"></span><span class="gate-text" id="gateText"></span></button>
@@ -968,7 +975,7 @@ button.obj:active { transform: scale(0.9); }
     lo: {
       appName: "ນັບເລກກັບໝີນ້ອຍ",
       tagline: "ເປັນສັດປະຫຼາດຍັກ ສູ້ກັບແມງເລກ ແລະ ບອສ ດ້ວຍການຕອບເລກໃຫ້ຖືກ!",
-      play: "ຫຼິ້ນ!", locked: "ຍັງລັອກຢູ່", unlock: "ປົດລັອກ",
+      play: "ຫຼິ້ນເກມ 3D", locked: "ຍັງລັອກຢູ່", unlock: "ປົດລັອກ",
       notEnough: (n) => `ຂາດອີກ ${n} ຫຼຽນ`,
       beatToUnlock: (b) => `ຊະນະ${b}ເພື່ອປົດລັອກ`,
       unlockedNow: (m) => `ປົດລັອກ${m}ແລ້ວ!`,
@@ -1181,7 +1188,7 @@ button.obj:active { transform: scale(0.9); }
     th: {
       appName: "นับเลขกับหมีน้อย",
       tagline: "เป็นสัตว์ประหลาดยักษ์ สู้กับแมงเลขและบอสด้วยการตอบเลขให้ถูก!",
-      play: "เล่น!", locked: "ยังล็อกอยู่", unlock: "ปลดล็อก",
+      play: "เล่นเกม 3D", locked: "ยังล็อกอยู่", unlock: "ปลดล็อก",
       notEnough: (n) => `ขาดอีก ${n} เหรียญ`,
       beatToUnlock: (b) => `ชนะ${b}เพื่อปลดล็อก`,
       unlockedNow: (m) => `ปลดล็อก${m}แล้ว!`,
@@ -4191,6 +4198,7 @@ button.obj:active { transform: scale(0.9); }
       button.setAttribute("aria-label", S.lang === "lo" ? "เปลี่ยนเป็นภาษาไทย" : "ປ່ຽນເປັນພາສາລາວ");
     });
     $("#textbookLink").textContent = S.lang === "th" ? "📖 บทเรียนตามหนังสือ ป.1" : "📖 ບົດຮຽນຕາມປຶ້ມ ປ.1";
+    $("#homeLessons").textContent = S.lang === "th" ? "บทเรียน ป.1" : "ບົດຮຽນ ປ.1";
     $("#homeworkLink").textContent = S.lang === "th" ? "ทำโจทย์การบ้านด้วยภาพ" : "ເຮັດວຽກບ້ານດ້ວຍຮູບ";
     $("#appTitle").textContent = D.appName;
     $("#tagline").textContent = D.tagline;
@@ -4514,7 +4522,7 @@ button.obj:active { transform: scale(0.9); }
 
   function renderPracticeLabels() {
     const D = T(), P = D.practice, drawing = P.drawing;
-    $("#practiceBtn").textContent = P.title;
+    $("#practiceBtn").textContent = S.lang === "th" ? "ฝึกกับพ่อแม่" : "ຝຶກກັບພໍ່ແມ່";
     $("#practiceTitle").textContent = P.title;
     $("#practiceBack").innerHTML = ICON.back;
     $("#practiceIntro").textContent = P.intro;
